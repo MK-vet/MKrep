@@ -48,6 +48,7 @@ from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 from statsmodels.stats.multitest import multipletests
 from scipy.stats import chi2_contingency, fisher_exact
+from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 
 warnings.filterwarnings('ignore')  # for cleaner console output
 
@@ -967,12 +968,12 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
         G (nx.Graph): NetworkX graph of the hybrid network
         
     Returns:
-        str: HTML code for interactive Plotly figure
+        tuple: (HTML string for interactive Plotly figure, Figure object)
     """
     import plotly.graph_objs as go
 
     if G.number_of_nodes()==0:
-        return "<p>No hybrid network to display.</p>"
+        return "<p>No hybrid network to display.</p>", None
 
     # Use a force-directed layout algorithm for better node positioning
     pos = nx.spring_layout(G, k=0.5, iterations=50, seed=42)
@@ -1147,7 +1148,7 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
         ]
     }
 
-    return fig.to_html(full_html=False, include_plotlyjs='cdn', config=config)
+    return fig.to_html(full_html=False, include_plotlyjs='cdn', config=config), fig
 
 ###############################################################################
 # 9) REPORT + MAIN
@@ -1664,6 +1665,220 @@ def generate_html_report(
 </html>
 """
     return html
+
+
+def generate_excel_report(
+    data: pd.DataFrame,
+    class_res_all: pd.DataFrame,
+    class_res_mdr: pd.DataFrame,
+    amr_all: pd.DataFrame,
+    amr_mdr: pd.DataFrame,
+    freq_pheno_all: pd.DataFrame,
+    freq_pheno_mdr: pd.DataFrame,
+    freq_gene_all: pd.DataFrame,
+    freq_gene_mdr: pd.DataFrame,
+    pat_pheno_mdr: pd.DataFrame,
+    pat_gene_mdr: pd.DataFrame,
+    coocc_pheno_mdr: pd.DataFrame,
+    coocc_gene_mdr: pd.DataFrame,
+    gene_pheno_assoc: pd.DataFrame,
+    assoc_rules_pheno: pd.DataFrame,
+    assoc_rules_genes: pd.DataFrame,
+    hybrid_net: nx.Graph,
+    edges_df: pd.DataFrame,
+    comm_df: pd.DataFrame,
+    fig_network=None
+) -> str:
+    """
+    Generate comprehensive Excel report with all analysis results and PNG charts.
+    
+    This function creates a detailed Excel workbook with multiple sheets containing:
+    - Dataset overview and metadata
+    - Methodology descriptions
+    - Frequency analyses with bootstrap confidence intervals
+    - Pattern identification results
+    - Co-occurrence matrices
+    - Association rules
+    - Network analysis results
+    - Community detection outcomes
+    
+    All network visualizations are saved as PNG files.
+    
+    Parameters:
+        data: Original dataset
+        class_res_all: Class resistance matrix (all isolates)
+        class_res_mdr: Class resistance matrix (MDR isolates only)
+        amr_all: AMR gene presence matrix (all isolates)
+        amr_mdr: AMR gene presence matrix (MDR isolates only)
+        freq_pheno_all: Phenotypic resistance frequencies (all isolates)
+        freq_pheno_mdr: Phenotypic resistance frequencies (MDR isolates)
+        freq_gene_all: AMR gene frequencies (all isolates)
+        freq_gene_mdr: AMR gene frequencies (MDR isolates)
+        pat_pheno_mdr: Phenotypic resistance patterns (MDR isolates)
+        pat_gene_mdr: AMR gene patterns (MDR isolates)
+        coocc_pheno_mdr: Co-occurrence among antibiotic classes
+        coocc_gene_mdr: Co-occurrence among AMR genes
+        gene_pheno_assoc: Phenotype-gene associations
+        assoc_rules_pheno: Association rules for phenotypes
+        assoc_rules_genes: Association rules for genes
+        hybrid_net: Hybrid network graph
+        edges_df: Significant edges in the network
+        comm_df: Communities identified in the network
+        fig_network: Plotly figure object for the network (optional)
+        
+    Returns:
+        str: Path to generated Excel file
+    """
+    # Initialize Excel report generator
+    excel_gen = ExcelReportGenerator(output_folder="output")
+    
+    # Save network visualization as PNG if available
+    if fig_network is not None:
+        try:
+            excel_gen.save_plotly_figure_fallback(fig_network, "hybrid_network_visualization", width=1400, height=1000)
+        except Exception as e:
+            print(f"Could not save network visualization: {e}")
+    
+    # Prepare methodology description
+    methodology = {
+        "Bootstrap Resampling": (
+            "5000 iterations with 95% confidence intervals for prevalence estimation. "
+            "Non-parametric approach suitable for complex distributions."
+        ),
+        "Association Testing": (
+            "Chi-square test for general associations, Fisher's exact test when expected cell counts <5. "
+            "Phi coefficient measures association strength. "
+            "Benjamini-Hochberg FDR correction for multiple hypothesis testing."
+        ),
+        "Pattern Analysis": (
+            "Identification of phenotypic resistance patterns and AMR gene patterns in MDR isolates. "
+            "Patterns are ranked by frequency with bootstrap confidence intervals."
+        ),
+        "Co-occurrence Analysis": (
+            "Matrix-based analysis of feature co-occurrence using phi coefficient. "
+            "Statistical significance assessed via chi-square or Fisher's exact test."
+        ),
+        "Association Rules": (
+            "Mining of predictive rules using support and lift metrics. "
+            "Identifies antecedent → consequent relationships with high confidence."
+        ),
+        "Hybrid Network Construction": (
+            "Network combining phenotype-gene, phenotype-phenotype, and gene-gene edges. "
+            "Edges represent significant associations (corrected p < 0.05). "
+            "Louvain community detection identifies functional modules."
+        )
+    }
+    
+    # Prepare sheets data
+    sheets_data = {}
+    
+    # Dataset Overview
+    overview_data = {
+        'Metric': [
+            'Total Isolates',
+            'MDR Isolates',
+            'MDR Percentage',
+            'Phenotype Columns',
+            'Gene Columns'
+        ],
+        'Value': [
+            len(data),
+            len(class_res_mdr) if class_res_mdr is not None else 0,
+            f"{(len(class_res_mdr) / len(data) * 100):.2f}%" if class_res_mdr is not None and len(data) > 0 else "N/A",
+            len([c for c in data.columns if 'MIC_' in c or 'Resistance_' in c]),
+            len([c for c in data.columns if c not in ['Strain_ID'] and 'MIC_' not in c and 'Resistance_' not in c])
+        ]
+    }
+    sheets_data['Dataset_Overview'] = (pd.DataFrame(overview_data), "Summary statistics for the analyzed dataset")
+    
+    # Frequency Analyses
+    if freq_pheno_all is not None and not freq_pheno_all.empty:
+        sheets_data['Freq_Pheno_All'] = (freq_pheno_all, "Phenotypic resistance frequencies in all isolates")
+    
+    if freq_pheno_mdr is not None and not freq_pheno_mdr.empty:
+        sheets_data['Freq_Pheno_MDR'] = (freq_pheno_mdr, "Phenotypic resistance frequencies in MDR isolates")
+    
+    if freq_gene_all is not None and not freq_gene_all.empty:
+        sheets_data['Freq_Gene_All'] = (freq_gene_all, "AMR gene frequencies in all isolates")
+    
+    if freq_gene_mdr is not None and not freq_gene_mdr.empty:
+        sheets_data['Freq_Gene_MDR'] = (freq_gene_mdr, "AMR gene frequencies in MDR isolates")
+    
+    # Pattern Analyses
+    if pat_pheno_mdr is not None and not pat_pheno_mdr.empty:
+        sheets_data['Patterns_Pheno_MDR'] = (pat_pheno_mdr, "Phenotypic resistance patterns in MDR isolates")
+    
+    if pat_gene_mdr is not None and not pat_gene_mdr.empty:
+        sheets_data['Patterns_Gene_MDR'] = (pat_gene_mdr, "AMR gene patterns in MDR isolates")
+    
+    # Co-occurrence Analyses
+    if coocc_pheno_mdr is not None and not coocc_pheno_mdr.empty:
+        sheets_data['Coocc_Pheno_MDR'] = (coocc_pheno_mdr, "Co-occurrence among antibiotic classes in MDR")
+    
+    if coocc_gene_mdr is not None and not coocc_gene_mdr.empty:
+        sheets_data['Coocc_Gene_MDR'] = (coocc_gene_mdr, "Co-occurrence among AMR genes in MDR")
+    
+    # Association Analyses
+    if gene_pheno_assoc is not None and not gene_pheno_assoc.empty:
+        sheets_data['Gene_Pheno_Assoc'] = (gene_pheno_assoc, "Gene-Phenotype associations with statistical significance")
+    
+    if assoc_rules_pheno is not None and not assoc_rules_pheno.empty:
+        sheets_data['Assoc_Rules_Pheno'] = (assoc_rules_pheno, "Association rules for phenotypic resistances")
+    
+    if assoc_rules_genes is not None and not assoc_rules_genes.empty:
+        sheets_data['Assoc_Rules_Genes'] = (assoc_rules_genes, "Association rules for AMR genes")
+    
+    # Network Analyses
+    if edges_df is not None and not edges_df.empty:
+        sheets_data['Network_Edges'] = (edges_df, f"Significant edges in hybrid network (total: {len(edges_df)})")
+    
+    if comm_df is not None and not comm_df.empty:
+        sheets_data['Network_Communities'] = (comm_df, f"Louvain communities in network (total: {comm_df['Community'].nunique()} communities)")
+    
+    # Network Statistics
+    if hybrid_net is not None and hybrid_net.number_of_nodes() > 0:
+        network_stats = {
+            'Metric': [
+                'Total Nodes',
+                'Total Edges',
+                'Phenotype Nodes',
+                'Gene Nodes',
+                'Average Degree',
+                'Network Density',
+                'Number of Communities'
+            ],
+            'Value': [
+                hybrid_net.number_of_nodes(),
+                hybrid_net.number_of_edges(),
+                len([n for n, d in hybrid_net.nodes(data=True) if d.get('node_type') == 'Phenotype']),
+                len([n for n, d in hybrid_net.nodes(data=True) if d.get('node_type') == 'Gene']),
+                f"{sum(dict(hybrid_net.degree()).values()) / hybrid_net.number_of_nodes():.2f}" if hybrid_net.number_of_nodes() > 0 else 0,
+                f"{nx.density(hybrid_net):.4f}",
+                comm_df['Community'].nunique() if comm_df is not None and not comm_df.empty else 0
+            ]
+        }
+        sheets_data['Network_Stats'] = (pd.DataFrame(network_stats), "Overall network statistics and topology metrics")
+    
+    # Prepare metadata
+    metadata = {
+        'Total_Isolates': len(data),
+        'MDR_Isolates': len(class_res_mdr) if class_res_mdr is not None else 0,
+        'Network_Nodes': hybrid_net.number_of_nodes() if hybrid_net is not None else 0,
+        'Network_Edges': hybrid_net.number_of_edges() if hybrid_net is not None else 0,
+        'Bootstrap_Iterations': 5000,
+        'FDR_Threshold': 0.05
+    }
+    
+    # Generate Excel report
+    excel_path = excel_gen.generate_excel_report(
+        report_name="MDR_Analysis_Hybrid_Report",
+        sheets_data=sheets_data,
+        methodology=methodology,
+        **metadata
+    )
+    
+    return excel_path
+
 
 def save_report(html_code: str, out_dir: str="output") -> str:
     """
@@ -1802,7 +2017,7 @@ def main():
     comm_df = compute_louvain_communities(hybrid_net)
 
     # 13) Generate interactive network visualization
-    net_html = create_hybrid_network_figure(hybrid_net)
+    net_html, fig_network = create_hybrid_network_figure(hybrid_net)
 
     # 14) Generate comprehensive HTML report
     html_report = generate_html_report(
@@ -1828,10 +2043,37 @@ def main():
         net_html=net_html
     )
 
-    # 15) Save report and log completion
+    # 15) Save HTML report
     out_html = save_report(html_report, "output")
+    
+    # 16) Generate and save Excel report with PNG charts
+    excel_path = generate_excel_report(
+        data=data,
+        class_res_all=class_res_all,
+        class_res_mdr=class_res_mdr,
+        amr_all=amr_all,
+        amr_mdr=amr_mdr,
+        freq_pheno_all=freq_pheno_all,
+        freq_pheno_mdr=freq_pheno_mdr,
+        freq_gene_all=freq_gene_all,
+        freq_gene_mdr=freq_gene_mdr,
+        pat_pheno_mdr=pat_pheno_mdr,
+        pat_gene_mdr=pat_gene_mdr,
+        coocc_pheno_mdr=coocc_pheno_mdr,
+        coocc_gene_mdr=coocc_gene_mdr,
+        gene_pheno_assoc=gene_pheno_assoc,
+        assoc_rules_pheno=assoc_pheno,
+        assoc_rules_genes=assoc_genes,
+        hybrid_net=hybrid_net,
+        edges_df=edges_df,
+        comm_df=comm_df,
+        fig_network=fig_network
+    )
+    
     end_time = time.time()
-    logging.info(f"Hybrid pipeline completed in {end_time - start_time:.2f}s => {out_html}")
+    logging.info(f"Hybrid pipeline completed in {end_time - start_time:.2f}s")
+    logging.info(f"HTML report: {out_html}")
+    logging.info(f"Excel report: {excel_path}")
 
 
 if __name__=="__main__":
