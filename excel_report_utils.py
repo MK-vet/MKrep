@@ -305,7 +305,7 @@ class ExcelReportGenerator:
 
 
 def sanitize_sheet_name(name):
-    """
+    r"""
     Sanitize sheet name to comply with Excel requirements.
     - Max 31 characters
     - No special characters: : \ / ? * [ ]
