@@ -52,6 +52,9 @@ import jinja2
 import base64
 import io
 
+# Excel report generation
+from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+
 # -----------------------------------------
 # 3. Logging & Global Configuration
 # -----------------------------------------
@@ -1281,6 +1284,226 @@ def generate_comprehensive_html_report(
         pass
 
 # -----------------------------------------
+# 21b. Generate Excel Report
+# -----------------------------------------
+def generate_comprehensive_excel_report(
+    output_folder,
+    results_dict,
+    integrated_clusters,
+    csv_results
+):
+    """
+    Generate comprehensive Excel report with all analysis results and PNG charts.
+    
+    This function creates a detailed Excel workbook with multiple sheets containing:
+    - Metadata and methodology
+    - Clustering results for each category (MIC, AMR, Virulence)
+    - Statistical tests (Chi-square, Log-odds, Bootstrap CIs)
+    - Feature importance from Random Forest
+    - Multiple Correspondence Analysis (MCA) results
+    - Association rules
+    - Integrated cluster assignments
+    - All CSV results from the analysis
+    
+    Parameters:
+        output_folder (str): Directory for output files
+        results_dict (dict): Dictionary containing all analysis results by category
+        integrated_clusters (pd.DataFrame): Integrated cluster assignments
+        csv_results (dict): Dictionary of all CSV files from analysis
+        
+    Returns:
+        str: Path to generated Excel file
+    """
+    # Initialize Excel report generator
+    excel_gen = ExcelReportGenerator(output_folder=output_folder)
+    
+    # Save any plotly figures as PNG
+    for category, cat_results in results_dict.items():
+        # Save MCA scatter plots if available
+        if 'mca_scatter' in cat_results and cat_results['mca_scatter']:
+            try:
+                # Parse base64 image data if present
+                import re
+                match = re.search(r'data:image/png;base64,([^"]+)', str(cat_results['mca_scatter']))
+                if match:
+                    img_data = match.group(1)
+                    # Decode and save
+                    import base64
+                    from PIL import Image
+                    from io import BytesIO
+                    img = Image.open(BytesIO(base64.b64decode(img_data)))
+                    filepath = os.path.join(excel_gen.png_folder, f"mca_scatter_{category}.png")
+                    img.save(filepath)
+                    excel_gen.png_files.append(filepath)
+                    print(f"Saved MCA scatter plot: {filepath}")
+            except Exception as e:
+                print(f"Could not save MCA scatter for {category}: {e}")
+        
+        # Save heatmaps if available
+        if 'heatmap' in cat_results and cat_results['heatmap']:
+            try:
+                match = re.search(r'data:image/png;base64,([^"]+)', str(cat_results['heatmap']))
+                if match:
+                    img_data = match.group(1)
+                    import base64
+                    from PIL import Image
+                    from io import BytesIO
+                    img = Image.open(BytesIO(base64.b64decode(img_data)))
+                    filepath = os.path.join(excel_gen.png_folder, f"heatmap_{category}.png")
+                    img.save(filepath)
+                    excel_gen.png_files.append(filepath)
+                    print(f"Saved heatmap: {filepath}")
+            except Exception as e:
+                print(f"Could not save heatmap for {category}: {e}")
+    
+    # Prepare methodology description
+    methodology = {
+        "K-Modes Clustering": (
+            "Huang initialization with automatic cluster number selection using silhouette score. "
+            "Cluster count determined via sqrt(N) heuristic and silhouette optimization (2 to max_k). "
+            "Binary 0/1 data appropriate for K-Modes (mode-based distance metric)."
+        ),
+        "Statistical Tests": (
+            "Chi-square tests for global associations with Yates correction when expected counts < 5. "
+            "Fisher exact test fallback for 2x2 tables. "
+            "Benjamini-Hochberg FDR correction at alpha=0.05 for multiple testing. "
+            "Pairwise post-hoc tests with FDR correction for cluster comparisons."
+        ),
+        "Log-odds Ratio": (
+            "0.5 pseudo-count correction to avoid infinite or zero ratios. "
+            "Bootstrap confidence intervals (200+ resamples) with stratified sampling."
+        ),
+        "Logistic Regression": (
+            "L1 penalty (saga solver) for binary classification of cluster labels. "
+            "Bootstrap approach (200+ resamples) for coefficient confidence intervals (2.5%-97.5%)."
+        ),
+        "Multiple Correspondence Analysis": (
+            "Dimensionality reduction for categorical data producing two principal components. "
+            "Eigenvalue-based inertia reported with row/column coordinates. "
+            "2D scatter plot visualization for cluster separation."
+        ),
+        "Random Forest": (
+            "50-tree classifier for feature importance estimation. "
+            "Heuristic measure of feature influence on cluster separation."
+        ),
+        "Association Rules": (
+            "Minimum support=0.3 and confidence=0.7 thresholds. "
+            "Items meeting criteria listed as antecedent => consequent rules."
+        ),
+        "Bootstrap Confidence Intervals": (
+            "Applied to cluster percentages and log-odds ratios. "
+            "0.5 pseudo-count corrects extreme values (0 or 100%)."
+        )
+    }
+    
+    # Prepare sheets data
+    sheets_data = {}
+    
+    # Integrated clusters
+    if integrated_clusters is not None and not integrated_clusters.empty:
+        sheets_data['Integrated_Clusters'] = (
+            integrated_clusters,
+            f"Integrated cluster assignments across all categories (N={len(integrated_clusters)} strains)"
+        )
+    
+    # Category-specific results
+    for category, cat_results in results_dict.items():
+        prefix = sanitize_sheet_name(category)[:20]  # Limit prefix length
+        
+        # Cluster assignments
+        if 'cluster_df' in cat_results and cat_results['cluster_df'] is not None:
+            sheet_name = f"{prefix}_Clusters"
+            sheets_data[sheet_name] = (
+                cat_results['cluster_df'],
+                f"Cluster assignments for {category}"
+            )
+        
+        # Chi-square results
+        if 'chi2_results' in cat_results and cat_results['chi2_results'] is not None:
+            sheet_name = f"{prefix}_Chi2"
+            sheets_data[sheet_name] = (
+                cat_results['chi2_results'],
+                f"Chi-square test results for {category}"
+            )
+        
+        # Log-odds results
+        if 'log_odds_df' in cat_results and cat_results['log_odds_df'] is not None:
+            sheet_name = f"{prefix}_LogOdds"
+            sheets_data[sheet_name] = (
+                cat_results['log_odds_df'],
+                f"Log-odds ratios with bootstrap CIs for {category}"
+            )
+        
+        # Feature importance
+        if 'feature_importance' in cat_results and cat_results['feature_importance'] is not None:
+            sheet_name = f"{prefix}_RF_Import"
+            sheets_data[sheet_name] = (
+                cat_results['feature_importance'],
+                f"Random Forest feature importance for {category}"
+            )
+        
+        # Association rules
+        if 'association_rules' in cat_results and cat_results['association_rules'] is not None:
+            sheet_name = f"{prefix}_Assoc_Rules"
+            sheets_data[sheet_name] = (
+                cat_results['association_rules'],
+                f"Association rules for {category}"
+            )
+        
+        # MCA coordinates
+        if 'mca_coords' in cat_results and cat_results['mca_coords'] is not None:
+            sheet_name = f"{prefix}_MCA"
+            sheets_data[sheet_name] = (
+                cat_results['mca_coords'],
+                f"MCA coordinates for {category}"
+            )
+    
+    # Add CSV results that are not already included
+    excluded_files = ['mca_row_coordinates', 'mca_column_coordinates', 'all_characteristic_patterns']
+    for csv_name, csv_df in csv_results.items():
+        # Create sheet name from CSV filename
+        base_name = csv_name.replace('.csv', '')
+        # Check if not already added and not in exclusion list
+        if not any(excl in base_name.lower() for excl in excluded_files):
+            sheet_name = sanitize_sheet_name(base_name)
+            if sheet_name not in sheets_data:
+                sheets_data[sheet_name] = (csv_df, f"Results from {csv_name}")
+    
+    # Prepare metadata
+    total_clusters_per_category = {}
+    for category, cat_results in results_dict.items():
+        if 'cluster_df' in cat_results and cat_results['cluster_df'] is not None:
+            n_clusters = cat_results['cluster_df']['Cluster'].nunique() if 'Cluster' in cat_results['cluster_df'].columns else 0
+            total_clusters_per_category[category] = n_clusters
+    
+    metadata = {
+        'Total_Strains': len(integrated_clusters) if integrated_clusters is not None else 0,
+        'Categories_Analyzed': len(results_dict),
+        'Total_Sheets': len(sheets_data),
+        'Total_PNG_Charts': len(excel_gen.png_files)
+    }
+    
+    # Add cluster counts to metadata
+    for category, n_clusters in total_clusters_per_category.items():
+        metadata[f'Clusters_{category}'] = n_clusters
+    
+    # Generate Excel report
+    excel_path = excel_gen.generate_excel_report(
+        report_name="Cluster_Analysis_Report",
+        sheets_data=sheets_data,
+        methodology=methodology,
+        **metadata
+    )
+    
+    print(f"\nExcel report generated: {excel_path}")
+    try:
+        files.download(excel_path)
+    except:
+        pass
+    
+    return excel_path
+
+# -----------------------------------------
 # 22. Main Function
 # -----------------------------------------
 def main():
@@ -1298,7 +1521,15 @@ def main():
         csv_results=all_csv_results
     )
 
-    print("\nAnalysis complete. Please check the final HTML report in:", output_folder)
+    # 4. Generate comprehensive Excel report
+    generate_comprehensive_excel_report(
+        output_folder=output_folder,
+        results_dict=results_dict,
+        integrated_clusters=integrated_df,
+        csv_results=all_csv_results
+    )
+
+    print("\nAnalysis complete. Please check the HTML and Excel reports in:", output_folder)
 
 
 if __name__ == "__main__":
