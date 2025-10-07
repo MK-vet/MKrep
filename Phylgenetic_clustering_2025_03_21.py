@@ -57,6 +57,9 @@ from mlxtend.frequent_patterns import apriori, association_rules
 from multiprocessing import Pool, cpu_count
 from functools import partial
 
+# Excel report generation
+from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+
 # Set global random seeds and control threading for reproducibility
 random.seed(42)
 np.random.seed(42)
@@ -2192,6 +2195,171 @@ class HTMLReportGenerator:
             f.write(html_rendered)
         print(f"HTML report saved to: {outpath}")
         return outpath
+    
+    def generate_excel_report(self, analysis_results, config):
+        """
+        Generate comprehensive Excel report with all analysis results and PNG charts.
+        
+        This function creates a detailed Excel workbook with multiple sheets containing:
+        - Metadata and methodology
+        - Phylogenetic clustering results
+        - Evolutionary metrics (PD, pairwise distances, beta diversity)
+        - Binary trait analysis (chi-square, log-odds, feature importance)
+        - Association rules and MCA results
+        - All CSV files generated during analysis
+        
+        Parameters:
+            analysis_results (dict): Dictionary containing all analysis results
+            config (Config): Configuration object with analysis parameters
+            
+        Returns:
+            str: Path to generated Excel file
+        """
+        # Initialize Excel report generator
+        excel_gen = ExcelReportGenerator(output_folder=self.output_folder)
+        
+        # Save matplotlib figures as PNG
+        # Tree plot
+        tree_plot_info = analysis_results.get('tree_plot', {})
+        if tree_plot_info and 'data' in tree_plot_info:
+            try:
+                import base64
+                from PIL import Image
+                from io import BytesIO
+                img_data = tree_plot_info['data']
+                img = Image.open(BytesIO(base64.b64decode(img_data)))
+                filepath = os.path.join(excel_gen.png_folder, "phylogenetic_tree.png")
+                img.save(filepath)
+                excel_gen.png_files.append(filepath)
+                print(f"Saved phylogenetic tree: {filepath}")
+            except Exception as e:
+                print(f"Could not save tree plot: {e}")
+        
+        # UMAP plot
+        umap_plot_info = analysis_results.get('umap_plot', {})
+        if umap_plot_info and 'data' in umap_plot_info:
+            try:
+                import base64
+                from PIL import Image
+                from io import BytesIO
+                img_data = umap_plot_info['data']
+                img = Image.open(BytesIO(base64.b64decode(img_data)))
+                filepath = os.path.join(excel_gen.png_folder, "umap_embedding.png")
+                img.save(filepath)
+                excel_gen.png_files.append(filepath)
+                print(f"Saved UMAP plot: {filepath}")
+            except Exception as e:
+                print(f"Could not save UMAP plot: {e}")
+        
+        # Prepare methodology description
+        methodology = {
+            "Phylogenetic Clustering": (
+                "Tree-aware clustering methods (TreeCluster, Phydelity-inspired) that respect tree structure. "
+                "Pairwise patristic distances computed from phylogenetic tree. "
+                "Optimal cluster number selected using silhouette analysis."
+            ),
+            "Outlier Detection": (
+                "Isolation Forest algorithm to identify and remove outlier strains. "
+                "Contamination parameter controls the expected proportion of outliers."
+            ),
+            "Ensemble Clustering": (
+                "Multiple clustering algorithms tested (KMeans, DBSCAN, Gaussian Mixture). "
+                "Best performer selected based on silhouette coefficient. "
+                "Optuna used for hyperparameter optimization."
+            ),
+            "Evolutionary Metrics": (
+                "Faith's Phylogenetic Diversity (PD) quantifies evolutionary history captured by clusters. "
+                "Pairwise patristic distances measure evolutionary divergence. "
+                "Beta diversity metrics assess cluster differentiation."
+            ),
+            "Binary Trait Analysis": (
+                "Chi-square tests for trait-cluster associations with Benjamini-Hochberg FDR correction. "
+                "Log-odds ratios with bootstrap confidence intervals for effect size estimation. "
+                "Random Forest feature importance for identifying discriminative traits."
+            ),
+            "Association Rules": (
+                "mlxtend library for mining frequent patterns and association rules. "
+                "Apriori algorithm identifies trait combinations with high support and confidence."
+            ),
+            "Multiple Correspondence Analysis": (
+                "prince library for dimensionality reduction of categorical trait data. "
+                "Produces low-dimensional representation for visualization."
+            ),
+            "Statistical Corrections": (
+                "Benjamini-Hochberg FDR correction for multiple hypothesis testing. "
+                "Pairwise comparisons with FDR adjustment for cluster-specific tests."
+            )
+        }
+        
+        # Prepare sheets data
+        sheets_data = {}
+        
+        # Scan output folder for CSV files
+        csv_files = {}
+        for f in os.listdir(self.output_folder):
+            if f.lower().endswith('.csv'):
+                try:
+                    df = pd.read_csv(os.path.join(self.output_folder, f))
+                    csv_files[f] = df
+                except Exception as e:
+                    print(f"Could not load {f}: {e}")
+        
+        # Add CSV files as sheets with descriptive names
+        for csv_name, df in csv_files.items():
+            sheet_name = sanitize_sheet_name(csv_name.replace('.csv', ''))
+            description = f"Data from {csv_name}"
+            
+            # Add more specific descriptions based on filename
+            if 'cluster' in csv_name.lower():
+                description = "Phylogenetic cluster assignments for all strains"
+            elif 'outlier' in csv_name.lower():
+                description = "Outlier detection results"
+            elif 'chi' in csv_name.lower() or 'chi2' in csv_name.lower():
+                description = "Chi-square test results for trait-cluster associations"
+            elif 'odds' in csv_name.lower() or 'logodds' in csv_name.lower():
+                description = "Log-odds ratios for trait enrichment in clusters"
+            elif 'importance' in csv_name.lower() or 'feat' in csv_name.lower():
+                description = "Random Forest feature importance scores"
+            elif 'rules' in csv_name.lower() or 'assoc' in csv_name.lower():
+                description = "Association rules for trait patterns"
+            elif 'mca' in csv_name.lower():
+                description = "Multiple Correspondence Analysis coordinates"
+            elif 'pd' in csv_name.lower() or 'diversity' in csv_name.lower():
+                description = "Phylogenetic diversity and evolutionary metrics"
+            elif 'pairwise' in csv_name.lower() or 'distance' in csv_name.lower():
+                description = "Pairwise patristic distances between strains"
+            elif 'trait' in csv_name.lower():
+                description = "Binary trait analysis results"
+            
+            sheets_data[sheet_name] = (df, description)
+        
+        # Prepare metadata
+        metadata = {
+            'Base_Directory': config.base_dir,
+            'Output_Folder': config.output_folder,
+            'Tree_File': config.tree_file,
+            'MIC_File': config.mic_file,
+            'AMR_Genes_File': config.amr_genes_file,
+            'Virulence_Genes_File': config.virulence_genes_file,
+            'UMAP_Components': config.umap_components,
+            'UMAP_Neighbors': config.umap_neighbors,
+            'Outlier_Contamination': config.outlier_contamination,
+            'Bootstrap_Iterations': config.bootstrap_iterations,
+            'FDR_Alpha': config.fdr_alpha,
+            'Total_CSV_Files': len(csv_files),
+            'Total_PNG_Charts': len(excel_gen.png_files)
+        }
+        
+        # Generate Excel report
+        excel_path = excel_gen.generate_excel_report(
+            report_name="Phylogenetic_Clustering_Report",
+            sheets_data=sheets_data,
+            methodology=methodology,
+            **metadata
+        )
+        
+        print(f"Excel report saved to: {excel_path}")
+        return excel_path
 
     def convert_html_to_pdf(self, html_path, output_file=None):
         if output_file is None:
@@ -2590,10 +2758,17 @@ Author: MK-vet (with tree-aware clustering improvements)
     final_results = analysis.run_complete_analysis()
     if final_results is not None:
         report_generator = HTMLReportGenerator(config.output_folder, base_dir=config.base_dir)
+        
+        # Generate HTML report
         html_report_path = report_generator.generate_report(final_results, config, "phylogenetic_report.html")
+        print("\nHTML report generation completed.")
+        
+        # Generate Excel report
+        excel_report_path = report_generator.generate_excel_report(final_results, config)
+        print("\nExcel report generation completed.")
+        
         # Optionally, to produce a PDF:
         # report_generator.convert_html_to_pdf(html_report_path)
-        print("\nHTML report generation completed.")
     else:
         print("Analysis was interrupted due to errors.")
     print(f"\n=== End of Phylogenetic Analysis: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')} ===")
