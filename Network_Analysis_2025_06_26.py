@@ -1,0 +1,598 @@
+import pandas as pd
+import numpy as np
+import networkx as nx
+import community.community_louvain as community_louvain
+import plotly.graph_objects as go
+import plotly.offline as pyo
+from scipy.stats import chi2_contingency, entropy as scipy_entropy, norm, fisher_exact
+import statsmodels.stats.multitest as smm
+from google.colab import files
+import itertools
+import re
+import concurrent.futures
+from collections import Counter
+
+def create_interactive_table(df: pd.DataFrame, table_id: str) -> str:
+    display_df = df.copy()
+    numeric_cols = display_df.select_dtypes(include=[np.number]).columns
+    display_df[numeric_cols] = display_df[numeric_cols].round(3)
+    html = f'<table id="table-{table_id}" class="data-table" cellspacing="0" width="100%">'
+    html += '<thead><tr>'
+    for col in display_df.columns:
+        html += f'<th>{col}</th>'
+    html += '</tr></thead><tbody>'
+    for _, row in display_df.iterrows():
+        html += '<tr>'
+        for val in row:
+            html += f'<td>{val}</td>'
+        html += '</tr>'
+    html += '</tbody></table>'
+    return html
+
+def create_section_summary(title: str, stats: dict, per_category=None, per_feature=None) -> str:
+    html = f'<div class="summary-block" style="background:#f7f7f7;border:1px solid #ccc;padding:10px;margin-bottom:10px;"><strong>{title}:</strong><ul>'
+    for k,v in stats.items():
+        html += f'<li>{k}: {v}</li>'
+    html += '</ul>'
+    if per_category is not None:
+        html += "<b>By category:</b><ul>"
+        for cat, stat in per_category.items():
+            html += f"<li>{cat}: {stat}</li>"
+        html += "</ul>"
+    if per_feature is not None:
+        html += "<details><summary><b>By feature (click to expand):</b></summary><ul>"
+        for feat, stat in per_feature.items():
+            html += f"<li>{feat}: {stat}</li>"
+        html += "</ul></details>"
+    html += '</div>'
+    return html
+
+def find_matching_files(uploaded_files, expected_files):
+    file_mapping = {}
+    for expected in expected_files:
+        base_name = expected.replace('.csv', '')
+        if expected in uploaded_files:
+            file_mapping[expected] = expected
+            continue
+        pattern = rf"{re.escape(base_name)}\s*\(\d+\)\.csv"
+        found = False
+        for uploaded_file in uploaded_files:
+            if re.match(pattern, uploaded_file):
+                file_mapping[expected] = uploaded_file
+                found = True
+                break
+        if not found:
+            for uploaded_file in uploaded_files:
+                if uploaded_file.lower() == expected.lower():
+                    file_mapping[expected] = uploaded_file
+                    found = True
+                    break
+    return file_mapping
+
+def get_centrality(centrality_dict: dict) -> dict:
+    return centrality_dict
+
+def expand_categories(df: pd.DataFrame, category_name: str) -> pd.DataFrame:
+    sid = df['Strain_ID']
+    values = df[category_name].astype(str)
+    if category_name in ['MLST', 'Serotype']:
+        values = values.str.replace(r'\.0$', '', regex=True)
+    dummies = pd.get_dummies(values, prefix=category_name)
+    dummies['Strain_ID'] = sid
+    return dummies.set_index('Strain_ID').reset_index()
+
+def chi2_phi(x: pd.Series, y: pd.Series):
+    contingency = pd.crosstab(x, y)
+    n = contingency.values.sum()
+    if contingency.shape == (2,2) and n <= 20:
+        _, p = fisher_exact(contingency)
+        chi2 = chi2_contingency(contingency, correction=False)[0]
+        phi = min(np.sqrt(chi2 / n), 0.9999)
+        return p, phi, contingency, 0.0, 0.0
+    chi2_stat, p, _, expected = chi2_contingency(contingency, correction=False)
+    if contingency.shape == (2,2) and (expected < 5).any():
+        chi2_stat, p, _, _ = chi2_contingency(contingency, correction=True)
+    if n <= 3:
+        return p, 0.0, contingency, 0.0, 0.0
+    phi = min(np.sqrt(chi2_stat / n), 0.9999)
+    z = np.arctanh(phi)
+    se = 1 / np.sqrt(n - 3)
+    lo = np.tanh(z - norm.ppf(0.975) * se)
+    hi = np.tanh(z + norm.ppf(0.975) * se)
+    return p, phi, contingency, lo, hi
+
+def cramers_v(contingency: pd.DataFrame):
+    r, k = contingency.shape
+    if r < 2 or k < 2:
+        return 0.0, 0.0, 0.0
+    chi2_stat = chi2_contingency(contingency)[0]
+    n = contingency.values.sum()
+    if n <= 3:
+        return 0.0, 0.0, 0.0
+    phi = min(np.sqrt(chi2_stat / n), 0.9999)
+    z = np.arctanh(phi)
+    se = 1 / np.sqrt(n - 3)
+    lo = np.tanh(z - norm.ppf(0.975) * se)
+    hi = np.tanh(z + norm.ppf(0.975) * se)
+    m = min(r - 1, k - 1)
+    if m <= 0:
+        return 0.0, 0.0, 0.0
+    v = phi / np.sqrt(m)
+    return v, lo / np.sqrt(m), hi / np.sqrt(m)
+
+def calculate_entropy(series: pd.Series):
+    probs = series.value_counts(normalize=True)
+    if len(probs) <= 1:
+        return 0.0, 0.0
+    H = scipy_entropy(probs)
+    Hn = H / np.log2(len(probs))
+    return H, Hn
+
+def conditional_entropy(x: pd.Series, y: pd.Series) -> float:
+    joint = pd.crosstab(x, y, normalize='all')
+    marginal = joint.sum(axis=0)
+    ce = 0.0
+    for val in marginal.index:
+        p_y = marginal[val]
+        if p_y > 0:
+            cond_probs = joint[val] / p_y
+            non_zero = cond_probs[cond_probs > 0]
+            if len(non_zero) > 0:
+                ce += p_y * scipy_entropy(non_zero)
+    return ce
+
+def information_gain(x: pd.Series, y: pd.Series) -> float:
+    H, _ = calculate_entropy(x)
+    ce = conditional_entropy(x, y)
+    return max(0.0, H - ce)
+
+def normalized_mutual_info(x: pd.Series, y: pd.Series) -> float:
+    ig = information_gain(x, y)
+    Hx, _ = calculate_entropy(x)
+    Hy, _ = calculate_entropy(y)
+    if Hx > 0 and Hy > 0:
+        return ig / np.sqrt(Hx * Hy)
+    return 0.0
+
+def find_mutually_exclusive(df: pd.DataFrame, features: list, mapping: dict, k: int = 2, max_patterns: int = 1000) -> pd.DataFrame:
+    patterns = []
+    for combo in itertools.combinations(features, k):
+        if (df[list(combo)].sum(axis=1) == k).sum() == 0:
+            pat = {}
+            for idx, feat in enumerate(combo, 1):
+                pat[f'Feature_{idx}'] = feat
+                pat[f'Category_{idx}'] = mapping.get(feat, 'Unassigned')
+            patterns.append(pat)
+        if len(patterns) >= max_patterns:
+            break
+    return pd.DataFrame(patterns)
+
+def get_cluster_hubs(df: pd.DataFrame, top_n: int = 3) -> pd.DataFrame:
+    if 'Cluster' not in df.columns or 'Degree_Centrality' not in df.columns:
+        return pd.DataFrame()
+    hubs = []
+    for cluster, group in df.groupby('Cluster'):
+        topk = group.nlargest(top_n, 'Degree_Centrality')
+        for _, row in topk.iterrows():
+            hubs.append({
+                'Cluster': cluster,
+                'Feature': row['Feature'],
+                'Category': row['Category'],
+                'Degree_Centrality': row['Degree_Centrality']
+            })
+    return pd.DataFrame(hubs)
+
+def adaptive_phi_threshold(phi_vals: np.ndarray, method: str = 'percentile', percentile: int = 90) -> float:
+    if method == 'percentile':
+        return np.percentile(phi_vals, percentile)
+    elif method == 'iqr':
+        q75, q25 = np.percentile(phi_vals, [75, 25])
+        return q75 + 1.5 * (q75 - q25)
+    elif method == 'statistical':
+        mean = np.mean(phi_vals)
+        std = np.std(phi_vals)
+        return mean + 2 * std
+    return 0.5
+
+def create_interactive_table_with_empty(df: pd.DataFrame, table_id: str) -> str:
+    if df.empty:
+        return "<p>No data available.</p>"
+    return create_interactive_table(df, table_id)
+
+# ---------- EXTENDED SUMMARY HELPERS ----------
+
+def summarize_by_category(df, value_col, category_cols):
+    out = {}
+    cats = pd.unique(df[category_cols[0]].tolist() + df[category_cols[1]].tolist())
+    for cat in cats:
+        subset = df[(df[category_cols[0]] == cat) | (df[category_cols[1]] == cat)]
+        if len(subset) > 0:
+            out[cat] = f"Count: {len(subset)}, mean: {subset[value_col].mean():.3f}, min/max: {subset[value_col].min():.3f}/{subset[value_col].max():.3f}"
+    return out
+
+def summarize_by_feature(df, value_col, feature_cols):
+    out = {}
+    feats = pd.unique(df[feature_cols[0]].tolist() + df[feature_cols[1]].tolist())
+    for feat in feats:
+        subset = df[(df[feature_cols[0]] == feat) | (df[feature_cols[1]] == feat)]
+        if len(subset) > 0:
+            out[feat] = f"Count: {len(subset)}, mean: {subset[value_col].mean():.3f}, min/max: {subset[value_col].min():.3f}/{subset[value_col].max():.3f}"
+    return out
+
+def summarize_by_category_excl(df, k=2):
+    cats = []
+    for i in range(1, k+1):
+        cats += df.get(f'Category_{i}', pd.Series(dtype=str)).tolist()
+    cats = pd.unique([c for c in cats if pd.notna(c)])
+    out = {}
+    for cat in cats:
+        subset = df[(df.filter(like='Category_').isin([cat])).any(axis=1)]
+        out[cat] = f"Count: {len(subset)}"
+    return out
+
+def summarize_by_feature_excl(df, k=2):
+    feats = []
+    for i in range(1, k+1):
+        feats += df.get(f'Feature_{i}', pd.Series(dtype=str)).tolist()
+    feats = pd.unique([f for f in feats if pd.notna(f)])
+    out = {}
+    for feat in feats:
+        subset = df[(df.filter(like='Feature_').isin([feat])).any(axis=1)]
+        out[feat] = f"Count: {len(subset)}"
+    return out
+
+def summarize_by_category_network(df, value_col='Degree_Centrality'):
+    out = {}
+    cats = df['Category'].unique()
+    for cat in cats:
+        sub = df[df['Category']==cat]
+        if len(sub)>0:
+            out[cat] = f"Count: {len(sub)}, mean degree: {sub[value_col].mean():.3f}, min/max degree: {sub[value_col].min():.3f}/{sub[value_col].max():.3f}"
+    return out
+
+def summarize_by_feature_network(df, value_col='Degree_Centrality'):
+    out = {}
+    for feat in df['Feature']:
+        sub = df[df['Feature']==feat]
+        if len(sub)>0:
+            out[feat] = f"degree: {sub[value_col].values[0]:.3f}"
+    return out
+
+# ====================== REPORT GENERATION ======================
+
+def generate_report_with_cluster_stats(
+    chi2_df, network_df, entropy_df, cramers_df,
+    feature_summary_df, excl2_df, excl3_df, hubs_df, network_html,
+    chi2_summary, entropy_summary, cramers_summary, excl2_summary, excl3_summary,
+    network_summary, hubs_summary,
+    chi2_cat, chi2_feat, entropy_cat, entropy_feat, cramers_cat, cramers_feat,
+    excl2_cat, excl2_feat, excl3_cat, excl3_feat, network_cat, network_feat):
+
+    css_links = (
+        '<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>'
+        '<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"/>'
+    )
+    js_scripts = (
+        '<script src="https://code.jquery.com/jquery-3.5.1.js"></script>'
+        '<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>'
+        '<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>'
+        '<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>'
+        '<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>'
+        '<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>'
+        '<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>'
+    )
+    init_script = (
+        '<script>$(document).ready(function() {'
+        "$('table.data-table').DataTable({dom:'Bfrtip', buttons:['copyHtml5','csvHtml5','excelHtml5','pdfHtml5'], pageLength:20});"
+        '});</script>'
+    )
+
+    html = (
+        '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">'
+        '<title>Analysis Report</title>'
+        + css_links + js_scripts +
+        '<style>.summary-block{background:#f7f7f7;border:1px solid #ccc;padding:10px;margin-bottom:10px;}</style>'
+        '</head><body>'
+        '<h1>Comprehensive Statistical Analysis Report</h1>'
+        '<section><h2>1. Feature Summary</h2>' + create_interactive_table_with_empty(feature_summary_df, 'FeatureSummary') + '</section>'
+
+        '<section><h2>2. Chi-square Results</h2>'
+        + create_section_summary('Chi-square/Fisher results summary', chi2_summary, chi2_cat, chi2_feat)
+        + create_interactive_table_with_empty(chi2_df, 'ChiSquare') + '</section>'
+
+        '<section><h2>3. Information Theory</h2>'
+        + create_section_summary('Information theory summary', entropy_summary, entropy_cat, entropy_feat)
+        + create_interactive_table_with_empty(entropy_df, 'Entropy')
+        + '<h3>Cramér\'s V</h3>'
+        + create_section_summary("Cramér's V summary", cramers_summary, cramers_cat, cramers_feat)
+        + create_interactive_table_with_empty(cramers_df, 'Cramers') + '</section>'
+
+        '<section><h2>4. Mutually Exclusive Patterns</h2>'
+        + '<h3>Pairs (k=2)</h3>' + create_section_summary("Mutually exclusive pairs summary", excl2_summary, excl2_cat, excl2_feat)
+        + create_interactive_table_with_empty(excl2_df, 'Excl2')
+        + '<h3>Triplets (k=3)</h3>' + create_section_summary("Mutually exclusive triplets summary", excl3_summary, excl3_cat, excl3_feat)
+        + create_interactive_table_with_empty(excl3_df, 'Excl3') + '</section>'
+
+        '<section><h2>5. Network Analysis</h2>'
+        + create_section_summary('Network summary', network_summary, network_cat, network_feat)
+        + create_interactive_table_with_empty(network_df, 'Network') + network_html + '</section>'
+
+        '<section><h2>6. Cluster Hubs</h2>'
+        + create_section_summary("Cluster hubs summary", hubs_summary)
+        + create_interactive_table_with_empty(hubs_df, 'Hubs') + '</section>'
+        + init_script +
+        '</body></html>'
+    )
+    return html
+
+# ====================== MAIN WORKFLOW ======================
+
+def perform_full_analysis():
+    np.random.seed(2800)
+    print("Please upload the following CSV files: MGE.csv, MIC.csv, MLST.csv, Plasmid.csv, Serotype.csv, Virulence.csv, AMR_genes.csv")
+    uploaded_files = files.upload()
+    expected = ['MGE.csv','MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']
+    file_mapping = find_matching_files(uploaded_files, expected)
+    missing = [fn for fn in expected if fn not in file_mapping]
+    if missing:
+        print("Available files:", list(uploaded_files.keys()))
+        raise FileNotFoundError(f"Missing files: {', '.join(missing)}")
+    print("File mapping:")
+    for expected_name, actual_name in file_mapping.items():
+        print(f"  {expected_name} -> {actual_name}")
+
+    data = {}
+    for expected_name, actual_name in file_mapping.items():
+        data[expected_name] = pd.read_csv(actual_name)
+
+    for fn, df in data.items():
+        if 'Strain_ID' not in df.columns:
+            raise KeyError(f"File {fn} must contain 'Strain_ID' column.")
+
+    summary = []
+    for fn in expected:
+        cat = fn.replace('.csv','')
+        df = data[fn]
+        if cat in ['MGE','MLST','Plasmid','Serotype']:
+            unique_vals = df[cat].dropna().astype(str).str.replace(r'\.0$', '', regex=True).unique()
+            unique_vals = [v for v in unique_vals if v and v.lower() != 'nan']
+            count = len(unique_vals)
+        else:
+            count = len([c for c in df.columns if c != 'Strain_ID'])
+        summary.append({'Category': cat, 'Number_of_Features': count})
+    feature_summary_df = pd.DataFrame(summary)
+
+    expanded = {}
+    for fn in ['MGE.csv','MLST.csv','Plasmid.csv','Serotype.csv']:
+        cat = fn.replace('.csv','')
+        expanded[cat] = expand_categories(data[fn], cat)
+
+    merged = expanded['MGE']
+    for fn in ['MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']:
+        key = fn.replace('.csv','')
+        merged = merged.merge(expanded.get(key, data[fn]), on='Strain_ID', how='outer')
+    merged.fillna(0, inplace=True)
+    features = [c for c in merged.columns if c != 'Strain_ID']
+
+    feature_category = {}
+    for fn in expected:
+        cat = fn.replace('.csv','')
+        df = data[fn]
+        if cat in expanded:
+            cols = [col for col in expanded[cat].columns if col != 'Strain_ID']
+            for c in cols:
+                feature_category[c] = cat
+        else:
+            for c in df.columns:
+                if c != 'Strain_ID':
+                    feature_category[c] = cat
+    for feat in features:
+        if feat not in feature_category:
+            if '_' in feat:
+                prefix = feat.split('_')[0]
+                feature_category[feat] = prefix
+            else:
+                feature_category[feat] = 'Unassigned'
+
+    excl2_df = find_mutually_exclusive(merged, features, feature_category, k=2)
+    excl3_df = find_mutually_exclusive(merged, features, feature_category, k=3)
+
+    pairs = list(itertools.combinations(features, 2))
+    results = []
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {executor.submit(chi2_phi, merged[f1], merged[f2]): (f1, f2) for f1, f2 in pairs}
+        for fut in concurrent.futures.as_completed(futures):
+            f1, f2 = futures[fut]
+            p, phi, _, lo, hi = fut.result()
+            results.append({
+                'Feature1': f1, 'Category1': feature_category.get(f1, 'Unassigned'),
+                'Feature2': f2, 'Category2': feature_category.get(f2, 'Unassigned'),
+                'P_value': p, 'Phi_coefficient': phi, 'CI_Lower': lo, 'CI_Upper': hi
+            })
+    chi2_df = pd.DataFrame(results)
+    chi2_df['Significant'], chi2_df['P_adjusted'], _, _ = smm.multipletests(chi2_df['P_value'], method='fdr_bh')
+
+    numeric_feats = merged[features].select_dtypes(include=[np.number]).columns.tolist()
+    if not numeric_feats:
+        for feat in features:
+            merged[feat] = pd.to_numeric(merged[feat], errors='coerce').fillna(0)
+        numeric_feats = features
+    top_feats = pd.Series(merged[numeric_feats].var()).nlargest(min(50, len(numeric_feats))).index.tolist()
+    print(f"Analyzing {len(top_feats)} features for information theory metrics.")
+
+    info_results, cramers_results = [], []
+    info_pvals, cramers_pvals = [], []
+    for f1 in top_feats:
+        H, Hn = calculate_entropy(merged[f1])
+        for f2 in top_feats:
+            if f1 == f2:
+                continue
+            ce = conditional_entropy(merged[f1], merged[f2])
+            ig = information_gain(merged[f1], merged[f2])
+            nmi = normalized_mutual_info(merged[f1], merged[f2])
+            tbl = pd.crosstab(merged[f1], merged[f2])
+            n = tbl.values.sum()
+            p_ig = 1.0
+            df_ig = (tbl.shape[0] - 1) * (tbl.shape[1] - 1)
+            if n > 0 and df_ig > 0:
+                p_ig = 1 - chi2_contingency(tbl, correction=False)[1]
+            info_pvals.append(p_ig)
+            v, vlo, vhi = cramers_v(tbl)
+            cramers_pvals.append(chi2_contingency(tbl)[1] if tbl.size>1 else 1.0)
+            info_results.append({
+                'Feature1': f1, 'Category1': feature_category.get(f1,'Unassigned'),
+                'Feature2': f2, 'Category2': feature_category.get(f2,'Unassigned'),
+                'Entropy': H, 'Entropy_Normalized': Hn,
+                'Conditional_Entropy': ce, 'Information_Gain': ig,
+                'Normalized_Mutual_Information': nmi
+            })
+            cramers_results.append({
+                'Feature1': f1, 'Category1': feature_category.get(f1,'Unassigned'),
+                'Feature2': f2, 'Category2': feature_category.get(f2,'Unassigned'),
+                'Cramers_V': v, 'CI_Lower':vlo, 'CI_Upper':vhi
+            })
+    entropy_df = pd.DataFrame(info_results)
+    cramers_df = pd.DataFrame(cramers_results)
+    entropy_df['Significant'], entropy_df['P_adjusted'], _, _ = smm.multipletests(info_pvals, method='fdr_bh')
+    cramers_df['Significant'], cramers_df['P_adjusted'], _, _ = smm.multipletests(cramers_pvals, method='fdr_bh')
+
+    # ---------- SECTION SUMMARIES ----------
+
+    chi2_summary = {
+        "Total pairs": len(chi2_df),
+        "Significant (FDR)": int(chi2_df['Significant'].sum()),
+        "Phi mean": np.round(chi2_df['Phi_coefficient'].mean(),3),
+        "Phi min/max": f"{chi2_df['Phi_coefficient'].min():.3f} / {chi2_df['Phi_coefficient'].max():.3f}"
+    }
+    chi2_cat = summarize_by_category(chi2_df, 'Phi_coefficient', ['Category1','Category2'])
+    chi2_feat = summarize_by_feature(chi2_df, 'Phi_coefficient', ['Feature1','Feature2'])
+
+    entropy_summary = {
+        "Pairs analyzed": len(entropy_df),
+        "Significant (FDR)": int(entropy_df['Significant'].sum()),
+        "IG mean": np.round(entropy_df['Information_Gain'].mean(),3),
+        "NMI mean": np.round(entropy_df['Normalized_Mutual_Information'].mean(),3)
+    }
+    entropy_cat = summarize_by_category(entropy_df, 'Information_Gain', ['Category1','Category2'])
+    entropy_feat = summarize_by_feature(entropy_df, 'Information_Gain', ['Feature1','Feature2'])
+
+    cramers_summary = {
+        "Pairs analyzed": len(cramers_df),
+        "Significant (FDR)": int(cramers_df['Significant'].sum()),
+        "V mean": np.round(cramers_df['Cramers_V'].mean(),3),
+        "V min/max": f"{cramers_df['Cramers_V'].min():.3f} / {cramers_df['Cramers_V'].max():.3f}"
+    }
+    cramers_cat = summarize_by_category(cramers_df, 'Cramers_V', ['Category1','Category2'])
+    cramers_feat = summarize_by_feature(cramers_df, 'Cramers_V', ['Feature1','Feature2'])
+
+    excl2_summary = {"Number of mutually exclusive pairs": len(excl2_df)}
+    excl2_cat = summarize_by_category_excl(excl2_df, k=2)
+    excl2_feat = summarize_by_feature_excl(excl2_df, k=2)
+
+    excl3_summary = {"Number of mutually exclusive triplets": len(excl3_df)}
+    excl3_cat = summarize_by_category_excl(excl3_df, k=3)
+    excl3_feat = summarize_by_feature_excl(excl3_df, k=3)
+
+    # ---------- NETWORK ----------
+    phi_vals = chi2_df['Phi_coefficient'].values
+    threshold = adaptive_phi_threshold(phi_vals, method='percentile', percentile=90)
+    print(f"Applying phi threshold: {threshold:.3f}")
+    sig_edges = chi2_df[chi2_df['Significant'] & (chi2_df['Phi_coefficient'] > threshold)]
+    G = nx.Graph()
+    for _, row in sig_edges.iterrows():
+        G.add_edge(row['Feature1'], row['Feature2'], weight=row['Phi_coefficient'])
+
+    network_df = pd.DataFrame()
+    hubs_df = pd.DataFrame()
+    network_html = ''
+    hubs_summary = {"Number of cluster hubs": 0}
+    network_summary = {
+        "Edges (significant)": G.number_of_edges(),
+        "Nodes": G.number_of_nodes()
+    }
+    network_cat, network_feat = {}, {}
+
+    if G.number_of_edges() > 0:
+        partition = community_louvain.best_partition(G, weight='weight', random_state=2800)
+        cluster_ids = sorted(set(partition.values()))
+        num_clusters = len(cluster_ids)
+        deg_cent = get_centrality(nx.degree_centrality(G))
+        btw_cent = get_centrality(nx.betweenness_centrality(G))
+        cls_cent = get_centrality(nx.closeness_centrality(G))
+        eig_cent = get_centrality(nx.eigenvector_centrality(G, tol=1e-6))
+        node_data = []
+        for node in G.nodes():
+            node_data.append({
+                'Feature': node,
+                'Category': feature_category.get(node,'Unassigned'),
+                'Cluster': partition[node] + 1,
+                'Degree_Centrality': deg_cent[node],
+                'Betweenness_Centrality': btw_cent[node],
+                'Closeness_Centrality': cls_cent[node],
+                'Eigenvector_Centrality': eig_cent[node]
+            })
+        network_df = pd.DataFrame(node_data)
+        hubs_df = get_cluster_hubs(network_df)
+        hubs_summary = {
+            "Total hubs (top 3/cluster)": len(hubs_df),
+            "Clusters": num_clusters
+        }
+        # --- DYNAMIC COLORS ---
+        import matplotlib
+        from matplotlib import cm
+        if num_clusters > 10:
+            cmap = cm.get_cmap('tab20', num_clusters)
+            palette = [matplotlib.colors.rgb2hex(cmap(i)) for i in range(num_clusters)]
+        else:
+            palette = ['red','blue','green','orange','purple','cyan','magenta','yellow','pink','brown'][:num_clusters]
+        # 3D network
+        pos = nx.spring_layout(G, dim=3, seed=2800, k=0.6)
+        edge_x, edge_y, edge_z = [], [], []
+        hover_texts = []
+        for u, v, d in G.edges(data=True):
+            x0,y0,z0 = pos[u]; x1,y1,z1 = pos[v]
+            edge_x += [x0, x1, None]; edge_y += [y0, y1, None]; edge_z += [z0, z1, None]
+            hover_texts.append(f"{u}–{v}<br>Phi: {d['weight']:.3f}")
+        edge_trace = go.Scatter3d(x=edge_x, y=edge_y, z=edge_z, mode='lines', line=dict(width=2, color='#888'), hoverinfo='text', hovertext=hover_texts)
+        node_x, node_y, node_z, texts, colors, hovers = [], [], [], [], [], []
+        for node in G.nodes():
+            x,y,z = pos[node]
+            node_x.append(x); node_y.append(y); node_z.append(z)
+            clust = partition[node]
+            colors.append(palette[clust % len(palette)])
+            texts.append(f"{node}\n(C{clust+1})")
+            hovers.append(
+                f"Feature: {node}<br>Category: {feature_category.get(node,'Unassigned')}<br>Cluster: {clust+1}"
+                f"<br>Degree: {deg_cent[node]:.3f}<br>Betweenness: {btw_cent[node]:.3f}"
+                f"<br>Closeness: {cls_cent[node]:.3f}<br>Eigenvector: {eig_cent[node]:.3f}"
+            )
+        node_trace = go.Scatter3d(x=node_x, y=node_y, z=node_z, mode='markers+text', marker=dict(color=colors, size=12, opacity=0.8), text=texts, textposition='top center', textfont=dict(size=10, color='black'), hovertext=hovers, hoverinfo='text')
+        fig = go.Figure(data=[edge_trace, node_trace], layout=go.Layout(title='3D Network with Cluster Labels', margin=dict(b=20,l=5,r=5,t=40), scene=dict(xaxis=dict(showgrid=True,title='X'), yaxis=dict(showgrid=True,title='Y'), zaxis=dict(showgrid=True,title='Z')), width=1200, height=800, showlegend=False))
+        fig.write_html('network_visualization.html', include_plotlyjs='cdn')
+        with open('network_visualization.html','r') as f:
+            network_html = f.read()
+        network_summary.update({
+            "Clusters": num_clusters,
+            "Max cluster size": network_df.groupby("Cluster").size().max(),
+            "Min cluster size": network_df.groupby("Cluster").size().min(),
+        })
+        network_cat = summarize_by_category_network(network_df, value_col='Degree_Centrality')
+        network_feat = summarize_by_feature_network(network_df, value_col='Degree_Centrality')
+    else:
+        network_html = '<p>No significant network edges detected.</p>'
+
+    report_html = generate_report_with_cluster_stats(
+        chi2_df, network_df, entropy_df, cramers_df, feature_summary_df,
+        excl2_df, excl3_df, hubs_df, network_html,
+        chi2_summary, entropy_summary, cramers_summary, excl2_summary, excl3_summary,
+        network_summary, hubs_summary,
+        chi2_cat, chi2_feat, entropy_cat, entropy_feat, cramers_cat, cramers_feat,
+        excl2_cat, excl2_feat, excl3_cat, excl3_feat, network_cat, network_feat
+    )
+    with open('report.html', 'w', encoding='utf-8') as f:
+        f.write(report_html)
+    print("Report saved to 'report.html'.")
+    files.download('report.html')
+
+if __name__ == '__main__':
+    perform_full_analysis()
