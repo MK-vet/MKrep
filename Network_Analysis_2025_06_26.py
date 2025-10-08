@@ -11,6 +11,8 @@ import itertools
 import re
 import concurrent.futures
 from collections import Counter
+import os
+from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 
 def create_interactive_table(df: pd.DataFrame, table_id: str) -> str:
     display_df = df.copy()
@@ -325,6 +327,174 @@ def generate_report_with_cluster_stats(
     )
     return html
 
+# ====================== EXCEL REPORT GENERATION ======================
+
+def generate_excel_report_with_cluster_stats(
+    chi2_df, network_df, entropy_df, cramers_df,
+    feature_summary_df, excl2_df, excl3_df, hubs_df, fig_network,
+    chi2_summary, entropy_summary, cramers_summary, excl2_summary, excl3_summary,
+    network_summary, hubs_summary,
+    chi2_cat, chi2_feat, entropy_cat, entropy_feat, cramers_cat, cramers_feat,
+    excl2_cat, excl2_feat, excl3_cat, excl3_feat, network_cat, network_feat):
+    """
+    Generate comprehensive Excel report with all analysis results and PNG charts.
+    
+    This function creates a detailed Excel workbook with multiple sheets containing:
+    - Metadata and methodology
+    - Feature summary statistics
+    - Chi-square and Fisher exact test results
+    - Information theory metrics (entropy, Cramér's V)
+    - Mutually exclusive patterns (pairs and triplets)
+    - Network analysis with centrality measures
+    - Cluster hubs identification
+    - Category and feature-level summaries
+    
+    All visualizations are saved as PNG files in the png_charts subfolder.
+    """
+    # Initialize Excel report generator
+    excel_gen = ExcelReportGenerator(output_folder="output")
+    
+    # Save network visualization as PNG if available
+    if fig_network is not None:
+        try:
+            excel_gen.save_plotly_figure_fallback(fig_network, "network_3d_visualization", width=1400, height=1000)
+        except Exception as e:
+            print(f"Could not save network visualization: {e}")
+    
+    # Prepare methodology description
+    methodology = {
+        "Chi-square and Fisher Exact Tests": (
+            "Statistical tests to assess associations between categorical features. "
+            "Fisher exact test is used for 2x2 contingency tables with low expected counts (≤20 samples). "
+            "Benjamini-Hochberg FDR correction applied for multiple testing."
+        ),
+        "Information Theory Metrics": (
+            "Entropy measures the uncertainty/information content of feature distributions. "
+            "Cramér's V quantifies association strength between categorical variables (0=no association, 1=perfect association). "
+            "Phi coefficient is calculated for binary features."
+        ),
+        "Mutually Exclusive Patterns": (
+            "Identifies features that rarely or never co-occur in the dataset. "
+            "Analyzed for pairs (k=2) and triplets (k=3) of features. "
+            "Uses hypergeometric test to assess statistical significance of co-occurrence patterns."
+        ),
+        "Network Analysis": (
+            "Constructs a network where nodes are features and edges represent significant associations (Phi ≥ 0.3). "
+            "Community detection using Louvain algorithm to identify feature clusters. "
+            "Centrality metrics: Degree (connectivity), Betweenness (bridging), Closeness (reach), Eigenvector (influence)."
+        ),
+        "Hub Identification": (
+            "Identifies highly connected features that serve as central nodes in the network. "
+            "Hubs are defined as nodes with degree centrality > mean + 1.5×SD."
+        )
+    }
+    
+    # Prepare sheets data
+    sheets_data = {}
+    
+    # Feature Summary
+    sheets_data['Feature_Summary'] = (
+        feature_summary_df,
+        "Overview of all feature categories and their counts"
+    )
+    
+    # Chi-square Results
+    if chi2_df is not None and not chi2_df.empty:
+        sheets_data['Chi2_Results'] = (
+            chi2_df,
+            f"Chi-square/Fisher test results. Total tests: {chi2_summary.get('Total tests', 'N/A')}, "
+            f"Significant (FDR<0.05): {chi2_summary.get('Significant (FDR<0.05)', 'N/A')}"
+        )
+    
+    # Entropy Results
+    if entropy_df is not None and not entropy_df.empty:
+        sheets_data['Entropy_Results'] = (
+            entropy_df,
+            f"Information entropy for each feature. Mean entropy: {entropy_summary.get('Mean entropy', 'N/A')}"
+        )
+    
+    # Cramér's V Results
+    if cramers_df is not None and not cramers_df.empty:
+        sheets_data['Cramers_V_Results'] = (
+            cramers_df,
+            f"Cramér's V association strength. Significant pairs: {cramers_summary.get('Significant (FDR<0.05)', 'N/A')}"
+        )
+    
+    # Mutually Exclusive Pairs
+    if excl2_df is not None and not excl2_df.empty:
+        sheets_data['Exclusive_Pairs_k2'] = (
+            excl2_df,
+            f"Mutually exclusive feature pairs. Total patterns: {excl2_summary.get('Total patterns', 'N/A')}, "
+            f"Significant: {excl2_summary.get('Significant (FDR<0.05)', 'N/A')}"
+        )
+    
+    # Mutually Exclusive Triplets
+    if excl3_df is not None and not excl3_df.empty:
+        sheets_data['Exclusive_Triplets_k3'] = (
+            excl3_df,
+            f"Mutually exclusive feature triplets. Total patterns: {excl3_summary.get('Total patterns', 'N/A')}, "
+            f"Significant: {excl3_summary.get('Significant (FDR<0.05)', 'N/A')}"
+        )
+    
+    # Network Analysis
+    if network_df is not None and not network_df.empty:
+        sheets_data['Network_Analysis'] = (
+            network_df,
+            f"Network node properties with community assignments. "
+            f"Total nodes: {network_summary.get('Total nodes', 'N/A')}, "
+            f"Total edges: {network_summary.get('Total edges', 'N/A')}, "
+            f"Clusters: {network_summary.get('Clusters', 'N/A')}"
+        )
+    
+    # Cluster Hubs
+    if hubs_df is not None and not hubs_df.empty:
+        sheets_data['Cluster_Hubs'] = (
+            hubs_df,
+            f"Highly connected hub features. Total hubs: {hubs_summary.get('Total hubs', 'N/A')}"
+        )
+    
+    # Category-level summaries
+    if chi2_cat:
+        df_chi2_cat = pd.DataFrame([
+            {'Category': k, 'Metric': 'Chi2_Significant_Count', 'Value': v}
+            for k, v in chi2_cat.items()
+        ])
+        sheets_data['Chi2_by_Category'] = (df_chi2_cat, "Chi-square results aggregated by category")
+    
+    if entropy_cat:
+        df_entropy_cat = pd.DataFrame([
+            {'Category': k, 'Metric': 'Mean_Entropy', 'Value': v}
+            for k, v in entropy_cat.items()
+        ])
+        sheets_data['Entropy_by_Category'] = (df_entropy_cat, "Entropy aggregated by category")
+    
+    if network_cat:
+        df_network_cat = pd.DataFrame([
+            {'Category': k, 'Metric': 'Mean_Degree_Centrality', 'Value': v}
+            for k, v in network_cat.items()
+        ])
+        sheets_data['Network_by_Category'] = (df_network_cat, "Network metrics aggregated by category")
+    
+    # Prepare metadata
+    metadata = {
+        'Total_Features_Analyzed': len(feature_summary_df) if feature_summary_df is not None else 0,
+        'Chi2_Tests_Performed': chi2_summary.get('Total tests', 'N/A'),
+        'Significant_Associations_FDR': chi2_summary.get('Significant (FDR<0.05)', 'N/A'),
+        'Network_Nodes': network_summary.get('Total nodes', 'N/A'),
+        'Network_Edges': network_summary.get('Total edges', 'N/A'),
+        'Network_Clusters': network_summary.get('Clusters', 'N/A')
+    }
+    
+    # Generate Excel report
+    excel_path = excel_gen.generate_excel_report(
+        report_name="Network_Analysis_Report",
+        sheets_data=sheets_data,
+        methodology=methodology,
+        **metadata
+    )
+    
+    return excel_path
+
 # ====================== MAIN WORKFLOW ======================
 
 def perform_full_analysis():
@@ -567,8 +737,8 @@ def perform_full_analysis():
                 f"<br>Closeness: {cls_cent[node]:.3f}<br>Eigenvector: {eig_cent[node]:.3f}"
             )
         node_trace = go.Scatter3d(x=node_x, y=node_y, z=node_z, mode='markers+text', marker=dict(color=colors, size=12, opacity=0.8), text=texts, textposition='top center', textfont=dict(size=10, color='black'), hovertext=hovers, hoverinfo='text')
-        fig = go.Figure(data=[edge_trace, node_trace], layout=go.Layout(title='3D Network with Cluster Labels', margin=dict(b=20,l=5,r=5,t=40), scene=dict(xaxis=dict(showgrid=True,title='X'), yaxis=dict(showgrid=True,title='Y'), zaxis=dict(showgrid=True,title='Z')), width=1200, height=800, showlegend=False))
-        fig.write_html('network_visualization.html', include_plotlyjs='cdn')
+        fig_network = go.Figure(data=[edge_trace, node_trace], layout=go.Layout(title='3D Network with Cluster Labels', margin=dict(b=20,l=5,r=5,t=40), scene=dict(xaxis=dict(showgrid=True,title='X'), yaxis=dict(showgrid=True,title='Y'), zaxis=dict(showgrid=True,title='Z')), width=1200, height=800, showlegend=False))
+        fig_network.write_html('network_visualization.html', include_plotlyjs='cdn')
         with open('network_visualization.html','r') as f:
             network_html = f.read()
         network_summary.update({
@@ -580,7 +750,9 @@ def perform_full_analysis():
         network_feat = summarize_by_feature_network(network_df, value_col='Degree_Centrality')
     else:
         network_html = '<p>No significant network edges detected.</p>'
+        fig_network = None
 
+    # Generate HTML report
     report_html = generate_report_with_cluster_stats(
         chi2_df, network_df, entropy_df, cramers_df, feature_summary_df,
         excl2_df, excl3_df, hubs_df, network_html,
@@ -591,8 +763,26 @@ def perform_full_analysis():
     )
     with open('report.html', 'w', encoding='utf-8') as f:
         f.write(report_html)
-    print("Report saved to 'report.html'.")
-    files.download('report.html')
+    print("HTML report saved to 'report.html'.")
+    
+    # Generate Excel report with PNG charts
+    excel_path = generate_excel_report_with_cluster_stats(
+        chi2_df, network_df, entropy_df, cramers_df, feature_summary_df,
+        excl2_df, excl3_df, hubs_df, fig_network,
+        chi2_summary, entropy_summary, cramers_summary, excl2_summary, excl3_summary,
+        network_summary, hubs_summary,
+        chi2_cat, chi2_feat, entropy_cat, entropy_feat, cramers_cat, cramers_feat,
+        excl2_cat, excl2_feat, excl3_cat, excl3_feat, network_cat, network_feat
+    )
+    print(f"Excel report saved to: {excel_path}")
+    
+    # Download both reports
+    try:
+        files.download('report.html')
+        files.download(excel_path)
+    except Exception as e:
+        print(f"Note: Auto-download may not work in all environments: {e}")
+
 
 if __name__ == '__main__':
     perform_full_analysis()

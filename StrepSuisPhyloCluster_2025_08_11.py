@@ -58,6 +58,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from Bio import Phylo
 from sklearn.cluster import KMeans, DBSCAN
+from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 from sklearn.mixture import GaussianMixture
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
 from sklearn.metrics import silhouette_score
@@ -941,6 +942,148 @@ class Report:
         with open(out,"w",encoding="utf-8") as f: f.write(html)
         print(f"HTML report saved to: {out}")
         return out
+    
+    def create_excel(self, payload, config):
+        """
+        Generate comprehensive Excel report with all analysis results and PNG charts.
+        
+        This function creates a detailed Excel workbook with multiple sheets containing:
+        - Metadata and methodology
+        - Phylogenetic clustering results
+        - Evolutionary metrics (PD, beta diversity, phylogenetic signal)
+        - Trait profiling (frequencies, chi-square, log-odds, RF importance)
+        - Association rules and MCA results
+        - All data tables from the analysis
+        
+        Parameters:
+            payload (dict): Dictionary containing all analysis results
+            config (Config): Configuration object with analysis parameters
+            
+        Returns:
+            str: Path to generated Excel file
+        """
+        # Initialize Excel report generator
+        excel_gen = ExcelReportGenerator(output_folder=self.outdir)
+        
+        # Save matplotlib/seaborn figures as PNG
+        # Tree visualization
+        tree_png_html = payload.get("tree_plot", "")
+        if tree_png_html and "data:image/png;base64," in tree_png_html:
+            try:
+                import re
+                match = re.search(r'data:image/png;base64,([^"\']+)', tree_png_html)
+                if match:
+                    img_data = match.group(1)
+                    import base64
+                    from PIL import Image
+                    from io import BytesIO
+                    img = Image.open(BytesIO(base64.b64decode(img_data)))
+                    filepath = os.path.join(excel_gen.png_folder, "phylogenetic_tree.png")
+                    img.save(filepath)
+                    excel_gen.png_files.append(filepath)
+                    print(f"Saved phylogenetic tree: {filepath}")
+            except Exception as e:
+                print(f"Could not save tree plot: {e}")
+        
+        # UMAP visualization
+        umap_html = payload.get("umap_plot", "")
+        if umap_html and "plotly" in umap_html.lower():
+            # This is likely a Plotly div, try to extract and save
+            pass  # Plotly figures in HTML format can't easily be converted back
+        
+        # Prepare methodology description
+        methodology = {
+            "Tree-aware Clustering": (
+                "Pairwise patristic distances from Newick tree computed. "
+                "For each internal clade, intra-clade distances tested against robust threshold "
+                "(median + IQR factor) under max, avg, and sum criteria. "
+                "Best solution selected by silhouette score on precomputed matrix."
+            ),
+            "Ensemble Fallback": (
+                "If tree-based fails: KMeans, GMM, DBSCAN tested with Optuna optimization. "
+                "Best performer chosen by silhouette coefficient."
+            ),
+            "Evolutionary Metrics": (
+                "Faith's Phylogenetic Diversity (PD) quantifies evolutionary history. "
+                "Beta diversity (UniFrac) measures cluster differentiation. "
+                "Phylogenetic signal (Pagel's lambda) tests trait-tree correlation."
+            ),
+            "Trait Profiling": (
+                "Chi-square tests with Benjamini-Hochberg FDR correction. "
+                "Log-odds ratios with bootstrap confidence intervals. "
+                "Random Forest feature importance with 100 bootstrap iterations."
+            ),
+            "Association Rules": (
+                "mlxtend library for pattern mining. "
+                "Minimum support and confidence thresholds applied."
+            ),
+            "Multiple Correspondence Analysis": (
+                "prince library for dimensionality reduction of categorical data. "
+                "Two principal components for visualization."
+            )
+        }
+        
+        # Prepare sheets data
+        sheets_data = {}
+        
+        # Extract data from payload (payload contains HTML tables, we need to parse them or use raw data)
+        # For tables, we'll need to extract DataFrames from the payload if available
+        # Since payload contains HTML strings, we'll need to look for CSV files in the output folder
+        
+        # Scan output folder for CSV files
+        csv_files = {}
+        for f in os.listdir(self.outdir):
+            if f.lower().endswith('.csv'):
+                try:
+                    df = pd.read_csv(os.path.join(self.outdir, f))
+                    csv_files[f] = df
+                except Exception as e:
+                    print(f"Could not load {f}: {e}")
+        
+        # Add CSV files as sheets
+        for csv_name, df in csv_files.items():
+            sheet_name = sanitize_sheet_name(csv_name.replace('.csv', ''))
+            description = f"Data from {csv_name}"
+            
+            # Add more specific descriptions based on filename
+            if 'cluster' in csv_name.lower():
+                description = "Phylogenetic cluster assignments for strains"
+            elif 'chi' in csv_name.lower() or 'chi2' in csv_name.lower():
+                description = "Chi-square test results for trait associations"
+            elif 'odds' in csv_name.lower():
+                description = "Log-odds ratios for trait enrichment"
+            elif 'importance' in csv_name.lower() or 'feat' in csv_name.lower():
+                description = "Random Forest feature importance scores"
+            elif 'rules' in csv_name.lower() or 'assoc' in csv_name.lower():
+                description = "Association rules for trait patterns"
+            elif 'mca' in csv_name.lower():
+                description = "Multiple Correspondence Analysis coordinates"
+            elif 'pd' in csv_name.lower() or 'diversity' in csv_name.lower():
+                description = "Phylogenetic diversity and evolutionary metrics"
+            
+            sheets_data[sheet_name] = (df, description)
+        
+        # Prepare metadata
+        metadata = {
+            'Base_Directory': config.base_dir,
+            'Tree_File': config.tree_file,
+            'UMAP_Components': config.umap_components,
+            'UMAP_Neighbors': config.umap_neighbors,
+            'Outlier_Contamination': config.outlier_contamination,
+            'Total_CSV_Files': len(csv_files),
+            'Total_PNG_Charts': len(excel_gen.png_files)
+        }
+        
+        # Generate Excel report
+        excel_path = excel_gen.generate_excel_report(
+            report_name="StrepSuisPhyloCluster_Report",
+            sheets_data=sheets_data,
+            methodology=methodology,
+            **metadata
+        )
+        
+        print(f"Excel report saved to: {excel_path}")
+        return excel_path
 
 
 # =====================================================
@@ -1194,11 +1337,16 @@ class Pipeline:
         # --- PART V: RESOURCES ---
         payload["download_section"]=rep.scan_downloads()
 
-        # Create report
+        # Create HTML report
         path=rep.create(payload, self.cfg, html_name="phylogenetic_report.html")
+        
+        # Create Excel report
+        excel_path=rep.create_excel(payload, self.cfg)
 
         print("\n=== Analysis completed successfully! ===")
         print("End:", pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"))
+        print(f"HTML report: {path}")
+        print(f"Excel report: {excel_path}")
         return path
 
 
