@@ -2,6 +2,10 @@
 
 Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing on antimicrobial resistance (AMR), virulence factors, and phylogenetic relationships.
 
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
+
 ## Overview
 
 This repository contains Python scripts for analyzing bacterial genomic data with a focus on:
@@ -10,6 +14,31 @@ This repository contains Python scripts for analyzing bacterial genomic data wit
 - Network analysis of gene-phenotype associations
 - Binary trait profiling for virulence and resistance genes
 - Clustering analysis with multiple statistical methods
+
+## 🚀 Quick Start
+
+### Option 1: Google Colab (No Installation Required)
+Click to open interactive notebooks:
+- [Cluster Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
+- [MDR Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb)
+- [Network Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb)
+
+### Option 2: Local Installation
+```bash
+git clone https://github.com/MK-vet/MKrep.git
+cd MKrep
+pip install -r requirements.txt
+python Cluster_MIC_AMR_Viruelnce.py
+```
+
+### Option 3: Python Package (CLI)
+```bash
+pip install mkrep  # When published
+mkrep-cluster --data-dir ./data --output ./results
+```
+
+### Option 4: Interactive Dashboard
+Visit our [Hugging Face Demo](https://huggingface.co/spaces/MK-vet/mkrep-demo) (when deployed)
 
 ## Analysis Scripts
 
@@ -48,46 +77,124 @@ Comprehensive clustering analysis for MIC, AMR, and virulence data:
 - Feature importance and association rules
 - Bootstrap confidence intervals
 
-## NEW: Excel Report Generation ✨
+## ✨ NEW: Multiple Usage Options
 
-All scripts now generate comprehensive Excel reports (.xlsx) in addition to HTML reports!
+### 📊 Comprehensive Reports
+All scripts generate **both HTML and Excel reports** with:
+- ✅ **Interactive HTML**: DataTables with sorting, filtering, and export
+- ✅ **Excel Workbooks**: Multi-sheet reports with methodology documentation
+- ✅ **High-quality PNG charts**: Saved separately for publications
+- ✅ **Consistent styling**: Uniform appearance across all outputs
 
-### Features:
-- ✅ **Multi-sheet Excel workbooks** with organized data
-- ✅ **High-quality PNG charts** saved separately
-- ✅ **Detailed methodology** documentation in each report
-- ✅ **Consistent structure** across all analysis types
-- ✅ **Auto-formatted tables** with proper rounding and column widths
+### 🎯 Multiple Deployment Options
 
-### Report Structure:
-1. **Metadata Sheet**: Analysis configuration and parameters
-2. **Methodology Sheet**: Detailed descriptions of all methods
-3. **Data Sheets**: Analysis results (varies by script)
-4. **Chart Index Sheet**: List of all generated PNG files
+1. **📓 Google Colab Notebooks**: Run in the cloud without installation
+   - See [colab_notebooks/](colab_notebooks/) directory
+   - One-click deployment with file upload/download
+   - Free GPU access for faster processing
 
-See [EXCEL_REPORTS_README.md](EXCEL_REPORTS_README.md) for detailed documentation.
+2. **📦 Python Package with CLI**: Install as a package
+   - See [python_package/](python_package/) directory
+   - Full command-line interface for all analyses
+   - Python API for programmatic access
+
+3. **🎨 Hugging Face Dashboard**: Interactive web interface
+   - See [huggingface_demo/](huggingface_demo/) directory
+   - Voilà-based dashboard with widgets
+   - Drag-and-drop file upload
+
+4. **💻 Standalone Scripts**: Traditional execution
+   - Direct Python script execution
+   - Maximum flexibility and customization
+
+See [INSTALLATION.md](INSTALLATION.md) for complete setup instructions.
 
 ## Requirements
 
-### Core Dependencies:
+### Quick Install:
 ```bash
-pip install pandas numpy scipy matplotlib seaborn plotly
-pip install scikit-learn biopython umap-learn networkx
-pip install statsmodels mlxtend prince jinja2
-pip install openpyxl kaleido pillow  # For Excel reports
+pip install -r requirements.txt
 ```
 
-### Script-Specific:
-- `kmodes` - For K-Modes clustering
-- `optuna` - For hyperparameter optimization
-- `community` (python-louvain) - For network community detection
-- `ydata-profiling` - For data profiling (optional)
+### Core Dependencies:
+- Python >= 3.8
+- pandas, numpy, scipy
+- scikit-learn, matplotlib, plotly
+- biopython, networkx
+- See [requirements.txt](requirements.txt) for complete list
+
+### Optional:
+- `voila` - For interactive dashboards
+- `jupyter` - For notebook execution
+- GPU support - For accelerated processing (Google Colab)
+
+## Installation
+
+See [INSTALLATION.md](INSTALLATION.md) for detailed installation instructions for:
+- Local installation (Windows, macOS, Linux)
+- Google Colab setup
+- Python package installation
+- Docker deployment
+- Troubleshooting guide
 
 ## Usage
 
-### Basic Execution:
+### Option 1: Google Colab (Recommended for Beginners)
+1. Click on a Colab notebook link above
+2. Upload your CSV files when prompted
+3. Run all cells
+4. Download results (HTML, Excel, PNG charts)
+
+[See Colab README](colab_notebooks/README.md) for details.
+
+### Option 2: Command Line Interface
+```bash
+# Cluster analysis
+mkrep-cluster --data-dir ./data --output ./results --bootstrap 500
+
+# MDR analysis
+mkrep-mdr --data-dir ./data --output ./results --mdr-threshold 3
+
+# Network analysis
+mkrep-network --data-dir ./data --output ./results
+
+# Phylogenetic clustering
+mkrep-phylo --tree tree.newick --data-dir ./data --output ./results
+
+# StrepSuis analysis
+mkrep-strepsuis --tree tree.newick --data-dir ./data --output ./results
+```
+
+[See Package README](python_package/README.md) for full CLI documentation.
+
+### Option 3: Python API
 ```python
-python <script_name>.py
+from mkrep.analysis import ClusterAnalyzer
+
+# Initialize analyzer
+analyzer = ClusterAnalyzer(
+    data_dir="./data",
+    output_dir="./results",
+    max_clusters=8,
+    bootstrap_iterations=500
+)
+
+# Run analysis
+results = analyzer.run()
+
+# Generate reports
+analyzer.generate_html_report(results)
+analyzer.generate_excel_report(results)
+```
+
+### Option 4: Standalone Scripts
+```bash
+# Direct execution
+python Cluster_MIC_AMR_Viruelnce.py
+python MDR_2025_04_15.py
+python Network_Analysis_2025_06_26.py
+python Phylgenetic_clustering_2025_03_21.py
+python StrepSuisPhyloCluster_2025_08_11.py
 ```
 
 Each script will:
@@ -108,6 +215,20 @@ All scripts expect CSV files with a `Strain_ID` column:
 - `Plasmid.csv`: Plasmid presence/absence
 - `MGE.csv`: Mobile genetic elements
 - `tree.newick` / `tree.nwk`: Phylogenetic tree (for phylogenetic scripts)
+
+**Important: Binary Data Format**
+- **0 = Absence** of feature (gene, resistance, virulence factor)
+- **1 = Presence** of feature
+- Both absence and presence are biologically significant
+- Do not use missing values (NaN) - encode as 0 or 1
+
+Example:
+```csv
+Strain_ID,Gene1,Gene2,Antibiotic1,Virulence1
+Strain001,1,0,1,0
+Strain002,0,1,1,1
+Strain003,1,1,0,1
+```
 
 ### Output Files:
 
@@ -163,25 +284,52 @@ config = Config(
 
 ## Citation
 
-If you use these scripts in your research, please cite:
+If you use MKrep in your research, please cite:
 
-```
-[Your citation information here]
+```bibtex
+@software{mkrep2025,
+  title = {MKrep: Comprehensive Bioinformatics Analysis Pipeline for Microbial Genomics},
+  author = {MK-vet},
+  year = {2025},
+  url = {https://github.com/MK-vet/MKrep},
+  version = {1.0.0}
+}
 ```
 
 ## License
 
-[Your license information here]
+MIT License - see [LICENSE](LICENSE) file for details
 
 ## Contact
 
 For questions or support:
-- GitHub Issues: [github.com/MK-vet/MKrep/issues](https://github.com/MK-vet/MKrep/issues)
-- Email: [Your contact email]
+- **GitHub Issues**: [github.com/MK-vet/MKrep/issues](https://github.com/MK-vet/MKrep/issues)
+- **Documentation**: See README files in each directory
+- **Installation Help**: See [INSTALLATION.md](INSTALLATION.md)
+- **Colab Issues**: See [colab_notebooks/README.md](colab_notebooks/README.md)
+
+## Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## Acknowledgments
+
+This tool was developed for the microbial genomics research community. We thank all contributors and users for their feedback and support.
 
 ## Changelog
 
-### 2025-01-07
+### 2025-01-07 - Version 1.0.0 🎉
+- ✨ **Added Google Colab notebooks** for cloud-based analysis
+- ✨ **Created Python package** with full CLI support
+- ✨ **Developed Hugging Face demo** with Voilà dashboard
+- ✨ **Comprehensive installation guide** (INSTALLATION.md)
+- ✨ **Multiple deployment options** (Colab, CLI, Dashboard, Scripts)
+- 📝 **Enhanced documentation** with usage examples
+- 📝 **Binary data handling** explicitly documented (0=absence, 1=presence)
 - ✨ Added comprehensive Excel report generation to all scripts
 - ✨ Implemented PNG chart export for all visualizations
 - ✨ Created shared utility module (`excel_report_utils.py`)
