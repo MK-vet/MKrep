@@ -1096,8 +1096,7 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
     fig = go.Figure(
         data=traces,
         layout=go.Layout(
-            title="Hybrid Co-resistance Network",
-            titlefont=dict(size=18),
+            title=dict(text="Hybrid Co-resistance Network", font=dict(size=18)),
             showlegend=True,
             hovermode='closest',
             width=1000,
