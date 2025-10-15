@@ -100,7 +100,7 @@ html = create_full_report(
 ### 3. Comprehensive Documentation ✓
 
 #### USER_GUIDE.md
-- Complete user manual (15,000+ words)
+- Complete user manual (2,100 words)
 - Step-by-step instructions for all tools
 - Voilà dashboard usage
 - Standalone script usage
@@ -119,7 +119,7 @@ html = create_full_report(
 - Common issues and solutions
 
 #### INTERPRETATION_GUIDE.md
-- Results interpretation guide (14,000+ words)
+- Results interpretation guide (2,000 words)
 - Statistical concepts explained
 - Tool-specific interpretations
 - Example interpretations
@@ -136,7 +136,7 @@ html = create_full_report(
 - Quick reference tables
 
 #### STANDARDIZATION_GUIDE.md
-- Developer guidelines (12,000+ words)
+- Developer guidelines (1,500 words)
 - Script structure requirements
 - Standardization checklist
 - Template usage examples
@@ -519,7 +519,7 @@ The existing analysis scripts can now be updated using:
 If desired, existing analysis scripts can be migrated to use the new templates:
 
 1. **Priority Scripts:**
-   - Cluster_MIC_AMR_Viruelnce.py
+   - Cluster_MIC_AMR_Virulence.py
    - MDR_2025_04_15.py
    - Network_Analysis_2025_06_26.py
 
