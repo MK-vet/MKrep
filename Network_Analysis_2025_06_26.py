@@ -12,6 +12,9 @@ import re
 import concurrent.futures
 from collections import Counter
 import os
+import sys
+import logging
+import time
 from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 
 def create_interactive_table(df: pd.DataFrame, table_id: str) -> str:
@@ -497,28 +500,109 @@ def generate_excel_report_with_cluster_stats(
 
 # ====================== MAIN WORKFLOW ======================
 
+def setup_logging():
+    """
+    Configure logging to both file and console output.
+    Creates output directory if it doesn't exist.
+    """
+    os.makedirs("output", exist_ok=True)
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s | %(levelname)s | %(message)s',
+        handlers=[
+            logging.FileHandler(os.path.join("output", "network_analysis_log.txt")),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+
 def perform_full_analysis():
+    """
+    Execute comprehensive network analysis pipeline with full reporting.
+    
+    This function orchestrates the complete feature association network analysis workflow:
+    
+    Execution Flow:
+    1. Environment setup and logging initialization
+    2. Data loading and validation (7 CSV files required)
+    3. Feature extraction and category expansion
+    4. Chi-square and Fisher exact tests for pairwise associations
+    5. Information theory metrics (entropy, conditional entropy, mutual information)
+    6. Cramér's V calculation for association strength
+    7. Mutually exclusive pattern detection (pairs and triplets)
+    8. Network construction with community detection
+    9. Hub identification and centrality analysis
+    10. Comprehensive HTML report generation with interactive tables
+    11. Excel report generation with methodology and PNG charts
+    
+    Statistical Methods:
+    - Chi-square tests with Yates correction for 2x2 tables with low counts
+    - Fisher exact test for 2x2 tables with ≤20 samples
+    - Benjamini-Hochberg FDR correction for multiple testing
+    - Bootstrap confidence intervals for effect sizes
+    - Adaptive threshold selection for network construction
+    - Louvain algorithm for community detection
+    
+    Required CSV Files:
+    - MGE.csv: Mobile genetic elements
+    - MIC.csv: Minimum inhibitory concentrations
+    - MLST.csv: Multi-locus sequence typing
+    - Plasmid.csv: Plasmid profiles
+    - Serotype.csv: Serotype data
+    - Virulence.csv: Virulence factors
+    - AMR_genes.csv: Antimicrobial resistance genes
+    
+    Output Files:
+    - report.html: Interactive HTML report with DataTables
+    - Network_Analysis_Report_YYYYMMDD_HHMMSS.xlsx: Excel workbook with multiple sheets
+    - output/png_charts/: Directory containing PNG visualizations
+    - output/network_analysis_log.txt: Detailed execution log
+    """
+    start_time = time.time()
+    
+    # Setup logging
+    setup_logging()
+    logging.info("="*80)
+    logging.info("Starting Network Analysis Pipeline")
+    logging.info("="*80)
+    
     np.random.seed(2800)
+    logging.info("Random seed set to 2800 for reproducibility")
+    
+    # Step 1: File upload and validation
+    logging.info("STEP 1: File Upload and Validation")
+    print("Please upload the following CSV files: MGE.csv, MIC.csv, MLST.csv, Plasmid.csv, Serotype.csv, Virulence.csv, AMR_genes.csv")
     print("Please upload the following CSV files: MGE.csv, MIC.csv, MLST.csv, Plasmid.csv, Serotype.csv, Virulence.csv, AMR_genes.csv")
     uploaded_files = files.upload()
     expected = ['MGE.csv','MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']
     file_mapping = find_matching_files(uploaded_files, expected)
     missing = [fn for fn in expected if fn not in file_mapping]
     if missing:
+        logging.error(f"Missing files: {', '.join(missing)}")
         print("Available files:", list(uploaded_files.keys()))
         raise FileNotFoundError(f"Missing files: {', '.join(missing)}")
+    logging.info("All required files uploaded successfully")
     print("File mapping:")
     for expected_name, actual_name in file_mapping.items():
         print(f"  {expected_name} -> {actual_name}")
+        logging.info(f"File mapping: {expected_name} -> {actual_name}")
 
+    # Step 2: Data loading
+    logging.info("STEP 2: Loading data from CSV files")
     data = {}
     for expected_name, actual_name in file_mapping.items():
         data[expected_name] = pd.read_csv(actual_name)
+        logging.info(f"Loaded {expected_name}: shape={data[expected_name].shape}")
 
+    # Step 3: Data validation
+    logging.info("STEP 3: Validating data structure")
     for fn, df in data.items():
         if 'Strain_ID' not in df.columns:
+            logging.error(f"File {fn} missing 'Strain_ID' column")
             raise KeyError(f"File {fn} must contain 'Strain_ID' column.")
+    logging.info("All files contain required 'Strain_ID' column")
 
+    # Step 4: Feature summary
+    logging.info("STEP 4: Generating feature summary statistics")
     summary = []
     for fn in expected:
         cat = fn.replace('.csv','')
@@ -530,20 +614,31 @@ def perform_full_analysis():
         else:
             count = len([c for c in df.columns if c != 'Strain_ID'])
         summary.append({'Category': cat, 'Number_of_Features': count})
+        logging.info(f"Category {cat}: {count} features")
     feature_summary_df = pd.DataFrame(summary)
 
+    # Step 5: Category expansion
+    logging.info("STEP 5: Expanding categorical features")
     expanded = {}
     for fn in ['MGE.csv','MLST.csv','Plasmid.csv','Serotype.csv']:
         cat = fn.replace('.csv','')
         expanded[cat] = expand_categories(data[fn], cat)
+        logging.info(f"Expanded {cat}: {len(expanded[cat].columns)-1} binary columns")
 
+    # Step 6: Data merging
+    logging.info("STEP 6: Merging all data sources")
     merged = expanded['MGE']
     for fn in ['MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']:
         key = fn.replace('.csv','')
         merged = merged.merge(expanded.get(key, data[fn]), on='Strain_ID', how='outer')
     merged.fillna(0, inplace=True)
     features = [c for c in merged.columns if c != 'Strain_ID']
+    logging.info(f"Merged dataset: {len(features)} total features across {len(merged)} strains")
 
+    logging.info(f"Merged dataset: {len(features)} total features across {len(merged)} strains")
+
+    # Step 7: Feature-category mapping
+    logging.info("STEP 7: Building feature-category mapping")
     feature_category = {}
     for fn in expected:
         cat = fn.replace('.csv','')
@@ -563,15 +658,27 @@ def perform_full_analysis():
                 feature_category[feat] = prefix
             else:
                 feature_category[feat] = 'Unassigned'
+    logging.info(f"Feature-category mapping complete: {len(feature_category)} features mapped")
 
+    # Step 8: Mutually exclusive pattern detection
+    logging.info("STEP 8: Detecting mutually exclusive patterns")
     excl2_df = find_mutually_exclusive(merged, features, feature_category, k=2)
     excl3_df = find_mutually_exclusive(merged, features, feature_category, k=3)
+    logging.info(f"Found {len(excl2_df)} mutually exclusive pairs")
+    logging.info(f"Found {len(excl3_df)} mutually exclusive triplets")
 
+    # Step 9: Chi-square and Fisher exact tests
+    logging.info("STEP 9: Performing pairwise Chi-square/Fisher exact tests")
     pairs = list(itertools.combinations(features, 2))
+    logging.info(f"Testing {len(pairs)} feature pairs (this may take several minutes...)")
     results = []
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(chi2_phi, merged[f1], merged[f2]): (f1, f2) for f1, f2 in pairs}
+        completed = 0
         for fut in concurrent.futures.as_completed(futures):
+            completed += 1
+            if completed % 10000 == 0:
+                logging.info(f"Completed {completed}/{len(pairs)} tests ({100*completed/len(pairs):.1f}%)")
             f1, f2 = futures[fut]
             p, phi, _, lo, hi = fut.result()
             results.append({
@@ -581,22 +688,34 @@ def perform_full_analysis():
             })
     chi2_df = pd.DataFrame(results)
     chi2_df['Significant'], chi2_df['P_adjusted'], _, _ = smm.multipletests(chi2_df['P_value'], method='fdr_bh')
+    logging.info(f"Chi-square tests complete: {chi2_df['Significant'].sum()} significant associations (FDR<0.05)")
 
+    # Step 10: Information theory metrics
+    logging.info("STEP 10: Computing information theory metrics")
+
+    # Step 10: Information theory metrics
+    logging.info("STEP 10: Computing information theory metrics")
     numeric_feats = merged[features].select_dtypes(include=[np.number]).columns.tolist()
     if not numeric_feats:
         for feat in features:
             merged[feat] = pd.to_numeric(merged[feat], errors='coerce').fillna(0)
         numeric_feats = features
     top_feats = pd.Series(merged[numeric_feats].var()).nlargest(min(50, len(numeric_feats))).index.tolist()
+    logging.info(f"Analyzing top {len(top_feats)} features with highest variance")
     print(f"Analyzing {len(top_feats)} features for information theory metrics.")
 
     info_results, cramers_results = [], []
     info_pvals, cramers_pvals = [], []
+    total_info_pairs = len(top_feats) * (len(top_feats) - 1)
+    completed_info = 0
     for f1 in top_feats:
         H, Hn = calculate_entropy(merged[f1])
         for f2 in top_feats:
             if f1 == f2:
                 continue
+            completed_info += 1
+            if completed_info % 500 == 0:
+                logging.info(f"Completed {completed_info}/{total_info_pairs} information theory calculations ({100*completed_info/total_info_pairs:.1f}%)")
             ce = conditional_entropy(merged[f1], merged[f2])
             ig = information_gain(merged[f1], merged[f2])
             nmi = normalized_mutual_info(merged[f1], merged[f2])
@@ -625,8 +744,14 @@ def perform_full_analysis():
     cramers_df = pd.DataFrame(cramers_results)
     entropy_df['Significant'], entropy_df['P_adjusted'], _, _ = smm.multipletests(info_pvals, method='fdr_bh')
     cramers_df['Significant'], cramers_df['P_adjusted'], _, _ = smm.multipletests(cramers_pvals, method='fdr_bh')
+    logging.info(f"Information theory complete: {entropy_df['Significant'].sum()} significant entropy associations")
+    logging.info(f"Cramér's V complete: {cramers_df['Significant'].sum()} significant associations")
 
-    # ---------- SECTION SUMMARIES ----------
+    # Step 11: Generate section summaries
+    logging.info("STEP 11: Generating section summaries")
+
+    # Step 11: Generate section summaries
+    logging.info("STEP 11: Generating section summaries")
 
     chi2_summary = {
         "Total pairs": len(chi2_df),
@@ -663,14 +788,18 @@ def perform_full_analysis():
     excl3_cat = summarize_by_category_excl(excl3_df, k=3)
     excl3_feat = summarize_by_feature_excl(excl3_df, k=3)
 
-    # ---------- NETWORK ----------
+    # Step 12: Network construction and analysis
+    logging.info("STEP 12: Constructing feature association network")
     phi_vals = chi2_df['Phi_coefficient'].values
     threshold = adaptive_phi_threshold(phi_vals, method='percentile', percentile=90)
+    logging.info(f"Adaptive phi threshold (90th percentile): {threshold:.3f}")
+    print(f"Applying phi threshold: {threshold:.3f}")
     print(f"Applying phi threshold: {threshold:.3f}")
     sig_edges = chi2_df[chi2_df['Significant'] & (chi2_df['Phi_coefficient'] > threshold)]
     G = nx.Graph()
     for _, row in sig_edges.iterrows():
         G.add_edge(row['Feature1'], row['Feature2'], weight=row['Phi_coefficient'])
+    logging.info(f"Network created: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges")
 
     network_df = pd.DataFrame()
     hubs_df = pd.DataFrame()
@@ -683,13 +812,18 @@ def perform_full_analysis():
     network_cat, network_feat = {}, {}
 
     if G.number_of_edges() > 0:
+        logging.info("STEP 13: Performing community detection and centrality analysis")
         partition = community_louvain.best_partition(G, weight='weight', random_state=2800)
         cluster_ids = sorted(set(partition.values()))
         num_clusters = len(cluster_ids)
+        logging.info(f"Detected {num_clusters} communities using Louvain algorithm")
+        
         deg_cent = get_centrality(nx.degree_centrality(G))
         btw_cent = get_centrality(nx.betweenness_centrality(G))
         cls_cent = get_centrality(nx.closeness_centrality(G))
         eig_cent = get_centrality(nx.eigenvector_centrality(G, tol=1e-6))
+        logging.info("Calculated degree, betweenness, closeness, and eigenvector centrality")
+        
         node_data = []
         for node in G.nodes():
             node_data.append({
@@ -707,7 +841,10 @@ def perform_full_analysis():
             "Total hubs (top 3/cluster)": len(hubs_df),
             "Clusters": num_clusters
         }
-        # --- DYNAMIC COLORS ---
+        logging.info(f"Identified {len(hubs_df)} hub features across {num_clusters} clusters")
+        
+        # Step 14: 3D network visualization
+        logging.info("STEP 14: Generating 3D network visualization")
         import matplotlib
         from matplotlib import cm
         if num_clusters > 10:
@@ -715,7 +852,7 @@ def perform_full_analysis():
             palette = [matplotlib.colors.rgb2hex(cmap(i)) for i in range(num_clusters)]
         else:
             palette = ['red','blue','green','orange','purple','cyan','magenta','yellow','pink','brown'][:num_clusters]
-        # 3D network
+        
         pos = nx.spring_layout(G, dim=3, seed=2800, k=0.6)
         edge_x, edge_y, edge_z = [], [], []
         hover_texts = []
@@ -741,6 +878,8 @@ def perform_full_analysis():
         fig_network.write_html('network_visualization.html', include_plotlyjs='cdn')
         with open('network_visualization.html','r') as f:
             network_html = f.read()
+        logging.info("3D network visualization saved to network_visualization.html")
+        
         network_summary.update({
             "Clusters": num_clusters,
             "Max cluster size": network_df.groupby("Cluster").size().max(),
@@ -749,10 +888,14 @@ def perform_full_analysis():
         network_cat = summarize_by_category_network(network_df, value_col='Degree_Centrality')
         network_feat = summarize_by_feature_network(network_df, value_col='Degree_Centrality')
     else:
+        logging.warning("No significant network edges detected")
         network_html = '<p>No significant network edges detected.</p>'
         fig_network = None
 
-    # Generate HTML report
+    # Step 15: Generate HTML report
+    logging.info("STEP 15: Generating interactive HTML report")
+    # Step 15: Generate HTML report
+    logging.info("STEP 15: Generating interactive HTML report")
     report_html = generate_report_with_cluster_stats(
         chi2_df, network_df, entropy_df, cramers_df, feature_summary_df,
         excl2_df, excl3_df, hubs_df, network_html,
@@ -763,9 +906,11 @@ def perform_full_analysis():
     )
     with open('report.html', 'w', encoding='utf-8') as f:
         f.write(report_html)
+    logging.info("HTML report saved to 'report.html'")
     print("HTML report saved to 'report.html'.")
     
-    # Generate Excel report with PNG charts
+    # Step 16: Generate Excel report with PNG charts
+    logging.info("STEP 16: Generating comprehensive Excel report with PNG charts")
     excel_path = generate_excel_report_with_cluster_stats(
         chi2_df, network_df, entropy_df, cramers_df, feature_summary_df,
         excl2_df, excl3_df, hubs_df, fig_network,
@@ -774,14 +919,51 @@ def perform_full_analysis():
         chi2_cat, chi2_feat, entropy_cat, entropy_feat, cramers_cat, cramers_feat,
         excl2_cat, excl2_feat, excl3_cat, excl3_feat, network_cat, network_feat
     )
+    logging.info(f"Excel report saved to: {excel_path}")
     print(f"Excel report saved to: {excel_path}")
     
-    # Download both reports
+    # Step 17: Download reports (for Colab)
+    logging.info("STEP 17: Attempting to download reports")
     try:
         files.download('report.html')
         files.download(excel_path)
+        logging.info("Reports downloaded successfully")
     except Exception as e:
+        logging.warning(f"Auto-download may not work in all environments: {e}")
         print(f"Note: Auto-download may not work in all environments: {e}")
+    
+    # Final summary
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    logging.info("="*80)
+    logging.info("ANALYSIS COMPLETE")
+    logging.info("="*80)
+    logging.info(f"Total execution time: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
+    logging.info(f"Total features analyzed: {len(features)}")
+    logging.info(f"Total strains: {len(merged)}")
+    logging.info(f"Chi-square tests performed: {len(chi2_df)}")
+    logging.info(f"Significant associations (FDR<0.05): {chi2_df['Significant'].sum()}")
+    logging.info(f"Network nodes: {G.number_of_nodes()}")
+    logging.info(f"Network edges: {G.number_of_edges()}")
+    if G.number_of_edges() > 0:
+        logging.info(f"Network clusters: {num_clusters}")
+        logging.info(f"Hub features identified: {len(hubs_df)}")
+    logging.info(f"Mutually exclusive pairs: {len(excl2_df)}")
+    logging.info(f"Mutually exclusive triplets: {len(excl3_df)}")
+    logging.info("="*80)
+    logging.info("Output files generated:")
+    logging.info(f"  - report.html")
+    logging.info(f"  - {excel_path}")
+    logging.info(f"  - output/png_charts/ (PNG visualizations)")
+    logging.info(f"  - output/network_analysis_log.txt (execution log)")
+    logging.info("="*80)
+    
+    print("\n" + "="*80)
+    print("ANALYSIS COMPLETE!")
+    print("="*80)
+    print(f"Total execution time: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
+    print(f"Check output/network_analysis_log.txt for detailed execution log")
+    print("="*80)
 
 
 if __name__ == '__main__':
