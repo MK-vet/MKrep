@@ -102,14 +102,17 @@ def test_normalized_mutual_info():
 def test_mutually_exclusive():
     """Test mutually exclusive pattern detection"""
     print("Testing find_mutually_exclusive...")
+    
+    # Test fixture: feature-category mapping
+    TEST_FEATURE_MAPPING = {'feat1': 'cat1', 'feat2': 'cat2', 'feat3': 'cat3'}
+    
     df = pd.DataFrame({
         'Strain_ID': ['S1', 'S2', 'S3', 'S4'],
         'feat1': [1, 0, 0, 0],
         'feat2': [0, 1, 0, 0],
         'feat3': [0, 0, 1, 1]
     })
-    mapping = {'feat1': 'cat1', 'feat2': 'cat2', 'feat3': 'cat3'}
-    result = find_mutually_exclusive(df, ['feat1', 'feat2', 'feat3'], mapping, k=2, max_patterns=10)
+    result = find_mutually_exclusive(df, ['feat1', 'feat2', 'feat3'], TEST_FEATURE_MAPPING, k=2, max_patterns=10)
     assert isinstance(result, pd.DataFrame)
     print(f"  ✓ find_mutually_exclusive passed (found {len(result)} patterns)")
 

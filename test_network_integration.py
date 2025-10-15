@@ -9,13 +9,20 @@ import os
 import pandas as pd
 import numpy as np
 import warnings
-warnings.filterwarnings('ignore')
+
+# Suppress specific pandas FutureWarnings in tests
+warnings.filterwarnings('ignore', category=FutureWarning, module='pandas')
 
 # Mock google.colab module for testing
 class MockFiles:
+    """Mock implementation of google.colab.files for testing without Colab environment."""
+    
     def upload(self):
+        """Mock file upload - returns empty dict."""
         return {}
+    
     def download(self, filename):
+        """Mock file download - prints filename instead of downloading."""
         print(f"  Mock download: {filename}")
 
 class MockColab:
@@ -238,6 +245,9 @@ def test_excel_report():
     print("Testing Excel Report Generation")
     print("="*80)
     
+    # Setup logging in isolated context for this test
+    # Note: This may create duplicate log handlers if called multiple times
+    # In production, logging should be configured once at application startup
     setup_logging()
     
     (chi2_df, network_df, entropy_df, cramers_df, feature_summary_df,
