@@ -23,12 +23,17 @@ Features:
 """
 
 import os
+import sys
 import warnings
+import logging
+import time
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import random
+import psutil
 
 from Bio import Phylo
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
@@ -69,6 +74,73 @@ os.environ["MKL_NUM_THREADS"] = "1"
 
 warnings.filterwarnings("ignore", category=UserWarning)
 sns.set(style="whitegrid")
+
+
+###############################################################################
+# LOGGING AND PROGRESS TRACKING UTILITIES
+###############################################################################
+def setup_logging(output_folder):
+    """
+    Set up comprehensive logging to file and console.
+    
+    Args:
+        output_folder: Directory where log file will be saved
+    """
+    log_file = os.path.join(output_folder, "phylogenetic_analysis.log")
+    
+    # Create formatter
+    formatter = logging.Formatter(
+        '%(asctime)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # File handler
+    file_handler = logging.FileHandler(log_file, mode='w')
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    
+    # Configure root logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    
+    # Remove existing handlers
+    logger.handlers = []
+    
+    # Add handlers
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+    
+    return log_file
+
+
+def print_memory_usage():
+    """Log current memory usage of the process."""
+    process = psutil.Process(os.getpid())
+    mem_mb = process.memory_info().rss / (1024**2)
+    logging.info(f"Memory Usage: {mem_mb:.2f} MB")
+    return mem_mb
+
+
+def print_section_header(title):
+    """Print a formatted section header."""
+    separator = "=" * 80
+    logging.info("")
+    logging.info(separator)
+    logging.info(f"  {title}")
+    logging.info(separator)
+    logging.info("")
+
+
+def print_step(step_num, total_steps, description):
+    """Print a formatted step indicator."""
+    logging.info(f"\n>>> Step {step_num}/{total_steps}: {description}")
+    logging.info(f"    Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print_memory_usage()
 
 
 ###############################################################################
@@ -2405,6 +2477,14 @@ class PhylogeneticAnalysis:
         self.base_dir = config.base_dir
         self.output_folder = os.path.join(self.base_dir, config.output_folder)
         os.makedirs(self.output_folder, exist_ok=True)
+        
+        # Setup logging
+        self.log_file = setup_logging(self.output_folder)
+        logging.info("Phylogenetic Analysis Pipeline Initialized")
+        logging.info(f"Output folder: {self.output_folder}")
+        logging.info(f"Log file: {self.log_file}")
+        
+        # Initialize analysis components
         self.core = PhylogeneticCore()
         self.clustering = ClusteringModule(
             n_clusters_range=config.n_clusters_range,
@@ -2416,6 +2496,10 @@ class PhylogeneticAnalysis:
         self.visualizer = Visualizer(self.output_folder)
         self.trait_analyzer = TraitAnalyzer(self.output_folder)
         self.mca_analyzer = MCAAnalyzer(self.output_folder)
+        
+        # Execution metrics
+        self.start_time = None
+        self.step_times = {}
 
     def determine_adaptive_cluster_range(self, embeddings, distance_matrix=None):
         """
@@ -2578,20 +2662,43 @@ class PhylogeneticAnalysis:
 
     def run_complete_analysis(self):
         """
-        Executes the full pipeline and returns results for the final HTML report.
+        Executes the full pipeline with comprehensive logging and progress tracking.
+        Returns results for the final HTML report.
         """
-        print("=== Starting Complete Phylogenetic Analysis ===")
-        print(f"Start time: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        self.start_time = time.time()
+        
+        print_section_header("PHYLOGENETIC ANALYSIS PIPELINE - STARTING")
+        logging.info(f"Analysis Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logging.info(f"Configuration:")
+        logging.info(f"  - Tree file: {self.config.tree_file}")
+        logging.info(f"  - MIC file: {self.config.mic_file}")
+        logging.info(f"  - AMR genes file: {self.config.amr_genes_file}")
+        logging.info(f"  - Virulence genes file: {self.config.virulence_genes_file}")
+        logging.info(f"  - UMAP components: {self.config.umap_components}")
+        logging.info(f"  - UMAP neighbors: {self.config.umap_neighbors}")
+        logging.info(f"  - Outlier contamination: {self.config.outlier_contamination}")
+        logging.info(f"  - Bootstrap iterations: {self.config.bootstrap_iterations}")
+        logging.info(f"  - FDR alpha: {self.config.fdr_alpha}")
+        print_memory_usage()
 
         analysis_results = {}
+        total_steps = 4
+        
         try:
             # Step 1: Phylogenetic Clustering using tree-aware methods
-            print("\n=== Step 1: Phylogenetic Clustering ===")
+            step_start = time.time()
+            print_step(1, total_steps, "Phylogenetic Clustering")
+            
             tree_path = os.path.join(self.base_dir, self.config.tree_file)
+            logging.info(f"Loading phylogenetic tree from: {tree_path}")
             tree = self.core.load_tree(tree_path)
+            
+            logging.info("Computing distance matrix from tree...")
             distance_matrix, terminals = self.core.tree_to_distance_matrix(tree, parallel=False, n_jobs=1)
             strain_names = [str(t).strip() for t in terminals]
+            logging.info(f"Loaded {len(strain_names)} strains from tree")
 
+            logging.info("Performing UMAP dimensionality reduction...")
             embeddings = self.core.dimension_reduction(
                 distance_matrix,
                 n_components=self.config.umap_components,
@@ -2599,31 +2706,42 @@ class PhylogeneticAnalysis:
                 min_dist=self.config.umap_min_dist,
                 random_state=42
             )
+            logging.info(f"UMAP embeddings shape: {embeddings.shape}")
 
             # Determine adaptive cluster range
+            logging.info("Determining adaptive cluster range...")
             self.adaptive_cluster_range = self.determine_adaptive_cluster_range(embeddings, distance_matrix)
+            logging.info(f"Adaptive cluster range: {self.adaptive_cluster_range}")
 
             # Create tree-aware clustering module
+            logging.info("Initializing tree-aware clustering...")
             tree_clustering = TreeAwareClusteringModule(
                 tree, terminals,
                 n_clusters_range=self.adaptive_cluster_range,
                 seed=42
             )
+            
+            logging.info("Testing multiple clustering methods...")
             best_labels, best_silhouette, best_method, best_params = self.test_multiple_clustering_methods(tree_clustering, distance_matrix)
 
             if best_labels is not None:
+                logging.info(f"Best clustering method: {best_method}")
+                logging.info(f"Best silhouette score: {best_silhouette:.4f}")
+                
                 pre_monophyly = tree_clustering.evaluate_monophyly(best_labels)
-                print(f"\nBefore enforcing monophyly: {pre_monophyly['monophyletic_percentage']:.2f}% clusters are monophyletic")
+                logging.info(f"Before enforcing monophyly: {pre_monophyly['monophyletic_percentage']:.2f}% clusters are monophyletic")
 
+                logging.info("Enforcing monophyletic clusters...")
                 best_labels = tree_clustering.ensure_monophyletic_clusters(best_labels)
                 post_monophyly = tree_clustering.evaluate_monophyly(best_labels)
-                print(f"After enforcing monophyly: {post_monophyly['monophyletic_percentage']:.2f}% clusters are monophyletic")
+                logging.info(f"After enforcing monophyly: {post_monophyly['monophyletic_percentage']:.2f}% clusters are monophyletic")
 
                 # Offset final labels by +1 so clusters start at 1
                 best_labels = best_labels + 1
+                logging.info(f"Final cluster labels range: {best_labels.min()} to {best_labels.max()}")
 
             else:
-                print("Tree-aware clustering failed. Falling back to standard ensemble clustering.")
+                logging.warning("Tree-aware clustering failed. Falling back to standard ensemble clustering.")
                 embeddings = self.core.dimension_reduction(
                     distance_matrix,
                     n_components=self.config.umap_components,
@@ -2639,7 +2757,7 @@ class PhylogeneticAnalysis:
                 )
                 labels, best_silhouette = self.clustering.ensemble_clustering(clean_embeddings)
                 if labels is None:
-                    print("Clustering failed. Stopping analysis.")
+                    logging.error("Clustering failed completely. Stopping analysis.")
                     return None
                 outlier_assignments = self.clustering.assign_outliers_to_clusters(embeddings, mask, labels)
                 full_labels = np.zeros(len(strain_names), dtype=int)
@@ -2652,11 +2770,14 @@ class PhylogeneticAnalysis:
                 mask = np.ones(len(strain_names), dtype=bool)
 
             mask = np.ones(len(strain_names), dtype=bool)
+            logging.info("Saving clustering results...")
             self._save_clustering_results(strain_names, mask, best_labels, [])
 
             # Plot clusters on UMAP and phylogenetic tree
+            logging.info("Generating visualizations...")
             self.visualizer.plot_umap_clusters(embeddings, best_labels, mask, [])
             self.visualizer.plot_phylogenetic_tree(tree, best_labels, strain_names, mask)
+            logging.info("Visualizations saved")
 
             analysis_results['embeddings'] = embeddings
             analysis_results['labels'] = best_labels
@@ -2664,51 +2785,140 @@ class PhylogeneticAnalysis:
             analysis_results['best_silhouette'] = best_silhouette
             analysis_results['best_method'] = best_method
             analysis_results['best_params'] = best_params
+            
+            self.step_times['Step 1: Phylogenetic Clustering'] = time.time() - step_start
+            logging.info(f"Step 1 completed in {self.step_times['Step 1: Phylogenetic Clustering']:.2f} seconds")
 
             # Step 2: Evolutionary Analysis
-            print("\n=== Step 2: Evolutionary Analysis ===")
+            step_start = time.time()
+            print_step(2, total_steps, "Evolutionary Analysis")
+            
+            logging.info("Computing evolutionary cluster metrics...")
             cluster_df = EvolutionaryAnalysis.evolutionary_cluster_analysis(tree, best_labels, strain_names, mask)
             cluster_df.to_csv(os.path.join(self.output_folder, "evolutionary_cluster_analysis.csv"), index=False)
+            logging.info(f"Evolutionary cluster analysis saved ({len(cluster_df)} clusters)")
+            
+            logging.info("Calculating phylogenetic beta diversity...")
             beta_div = EvolutionaryAnalysis.calculate_beta_diversity(tree, best_labels, strain_names, mask)
             beta_div.to_csv(os.path.join(self.output_folder, "phylogenetic_beta_diversity.csv"))
+            logging.info("Beta diversity matrix saved")
+            
+            logging.info("Calculating evolution rates...")
             rates_df = EvolutionaryAnalysis.calculate_evolution_rates(cluster_df)
             rates_df.to_csv(os.path.join(self.output_folder, "evolution_rates.csv"), index=False)
+            logging.info(f"Evolution rates saved ({len(rates_df)} clusters)")
+            
+            logging.info("Calculating phylogenetic signal...")
             phylo_signal = EvolutionaryAnalysis.calculate_phylogenetic_signal(cluster_df, self.output_folder)
+            logging.info("Phylogenetic signal analysis complete")
+            
+            self.step_times['Step 2: Evolutionary Analysis'] = time.time() - step_start
+            logging.info(f"Step 2 completed in {self.step_times['Step 2: Evolutionary Analysis']:.2f} seconds")
 
             # Step 3: Trait Analysis
-            print("\n=== Step 3: Trait Analysis ===")
+            step_start = time.time()
+            print_step(3, total_steps, "Binary Trait Analysis")
+            
             clusters_csv = os.path.join(self.output_folder, "phylogenetic_clusters.csv")
+            logging.info(f"Loading and merging trait data from: {clusters_csv}")
             merged_df = self.data_loader.load_and_merge_data(clusters_csv)
+            
             if merged_df is not None:
+                logging.info(f"Merged data shape: {merged_df.shape}")
+                logging.info(f"Unique clusters: {merged_df['Cluster'].nunique()}")
+                
+                logging.info("Analyzing trait categories...")
                 trait_summary_html = self.trait_analyzer.analyze_all_categories(merged_df)
+                
+                logging.info("Plotting cluster distribution...")
                 analysis_results['summary_stats'] = self.visualizer.plot_cluster_distribution(merged_df)
+                
+                logging.info("Performing log-odds ratio analysis...")
                 log_odds_global, log_odds_cluster = self.trait_analyzer.log_odds_ratio_analysis(merged_df)
+                
+                logging.info("Mining association rules...")
                 self.trait_analyzer.association_rule_mining(merged_df)
+                
+                logging.info("Labeling shared and unique features...")
                 self.trait_analyzer.label_shared_unique_features(merged_df, presence_threshold=0.3)
+                
+                logging.info("Performing pairwise FDR post-hoc tests...")
                 self.trait_analyzer.pairwise_fdr_post_hoc(merged_df)
+                
+                logging.info("Computing bootstrap feature importance...")
                 self.trait_analyzer.bootstrap_feature_importance(merged_df, n_bootstrap=100)
+                
+                logging.info("Computing bootstrap log-odds confidence intervals...")
                 self.trait_analyzer.bootstrap_log_odds(merged_df, n_bootstrap=100)
 
                 trait_summary_path = os.path.join(self.output_folder, "trait_analysis_summary.html")
                 with open(trait_summary_path, "w") as f:
                     f.write(trait_summary_html)
+                logging.info(f"Trait analysis summary saved to: {trait_summary_path}")
             else:
-                print("Merged data is None. Skipping trait analysis.")
+                logging.error("Merged data is None. Skipping trait analysis.")
                 return None
+            
+            self.step_times['Step 3: Binary Trait Analysis'] = time.time() - step_start
+            logging.info(f"Step 3 completed in {self.step_times['Step 3: Binary Trait Analysis']:.2f} seconds")
 
             # Step 4: MCA Analysis
-            print("\n=== Step 4: MCA Analysis ===")
+            step_start = time.time()
+            print_step(4, total_steps, "Multiple Correspondence Analysis (MCA)")
+            
             if merged_df is not None:
+                logging.info("Performing MCA analysis...")
                 self.mca_analyzer.perform_mca_analysis(merged_df)
+                logging.info("MCA analysis complete")
+            
+            self.step_times['Step 4: MCA Analysis'] = time.time() - step_start
+            logging.info(f"Step 4 completed in {self.step_times['Step 4: MCA Analysis']:.2f} seconds")
 
-            print("\n=== Analysis completed successfully! ===")
+            # Print execution summary
+            self._print_execution_summary()
+            
+            print_section_header("ANALYSIS COMPLETED SUCCESSFULLY")
             return analysis_results
 
         except Exception as e:
-            print(f"Error in analysis pipeline: {e}")
+            logging.error(f"Error in analysis pipeline: {e}")
             import traceback
-            traceback.print_exc()
+            logging.error(traceback.format_exc())
             return None
+    
+    def _print_execution_summary(self):
+        """Print comprehensive execution summary."""
+        total_time = time.time() - self.start_time
+        
+        print_section_header("EXECUTION SUMMARY")
+        logging.info(f"Total Execution Time: {total_time:.2f} seconds ({total_time/60:.2f} minutes)")
+        logging.info("")
+        logging.info("Step-by-Step Timing:")
+        for step_name, step_time in self.step_times.items():
+            percentage = (step_time / total_time) * 100
+            logging.info(f"  {step_name}: {step_time:.2f}s ({percentage:.1f}%)")
+        
+        logging.info("")
+        logging.info("Output Files Generated:")
+        csv_count = 0
+        png_count = 0
+        html_count = 0
+        
+        for file in os.listdir(self.output_folder):
+            if file.endswith('.csv'):
+                csv_count += 1
+            elif file.endswith('.png'):
+                png_count += 1
+            elif file.endswith('.html'):
+                html_count += 1
+        
+        logging.info(f"  - CSV files: {csv_count}")
+        logging.info(f"  - PNG images: {png_count}")
+        logging.info(f"  - HTML files: {html_count}")
+        logging.info("")
+        logging.info(f"Output folder: {self.output_folder}")
+        logging.info(f"Log file: {self.log_file}")
+        print_memory_usage()
 
     def _save_clustering_results(self, strain_names, mask, labels, outlier_assignments):
         clean_strain_names = np.array(strain_names)[mask]
@@ -2729,18 +2939,21 @@ class PhylogeneticAnalysis:
 ###############################################################################
 if __name__ == "__main__":
     print(f"""
-=== PHYLOGENETIC ANALYSIS SCRIPT ===
+{'='*80}
+PHYLOGENETIC ANALYSIS SCRIPT
 Date: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}
 Author: MK-vet (with tree-aware clustering improvements)
-=====================================
+{'='*80}
 """)
+    
+    # Configuration
     config = Config(
         base_dir=".",
         output_folder="phylogenetic_clustering_results_advanced17xY",
-        tree_file="tree.newick.txt",
+        tree_file="Snp_tree.newick",  # Fixed: use actual tree file
         mic_file="MIC.csv",
         amr_genes_file="AMR_genes.csv",
-        virulence_genes_file="Virulence3.csv",
+        virulence_genes_file="Virulence.csv",  # Fixed: use Virulence.csv instead of Virulence3.csv
         umap_components=2,
         umap_neighbors=15,
         umap_min_dist=0.1,
@@ -2754,21 +2967,45 @@ Author: MK-vet (with tree-aware clustering improvements)
         parallel_tree=False,
         parallel_jobs=1
     )
+    
+    # Run analysis pipeline
     analysis = PhylogeneticAnalysis(config)
     final_results = analysis.run_complete_analysis()
+    
     if final_results is not None:
+        # Generate comprehensive reports
+        print_section_header("GENERATING COMPREHENSIVE REPORTS")
         report_generator = HTMLReportGenerator(config.output_folder, base_dir=config.base_dir)
         
         # Generate HTML report
+        logging.info("Generating interactive HTML report...")
         html_report_path = report_generator.generate_report(final_results, config, "phylogenetic_report.html")
-        print("\nHTML report generation completed.")
+        logging.info(f"HTML report saved to: {html_report_path}")
         
         # Generate Excel report
+        logging.info("Generating comprehensive Excel report...")
         excel_report_path = report_generator.generate_excel_report(final_results, config)
-        print("\nExcel report generation completed.")
+        logging.info(f"Excel report saved to: {excel_report_path}")
+        
+        # Print final summary
+        print_section_header("ANALYSIS COMPLETE - SUMMARY")
+        logging.info("All reports generated successfully!")
+        logging.info("")
+        logging.info(f"Output Directory: {config.output_folder}")
+        logging.info(f"  - HTML Report: {os.path.basename(html_report_path)}")
+        logging.info(f"  - Excel Report: {os.path.basename(excel_report_path)}")
+        logging.info(f"  - Log File: phylogenetic_analysis.log")
+        logging.info("")
+        logging.info("Please review the reports for detailed analysis results.")
         
         # Optionally, to produce a PDF:
+        # logging.info("Generating PDF report...")
         # report_generator.convert_html_to_pdf(html_report_path)
     else:
-        print("Analysis was interrupted due to errors.")
-    print(f"\n=== End of Phylogenetic Analysis: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')} ===")
+        logging.error("Analysis was interrupted due to errors.")
+        logging.error("Please check the log file for details.")
+    
+    logging.info("")
+    logging.info(f"{'='*80}")
+    logging.info(f"End of Phylogenetic Analysis: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    logging.info(f"{'='*80}")
