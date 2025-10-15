@@ -184,10 +184,10 @@ These badges show:
 ```
 .github/
 └── workflows/
-    ├── ci.yml                   # Main CI testing (231 lines)
-    ├── deployment.yml           # Deployment verification (240 lines)
-    ├── version-info.yml         # Version information (245 lines)
-    └── quickstart-demo.yml      # Interactive demos (222 lines)
+    ├── ci.yml                   # Main CI testing (230 lines)
+    ├── deployment.yml           # Deployment verification (212 lines)
+    ├── version-info.yml         # Version information (217 lines)
+    └── quickstart-demo.yml      # Interactive demos (223 lines)
 
 GITHUB_ACTIONS.md                # Complete documentation (355 lines)
 ```
