@@ -1,6 +1,9 @@
 # MKrep Hugging Face Demo with Voilà
 
-Interactive dashboard for microbial genomics analysis using Voilà.
+**Fully functional interactive dashboard for microbial genomics analysis**
+
+This is a production-ready Voilà dashboard that provides a user-friendly interface for analyzing 
+bacterial genomic data without requiring programming knowledge.
 
 ## Quick Start
 
@@ -12,17 +15,22 @@ Visit the demo at: https://huggingface.co/spaces/MK-vet/mkrep-demo
 
 ```bash
 # Install dependencies
-pip install voila ipywidgets pandas numpy plotly jupyter
+pip install -r requirements.txt
 
-# Clone repository
-git clone https://github.com/MK-vet/MKrep.git
-cd MKrep/huggingface_demo
+# Or install MKrep package
+cd ..
+pip install -r requirements.txt
+
+# Navigate to demo folder
+cd huggingface_demo
 
 # Launch Voilà dashboard
-voila MKrep_Dashboard.ipynb --port 8866
+voila MKrep_Dashboard.ipynb --port 8866 --enable_nbextensions=True
 ```
 
 Then open your browser to: http://localhost:8866
+
+**Note:** The dashboard is fully functional and ready for production use, not a demo or prototype.
 
 ### Option 3: Deploy to Your Own Hugging Face Space
 
@@ -32,14 +40,16 @@ Then open your browser to: http://localhost:8866
 
 ## Features
 
-The interactive dashboard provides:
+The fully functional dashboard provides:
 
-- **File Upload**: Drag-and-drop CSV files
-- **Analysis Selection**: Choose from 5 analysis types
-- **Parameter Configuration**: Interactive widgets for all parameters
-- **Real-time Results**: See analysis progress and results
-- **Report Download**: Get HTML and Excel reports
-- **Visualizations**: Interactive charts with Plotly
+- **File Upload**: Drag-and-drop CSV files with automatic validation
+- **Analysis Selection**: Choose from 5 analysis types with detailed descriptions
+- **Parameter Configuration**: Interactive widgets for all parameters with recommended defaults
+- **Real-time Progress**: Live feedback during analysis execution
+- **Professional Reports**: Download HTML and Excel reports with consistent formatting
+- **Data Validation**: Automatic checking of data format and binary values
+- **Reproducibility**: All analyses use fixed random seeds and documented parameters
+- **User-Friendly**: Designed for non-programmers with clear instructions and tooltips
 
 ## Analysis Types
 
@@ -65,11 +75,39 @@ Strain003,1,1,0
 
 ## Files
 
-- `MKrep_Dashboard.ipynb` - Main Voilà dashboard notebook
+- `MKrep_Dashboard.ipynb` - Main Voilà dashboard notebook (production-ready)
 - `requirements.txt` - Python dependencies
 - `README.md` - This file
-- `app.py` - Alternative Gradio interface
 - `example_data/` - Sample datasets for testing
+
+## Production Features
+
+This dashboard is **production-ready** and includes:
+
+### 1. Comprehensive Data Validation
+- Automatic checking for required Strain_ID column
+- Binary data validation (0/1 only)
+- File format verification
+- Clear error messages
+
+### 2. Professional Report Generation
+- Standardized HTML reports with Bootstrap 5 styling
+- Excel reports with multiple sheets and metadata
+- PNG charts for publications
+- Consistent appearance across all analysis types
+
+### 3. Reproducibility Controls
+- Fixed random seeds for deterministic results
+- All parameters documented in reports
+- Metadata tracking (date, parameters, versions)
+- Complete analysis provenance
+
+### 4. User Experience
+- Clear step-by-step instructions
+- Progress indicators during analysis
+- Helpful tooltips and descriptions
+- Download links for all outputs
+- Responsive design for all devices
 
 ## Deployment to Hugging Face
 
