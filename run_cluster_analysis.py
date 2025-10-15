@@ -43,8 +43,11 @@ def check_dependencies():
     """Check if required Python packages are installed"""
     required_packages = [
         'kmodes', 'prince', 'pandas', 'numpy', 'plotly', 
-        'jinja2', 'openpyxl', 'sklearn', 'statsmodels'
+        'jinja2', 'openpyxl', 'statsmodels'
     ]
+    
+    # Special check for scikit-learn (imported as sklearn)
+    sklearn_packages = ['sklearn.ensemble', 'sklearn.metrics']
     
     print_color("\n📦 Checking Python dependencies...", BLUE)
     missing = []
@@ -56,6 +59,15 @@ def check_dependencies():
         except ImportError:
             print_color(f"✗ {package}", RED)
             missing.append(package)
+    
+    # Check sklearn separately
+    try:
+        for pkg in sklearn_packages:
+            __import__(pkg)
+        print_color(f"✓ scikit-learn", GREEN)
+    except ImportError:
+        print_color(f"✗ scikit-learn", RED)
+        missing.append('scikit-learn')
     
     return len(missing) == 0, missing
 
@@ -151,6 +163,8 @@ def main():
     
     try:
         # Import and run the main analysis
+        # Note: The filename has a spelling variation (Viruelnce instead of Virulence)
+        # This is the actual filename in the repository
         import Cluster_MIC_AMR_Viruelnce as cluster_analysis
         cluster_analysis.main()
         
@@ -191,7 +205,7 @@ def main():
         print_color("  1. Check the analysis.log file for details", YELLOW)
         print_color("  2. Verify your CSV files have correct format", YELLOW)
         print_color("  3. Make sure you have enough disk space", YELLOW)
-        print_color("  4. See CLUSTER_ANALYSIS_README.md for help", YELLOW)
+        print_color(f"  4. See CLUSTER_ANALYSIS_README.md for help", YELLOW)
         sys.exit(1)
 
 if __name__ == "__main__":
