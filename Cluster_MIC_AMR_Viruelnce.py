@@ -5,12 +5,9 @@
 ###########################################
 
 # -----------------------------------------
-# 1. Installation of Required Packages
+# 1. Required Packages
 # -----------------------------------------
-!pip install kmodes prince ydata-profiling joblib numba tqdm psutil statsmodels jinja2 plotly
-
-# Optional (for file download in Colab):
-from google.colab import files
+# Run: pip install kmodes prince ydata-profiling joblib numba tqdm psutil statsmodels jinja2 plotly openpyxl
 
 # -----------------------------------------
 # 2. Imports
@@ -770,7 +767,7 @@ def run_pipeline():
     # Load data from CSV
     mic_df = pd.read_csv("MIC.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("MIC.csv",nrows=0).columns if c!="Strain_ID"])
     amr_df = pd.read_csv("AMR_genes.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("AMR_genes.csv",nrows=0).columns if c!="Strain_ID"])
-    vir_df = pd.read_csv("Virulence3.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("Virulence3.csv",nrows=0).columns if c!="Strain_ID"])
+    vir_df = pd.read_csv("Virulence.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("Virulence.csv",nrows=0).columns if c!="Strain_ID"])
 
     print_memory_usage()
 
@@ -1278,10 +1275,6 @@ def generate_comprehensive_html_report(
         f.write(rendered_html)
 
     print(f"\nFinal HTML report generated: {final_report_path}")
-    try:
-        files.download(final_report_path)
-    except:
-        pass
 
 # -----------------------------------------
 # 21b. Generate Excel Report
@@ -1496,10 +1489,6 @@ def generate_comprehensive_excel_report(
     )
     
     print(f"\nExcel report generated: {excel_path}")
-    try:
-        files.download(excel_path)
-    except:
-        pass
     
     return excel_path
 
