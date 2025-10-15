@@ -36,6 +36,7 @@ env/
 # Output folders
 output/
 phylogenetic_clustering_results*/
+clustering_analysis_results*/
 results/
 png_charts/
 *_results/
