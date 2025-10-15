@@ -1,0 +1,10 @@
+Cluster,Size,Characteristic_Pattern,Type
+1,22,"Doxycycline (19/22, 86.36%, CI:68.18-97.84%); Oxytetracycline (22/22, 100.0%, CI:90.91-100.0%)",MIC
+2,14,"Doxycycline (12/14, 85.71%, CI:64.29-100.0%); Oxytetracycline (14/14, 100.0%, CI:85.71-100.0%); Spectinomycin (14/14, 100.0%, CI:85.71-100.0%); Tulathromycin (14/14, 100.0%, CI:85.71-100.0%)",MIC
+3,3,"Doxycycline (3/3, 100.0%, CI:33.33-100.0%); Oxytetracycline (3/3, 100.0%, CI:33.33-100.0%); Tiamulin (3/3, 100.0%, CI:33.33-100.0%); Tulathromycin (3/3, 100.0%, CI:33.33-100.0%)",MIC
+4,17,No significant features,MIC
+5,5,"Doxycycline (5/5, 100.0%, CI:60.0-100.0%); Oxytetracycline (5/5, 100.0%, CI:60.0-100.0%); Spectinomycin (5/5, 100.0%, CI:60.0-100.0%); Tiamulin (5/5, 100.0%, CI:60.0-100.0%)",MIC
+6,7,"Doxycycline (6/7, 85.71%, CI:57.14-100.0%); Oxytetracycline (7/7, 100.0%, CI:71.43-100.0%); Spectinomycin (7/7, 100.0%, CI:71.43-100.0%); Tiamulin (7/7, 100.0%, CI:71.43-100.0%); Tulathromycin (7/7, 100.0%, CI:71.43-100.0%)",MIC
+7,6,"Tulathromycin (6/6, 100.0%, CI:66.67-100.0%)",MIC
+8,1,"Doxycycline (1/1, 100.0%, CI:0.0-100.0%); Enrofloxacin (1/1, 100.0%, CI:0.0-100.0%); Oxytetracycline (1/1, 100.0%, CI:0.0-100.0%); Tulathromycin (1/1, 100.0%, CI:0.0-100.0%)",MIC
+9,16,"Doxycycline (16/16, 100.0%, CI:87.5-100.0%); Oxytetracycline (16/16, 100.0%, CI:87.5-100.0%); Tulathromycin (16/16, 100.0%, CI:87.5-100.0%)",MIC
