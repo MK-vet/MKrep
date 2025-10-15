@@ -37,8 +37,20 @@ pip install mkrep  # When published
 mkrep-cluster --data-dir ./data --output ./results
 ```
 
-### Option 4: Interactive Dashboard
-Visit our [Hugging Face Demo](https://huggingface.co/spaces/MK-vet/mkrep-demo) (when deployed)
+### Option 4: Interactive Dashboard (Production Ready)
+Our [Voilà Dashboard](huggingface_demo/MKrep_Dashboard.ipynb) is a fully functional, production-ready interface for non-programmers.
+
+```bash
+cd huggingface_demo
+voila MKrep_Dashboard.ipynb --port 8866
+```
+
+Features:
+- Drag-and-drop file upload with validation
+- Interactive parameter configuration
+- Real-time progress tracking
+- Professional report generation
+- No programming knowledge required
 
 ## Analysis Scripts
 
@@ -79,12 +91,14 @@ Comprehensive clustering analysis for MIC, AMR, and virulence data:
 
 ## ✨ NEW: Multiple Usage Options
 
-### 📊 Comprehensive Reports
-All scripts generate **both HTML and Excel reports** with:
-- ✅ **Interactive HTML**: DataTables with sorting, filtering, and export
-- ✅ **Excel Workbooks**: Multi-sheet reports with methodology documentation
-- ✅ **High-quality PNG charts**: Saved separately for publications
-- ✅ **Consistent styling**: Uniform appearance across all outputs
+### 📊 Comprehensive Reports (Standardized)
+All scripts generate **professional, consistent reports** with:
+- ✅ **Interactive HTML**: Bootstrap 5 styling, DataTables with export, interpretation sections
+- ✅ **Excel Workbooks**: Multi-sheet with metadata, methodology, and chart index
+- ✅ **High-quality PNG charts**: 150 DPI minimum, publication-ready
+- ✅ **Consistent styling**: Unified appearance and structure across all tools
+- ✅ **Interpretation included**: Every report explains what results mean
+- ✅ **Full reproducibility**: Fixed seeds, documented parameters, complete provenance
 
 ### 🎯 Multiple Deployment Options
 
@@ -98,10 +112,13 @@ All scripts generate **both HTML and Excel reports** with:
    - Full command-line interface for all analyses
    - Python API for programmatic access
 
-3. **🎨 Hugging Face Dashboard**: Interactive web interface
+3. **🎨 Voilà Dashboard (Production Ready)**: Fully functional web interface
    - See [huggingface_demo/](huggingface_demo/) directory
-   - Voilà-based dashboard with widgets
-   - Drag-and-drop file upload
+   - Complete file upload and validation
+   - Interactive parameter configuration
+   - Real-time progress tracking
+   - Professional report generation
+   - Designed for non-programmers
 
 4. **💻 Standalone Scripts**: Traditional execution
    - Direct Python script execution
@@ -128,14 +145,24 @@ pip install -r requirements.txt
 - `jupyter` - For notebook execution
 - GPU support - For accelerated processing (Google Colab)
 
-## Installation
+## Documentation
 
-See [INSTALLATION.md](INSTALLATION.md) for detailed installation instructions for:
-- Local installation (Windows, macOS, Linux)
-- Google Colab setup
-- Python package installation
-- Docker deployment
-- Troubleshooting guide
+**Essential Guides:**
+- **[README.md](README.md)** - Start here! Overview and quick start
+- **[USER_GUIDE.md](USER_GUIDE.md)** - Complete user guide with step-by-step instructions
+- **[INTERPRETATION_GUIDE.md](INTERPRETATION_GUIDE.md)** - How to interpret analysis results
+- **[INSTALLATION.md](INSTALLATION.md)** - Detailed installation instructions
+- **[BINARY_DATA_GUIDE.md](BINARY_DATA_GUIDE.md)** - Binary data handling (crucial!)
+
+**Technical Documentation:**
+- **[STANDARDIZATION_GUIDE.md](STANDARDIZATION_GUIDE.md)** - Script standardization guidelines
+- **[FEATURES.md](FEATURES.md)** - Complete feature list
+- **[EXCEL_REPORTS_README.md](EXCEL_REPORTS_README.md)** - Excel report structure
+
+**Specialized Guides:**
+- **[colab_notebooks/README.md](colab_notebooks/README.md)** - Google Colab usage
+- **[python_package/README.md](python_package/README.md)** - Package documentation
+- **[huggingface_demo/README.md](huggingface_demo/README.md)** - Voilà dashboard guide
 
 ## Usage
 
@@ -321,6 +348,19 @@ Contributions are welcome! Please:
 This tool was developed for the microbial genomics research community. We thank all contributors and users for their feedback and support.
 
 ## Changelog
+
+### 2025-01-15 - Version 1.1.0 🎉
+- ✨ **Production-ready Voilà Dashboard** with full functionality
+- ✨ **Standardized report templates** across all analysis tools
+- ✨ **Comprehensive interpretation sections** in all reports
+- ✨ **Complete user guide** (USER_GUIDE.md) with step-by-step instructions
+- ✨ **Results interpretation guide** (INTERPRETATION_GUIDE.md) for understanding outputs
+- ✨ **Standardization guide** (STANDARDIZATION_GUIDE.md) for developers
+- ✨ **Script template** (analysis_script_template.py) for consistent development
+- 📝 **All documentation in English** with clear explanations
+- 🎨 **Unified Bootstrap 5 styling** with consistent color scheme
+- 🔁 **Full reproducibility** with documented parameters and fixed seeds
+- ✅ **One HTML + One Excel per tool** - consolidated report generation
 
 ### 2025-01-07 - Version 1.0.0 🎉
 - ✨ **Added Google Colab notebooks** for cloud-based analysis
