@@ -6,6 +6,8 @@ Successfully implemented comprehensive cluster analysis pipeline for bacterial s
 ## Changes Implemented
 
 ### 1. Core Script Updates (`Cluster_MIC_AMR_Viruelnce.py`)
+**Note**: The filename has a spelling variation (Viruelnce vs Virulence). This is the actual filename in the repository.
+
 - ✅ Removed Google Colab-specific code
   - Removed `!pip install` command
   - Removed `google.colab.files` imports
