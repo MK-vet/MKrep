@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  mkrep:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mkrep:latest
+    container_name: mkrep-analysis
+    volumes:
+      # Mount local data directory to container
+      - ./data:/data
+      # Mount local output directory to container
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MKREP_DATA_DIR=/data
+      - MKREP_OUTPUT_DIR=/output
+    command: mkrep --help
+    
+  # Service for cluster analysis
+  mkrep-cluster:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mkrep:latest
+    container_name: mkrep-cluster-analysis
+    volumes:
+      - ./data:/data
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: mkrep-cluster --data-dir /data --output /output --bootstrap 500 --max-clusters 8
+    
+  # Service for MDR analysis
+  mkrep-mdr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mkrep:latest
+    container_name: mkrep-mdr-analysis
+    volumes:
+      - ./data:/data
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: mkrep-mdr --data-dir /data --output /output --mdr-threshold 3
+    
+  # Service for network analysis
+  mkrep-network:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mkrep:latest
+    container_name: mkrep-network-analysis
+    volumes:
+      - ./data:/data
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: mkrep-network --data-dir /data --output /output
+    
+  # Service for phylogenetic analysis
+  mkrep-phylo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mkrep:latest
+    container_name: mkrep-phylo-analysis
+    volumes:
+      - ./data:/data
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: mkrep-phylo --tree /data/tree.newick --data-dir /data --output /output
+    
+  # Service for Streptococcus suis analysis
+  mkrep-strepsuis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mkrep:latest
+    container_name: mkrep-strepsuis-analysis
+    volumes:
+      - ./data:/data
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: mkrep-strepsuis --tree /data/tree.newick --data-dir /data --output /output
+
+# Usage:
+# Build all services: docker-compose build
+# Run default service: docker-compose up mkrep
+# Run cluster analysis: docker-compose up mkrep-cluster
+# Run MDR analysis: docker-compose up mkrep-mdr
+# Run network analysis: docker-compose up mkrep-network
+# Run phylogenetic analysis: docker-compose up mkrep-phylo
+# Run strepsuis analysis: docker-compose up mkrep-strepsuis
+# Run in detached mode: docker-compose up -d mkrep-cluster
+# View logs: docker-compose logs mkrep-cluster
+# Stop services: docker-compose down
+# Clean up: docker-compose down -v
