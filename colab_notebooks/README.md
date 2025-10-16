@@ -4,11 +4,21 @@ This directory contains Google Colab-compatible Jupyter notebooks for running al
 
 ## Available Notebooks:
 
-1. **Cluster_Analysis_Colab.ipynb** - K-Modes clustering for MIC, AMR, and virulence data
-2. **MDR_Analysis_Colab.ipynb** - Multi-drug resistance analysis with hybrid networks
-3. **Network_Analysis_Colab.ipynb** - Feature association network analysis
-4. **Phylogenetic_Clustering_Colab.ipynb** - Tree-based clustering with evolutionary metrics
-5. **StrepSuis_Analysis_Colab.ipynb** - Streptococcus suis specific analysis
+### Interactive (No Coding Required)
+1. **Interactive_Analysis_Colab.ipynb** ⭐ **NEW!** - User-friendly interface with widgets
+   - Perfect for non-programmers
+   - Upload files with buttons
+   - Select analysis from dropdown
+   - Configure with sliders
+   - One-click execution
+   - Automatic download
+
+### Advanced (Full Code Access)
+2. **Cluster_Analysis_Colab.ipynb** - K-Modes clustering for MIC, AMR, and virulence data
+3. **MDR_Analysis_Colab.ipynb** - Multi-drug resistance analysis with hybrid networks
+4. **Network_Analysis_Colab.ipynb** - Feature association network analysis
+5. **Phylogenetic_Clustering_Colab.ipynb** - Tree-based clustering with evolutionary metrics
+6. **StrepSuis_Analysis_Colab.ipynb** - Streptococcus suis specific analysis
 
 ## How to Use:
 
@@ -27,6 +37,10 @@ This directory contains Google Colab-compatible Jupyter notebooks for running al
 ### Option 3: Direct Links
 Click on these links to open notebooks directly in Colab:
 
+#### For Non-Programmers:
+- [**Interactive Analysis**](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb) ⭐ **START HERE!**
+
+#### For Researchers (Advanced):
 - [Cluster Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
 - [MDR Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb)
 - [Network Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb)

@@ -36,10 +36,23 @@ All tools in this repository are **fully functional and production-ready**, not 
 ## 🚀 Quick Start
 
 ### Option 1: Google Colab (No Installation Required)
-Click to open interactive notebooks:
+
+#### A. Interactive Interface (No Coding!)
+**NEW!** User-friendly interface with buttons and widgets:
+- [**Interactive Analysis**](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb) - Perfect for non-programmers!
+  - Upload files with drag-and-drop
+  - Select analysis type from dropdown
+  - Configure parameters with sliders
+  - Click one button to run
+  - Download results automatically
+
+#### B. Advanced Notebooks (For Researchers)
+Detailed notebooks with full code and explanations:
 - [Cluster Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
 - [MDR Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb)
 - [Network Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb)
+- [Phylogenetic Clustering](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb)
+- [Streptococcus suis Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb)
 
 **For computationally intensive analyses:** Google Colab Pro is recommended for large datasets, providing:
 - High-RAM runtime (up to 52GB)
@@ -57,13 +70,34 @@ pip install -r requirements.txt
 python Cluster_MIC_AMR_Viruelnce.py
 ```
 
-### Option 3: Python Package (CLI)
+### Option 3: Docker Container (Universal Deployment)
+**NEW!** Run MKrep in any environment with Docker:
+```bash
+# Build the image
+docker build -t mkrep:latest .
+
+# Run cluster analysis
+docker run -v $(pwd)/data:/data -v $(pwd)/output:/output \
+    mkrep:latest mkrep-cluster --data-dir /data --output /output
+```
+
+Or use Docker Compose:
+```bash
+docker-compose up mkrep-cluster
+```
+
+See [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md) for complete guide including:
+- Running in Google Colab with Docker
+- All analysis types
+- Advanced configurations
+
+### Option 4: Python Package (CLI)
 ```bash
 pip install mkrep  # When published
 mkrep-cluster --data-dir ./data --output ./results
 ```
 
-### Option 4: Interactive Dashboard (Production Ready)
+### Option 5: Interactive Dashboard (Production Ready)
 Our [Voilà Dashboard](huggingface_demo/MKrep_Dashboard.ipynb) is a fully functional, production-ready interface for non-programmers.
 
 ```bash
@@ -77,6 +111,14 @@ Features:
 - Real-time progress tracking
 - Professional report generation
 - No programming knowledge required
+
+### Option 5: Standalone Scripts (Traditional)
+```bash
+git clone https://github.com/MK-vet/MKrep.git
+cd MKrep
+pip install -r requirements.txt
+python Cluster_MIC_AMR_Viruelnce.py
+```
 
 ## Analysis Scripts
 
@@ -208,6 +250,7 @@ pip install -r requirements.txt
 - **[USER_GUIDE.md](USER_GUIDE.md)** - Complete user guide with step-by-step instructions
 - **[INTERPRETATION_GUIDE.md](INTERPRETATION_GUIDE.md)** - How to interpret analysis results
 - **[INSTALLATION.md](INSTALLATION.md)** - Detailed installation instructions
+- **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** - Docker deployment guide (NEW!)
 - **[BINARY_DATA_GUIDE.md](BINARY_DATA_GUIDE.md)** - Binary data handling (crucial!)
 
 **Technical Documentation:**
