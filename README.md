@@ -6,6 +6,10 @@ Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
 
+[![CI - All Tools](https://github.com/MK-vet/MKrep/actions/workflows/ci.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/ci.yml)
+[![Deployment Tests](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml)
+[![Version Info](https://github.com/MK-vet/MKrep/actions/workflows/version-info.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/version-info.yml)
+
 ## Overview
 
 This repository contains Python scripts for analyzing bacterial genomic data with a focus on:
@@ -123,6 +127,36 @@ All scripts generate **professional, consistent reports** with:
 4. **💻 Standalone Scripts**: Traditional execution
    - Direct Python script execution
    - Maximum flexibility and customization
+
+### 🔧 GitHub Actions - Run Tools from GitHub
+
+All tools can be tested and run directly from GitHub using automated workflows:
+
+- **CI - All Tools**: Continuous integration testing for all deployment options
+  - Tests Python scripts, CLI package, Voilà dashboard, and notebooks
+  - Runs on Python 3.8-3.12 across multiple operating systems
+  - Automatically validates all tools on every push
+  
+- **Deployment Tests**: Comprehensive deployment verification
+  - Verifies standalone script execution
+  - Tests CLI package installation and commands
+  - Validates Voilà dashboard deployment
+  - Checks Colab notebook compatibility
+  
+- **Version Info**: Collects and displays version information
+  - Python environment details
+  - All package versions
+  - Available commands and scripts
+  
+- **Quick Start Demo**: Interactive demonstration (manual trigger)
+  - Choose specific tools to demonstrate
+  - See examples of all deployment options
+  - Can be triggered from GitHub Actions tab
+
+To view workflow status and trigger demos:
+1. Go to the [Actions tab](https://github.com/MK-vet/MKrep/actions)
+2. Select a workflow to view results
+3. For Quick Start Demo, click "Run workflow" to see tools in action
 
 See [INSTALLATION.md](INSTALLATION.md) for complete setup instructions.
 

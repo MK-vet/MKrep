@@ -253,7 +253,29 @@
 
 ## Deployment Options
 
-### 1. Google Colab Notebooks (5 notebooks)
+### 1. GitHub Actions (Automated Testing & Demos)
+**Location**: `.github/workflows/`
+
+**Features**:
+- Continuous integration testing
+- Automated version verification
+- Cross-platform compatibility testing
+- Manual workflow triggers for demos
+- No local installation needed to verify
+
+**Workflows**:
+1. ci.yml - Test all tools (Python 3.8-3.12)
+2. deployment.yml - Deployment verification
+3. version-info.yml - Version information collection
+4. quickstart-demo.yml - Interactive demonstrations
+
+**Usage**: Visit Actions tab → Run workflow → View demonstrations
+
+See [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md) for details.
+
+---
+
+### 2. Google Colab Notebooks (5 notebooks)
 **Location**: `colab_notebooks/`
 
 **Features**:
@@ -276,7 +298,7 @@
 
 ---
 
-### 2. Python Package with CLI
+### 3. Python Package with CLI
 **Location**: `python_package/`
 
 **Features**:
@@ -304,7 +326,7 @@ pip install -e .
 
 ---
 
-### 3. Hugging Face Demo with Voilà
+### 4. Hugging Face Demo with Voilà
 **Location**: `huggingface_demo/`
 
 **Features**:
@@ -326,7 +348,7 @@ Or deploy to Hugging Face Spaces
 
 ---
 
-### 4. Standalone Scripts
+### 5. Standalone Scripts
 **Location**: Root directory
 
 **Features**:

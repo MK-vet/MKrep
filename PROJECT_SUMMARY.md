@@ -63,8 +63,16 @@ MKrep/
 │   ├── FEATURES.md                           # Complete feature list
 │   ├── EXCEL_REPORTS_README.md               # Excel report guide
 │   ├── EXCEL_REPORT_EXAMPLES.md              # Report examples
+│   ├── GITHUB_ACTIONS.md                     # GitHub Actions guide
 │   ├── requirements.txt                      # Dependencies
 │   └── PROJECT_SUMMARY.md                    # This file
+│
+├── GitHub Actions Workflows (4)
+│   ├── .github/workflows/
+│   │   ├── ci.yml                            # CI testing all tools
+│   │   ├── deployment.yml                    # Deployment verification
+│   │   ├── version-info.yml                  # Version information
+│   │   └── quickstart-demo.yml               # Interactive demos
 │
 └── Example Data (7 CSV files)
     ├── MIC.csv
@@ -82,7 +90,20 @@ MKrep/
 
 ### 1. Multiple Deployment Options
 
-#### Option A: Google Colab (Recommended for Beginners)
+#### Option A: GitHub Actions (Verify Tools from GitHub)
+- No local installation required
+- View automated tests and demos
+- All tools verified on Python 3.8-3.12
+- Cross-platform testing (Ubuntu, Windows, macOS)
+- Manual workflow triggers for interactive demos
+
+**Quick Start**:
+1. Visit: [MKrep Actions](https://github.com/MK-vet/MKrep/actions)
+2. Select "Quick Start Demo" workflow
+3. Click "Run workflow"
+4. See all tools demonstrated
+
+#### Option B: Google Colab (Recommended for Beginners)
 - No installation required
 - Cloud-based execution
 - Free GPU access
@@ -95,7 +116,7 @@ MKrep/
 3. Run all cells
 4. Download results (HTML, Excel, PNG)
 
-#### Option B: Command-Line Interface
+#### Option C: Command-Line Interface
 - Python package with full CLI
 - Suitable for HPC clusters
 - Batch processing
@@ -107,7 +128,7 @@ pip install mkrep
 mkrep-cluster --data-dir ./data --output ./results
 ```
 
-#### Option C: Interactive Dashboard
+#### Option D: Interactive Dashboard
 - Web-based interface
 - Voilà-powered dashboard
 - Drag-and-drop file upload
@@ -120,7 +141,7 @@ cd huggingface_demo
 voila MKrep_Dashboard.ipynb
 ```
 
-#### Option D: Standalone Scripts
+#### Option E: Standalone Scripts
 - Direct Python execution
 - Maximum customization
 - No package installation

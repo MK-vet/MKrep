@@ -1,0 +1,223 @@
+name: Quick Start Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      tool_choice:
+        description: 'Select tool to demonstrate'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - python-scripts
+        - cli-package
+        - voila-dashboard
+        - notebooks
+
+jobs:
+  demo-python-scripts:
+    name: Demo - Python Standalone Scripts
+    runs-on: ubuntu-latest
+    if: github.event.inputs.tool_choice == 'python-scripts' || github.event.inputs.tool_choice == 'all'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Show available scripts
+      run: |
+        echo "==================================="
+        echo "  Python Standalone Scripts Demo"
+        echo "==================================="
+        echo ""
+        echo "Available analysis scripts:"
+        ls -lh Cluster_MIC_AMR_Viruelnce.py
+        ls -lh MDR_2025_04_15.py
+        ls -lh Network_Analysis_2025_06_26.py
+        ls -lh Phylgenetic_clustering_2025_03_21.py
+        ls -lh StrepSuisPhyloCluster_2025_08_11.py
+        echo ""
+        echo "Usage example:"
+        echo "  python Cluster_MIC_AMR_Viruelnce.py"
+        echo "  python MDR_2025_04_15.py"
+        echo ""
+        echo "These scripts can be run directly with Python!"
+
+  demo-cli-package:
+    name: Demo - CLI Package
+    runs-on: ubuntu-latest
+    if: github.event.inputs.tool_choice == 'cli-package' || github.event.inputs.tool_choice == 'all'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install CLI package
+      run: |
+        cd python_package
+        python -m pip install --upgrade pip
+        pip install -e .
+    
+    - name: Demo CLI commands
+      run: |
+        echo "==================================="
+        echo "      CLI Package Demo (mkrep)"
+        echo "==================================="
+        echo ""
+        echo "Available commands:"
+        echo ""
+        
+        echo "1. Main command:"
+        mkrep --help | head -15 || true
+        echo ""
+        
+        echo "2. Cluster analysis:"
+        echo "   mkrep-cluster --data-dir ./data --output ./results"
+        echo ""
+        
+        echo "3. MDR analysis:"
+        echo "   mkrep-mdr --data-dir ./data --output ./results"
+        echo ""
+        
+        echo "4. Network analysis:"
+        echo "   mkrep-network --data-dir ./data --output ./results"
+        echo ""
+        
+        echo "5. Phylogenetic analysis:"
+        echo "   mkrep-phylo --tree tree.newick --data-dir ./data --output ./results"
+        echo ""
+        
+        echo "6. StrepSuis analysis:"
+        echo "   mkrep-strepsuis --tree tree.newick --data-dir ./data --output ./results"
+        echo ""
+        
+        echo "Installation:"
+        echo "  pip install mkrep  # (when published to PyPI)"
+        echo "  OR"
+        echo "  cd python_package && pip install -e ."
+
+  demo-voila-dashboard:
+    name: Demo - Voilà Dashboard
+    runs-on: ubuntu-latest
+    if: github.event.inputs.tool_choice == 'voila-dashboard' || github.event.inputs.tool_choice == 'all'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install Voilà
+      run: |
+        cd huggingface_demo
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Demo Voilà dashboard
+      run: |
+        echo "==================================="
+        echo "    Voilà Dashboard Demo"
+        echo "==================================="
+        echo ""
+        echo "Voilà version:"
+        voila --version
+        echo ""
+        echo "Dashboard location:"
+        ls -lh huggingface_demo/MKrep_Dashboard.ipynb
+        echo ""
+        echo "Example data:"
+        ls huggingface_demo/example_data/
+        echo ""
+        echo "To run locally:"
+        echo "  cd huggingface_demo"
+        echo "  voila MKrep_Dashboard.ipynb --port 8866"
+        echo ""
+        echo "Then open: http://localhost:8866"
+        echo ""
+        echo "For Hugging Face Spaces deployment, see:"
+        echo "  huggingface_demo/README.md"
+
+  demo-notebooks:
+    name: Demo - Jupyter/Colab Notebooks
+    runs-on: ubuntu-latest
+    if: github.event.inputs.tool_choice == 'notebooks' || github.event.inputs.tool_choice == 'all'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install Jupyter
+      run: |
+        python -m pip install --upgrade pip
+        pip install jupyter nbconvert
+    
+    - name: Demo notebooks
+      run: |
+        echo "==================================="
+        echo "   Jupyter/Colab Notebooks Demo"
+        echo "==================================="
+        echo ""
+        echo "Available Colab notebooks:"
+        ls -1 colab_notebooks/*.ipynb
+        echo ""
+        echo "Notebook details:"
+        cd colab_notebooks
+        for notebook in *.ipynb; do
+          cells=$(python -c "import json; f=open('$notebook'); data=json.load(f); print(len(data['cells'])); f.close()")
+          echo "  - $notebook ($cells cells)"
+        done
+        echo ""
+        echo "To use in Google Colab:"
+        echo "  1. Click: https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb"
+        echo "  2. Upload your data files"
+        echo "  3. Run all cells"
+        echo "  4. Download results"
+        echo ""
+        echo "See colab_notebooks/README.md for more information"
+
+  demo-summary:
+    name: Demo Summary
+    runs-on: ubuntu-latest
+    needs: [demo-python-scripts, demo-cli-package, demo-voila-dashboard, demo-notebooks]
+    if: always()
+    
+    steps:
+    - name: Summary
+      run: |
+        echo "=========================================="
+        echo "       MKrep Quick Start Demo"
+        echo "=========================================="
+        echo ""
+        echo "All tools demonstrated successfully!"
+        echo ""
+        echo "📚 For detailed documentation, see:"
+        echo "   - README.md"
+        echo "   - INSTALLATION.md"
+        echo "   - FEATURES.md"
+        echo ""
+        echo "🚀 Ready to use MKrep from GitHub!"
+        echo "=========================================="

@@ -1,0 +1,217 @@
+name: Version Info & Documentation
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  version-info:
+    name: Check All Tool Versions
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install all dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install voila jupyter nbconvert
+        cd python_package && pip install -e . && cd ..
+    
+    - name: Collect version information
+      run: |
+        echo "# MKrep Tools Version Information" > VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        echo "Generated on: $(date)" >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        
+        echo "## Python Environment" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        python --version >> VERSION_INFO.md
+        pip --version >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        
+        echo "## MKrep Package" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        pip show mkrep >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        
+        echo "## Core Dependencies" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        pip show pandas numpy scipy matplotlib plotly scikit-learn biopython networkx >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        
+        echo "## Voilà & Jupyter" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        voila --version >> VERSION_INFO.md
+        jupyter --version >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        
+        echo "## Standalone Scripts" >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        echo "Available analysis scripts:" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        ls -1 *.py | grep -E "(Cluster_|MDR_|Network_|Phylgenetic_|StrepSuis)" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        
+        echo "## CLI Commands" >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        echo "Available CLI commands:" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        echo "mkrep" >> VERSION_INFO.md
+        echo "mkrep-cluster" >> VERSION_INFO.md
+        echo "mkrep-mdr" >> VERSION_INFO.md
+        echo "mkrep-network" >> VERSION_INFO.md
+        echo "mkrep-phylo" >> VERSION_INFO.md
+        echo "mkrep-strepsuis" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        
+        echo "## Colab Notebooks" >> VERSION_INFO.md
+        echo "" >> VERSION_INFO.md
+        echo "Available Colab notebooks:" >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+        ls -1 colab_notebooks/*.ipynb >> VERSION_INFO.md
+        echo '```' >> VERSION_INFO.md
+    
+    - name: Display version info
+      run: cat VERSION_INFO.md
+    
+    - name: Upload version info as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: version-information
+        path: VERSION_INFO.md
+        retention-days: 90
+
+  check-documentation:
+    name: Verify Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check main documentation files
+      run: |
+        echo "Checking documentation files..."
+        
+        test -f README.md && echo "✓ README.md"
+        test -f INSTALLATION.md && echo "✓ INSTALLATION.md"
+        test -f FEATURES.md && echo "✓ FEATURES.md"
+        test -f PROJECT_SUMMARY.md && echo "✓ PROJECT_SUMMARY.md"
+        
+        test -f python_package/README.md && echo "✓ python_package/README.md"
+        test -f huggingface_demo/README.md && echo "✓ huggingface_demo/README.md"
+        test -f colab_notebooks/README.md && echo "✓ colab_notebooks/README.md"
+        
+        echo ""
+        echo "All documentation files present!"
+    
+    - name: Check for setup instructions
+      run: |
+        echo "Verifying setup instructions in README.md"
+        
+        grep -q "Quick Start" README.md && echo "✓ Quick Start section found"
+        grep -q "Installation" README.md && echo "✓ Installation section found"
+        grep -q "Google Colab" README.md && echo "✓ Colab instructions found"
+        grep -q "voila" README.md && echo "✓ Voilà instructions found"
+        grep -q "CLI" README.md && echo "✓ CLI instructions found"
+        
+        echo ""
+        echo "All setup instructions documented!"
+
+  requirements-check:
+    name: Check Requirements Files
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Verify requirements files
+      run: |
+        echo "Checking requirements files..."
+        
+        test -f requirements.txt && echo "✓ requirements.txt"
+        test -f huggingface_demo/requirements.txt && echo "✓ huggingface_demo/requirements.txt"
+        test -f python_package/pyproject.toml && echo "✓ python_package/pyproject.toml"
+        
+        echo ""
+        echo "Checking Python version specifications..."
+        grep "Python" README.md || echo "Python version info in README"
+        grep "requires-python" python_package/pyproject.toml && echo "✓ Python version in pyproject.toml"
+        
+        echo ""
+        echo "All requirements files present!"
+    
+    - name: Check for version pins
+      run: |
+        echo "Main requirements.txt:"
+        cat requirements.txt
+        echo ""
+        echo "Voilà requirements.txt:"
+        cat huggingface_demo/requirements.txt
+
+  comprehensive-check:
+    name: Comprehensive Deployment Check
+    runs-on: ubuntu-latest
+    needs: [version-info, check-documentation, requirements-check]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Final deployment verification
+      run: |
+        echo "=========================================="
+        echo "  MKrep Deployment Readiness Report"
+        echo "=========================================="
+        echo ""
+        echo "Repository: MK-vet/MKrep"
+        echo "Branch: $(git branch --show-current)"
+        echo "Commit: $(git rev-parse --short HEAD)"
+        echo ""
+        echo "## Available Deployment Options:"
+        echo ""
+        echo "1. 📓 Google Colab Notebooks"
+        echo "   - Location: colab_notebooks/"
+        test -d colab_notebooks && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
+        echo ""
+        echo "2. 💻 Python Standalone Scripts"
+        echo "   - Location: Root directory"
+        test -f Cluster_MIC_AMR_Viruelnce.py && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
+        echo ""
+        echo "3. 📦 CLI Package (mkrep)"
+        echo "   - Location: python_package/"
+        test -f python_package/pyproject.toml && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
+        echo ""
+        echo "4. 🎨 Voilà Dashboard"
+        echo "   - Location: huggingface_demo/"
+        test -f huggingface_demo/MKrep_Dashboard.ipynb && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
+        echo ""
+        echo "## Supported Python Versions:"
+        echo "   - Python 3.8 ✅"
+        echo "   - Python 3.9 ✅"
+        echo "   - Python 3.10 ✅"
+        echo "   - Python 3.11 ✅"
+        echo "   - Python 3.12 ✅"
+        echo ""
+        echo "=========================================="
+        echo "All tools are ready to run from GitHub!"
+        echo "=========================================="

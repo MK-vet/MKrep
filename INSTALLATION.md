@@ -4,12 +4,37 @@ Complete guide for installing and using MKrep analysis tools in different enviro
 
 ## Table of Contents
 
-1. [Local Installation](#local-installation)
-2. [Google Colab](#google-colab)
-3. [Python Package](#python-package)
-4. [Hugging Face Demo](#hugging-face-demo)
-5. [Docker](#docker)
-6. [Troubleshooting](#troubleshooting)
+1. [Quick Verification (GitHub Actions)](#quick-verification-github-actions)
+2. [Local Installation](#local-installation)
+3. [Google Colab](#google-colab)
+4. [Python Package](#python-package)
+5. [Hugging Face Demo](#hugging-face-demo)
+6. [Docker](#docker)
+7. [Troubleshooting](#troubleshooting)
+
+---
+
+## Quick Verification (GitHub Actions)
+
+All MKrep tools are continuously tested and can be verified running from GitHub Actions:
+
+- **No installation needed** - View automated tests to see all tools working
+- **Status badges** on README show current CI status
+- **Manual demos** can be triggered from the Actions tab
+- **Version information** collected automatically
+
+**To view tools running from GitHub**:
+1. Visit [MKrep Actions](https://github.com/MK-vet/MKrep/actions)
+2. Select "Quick Start Demo" workflow
+3. Click "Run workflow" to see interactive demonstration
+4. View "CI - All Tools" for automatic test results
+
+See [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md) for complete documentation.
+
+**Supported configurations (all verified by CI)**:
+- Python 3.8, 3.9, 3.10, 3.11, 3.12 ✅
+- Ubuntu, Windows, macOS ✅
+- All deployment options (scripts, CLI, Voilà, notebooks) ✅
 
 ---
 
