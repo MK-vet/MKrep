@@ -4,7 +4,9 @@ Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing 
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com)
+[![DOI](https://img.shields.io/badge/DOI-pending-lightgrey.svg)]()
 
 [![CI - All Tools](https://github.com/MK-vet/MKrep/actions/workflows/ci.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/ci.yml)
 [![Deployment Tests](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml)
@@ -447,6 +449,27 @@ Contributions are welcome! Please:
 This tool was developed for the microbial genomics research community. We thank all contributors and users for their feedback and support.
 
 ## Changelog
+
+### 2025-01-16 - Version 1.2.0 🎉 **NEW FEATURES**
+- ✨ **Interactive Colab Notebook** - No coding required!
+  - Widget-based interface with buttons, dropdowns, and sliders
+  - Upload files, select analysis, configure parameters, click run
+  - Automatic result packaging and download
+  - Perfect for non-programmers and quick analysis
+- 🐳 **Docker Deployment** - Run anywhere with containers
+  - Complete Dockerfile for containerized deployment
+  - Docker Compose for easy multi-analysis workflows
+  - Works in Google Colab, local machines, cloud platforms
+  - Reproducible environments for research
+- 📚 **Enhanced Documentation**
+  - Complete Docker deployment guide (DOCKER_DEPLOYMENT.md)
+  - Interactive notebook guide (INTERACTIVE_NOTEBOOK_GUIDE.md)
+  - Quick start guide for new features (QUICK_START_NEW_FEATURES.md)
+  - Validation script to verify deployment readiness
+- 🔄 **Google Colab Updates**
+  - All existing notebooks verified and validated
+  - Better file handling and output management
+  - Improved instructions for beginners
 
 ### 2025-01-15 - Version 1.1.0 🎉
 - ✨ **Production-ready Voilà Dashboard** with full functionality
