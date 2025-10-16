@@ -12,12 +12,26 @@ Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing 
 
 ## Overview
 
-This repository contains Python scripts for analyzing bacterial genomic data with a focus on:
+This repository contains **production-ready** Python scripts for analyzing bacterial genomic data with a focus on:
 - Phylogenetic clustering and tree-based analysis
 - Antimicrobial resistance patterns and multi-drug resistance (MDR)
 - Network analysis of gene-phenotype associations
 - Binary trait profiling for virulence and resistance genes
 - Clustering analysis with multiple statistical methods
+
+### 🔬 Production-Ready for Scientific Publications
+
+All tools in this repository are **fully functional and production-ready**, not demos:
+
+- ✅ **Publication-quality outputs**: High-resolution charts (150+ DPI) and professional reports
+- ✅ **Reproducible research**: Fixed random seeds, documented parameters, complete methodology
+- ✅ **Peer-review ready**: Comprehensive documentation and validation
+- ✅ **Multi-platform support**: Works on Linux, macOS, Windows (Python 3.8-3.12)
+- ✅ **Independent tools**: Each tool can be used standalone while maintaining consistent appearance
+- ✅ **User-accessible**: Multiple deployment options for different skill levels
+- ✅ **Computational flexibility**: Support for local execution and cloud computing (Google Colab/Colab Pro)
+
+**For researchers:** All tools generate standardized reports suitable for scientific publications. Methods are fully documented and results are reproducible.
 
 ## 🚀 Quick Start
 
@@ -26,6 +40,14 @@ Click to open interactive notebooks:
 - [Cluster Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
 - [MDR Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb)
 - [Network Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb)
+
+**For computationally intensive analyses:** Google Colab Pro is recommended for large datasets, providing:
+- High-RAM runtime (up to 52GB)
+- Priority GPU access (T4, P100, V100)
+- Extended session times
+- Background execution
+
+All notebooks work with both free and Pro versions of Google Colab.
 
 ### Option 2: Local Installation
 ```bash
