@@ -86,6 +86,23 @@ For issues or questions:
 4. **Large datasets**: Consider splitting data or using high-RAM runtime
 5. **Reconnect**: If disconnected, re-run all cells or use Runtime → Run all
 
+### Google Colab Pro for Heavy Computations
+
+For computationally intensive analyses with large datasets, **Google Colab Pro** is recommended:
+
+- **High-RAM Runtime**: Up to 52GB RAM for large datasets
+- **Priority GPU Access**: Faster GPUs (T4, P100, V100) with longer runtimes
+- **Extended Sessions**: Longer timeout periods for long-running analyses
+- **Background Execution**: Continue computation even after closing browser
+
+To use Colab Pro features:
+1. Subscribe to Google Colab Pro at https://colab.research.google.com/signup
+2. Open any notebook from this repository
+3. Select Runtime → Change runtime type → Select GPU/TPU and High-RAM
+4. Run your analysis with enhanced computational resources
+
+All notebooks in this repository are **production-ready** and fully functional with both free and Pro versions of Google Colab.
+
 ---
 
 **Note:** These notebooks automatically download required scripts and utilities from the main repository. Ensure you have a stable internet connection.

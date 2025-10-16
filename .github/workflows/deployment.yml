@@ -188,7 +188,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         python validate.py || echo "Validation completed"
-        python -c "import pandas, numpy, scipy, matplotlib, plotly, sklearn, biopython, networkx; print('All core dependencies work on ${{ matrix.os }} with Python ${{ matrix.python-version }}')"
+        python -c "import pandas, numpy, scipy; from matplotlib import pyplot; import plotly, networkx; from sklearn import cluster; from Bio import Phylo; print('All core dependencies work on ${{ matrix.os }} with Python ${{ matrix.python-version }}')"
 
   deployment-summary:
     name: Deployment Summary
