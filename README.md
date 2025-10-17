@@ -12,6 +12,29 @@ Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing 
 [![Deployment Tests](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml)
 [![Version Info](https://github.com/MK-vet/MKrep/actions/workflows/version-info.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/version-info.yml)
 
+---
+
+## 🌐 Interactive Tool Portal
+
+**NEW!** Access all analysis tools through our interactive documentation portal:
+
+### 👉 **[https://mk-vet.github.io/MKrep/](https://mk-vet.github.io/MKrep/)** 👈
+
+The portal provides:
+- 📊 **Dedicated pages for each analysis tool** with detailed documentation
+- 🚀 **One-click access** to run tools in Google Colab
+- 📁 **Demo datasets** ready to download and test
+- 📈 **Example results** from completed analyses
+- 🎯 **Quick navigation** designed for researchers reading scientific articles
+
+**Perfect for external users who want to:**
+- Quickly understand what each tool does
+- Run analyses without installation
+- See example outputs before using their own data
+- Access all resources in one place
+
+---
+
 ## Overview
 
 This repository contains **production-ready** Python scripts for analyzing bacterial genomic data with a focus on:
