@@ -194,6 +194,38 @@ All scripts generate **professional, consistent reports** with:
    - Direct Python script execution
    - Maximum flexibility and customization
 
+### 🧪 Module Verification and Testing
+
+**NEW!** Comprehensive verification tools ensure all modules work correctly:
+
+```bash
+# Verify all modules are functional
+python verify_all_modules.py
+
+# Run all analyses with unified interface
+python run_all_analyses.py --all
+
+# Run specific analysis module
+python run_all_analyses.py --module cluster
+python run_all_analyses.py --module mdr
+python run_all_analyses.py --module network
+python run_all_analyses.py --module phylo
+python run_all_analyses.py --module strepsuis
+
+# List all available modules
+python run_all_analyses.py --list
+```
+
+Features:
+- Automated dependency checking
+- Data file validation
+- Syntax verification for all scripts
+- Quick import testing
+- Comprehensive result generation
+- JSON report of verification status
+
+See [APPLICATION_VARIANTS_GUIDE.md](APPLICATION_VARIANTS_GUIDE.md) for complete details on all modules.
+
 ### 🔧 GitHub Actions - Run Tools from GitHub
 
 All tools can be tested and run directly from GitHub using automated workflows:
@@ -252,8 +284,10 @@ pip install -r requirements.txt
 - **[USER_GUIDE.md](USER_GUIDE.md)** - Complete user guide with step-by-step instructions
 - **[INTERPRETATION_GUIDE.md](INTERPRETATION_GUIDE.md)** - How to interpret analysis results
 - **[INSTALLATION.md](INSTALLATION.md)** - Detailed installation instructions
-- **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** - Docker deployment guide (NEW!)
+- **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** - Docker deployment guide
 - **[BINARY_DATA_GUIDE.md](BINARY_DATA_GUIDE.md)** - Binary data handling (crucial!)
+- **[APPLICATION_VARIANTS_GUIDE.md](APPLICATION_VARIANTS_GUIDE.md)** - Complete guide to all analysis modules (NEW!)
+- **[EXAMPLE_RESULTS.md](EXAMPLE_RESULTS.md)** - Example outputs and verification status (NEW!)
 
 **Technical Documentation:**
 - **[STANDARDIZATION_GUIDE.md](STANDARDIZATION_GUIDE.md)** - Script standardization guidelines

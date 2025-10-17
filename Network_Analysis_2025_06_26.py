@@ -6,7 +6,11 @@ import plotly.graph_objects as go
 import plotly.offline as pyo
 from scipy.stats import chi2_contingency, entropy as scipy_entropy, norm, fisher_exact
 import statsmodels.stats.multitest as smm
-from google.colab import files
+try:
+    from google.colab import files
+    IN_COLAB = True
+except ImportError:
+    IN_COLAB = False
 import itertools
 import re
 import concurrent.futures
@@ -570,17 +574,34 @@ def perform_full_analysis():
     
     # Step 1: File upload and validation
     logging.info("STEP 1: File Upload and Validation")
-    print("Please upload the following CSV files: MGE.csv, MIC.csv, MLST.csv, Plasmid.csv, Serotype.csv, Virulence.csv, AMR_genes.csv")
-    print("Please upload the following CSV files: MGE.csv, MIC.csv, MLST.csv, Plasmid.csv, Serotype.csv, Virulence.csv, AMR_genes.csv")
-    uploaded_files = files.upload()
-    expected = ['MGE.csv','MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']
-    file_mapping = find_matching_files(uploaded_files, expected)
-    missing = [fn for fn in expected if fn not in file_mapping]
-    if missing:
-        logging.error(f"Missing files: {', '.join(missing)}")
-        print("Available files:", list(uploaded_files.keys()))
-        raise FileNotFoundError(f"Missing files: {', '.join(missing)}")
-    logging.info("All required files uploaded successfully")
+    
+    if IN_COLAB:
+        print("Please upload the following CSV files: MGE.csv, MIC.csv, MLST.csv, Plasmid.csv, Serotype.csv, Virulence.csv, AMR_genes.csv")
+        uploaded_files = files.upload()
+        expected = ['MGE.csv','MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']
+        file_mapping = find_matching_files(uploaded_files, expected)
+        missing = [fn for fn in expected if fn not in file_mapping]
+        if missing:
+            logging.error(f"Missing files: {', '.join(missing)}")
+            print("Available files:", list(uploaded_files.keys()))
+    else:
+        # Local execution - use files from current directory
+        print("Looking for CSV files in current directory...")
+        expected = ['MGE.csv','MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']
+        uploaded_files = {f: None for f in expected if os.path.exists(f)}
+        file_mapping = {f: f for f in expected if os.path.exists(f)}
+        missing = [fn for fn in expected if fn not in file_mapping]
+        if missing:
+            logging.warning(f"Optional files not found: {', '.join(missing)}")
+            print(f"Note: Some optional files not found: {', '.join(missing)}")
+    
+    # Check if we have at least the minimum required files
+    required_minimum = ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv']
+    missing_required = [f for f in required_minimum if f not in file_mapping]
+    if missing_required:
+        raise FileNotFoundError(f"Missing required files: {', '.join(missing_required)}")
+    
+    logging.info("All required files found successfully")
     print("File mapping:")
     for expected_name, actual_name in file_mapping.items():
         print(f"  {expected_name} -> {actual_name}")
@@ -923,14 +944,17 @@ def perform_full_analysis():
     print(f"Excel report saved to: {excel_path}")
     
     # Step 17: Download reports (for Colab)
-    logging.info("STEP 17: Attempting to download reports")
-    try:
-        files.download('report.html')
-        files.download(excel_path)
-        logging.info("Reports downloaded successfully")
-    except Exception as e:
-        logging.warning(f"Auto-download may not work in all environments: {e}")
-        print(f"Note: Auto-download may not work in all environments: {e}")
+    logging.info("STEP 17: Report generation complete")
+    if IN_COLAB:
+        try:
+            files.download('report.html')
+            files.download(excel_path)
+            logging.info("Reports downloaded successfully")
+        except Exception as e:
+            logging.warning(f"Auto-download may not work in all environments: {e}")
+            print(f"Note: Auto-download may not work in all environments: {e}")
+    else:
+        print(f"Reports saved to: report.html and {excel_path}")
     
     # Final summary
     end_time = time.time()
