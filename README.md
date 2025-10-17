@@ -280,6 +280,7 @@ pip install -r requirements.txt
 ## Documentation
 
 **Essential Guides:**
+- **[MODULE_VERIFICATION_SUMMARY.md](MODULE_VERIFICATION_SUMMARY.md)** - ⭐ NEW! Complete verification status and summary
 - **[README.md](README.md)** - Start here! Overview and quick start
 - **[USER_GUIDE.md](USER_GUIDE.md)** - Complete user guide with step-by-step instructions
 - **[INTERPRETATION_GUIDE.md](INTERPRETATION_GUIDE.md)** - How to interpret analysis results
@@ -287,6 +288,7 @@ pip install -r requirements.txt
 - **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** - Docker deployment guide
 - **[BINARY_DATA_GUIDE.md](BINARY_DATA_GUIDE.md)** - Binary data handling (crucial!)
 - **[APPLICATION_VARIANTS_GUIDE.md](APPLICATION_VARIANTS_GUIDE.md)** - Complete guide to all analysis modules (NEW!)
+- **[COMPLETE_WORKFLOW_GUIDE.md](COMPLETE_WORKFLOW_GUIDE.md)** - Workflow and integration guide (NEW!)
 - **[EXAMPLE_RESULTS.md](EXAMPLE_RESULTS.md)** - Example outputs and verification status (NEW!)
 
 **Technical Documentation:**
