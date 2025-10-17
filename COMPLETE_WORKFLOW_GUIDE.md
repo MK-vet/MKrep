@@ -476,7 +476,7 @@ import glob
 # Collect key results from all modules
 summary = {}
 
-for excel_file in glob.glob('*//*.xlsx'):
+for excel_file in glob.glob('*/*.xlsx'):
     module = excel_file.split('/')[0]
     # Extract key metrics
     # ... processing code ...
