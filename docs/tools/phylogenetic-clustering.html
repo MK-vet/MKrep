@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phylogenetic Clustering - MKrep</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { padding: 20px 0; background: #f8f9fa; }
+        .hero { background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 60px 0; margin-bottom: 40px; }
+        .content-card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .code-block { background: #f4f4f4; padding: 15px; border-radius: 8px; border-left: 4px solid #27ae60; }
+        .feature-list li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="container">
+            <h1><i class="fas fa-sitemap"></i> Phylogenetic Clustering</h1>
+            <p class="lead">Tree-based strain grouping with evolutionary context</p>
+            <a href="../index.html" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back to Tools</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-card">
+                    <h2>Overview</h2>
+                    <p>The Phylogenetic Clustering tool combines phylogenetic tree information with phenotypic data to perform evolutionary-aware clustering. It identifies strain groups that share both genetic ancestry and phenotypic characteristics.</p>
+                    
+                    <h3 class="mt-4">Key Features</h3>
+                    <ul class="feature-list">
+                        <li><strong>Tree-Aware Clustering:</strong> Multiple algorithms that respect phylogenetic structure</li>
+                        <li><strong>Evolutionary Metrics:</strong> Faith's Phylogenetic Diversity, pairwise distances</li>
+                        <li><strong>UMAP Visualization:</strong> Dimensionality reduction preserving evolutionary relationships</li>
+                        <li><strong>Binary Trait Analysis:</strong> Chi-square tests for trait-cluster associations</li>
+                        <li><strong>Bootstrap Validation:</strong> Confidence assessment of cluster assignments</li>
+                        <li><strong>Interactive Tree:</strong> Phylogenetic tree with cluster annotations</li>
+                    </ul>
+
+                    <h3 class="mt-4">When to Use</h3>
+                    <p>Use this tool when you want to:</p>
+                    <ul>
+                        <li>Analyze strain relationships in evolutionary context</li>
+                        <li>Find phylogenetically coherent strain groups</li>
+                        <li>Test trait associations with phylogenetic structure</li>
+                        <li>Combine tree-based and trait-based clustering</li>
+                    </ul>
+
+                    <h3 class="mt-4">Input Files Required</h3>
+                    <div class="code-block">
+                        <ul class="mb-0">
+                            <li><code>tree.newick</code> or <code>tree.nwk</code> - Phylogenetic tree (Newick format)</li>
+                            <li><code>MIC.csv</code> - Minimum Inhibitory Concentrations</li>
+                            <li><code>AMR_genes.csv</code> - Antimicrobial resistance genes</li>
+                            <li><code>Virulence.csv</code> - Virulence factors</li>
+                        </ul>
+                    </div>
+                    <p class="mt-2"><small><strong>Optional:</strong> MLST.csv, Serotype.csv for additional metadata</small></p>
+
+                    <h3 class="mt-4">Output Files</h3>
+                    <ul>
+                        <li><strong>HTML Report:</strong> Interactive phylogenetic tree, UMAP plots, trait associations</li>
+                        <li><strong>Excel Workbook:</strong> Cluster assignments, phylogenetic metrics, trait profiles</li>
+                        <li><strong>PNG Charts:</strong> Annotated trees, UMAP projections, heatmaps</li>
+                    </ul>
+
+                    <h3 class="mt-4">Statistical Methods</h3>
+                    <ul>
+                        <li>Multiple tree-aware clustering algorithms</li>
+                        <li>Faith's Phylogenetic Diversity (PD)</li>
+                        <li>Patristic distance calculations</li>
+                        <li>UMAP with custom phylogenetic distance metrics</li>
+                        <li>Chi-square tests with FDR correction</li>
+                        <li>Bootstrap consensus clustering</li>
+                    </ul>
+                </div>
+
+                <div class="content-card">
+                    <h2>Quick Start</h2>
+                    
+                    <h4>Option 1: Google Colab (Recommended)</h4>
+                    <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb" 
+                       class="btn btn-success btn-lg mb-3">
+                        <i class="fas fa-play"></i> Run in Colab
+                    </a>
+
+                    <h4>Option 2: Local Installation</h4>
+                    <div class="code-block">
+                        <pre class="mb-0"><code>git clone https://github.com/MK-vet/MKrep.git
+cd MKrep
+pip install -r requirements.txt
+python Phylgenetic_clustering_2025_03_21.py</code></pre>
+                    </div>
+
+                    <h4 class="mt-3">Option 3: CLI</h4>
+                    <div class="code-block">
+                        <pre class="mb-0"><code>mkrep-phylo --tree tree.newick --data-dir ./data --output ./results</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="content-card">
+                    <h4>Quick Links</h4>
+                    <div class="d-grid gap-2">
+                        <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb" 
+                           class="btn btn-success">
+                            <i class="fas fa-play"></i> Run in Colab
+                        </a>
+                        <a href="../results/phylogenetic-clustering.html" class="btn btn-primary">
+                            <i class="fas fa-chart-bar"></i> View Example Results
+                        </a>
+                        <a href="../demo-data/index.html" class="btn btn-info">
+                            <i class="fas fa-download"></i> Download Demo Data
+                        </a>
+                        <a href="https://github.com/MK-vet/MKrep/blob/main/Phylgenetic_clustering_2025_03_21.py" 
+                           class="btn btn-secondary">
+                            <i class="fab fa-github"></i> View Source Code
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h4>Parameters</h4>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>UMAP Components</strong></td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bootstrap</strong></td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FDR Alpha</strong></td>
+                            <td>0.05</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Random Seed</strong></td>
+                            <td>42</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="content-card">
+                    <h4>Runtime</h4>
+                    <p><i class="fas fa-clock"></i> <strong>15-30 minutes</strong></p>
+                    <p class="text-muted small">Depends on tree size and number of features</p>
+                </div>
+
+                <div class="content-card">
+                    <h4>Documentation</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/MK-vet/MKrep/blob/main/PHYLOGENETIC_ANALYSIS_README.md"><i class="fas fa-book"></i> Phylo Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
