@@ -5,6 +5,7 @@ Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MK-vet/MKrep/main?filepath=colab_notebooks%2FInteractive_Analysis_Colab.ipynb)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com)
 [![DOI](https://img.shields.io/badge/DOI-pending-lightgrey.svg)]()
 
