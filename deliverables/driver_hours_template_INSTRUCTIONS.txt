@@ -1,0 +1,35 @@
+I will place the ready .xlsx file into the repository but cannot generate binary .xlsx directly from this environment. This file explains how to generate the .xlsx locally using the provided script docs/generate_driver_hours_xlsx.py, and how to upload the generated file into the repository.
+
+## Step-by-Step Instructions
+
+1. **Navigate to the script directory**:
+   ```bash
+   cd docs
+   ```
+
+2. **Run the script** to generate the .xlsx file:
+   ```bash
+   python generate_driver_hours_xlsx.py
+   ```
+
+3. **Verify the generated file** (make sure `driver_hours_template.xlsx` is created in the same directory).
+
+4. **Navigate to the repository root**:
+   ```bash
+   cd ../../
+   ```
+
+5. **Add the generated file to the staging area**:
+   ```bash
+   git add deliverables/driver_hours_template.xlsx
+   ```
+
+6. **Commit the changes**:
+   ```bash
+   git commit -m "Add driver hours template"
+   ```
+
+7. **Push the changes to GitHub**:
+   ```bash
+   git push origin main
+   ```
