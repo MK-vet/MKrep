@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MKrep - Microbial Genomics Analysis Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .hero-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .btn-run {
+            margin: 5px;
+        }
+        .badge-status {
+            font-size: 0.9em;
+            padding: 5px 10px;
+        }
+        .feature-icon {
+            font-size: 2.5em;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        .footer {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="text-center">
+                <h1 class="display-4 mb-3">
+                    <i class="fas fa-dna"></i> MKrep Analysis Tools
+                </h1>
+                <p class="lead">
+                    Production-ready bioinformatics analysis pipeline for microbial genomics
+                </p>
+                <p class="text-muted">
+                    Comprehensive tools for antimicrobial resistance, virulence factors, and phylogenetic analysis
+                </p>
+                <div class="mt-4">
+                    <a href="https://github.com/MK-vet/MKrep" class="btn btn-primary btn-lg me-2">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                    <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb" 
+                       class="btn btn-success btn-lg me-2">
+                        <i class="fas fa-play"></i> Try in Colab
+                    </a>
+                    <a href="https://mybinder.org/v2/gh/MK-vet/MKrep/main?filepath=colab_notebooks%2FInteractive_Analysis_Colab.ipynb" 
+                       class="btn btn-info btn-lg">
+                        <i class="fas fa-rocket"></i> Launch in Binder
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Access Section -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="hero-section">
+                    <h3 class="text-center mb-4"><i class="fas fa-rocket"></i> Quick Access for Researchers</h3>
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+                            <h5>Documentation</h5>
+                            <p class="text-muted">Complete guides and tutorials</p>
+                            <a href="https://github.com/MK-vet/MKrep#readme" class="btn btn-outline-primary">
+                                Read Docs
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="feature-icon"><i class="fas fa-database"></i></div>
+                            <h5>Example Data</h5>
+                            <p class="text-muted">Sample datasets for testing</p>
+                            <a href="demo-data/index.html" class="btn btn-outline-primary">
+                                Get Data
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                            <h5>Example Results</h5>
+                            <p class="text-muted">Pre-generated analysis outputs</p>
+                            <a href="results/index.html" class="btn btn-outline-primary">
+                                View Results
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Tools Section -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h2 class="text-white text-center mb-4">
+                    <i class="fas fa-tools"></i> Available Analysis Tools
+                </h2>
+            </div>
+        </div>
+
+        <!-- Tool 1: Cluster Analysis -->
+        <div class="tool-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3>
+                        <i class="fas fa-project-diagram text-primary"></i> 
+                        Cluster Analysis
+                        <span class="badge bg-success badge-status ms-2">Production Ready</span>
+                    </h3>
+                    <p class="lead">K-Modes clustering for MIC, AMR, and virulence data</p>
+                    <ul>
+                        <li>Automatic optimal cluster number selection</li>
+                        <li>Multiple Correspondence Analysis (MCA)</li>
+                        <li>Bootstrap confidence intervals</li>
+                        <li>Feature importance ranking</li>
+                    </ul>
+                    <p class="text-muted">
+                        <strong>Use when:</strong> Identifying strain groups based on resistance patterns
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-grid gap-2">
+                        <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb" 
+                           class="btn btn-primary btn-run">
+                            <i class="fas fa-play"></i> Run in Colab
+                        </a>
+                        <a href="tools/cluster-analysis.html" class="btn btn-outline-primary btn-run">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                        <a href="results/cluster-analysis.html" class="btn btn-outline-success btn-run">
+                            <i class="fas fa-chart-bar"></i> View Example Results
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 2: MDR Analysis -->
+        <div class="tool-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3>
+                        <i class="fas fa-shield-virus text-danger"></i> 
+                        MDR Analysis
+                        <span class="badge bg-success badge-status ms-2">Production Ready</span>
+                    </h3>
+                    <p class="lead">Multi-drug resistance pattern analysis with hybrid networks</p>
+                    <ul>
+                        <li>Customizable MDR threshold</li>
+                        <li>Bootstrap prevalence estimation</li>
+                        <li>Association rule mining</li>
+                        <li>Hybrid co-resistance network visualization</li>
+                    </ul>
+                    <p class="text-muted">
+                        <strong>Use when:</strong> Analyzing antibiotic resistance patterns and MDR strains
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-grid gap-2">
+                        <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb" 
+                           class="btn btn-primary btn-run">
+                            <i class="fas fa-play"></i> Run in Colab
+                        </a>
+                        <a href="tools/mdr-analysis.html" class="btn btn-outline-primary btn-run">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                        <a href="results/mdr-analysis.html" class="btn btn-outline-success btn-run">
+                            <i class="fas fa-chart-bar"></i> View Example Results
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 3: Network Analysis -->
+        <div class="tool-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3>
+                        <i class="fas fa-network-wired text-info"></i> 
+                        Network Analysis
+                        <span class="badge bg-success badge-status ms-2">Production Ready</span>
+                    </h3>
+                    <p class="lead">Statistical network analysis of feature associations</p>
+                    <ul>
+                        <li>Chi-square and Fisher exact tests</li>
+                        <li>Information theory metrics (entropy, Cramér's V)</li>
+                        <li>3D network visualization</li>
+                        <li>Community detection and hub identification</li>
+                    </ul>
+                    <p class="text-muted">
+                        <strong>Use when:</strong> Finding feature correlations and relationship networks
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-grid gap-2">
+                        <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb" 
+                           class="btn btn-primary btn-run">
+                            <i class="fas fa-play"></i> Run in Colab
+                        </a>
+                        <a href="tools/network-analysis.html" class="btn btn-outline-primary btn-run">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                        <a href="results/network-analysis.html" class="btn btn-outline-success btn-run">
+                            <i class="fas fa-chart-bar"></i> View Example Results
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 4: Phylogenetic Clustering -->
+        <div class="tool-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3>
+                        <i class="fas fa-sitemap text-success"></i> 
+                        Phylogenetic Clustering
+                        <span class="badge bg-success badge-status ms-2">Production Ready</span>
+                    </h3>
+                    <p class="lead">Tree-based clustering with evolutionary context</p>
+                    <ul>
+                        <li>Tree-aware clustering methods</li>
+                        <li>Faith's Phylogenetic Diversity</li>
+                        <li>UMAP dimensionality reduction</li>
+                        <li>Trait-phylogeny associations</li>
+                    </ul>
+                    <p class="text-muted">
+                        <strong>Use when:</strong> Analyzing phylogenetic relationships and evolution
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-grid gap-2">
+                        <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb" 
+                           class="btn btn-primary btn-run">
+                            <i class="fas fa-play"></i> Run in Colab
+                        </a>
+                        <a href="tools/phylogenetic-clustering.html" class="btn btn-outline-primary btn-run">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                        <a href="results/phylogenetic-clustering.html" class="btn btn-outline-success btn-run">
+                            <i class="fas fa-chart-bar"></i> View Example Results
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 5: StrepSuis Analysis -->
+        <div class="tool-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3>
+                        <i class="fas fa-bacterium text-warning"></i> 
+                        Streptococcus suis Analysis
+                        <span class="badge bg-success badge-status ms-2">Production Ready</span>
+                    </h3>
+                    <p class="lead">Specialized integrative analysis for <em>S. suis</em> strains</p>
+                    <ul>
+                        <li>Ensemble clustering with fallback</li>
+                        <li>Chi-square trait associations</li>
+                        <li>Random Forest feature importance</li>
+                        <li>Comprehensive trait profiling</li>
+                    </ul>
+                    <p class="text-muted">
+                        <strong>Use when:</strong> Characterizing <em>Streptococcus suis</em> strains
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-grid gap-2">
+                        <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb" 
+                           class="btn btn-primary btn-run">
+                            <i class="fas fa-play"></i> Run in Colab
+                        </a>
+                        <a href="tools/strepsuis-analysis.html" class="btn btn-outline-primary btn-run">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                        <a href="results/strepsuis-analysis.html" class="btn btn-outline-success btn-run">
+                            <i class="fas fa-chart-bar"></i> View Example Results
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="hero-section">
+            <h3 class="text-center mb-4"><i class="fas fa-star"></i> Key Features</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h5><i class="fas fa-check-circle text-success"></i> Production Ready</h5>
+                    <p>All tools are fully functional and validated for scientific publications</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5><i class="fas fa-chart-bar text-primary"></i> Publication Quality</h5>
+                    <p>High-resolution charts (150+ DPI) and professional reports</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5><i class="fas fa-redo text-info"></i> Reproducible</h5>
+                    <p>Fixed random seeds and documented parameters ensure reproducibility</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h5><i class="fas fa-download text-warning"></i> Multiple Formats</h5>
+                    <p>HTML, Excel, and PNG outputs for different use cases</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="mb-2">
+                <strong>MKrep</strong> - Comprehensive Bioinformatics Analysis Pipeline
+            </p>
+            <p class="text-muted mb-2">
+                Developed for microbial genomics research community
+            </p>
+            <p>
+                <a href="https://github.com/MK-vet/MKrep" class="text-decoration-none me-3">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://github.com/MK-vet/MKrep/issues" class="text-decoration-none me-3">
+                    <i class="fas fa-bug"></i> Report Issues
+                </a>
+                <a href="https://github.com/MK-vet/MKrep#citation" class="text-decoration-none">
+                    <i class="fas fa-quote-right"></i> Citation
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

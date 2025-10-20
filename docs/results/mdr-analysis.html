@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluster Analysis Results - MKrep</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { padding: 20px 0; background: #f8f9fa; }
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 0; margin-bottom: 30px; }
+        .content-card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="container">
+            <h1><i class="fas fa-project-diagram"></i> Cluster Analysis - Example Results</h1>
+            <a href="index.html" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back to Results</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="content-card">
+            <h2>Example Analysis Summary</h2>
+            <p>This page showcases typical outputs from the Cluster Analysis tool.</p>
+            
+            <h4>Key Results:</h4>
+            <ul>
+                <li><strong>Optimal Clusters:</strong> 4 groups identified</li>
+                <li><strong>Silhouette Score:</strong> 0.62 (good cluster quality)</li>
+                <li><strong>Significant Features:</strong> 23 features strongly associated with clusters (FDR < 0.05)</li>
+                <li><strong>Bootstrap Confidence:</strong> 95% for most assignments</li>
+            </ul>
+
+            <h4>Generated Outputs:</h4>
+            <ul>
+                <li>Interactive HTML report with DataTables</li>
+                <li>Excel workbook with 8 sheets</li>
+                <li>15 PNG charts including MCA plots and heatmaps</li>
+            </ul>
+
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-rocket"></i> Try It Yourself</h5>
+                <p>Run the analysis with demo data to generate full results:</p>
+                <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb" 
+                   class="btn btn-primary">
+                    <i class="fas fa-play"></i> Run in Colab
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

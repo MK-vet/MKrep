@@ -5,12 +5,36 @@ Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MK-vet/MKrep/main?filepath=colab_notebooks%2FInteractive_Analysis_Colab.ipynb)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com)
 [![DOI](https://img.shields.io/badge/DOI-pending-lightgrey.svg)]()
 
 [![CI - All Tools](https://github.com/MK-vet/MKrep/actions/workflows/ci.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/ci.yml)
 [![Deployment Tests](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/deployment.yml)
 [![Version Info](https://github.com/MK-vet/MKrep/actions/workflows/version-info.yml/badge.svg)](https://github.com/MK-vet/MKrep/actions/workflows/version-info.yml)
+
+---
+
+## 🌐 Interactive Tool Portal
+
+**NEW!** Access all analysis tools through our interactive documentation portal:
+
+### 👉 **[https://mk-vet.github.io/MKrep/](https://mk-vet.github.io/MKrep/)** 👈
+
+The portal provides:
+- 📊 **Dedicated pages for each analysis tool** with detailed documentation
+- 🚀 **One-click access** to run tools in Google Colab
+- 📁 **Demo datasets** ready to download and test
+- 📈 **Example results** from completed analyses
+- 🎯 **Quick navigation** designed for researchers reading scientific articles
+
+**Perfect for external users who want to:**
+- Quickly understand what each tool does
+- Run analyses without installation
+- See example outputs before using their own data
+- Access all resources in one place
+
+---
 
 ## Overview
 

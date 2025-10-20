@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streptococcus suis Analysis - MKrep</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { padding: 20px 0; background: #f8f9fa; }
+        .hero { background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; padding: 60px 0; margin-bottom: 40px; }
+        .content-card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .code-block { background: #f4f4f4; padding: 15px; border-radius: 8px; border-left: 4px solid #f39c12; }
+        .feature-list li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="container">
+            <h1><i class="fas fa-bacterium"></i> <em>Streptococcus suis</em> Analysis</h1>
+            <p class="lead">Specialized integrative analysis for <em>S. suis</em> strains</p>
+            <a href="../index.html" class="btn btn-light"><i class="fas fa-arrow-left"></i> Back to Tools</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-card">
+                    <h2>Overview</h2>
+                    <p>The <em>Streptococcus suis</em> Analysis tool is specifically designed for comprehensive characterization of <em>S. suis</em> strains. It combines phylogenetic clustering with extensive trait profiling to provide detailed insights into strain diversity and virulence potential.</p>
+                    
+                    <h3 class="mt-4">Key Features</h3>
+                    <ul class="feature-list">
+                        <li><strong>Ensemble Clustering:</strong> Multiple algorithms with intelligent fallback strategies</li>
+                        <li><strong>Comprehensive Trait Profiling:</strong> Chi-square, log-odds, Random Forest importance</li>
+                        <li><strong>Association Rules:</strong> Apriori mining for trait co-occurrence patterns</li>
+                        <li><strong>MCA Visualization:</strong> Multiple Correspondence Analysis for categorical data</li>
+                        <li><strong>Bootstrap Validation:</strong> Robust confidence assessment</li>
+                        <li><strong>Interactive Reports:</strong> Bootstrap 5 UI with CSV export functionality</li>
+                    </ul>
+
+                    <h3 class="mt-4">When to Use</h3>
+                    <p>Use this tool when you want to:</p>
+                    <ul>
+                        <li>Characterize <em>S. suis</em> strain collections</li>
+                        <li>Identify virulence factor patterns specific to <em>S. suis</em></li>
+                        <li>Analyze phylogenetic-trait relationships in <em>S. suis</em></li>
+                        <li>Perform comprehensive integrative analysis</li>
+                    </ul>
+
+                    <h3 class="mt-4">Input Files Required</h3>
+                    <div class="code-block">
+                        <ul class="mb-0">
+                            <li><code>tree.newick</code> - Phylogenetic tree (Newick format)</li>
+                            <li><code>MIC.csv</code> - Minimum Inhibitory Concentrations</li>
+                            <li><code>AMR_genes.csv</code> - Antimicrobial resistance genes</li>
+                            <li><code>Virulence.csv</code> - Virulence factors (S. suis specific)</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="mt-4">Output Files</h3>
+                    <ul>
+                        <li><strong>HTML Report:</strong> Comprehensive interactive dashboard with all analyses</li>
+                        <li><strong>Excel Workbook:</strong> Multi-sheet with cluster assignments, trait profiles, associations</li>
+                        <li><strong>PNG Charts:</strong> Phylogenetic trees, MCA plots, trait heatmaps</li>
+                        <li><strong>CSV Exports:</strong> All data tables for further analysis</li>
+                    </ul>
+
+                    <h3 class="mt-4">Statistical Methods</h3>
+                    <ul>
+                        <li>Ensemble phylogenetic clustering (TreeCluster, PhyloHMM)</li>
+                        <li>Chi-square tests with FDR correction</li>
+                        <li>Log-odds ratio calculations for effect sizes</li>
+                        <li>Random Forest feature importance</li>
+                        <li>Multiple Correspondence Analysis (MCA)</li>
+                        <li>Apriori association rule mining</li>
+                        <li>Bootstrap confidence intervals</li>
+                    </ul>
+                </div>
+
+                <div class="content-card">
+                    <h2>Quick Start</h2>
+                    
+                    <h4>Option 1: Google Colab (Recommended)</h4>
+                    <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb" 
+                       class="btn btn-warning btn-lg mb-3">
+                        <i class="fas fa-play"></i> Run in Colab
+                    </a>
+
+                    <h4>Option 2: Local Installation</h4>
+                    <div class="code-block">
+                        <pre class="mb-0"><code>git clone https://github.com/MK-vet/MKrep.git
+cd MKrep
+pip install -r requirements.txt
+python StrepSuisPhyloCluster_2025_08_11.py</code></pre>
+                    </div>
+
+                    <h4 class="mt-3">Option 3: CLI</h4>
+                    <div class="code-block">
+                        <pre class="mb-0"><code>mkrep-strepsuis --tree tree.newick --data-dir ./data --output ./results</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="content-card">
+                    <h4>Quick Links</h4>
+                    <div class="d-grid gap-2">
+                        <a href="https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb" 
+                           class="btn btn-warning">
+                            <i class="fas fa-play"></i> Run in Colab
+                        </a>
+                        <a href="../results/strepsuis-analysis.html" class="btn btn-success">
+                            <i class="fas fa-chart-bar"></i> View Example Results
+                        </a>
+                        <a href="../demo-data/index.html" class="btn btn-info">
+                            <i class="fas fa-download"></i> Download Demo Data
+                        </a>
+                        <a href="https://github.com/MK-vet/MKrep/blob/main/StrepSuisPhyloCluster_2025_08_11.py" 
+                           class="btn btn-secondary">
+                            <i class="fab fa-github"></i> View Source Code
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h4>Parameters</h4>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>Bootstrap</strong></td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FDR Alpha</strong></td>
+                            <td>0.05</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Min Support</strong></td>
+                            <td>0.1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Random Seed</strong></td>
+                            <td>42</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="content-card">
+                    <h4>Runtime</h4>
+                    <p><i class="fas fa-clock"></i> <strong>10-20 minutes</strong></p>
+                    <p class="text-muted small">Most comprehensive analysis pipeline</p>
+                </div>
+
+                <div class="content-card">
+                    <h4>Documentation</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/MK-vet/MKrep#readme"><i class="fas fa-book"></i> Main README</a></li>
+                        <li><a href="https://github.com/MK-vet/MKrep/blob/main/USER_GUIDE.md"><i class="fas fa-user"></i> User Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

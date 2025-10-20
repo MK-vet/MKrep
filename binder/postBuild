@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Enable Jupyter widgets
+jupyter nbextension enable --py widgetsnbextension --sys-prefix
+
+# Trust notebooks
+jupyter trust colab_notebooks/*.ipynb 2>/dev/null || true
+
+# Create output directories
+mkdir -p output
+mkdir -p png_charts
+
+echo "Binder environment ready!"
