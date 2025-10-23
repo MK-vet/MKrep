@@ -932,7 +932,7 @@ class Report:
     def create(self, payload, config, html_name="phylogenetic_report.html"):
         tpl=self.env.get_template("report_template.html")
         context={
-            "title":"StrepSuisPhyloCluster: Integrative Phylogenetic Clustering Tool and Binary Trait Profiling of Antimicrobial Resistance and Virulence in Streptococcus suis",
+            "title":"StrepSuis-GenPhen: An Interactive Platform for Integrated Genomic–Phenotypic Analysis in Streptococcus suis",
             "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "config": vars(config),
             "results": payload

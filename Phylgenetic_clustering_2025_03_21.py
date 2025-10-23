@@ -2255,7 +2255,7 @@ class HTMLReportGenerator:
         results['additional_results'] = additional_html
 
         context = {
-            'title': 'Phylogenetic Analysis Report',
+            'title': 'StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis of Antimicrobial Resistance and Virulence in Streptococcus suis',
             'date': pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S'),
             'config': vars(config),
             'results': results

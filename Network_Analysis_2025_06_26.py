@@ -298,11 +298,11 @@ def generate_report_with_cluster_stats(
 
     html = (
         '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">'
-        '<title>Analysis Report</title>'
+        '<title>StrepSuis-GenPhenNet: Network-Based Integration of Genome–Phenome Data in Streptococcus suis</title>'
         + css_links + js_scripts +
         '<style>.summary-block{background:#f7f7f7;border:1px solid #ccc;padding:10px;margin-bottom:10px;}</style>'
         '</head><body>'
-        '<h1>Comprehensive Statistical Analysis Report</h1>'
+        '<h1>StrepSuis-GenPhenNet: Network-Based Integration of Genome–Phenome Data in Streptococcus suis</h1>'
         '<section><h2>1. Feature Summary</h2>' + create_interactive_table_with_empty(feature_summary_df, 'FeatureSummary') + '</section>'
 
         '<section><h2>2. Chi-square Results</h2>'
