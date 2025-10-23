@@ -1,4 +1,4 @@
-# MKrep - Microbial Genomics Analysis Package
+# StrepSuis_Suite - Streptococcus suis Genomics Analysis Package
 
 A comprehensive Python package for bioinformatics analysis of microbial genomics data.
 
@@ -217,10 +217,10 @@ Full documentation is available at:
 
 ## Citation
 
-If you use MKrep in your research, please cite:
+If you use StrepSuis_Suite in your research, please cite:
 
 ```
-MK-vet/MKrep: Comprehensive bioinformatics analysis pipeline for microbial genomics
+MK-vet/MKrep: StrepSuis_Suite - Comprehensive bioinformatics analysis suite for Streptococcus suis genomics
 https://github.com/MK-vet/MKrep
 ```
 
