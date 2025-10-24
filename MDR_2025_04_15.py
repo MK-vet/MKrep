@@ -1272,7 +1272,7 @@ def generate_html_report(
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>Hybrid MDR Network Report</title>
+  <title>StrepSuis-AMRPat: Automated Detection of Antimicrobial Resistance Patterns in Streptococcus suis</title>
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -1366,7 +1366,7 @@ def generate_html_report(
 </head>
 <body>
 <div class="container">
-<h1>Hybrid MDR Analysis Pipeline</h1>
+<h1>StrepSuis-AMRPat: Automated Detection of Antimicrobial Resistance Patterns in Streptococcus suis</h1>
 <p><strong>Timestamp:</strong> {ts}</p>
 <p><strong>Total isolates:</strong> {len(data)}</p>
 <hr/>

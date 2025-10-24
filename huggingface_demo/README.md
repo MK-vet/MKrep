@@ -1,4 +1,4 @@
-# MKrep Hugging Face Demo with Voilà
+# StrepSuis_Suite Hugging Face Demo with Voilà
 
 **Fully functional interactive dashboard for microbial genomics analysis**
 
@@ -53,7 +53,7 @@ The fully functional dashboard provides:
 
 ## Analysis Types
 
-1. **Cluster Analysis** - K-Modes clustering for binary traits
+1. **StrepSuis-AMRVirKM** - K-Modes clustering for antimicrobial resistance and virulence
 2. **MDR Analysis** - Multi-drug resistance patterns
 3. **Network Analysis** - Feature association networks
 4. **Phylogenetic Clustering** - Tree-based clustering

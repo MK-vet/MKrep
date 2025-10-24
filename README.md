@@ -1,6 +1,6 @@
-# MKrep
+# StrepSuis_Suite
 
-Comprehensive bioinformatics analysis pipeline for microbial genomics, focusing on antimicrobial resistance (AMR), virulence factors, and phylogenetic relationships.
+Comprehensive bioinformatics analysis suite for *Streptococcus suis* genomics, focusing on antimicrobial resistance (AMR), virulence factors, and phylogenetic relationships.
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -146,42 +146,52 @@ pip install -r requirements.txt
 python Cluster_MIC_AMR_Viruelnce.py
 ```
 
-## Analysis Scripts
+## Analysis Modules
 
-### 1. `Phylgenetic_clustering_2025_03_21.py`
-Complete phylogenetic clustering and binary trait analysis with:
-- Tree-aware clustering methods
-- Evolutionary metrics (Faith's PD, pairwise distances)
-- Binary trait analysis (AMR, virulence)
-- Interactive HTML reports with DataTables and Plotly
+### 1. StrepSuis-GenPhen: Interactive Platform for Integrated Genomic–Phenotypic Analysis
+**Script:** `StrepSuisPhyloCluster_2025_08_11.py`
 
-### 2. `StrepSuisPhyloCluster_2025_08_11.py`
-Integrative phylogenetic clustering tool for *Streptococcus suis* with:
-- Tree-aware clustering with ensemble fallback
-- Trait profiling (chi-square, log-odds, RF importance)
-- Association rules and MCA
-- Bootstrap 5 UI with CSV export
+Integrative genomic-phenotypic analysis tool for *Streptococcus suis*:
+- Tree-aware phylogenetic clustering with ensemble fallback
+- Comprehensive trait profiling (chi-square, log-odds, RF importance)
+- Association rules mining and Multiple Correspondence Analysis
+- Interactive Bootstrap 5 UI with full CSV export capabilities
 
-### 3. `Network_Analysis_2025_06_26.py`
-Statistical network analysis for feature associations:
-- Chi-square and Fisher exact tests
-- Information theory metrics (entropy, Cramér's V)
-- Mutually exclusive pattern detection
+### 2. StrepSuis-AMRPat: Automated Detection of Antimicrobial Resistance Patterns
+**Script:** `MDR_2025_04_15.py`
+
+Advanced multidrug resistance pattern detection:
+- Bootstrap resampling for robust prevalence estimation
+- Co-occurrence analysis for phenotypes and resistance genes
+- Association rule mining for resistance patterns
+- Hybrid co-resistance network construction and visualization
+
+### 3. StrepSuis-AMRVirKM: K-Modes Clustering of Antimicrobial Resistance and Virulence Profiles
+**Script:** `Cluster_MIC_AMR_Viruelnce.py`
+
+Comprehensive clustering analysis for resistance and virulence:
+- K-Modes clustering with automatic silhouette optimization
+- Multiple Correspondence Analysis (MCA) for dimensionality reduction
+- Feature importance ranking and association rule discovery
+- Bootstrap confidence intervals for robust statistical inference
+
+### 4. StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis
+**Script:** `Phylgenetic_clustering_2025_03_21.py`
+
+Complete phylogenetic and binary trait analysis:
+- Tree-aware clustering with evolutionary metrics
+- Faith's Phylogenetic Diversity and pairwise distance calculations
+- Binary trait analysis for AMR and virulence factors
+- Interactive HTML reports with DataTables and Plotly visualizations
+
+### 5. StrepSuis-GenPhenNet: Network-Based Integration of Genome–Phenome Data
+**Script:** `Network_Analysis_2025_06_26.py`
+
+Statistical network analysis for genomic-phenotypic associations:
+- Chi-square and Fisher exact tests with FDR correction
+- Information theory metrics (entropy, mutual information, Cramér's V)
+- Mutually exclusive pattern detection algorithms
 - 3D network visualization with community detection
-
-### 4. `MDR_2025_04_15.py`
-Enhanced MDR analysis with hybrid network approach:
-- Bootstrap resampling for prevalence estimation
-- Co-occurrence analysis (phenotypes and genes)
-- Association rule mining
-- Hybrid co-resistance network construction
-
-### 5. `Cluster_MIC_AMR_Viruelnce.py`
-Comprehensive clustering analysis for MIC, AMR, and virulence data:
-- K-Modes clustering with silhouette optimization
-- Multiple Correspondence Analysis (MCA)
-- Feature importance and association rules
-- Bootstrap confidence intervals
 
 ## ✨ NEW: Multiple Usage Options
 
@@ -430,17 +440,17 @@ output/
     └── ...
 ```
 
-## Features by Script
+## Features by Module
 
-| Feature | Phylo_2025 | StrepSuis | Network | MDR | Cluster |
-|---------|-----------|-----------|---------|-----|---------|
-| Phylogenetic clustering | ✓ | ✓ | - | - | - |
-| Network analysis | - | - | ✓ | ✓ | - |
-| K-Modes clustering | - | - | - | - | ✓ |
+| Feature | GenPhen | AMRPat | AMRVirKM | PhyloTrait | GenPhenNet |
+|---------|---------|--------|----------|------------|------------|
+| Phylogenetic clustering | ✓ | - | - | ✓ | - |
+| Network analysis | - | ✓ | - | - | ✓ |
+| K-Modes clustering | - | - | ✓ | - | - |
 | Chi-square tests | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Bootstrap CIs | ✓ | ✓ | - | ✓ | ✓ |
-| Association rules | ✓ | ✓ | - | ✓ | ✓ |
-| MCA | ✓ | ✓ | - | - | ✓ |
+| Bootstrap CIs | ✓ | ✓ | ✓ | ✓ | - |
+| Association rules | ✓ | ✓ | ✓ | ✓ | - |
+| MCA | ✓ | - | ✓ | ✓ | - |
 | Excel reports | ✓ | ✓ | ✓ | ✓ | ✓ |
 | PNG charts | ✓ | ✓ | ✓ | ✓ | ✓ |
 
@@ -472,15 +482,15 @@ config = Config(
 
 ## Citation
 
-If you use MKrep in your research, please cite:
+If you use StrepSuis_Suite in your research, please cite:
 
 ```bibtex
-@software{mkrep2025,
-  title = {MKrep: Comprehensive Bioinformatics Analysis Pipeline for Microbial Genomics},
+@software{strepsuis_suite2025,
+  title = {StrepSuis\_Suite: Comprehensive Bioinformatics Analysis Suite for Streptococcus suis Genomics},
   author = {MK-vet},
   year = {2025},
   url = {https://github.com/MK-vet/MKrep},
-  version = {1.0.0}
+  version = {2.0.0}
 }
 ```
 

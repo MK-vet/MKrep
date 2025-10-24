@@ -1007,7 +1007,7 @@ def generate_comprehensive_html_report(
     <html lang="en">
     <head>
       <meta charset="UTF-8">
-      <title>Comprehensive Cluster Analysis</title>
+      <title>StrepSuis-AMRVirKM: K-Modes Clustering of Antimicrobial Resistance and Virulence Profiles in Streptococcus suis</title>
       <!-- Bootstrap -->
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
       <!-- DataTables -->
@@ -1030,7 +1030,7 @@ def generate_comprehensive_html_report(
 
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Cluster Analysis</a>
+          <a class="navbar-brand" href="#">StrepSuis-AMRVirKM</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -1048,7 +1048,7 @@ def generate_comprehensive_html_report(
       </nav>
 
       <div class="container-fluid">
-        <h1>Comprehensive Cluster Analysis Report</h1>
+        <h1>StrepSuis-AMRVirKM: K-Modes Clustering of Antimicrobial Resistance and Virulence Profiles in Streptococcus suis</h1>
 
         <div id="methodology">
           {{ methodology_text|safe }}

@@ -1,4 +1,4 @@
-# Google Colab Notebooks for MKrep Analysis
+# Google Colab Notebooks for StrepSuis_Suite Analysis
 
 This directory contains Google Colab-compatible Jupyter notebooks for running all analysis scripts in the cloud.
 
@@ -41,11 +41,11 @@ Click on these links to open notebooks directly in Colab:
 - [**Interactive Analysis**](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb) ⭐ **START HERE!**
 
 #### For Researchers (Advanced):
-- [Cluster Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
-- [MDR Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb)
-- [Network Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb)
-- [Phylogenetic Clustering](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb)
-- [StrepSuis Analysis](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb)
+- [**StrepSuis-AMRVirKM** (Cluster Analysis)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
+- [**StrepSuis-AMRPat** (MDR Analysis)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb)
+- [**StrepSuis-GenPhenNet** (Network Analysis)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb)
+- [**StrepSuis-PhyloTrait** (Phylogenetic Clustering)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb)
+- [**StrepSuis-GenPhen** (StrepSuis Analysis)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb)
 
 ## Requirements:
 

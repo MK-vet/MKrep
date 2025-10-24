@@ -1,6 +1,6 @@
-# MKrep Documentation Portal
+# StrepSuis_Suite Documentation Portal
 
-This directory contains the GitHub Pages documentation site for MKrep.
+This directory contains the GitHub Pages documentation site for StrepSuis_Suite.
 
 ## Structure
 

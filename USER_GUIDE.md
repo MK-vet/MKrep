@@ -1,6 +1,6 @@
-# MKrep User Guide
+# StrepSuis_Suite User Guide
 
-**Complete guide for using MKrep analysis tools**
+**Complete guide for using StrepSuis_Suite analysis tools for *Streptococcus suis* genomics**
 
 ## Table of Contents
 
@@ -49,15 +49,15 @@ voila MKrep_Dashboard.ipynb --port 8866
 
 ## Analysis Tools Overview
 
-MKrep provides **5 fully functional analysis tools**, each designed for specific tasks:
+StrepSuis_Suite provides **5 fully functional analysis modules**, each designed for specific genomic analysis tasks in *Streptococcus suis*:
 
-### 1. Cluster Analysis (`Cluster_MIC_AMR_Viruelnce.py`)
-**Purpose:** K-Modes clustering for categorical data
+### 1. StrepSuis-AMRVirKM (`Cluster_MIC_AMR_Viruelnce.py`)
+**Purpose:** K-Modes Clustering of Antimicrobial Resistance and Virulence Profiles
 
 **Best for:**
-- Identifying strain groups based on resistance patterns
-- Analyzing MIC, AMR, and virulence profiles
-- Finding natural groupings in binary data
+- Identifying strain groups based on resistance and virulence patterns
+- Analyzing MIC, AMR genes, and virulence factor profiles
+- Finding natural groupings in binary genomic data
 
 **Key Features:**
 - Automatic optimal cluster number selection
@@ -75,14 +75,14 @@ MKrep provides **5 fully functional analysis tools**, each designed for specific
 
 ---
 
-### 2. MDR Analysis (`MDR_2025_04_15.py`)
-**Purpose:** Multi-drug resistance pattern analysis
+### 2. StrepSuis-AMRPat (`MDR_2025_04_15.py`)
+**Purpose:** Automated Detection of Antimicrobial Resistance Patterns
 
 **Best for:**
-- Identifying MDR strains
-- Analyzing co-resistance patterns
+- Identifying multidrug resistant strains
+- Analyzing co-resistance patterns across antibiotic classes
 - Finding resistance gene associations
-- Understanding resistance networks
+- Understanding antimicrobial resistance networks
 
 **Key Features:**
 - Customizable MDR threshold (default: 3 classes)
@@ -98,14 +98,14 @@ MKrep provides **5 fully functional analysis tools**, each designed for specific
 
 ---
 
-### 3. Network Analysis (`Network_Analysis_2025_06_26.py`)
-**Purpose:** Statistical network analysis of feature associations
+### 3. StrepSuis-GenPhenNet (`Network_Analysis_2025_06_26.py`)
+**Purpose:** Network-Based Integration of Genome–Phenome Data
 
 **Best for:**
-- Finding feature correlations
-- Identifying mutually exclusive patterns
-- Network community detection
-- Understanding feature relationships
+- Finding genomic-phenotypic feature correlations
+- Identifying mutually exclusive genetic patterns
+- Network community detection in genome-phenome associations
+- Understanding complex feature relationships
 
 **Key Features:**
 - Chi-square and Fisher exact tests
@@ -127,12 +127,12 @@ MKrep provides **5 fully functional analysis tools**, each designed for specific
 
 ---
 
-### 4. Phylogenetic Clustering (`Phylgenetic_clustering_2025_03_21.py`)
-**Purpose:** Tree-based clustering with evolutionary context
+### 4. StrepSuis-PhyloTrait (`Phylgenetic_clustering_2025_03_21.py`)
+**Purpose:** Integrated Phylogenetic and Binary Trait Analysis
 
 **Best for:**
-- Analyzing phylogenetic relationships
-- Tree-aware clustering
+- Analyzing phylogenetic relationships with trait context
+- Tree-aware clustering with evolutionary metrics
 - Evolutionary metric calculation
 - Trait-phylogeny associations
 
@@ -157,13 +157,13 @@ MKrep provides **5 fully functional analysis tools**, each designed for specific
 
 ---
 
-### 5. Streptococcus suis Analysis (`StrepSuisPhyloCluster_2025_08_11.py`)
-**Purpose:** Specialized analysis for *S. suis* with phylogenetic integration
+### 5. StrepSuis-GenPhen (`StrepSuisPhyloCluster_2025_08_11.py`)
+**Purpose:** An Interactive Platform for Integrated Genomic–Phenotypic Analysis
 
 **Best for:**
-- S. suis strain characterization
+- Comprehensive *Streptococcus suis* strain characterization
 - Integrative phylogenetic-trait analysis
-- Comprehensive trait profiling
+- Complete genomic-phenotypic profiling
 
 **Key Features:**
 - Ensemble clustering with fallback
@@ -292,7 +292,7 @@ random_seed = 42
 
 ## Understanding Reports
 
-All MKrep tools generate **consistent, professional reports** with the same structure and appearance.
+All StrepSuis_Suite modules generate **consistent, professional reports** with the same structure and appearance.
 
 ### HTML Reports
 
@@ -374,7 +374,7 @@ Recommendations:
 
 ## Reproducibility
 
-**MKrep ensures complete reproducibility** of all analyses.
+**StrepSuis_Suite ensures complete reproducibility** of all analyses.
 
 ### Key Features
 
@@ -570,7 +570,7 @@ If you encounter issues:
 
 ### Reporting Results
 
-1. **Cite MKrep properly**
+1. **Cite StrepSuis_Suite properly**
    - Include version number
    - Reference GitHub repository
    - See README for citation format

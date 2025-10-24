@@ -1,7 +1,7 @@
-# MKrep Application Variants Guide
+# StrepSuis_Suite Application Guide
 ## Complete Analysis Suite - Production Ready
 
-This document describes all available MKrep analysis applications organized as separate, ordered modules with complete functionality.
+This document describes all available StrepSuis_Suite analysis modules organized as separate, independent tools with complete functionality for *Streptococcus suis* genomic analysis.
 
 ## Quick Start
 
@@ -26,11 +26,11 @@ python run_all_analyses.py --module strepsuis
 
 ---
 
-## Application Variants
+## Analysis Modules
 
-### 1. Cluster Analysis Module
+### 1. StrepSuis-AMRVirKM: K-Modes Clustering of Antimicrobial Resistance and Virulence Profiles
 **Script:** `Cluster_MIC_AMR_Viruelnce.py`  
-**Purpose:** Comprehensive clustering analysis for MIC, AMR, and virulence data  
+**Purpose:** K-Modes clustering analysis for antimicrobial resistance and virulence patterns in *Streptococcus suis*  
 **Status:** ✅ **Production Ready** - Full functionality with complete results
 
 #### Features:
@@ -70,9 +70,9 @@ python run_cluster_analysis.py
 
 ---
 
-### 2. MDR Analysis Module
+### 2. StrepSuis-AMRPat: Automated Detection of Antimicrobial Resistance Patterns
 **Script:** `MDR_2025_04_15.py`  
-**Purpose:** Multi-drug resistance pattern analysis with network approach  
+**Purpose:** Automated detection of multidrug resistance patterns and co-resistance networks in *Streptococcus suis*  
 **Status:** ✅ **Production Ready** - Full functionality with complete results
 
 #### Features:
@@ -111,9 +111,9 @@ python run_mdr_analysis.py
 
 ---
 
-### 3. Network Analysis Module
+### 3. StrepSuis-GenPhenNet: Network-Based Integration of Genome–Phenome Data
 **Script:** `Network_Analysis_2025_06_26.py`  
-**Purpose:** Statistical network analysis of gene-phenotype associations  
+**Purpose:** Network-based statistical analysis of genomic-phenotypic associations in *Streptococcus suis*  
 **Status:** ✅ **Production Ready** - Full functionality with complete results
 
 #### Features:
@@ -149,9 +149,9 @@ python run_all_analyses.py --module network
 
 ---
 
-### 4. Phylogenetic Clustering Module
+### 4. StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis
 **Script:** `Phylgenetic_clustering_2025_03_21.py`  
-**Purpose:** Tree-aware clustering with evolutionary metrics  
+**Purpose:** Integrated phylogenetic clustering and binary trait analysis for *Streptococcus suis* with evolutionary context  
 **Status:** ✅ **Production Ready** - Full functionality with complete results
 
 #### Features:
@@ -191,9 +191,9 @@ python run_phylogenetic_analysis.py
 
 ---
 
-### 5. StrepSuis Analysis Module
+### 5. StrepSuis-GenPhen: An Interactive Platform for Integrated Genomic–Phenotypic Analysis
 **Script:** `StrepSuisPhyloCluster_2025_08_11.py`  
-**Purpose:** Specialized integrative analysis for *Streptococcus suis*  
+**Purpose:** Interactive platform for comprehensive integrated genomic-phenotypic analysis of *Streptococcus suis*  
 **Status:** ✅ **Production Ready** - Full functionality with complete results
 
 #### Features:
@@ -454,11 +454,11 @@ All analyses ensure reproducibility through:
 - Garbage collection optimized
 
 ### Processing Time
-- Cluster Analysis: 5-10 minutes
-- MDR Analysis: 5-10 minutes
-- Network Analysis: 3-5 minutes
-- Phylogenetic Clustering: 7-12 minutes
-- StrepSuis Analysis: 7-12 minutes
+- StrepSuis-AMRVirKM: 5-10 minutes
+- StrepSuis-AMRPat: 5-10 minutes
+- StrepSuis-GenPhenNet: 3-5 minutes
+- StrepSuis-PhyloTrait: 7-12 minutes
+- StrepSuis-GenPhen: 7-12 minutes
 
 Times based on reference dataset (~50 strains, ~200 features)
 
