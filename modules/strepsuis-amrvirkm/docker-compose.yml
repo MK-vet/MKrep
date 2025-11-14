@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  strepsuis-amrvirkm:
+    build: .
+    image: strepsuis-amrvirkm:latest
+    container_name: strepsuis-amrvirkm
+    volumes:
+      # Mount your data directory
+      - ./examples/data:/data:ro
+      # Mount output directory
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      strepsuis-amrvirkm
+      --data-dir /data
+      --output /output
+      --max-clusters 8
+      --bootstrap 200
+
+# Usage:
+# 1. Build and run:
+#    docker-compose up
+#
+# 2. Run with custom data:
+#    docker-compose run --rm strepsuis-amrvirkm \
+#      strepsuis-amrvirkm --data-dir /data --output /output
+#
+# 3. Advanced options:
+#    docker-compose run --rm strepsuis-amrvirkm \
+#      strepsuis-amrvirkm --data-dir /data --output /output \
+#      --max-clusters 10 --bootstrap 500 --min-support 0.3
