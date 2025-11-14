@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  strepsuis-genphen:
+    build: .
+    image: strepsuis-genphen:latest
+    container_name: strepsuis-genphen
+    volumes:
+      - ./examples/data:/data:ro
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      strepsuis-genphen
+      --data-dir /data
+      --output /output
+
+# Usage:
+# docker-compose up

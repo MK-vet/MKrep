@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  strepsuis-phylotrait:
+    build: .
+    image: strepsuis-phylotrait:latest
+    container_name: strepsuis-phylotrait
+    volumes:
+      - ./examples/data:/data:ro
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      strepsuis-phylotrait
+      --data-dir /data
+      --output /output
+
+# Usage:
+# docker-compose up

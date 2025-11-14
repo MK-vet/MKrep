@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  strepsuis-amrpat:
+    build: .
+    image: strepsuis-amrpat:latest
+    container_name: strepsuis-amrpat
+    volumes:
+      - ./examples/data:/data:ro
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      strepsuis-amrpat
+      --data-dir /data
+      --output /output
+
+# Usage:
+# docker-compose up

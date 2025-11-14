@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "strepsuis-genphennet"
+version = "1.0.0"
+description = "Network-Based Integration of Genome–Phenome Data"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "MK-vet", email = "contact@example.com"}
+]
+keywords = ["bioinformatics", "microbiology", "genomics", "network-analysis", "genome-phenome", "associations"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+dependencies = [
+    "pandas>=1.3.0",
+    "numpy>=1.21.0",
+    "scipy>=1.7.0",
+    "matplotlib>=3.4.0",
+    "seaborn>=0.11.0",
+    "plotly>=5.0.0",
+    "scikit-learn>=1.0.0",
+    "jinja2>=3.0.0",
+    "openpyxl>=3.0.0",
+    "xlsxwriter>=3.0.0",
+    "kaleido>=0.2.0",
+    "pillow>=8.0.0",
+    "tqdm>=4.62.0",
+    "statsmodels>=0.13.0",
+    
+        "networkx>=2.6.0",
+    
+    
+    
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=3.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/MK-vet/strepsuis-genphennet"
+Documentation = "https://github.com/MK-vet/strepsuis-genphennet#readme"
+Repository = "https://github.com/MK-vet/strepsuis-genphennet"
+Issues = "https://github.com/MK-vet/strepsuis-genphennet/issues"
+
+[project.scripts]
+strepsuis-genphennet = "strepsuis_genphennet.cli:main"
+
+[tool.setuptools]
+packages = ["strepsuis_genphennet"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
