@@ -82,8 +82,11 @@ results/
 *.html
 png_charts/
 
-# Data files (keep examples)
-data/
+# Data files (keep examples and documentation)
+data/*
+!data/examples/
+!data/results/
+!data/*/README.md
 *.csv
 !examples/*.csv
 
