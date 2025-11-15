@@ -1,37 +1,42 @@
 """Tests for CLI module."""
 import pytest
-from click.testing import CliRunner
+import sys
+from io import StringIO
 from strepsuis_amrpat.cli import main
 from pathlib import Path
 import tempfile
 
 
-def test_cli_help():
+def test_cli_help(capsys, monkeypatch):
     """Test CLI help command."""
-    runner = CliRunner()
-    result = runner.invoke(main, ['--help'])
-    assert result.exit_code == 0
-    assert 'Usage:' in result.output or 'usage:' in result.output.lower()
+    monkeypatch.setattr(sys, 'argv', ['strepsuis-amrpat', '--help'])
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+    assert exc_info.value.code == 0
+    captured = capsys.readouterr()
+    assert 'usage:' in captured.out.lower() or 'Usage:' in captured.out
 
 
-def test_cli_version():
+def test_cli_version(capsys, monkeypatch):
     """Test CLI version command."""
-    runner = CliRunner()
-    result = runner.invoke(main, ['--version'])
-    assert result.exit_code == 0
-    assert '1.0.0' in result.output
+    monkeypatch.setattr(sys, 'argv', ['strepsuis-amrpat', '--version'])
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+    assert exc_info.value.code == 0
+    captured = capsys.readouterr()
+    assert '1.0.0' in captured.out
 
 
-def test_cli_missing_required_args():
+def test_cli_missing_required_args(monkeypatch):
     """Test CLI with missing required arguments."""
-    runner = CliRunner()
-    result = runner.invoke(main, [])
-    assert result.exit_code != 0
+    monkeypatch.setattr(sys, 'argv', ['strepsuis-amrpat'])
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+    assert exc_info.value.code != 0
 
 
-def test_cli_with_valid_args():
+def test_cli_with_valid_args(monkeypatch):
     """Test CLI with valid arguments."""
-    runner = CliRunner()
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
@@ -40,16 +45,17 @@ def test_cli_with_valid_args():
         df = pd.DataFrame({'test': [1, 2, 3]})
         df.to_csv(data_dir / "test.csv", index=False)
         
-        result = runner.invoke(main, [
+        monkeypatch.setattr(sys, 'argv', [
+            'strepsuis-amrpat',
             '--data-dir', str(data_dir),
             '--output', str(Path(tmpdir) / "output")
         ])
-        assert result.exit_code == 0
+        result = main()
+        assert result == 0
 
 
-def test_cli_with_bootstrap_option():
+def test_cli_with_bootstrap_option(monkeypatch):
     """Test CLI with bootstrap iterations option."""
-    runner = CliRunner()
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
@@ -57,17 +63,18 @@ def test_cli_with_bootstrap_option():
         df = pd.DataFrame({'test': [1, 2, 3]})
         df.to_csv(data_dir / "test.csv", index=False)
         
-        result = runner.invoke(main, [
+        monkeypatch.setattr(sys, 'argv', [
+            'strepsuis-amrpat',
             '--data-dir', str(data_dir),
             '--output', str(Path(tmpdir) / "output"),
             '--bootstrap', '100'
         ])
-        assert result.exit_code == 0
+        result = main()
+        assert result == 0
 
 
-def test_cli_with_fdr_alpha_option():
+def test_cli_with_fdr_alpha_option(monkeypatch):
     """Test CLI with FDR alpha option."""
-    runner = CliRunner()
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
@@ -75,17 +82,18 @@ def test_cli_with_fdr_alpha_option():
         df = pd.DataFrame({'test': [1, 2, 3]})
         df.to_csv(data_dir / "test.csv", index=False)
         
-        result = runner.invoke(main, [
+        monkeypatch.setattr(sys, 'argv', [
+            'strepsuis-amrpat',
             '--data-dir', str(data_dir),
             '--output', str(Path(tmpdir) / "output"),
             '--fdr-alpha', '0.01'
         ])
-        assert result.exit_code == 0
+        result = main()
+        assert result == 0
 
 
-def test_cli_with_verbose_option():
+def test_cli_with_verbose_option(monkeypatch):
     """Test CLI with verbose option."""
-    runner = CliRunner()
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
@@ -93,19 +101,22 @@ def test_cli_with_verbose_option():
         df = pd.DataFrame({'test': [1, 2, 3]})
         df.to_csv(data_dir / "test.csv", index=False)
         
-        result = runner.invoke(main, [
+        monkeypatch.setattr(sys, 'argv', [
+            'strepsuis-amrpat',
             '--data-dir', str(data_dir),
             '--output', str(Path(tmpdir) / "output"),
             '--verbose'
         ])
-        assert result.exit_code == 0
+        result = main()
+        assert result == 0
 
 
-def test_cli_with_invalid_data_dir():
+def test_cli_with_invalid_data_dir(monkeypatch):
     """Test CLI with non-existent data directory."""
-    runner = CliRunner()
-    result = runner.invoke(main, [
+    monkeypatch.setattr(sys, 'argv', [
+        'strepsuis-amrpat',
         '--data-dir', '/nonexistent/path',
         '--output', '/tmp/output'
     ])
-    assert result.exit_code != 0
+    result = main()
+    assert result != 0
