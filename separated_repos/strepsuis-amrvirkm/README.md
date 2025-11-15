@@ -153,9 +153,8 @@ Each analysis generates:
 
 ## Documentation
 
-- **[Installation Guide](docs/INSTALLATION.md)**: Detailed installation instructions
-- **[User Guide](docs/USER_GUIDE.md)**: Step-by-step usage guide
-- **[API Reference](docs/API.md)**: Complete API documentation
+See [USER_GUIDE.md](USER_GUIDE.md) for detailed installation instructions and usage examples.
+
 - **[Examples](examples/)**: Sample datasets and analysis examples
 
 ## Requirements
