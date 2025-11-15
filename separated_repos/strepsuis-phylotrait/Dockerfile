@@ -20,7 +20,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Install the package directly from GitHub
 # This ensures no code duplication - the package is installed dynamically
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir git+https://github.com/MK-vet/strepsuis-phylotrait.git@v1.0
+    pip install --no-cache-dir git+https://github.com/MK-vet/strepsuis-phylotrait.git@main
 
 # Stage 2: Runtime - Minimal image with only runtime dependencies
 FROM python:3.11-slim
