@@ -68,12 +68,7 @@ dev = [
     "bandit>=1.7.0",
     "pre-commit>=3.0.0",
     "pdoc3>=0.10.0",
-    "pytest-cov>=3.0.0",
-    "black>=22.0.0",
-    "flake8>=4.0.0",
-    "mypy>=0.950",
-    "ipython>=8.0.0",
-    "jupyter>=1.0.0"
+    "flake8>=4.0.0"
 ]
 
 [project.urls]
