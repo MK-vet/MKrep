@@ -11,35 +11,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of StrepSuis-AMRVirKM
-- Bootstrap resampling for robust statistical analysis
-- K-Modes clustering algorithm for categorical data
-- Multiple Correspondence Analysis (MCA) implementation
+- K-Modes clustering with automatic silhouette score optimization (2-15 clusters tested)
+- Multiple Correspondence Analysis (MCA) for dimensionality reduction and visualization
+- Feature importance ranking using Random Forest classifiers and chi-square tests
+- Association Rule Discovery with Apriori algorithm (configurable support/confidence)
+- Bootstrap confidence intervals for robust statistical inference (configurable iterations)
 - Integrated antimicrobial resistance and virulence factor analysis
-- Statistical significance testing with FDR correction
-- Interactive HTML reports with visualizations
-- Excel output with detailed statistical results
-- PNG chart export functionality
-- Comprehensive test suite with >80% coverage
-- Docker container support
-- Google Colab notebook for easy usage
-- Complete documentation (README, USER_GUIDE, CONTRIBUTING)
-- GitHub Actions CI/CD workflows
-- Pre-commit hooks for code quality
+- Statistical significance testing with FDR correction for multiple testing
+- Interactive HTML reports with sortable tables and visualizations
+- Excel output with detailed statistical results and methodology
+- High-resolution PNG chart export (150+ DPI) for publications
+- Complete test suite with pytest
+- Docker container support with multi-stage build
+- Google Colab notebook for non-programmers
+- Comprehensive documentation (README, USER_GUIDE, CONTRIBUTING)
+- CI/CD workflows (GitHub Actions)
+- Pre-commit hooks for code quality (black, isort, ruff, mypy, bandit)
+- Example datasets with documentation
 
-### Changed
-- None (initial release)
+### Features
+- Automatic optimal cluster detection via silhouette analysis
+- Binary trait clustering for multiple genomic features
+- Strain profiling across data types (MIC, AMR genes, virulence, MLST, serotype)
+- Statistical validation with permutation tests
+- Interactive cluster visualizations with MCA 2D/3D projections
+- Full CSV export capabilities for all results
 
-### Deprecated
-- None
+### Technical Details
+- Python 3.8+ support
+- Reproducible analyses with fixed random seeds
+- Bootstrap resampling for statistical robustness
+- FDR correction for multiple testing
+- Interactive visualizations with Plotly
+- Command-line interface (CLI) and Python API
 
-### Removed
-- None
+## Project History
 
-### Fixed
-- None
-
-### Security
-- None
+This tool was developed as part of the StrepSuis Suite for bacterial genomics research, 
+with a focus on *Streptococcus suis* but applicable to any bacterial species.
 
 [Unreleased]: https://github.com/MK-vet/strepsuis-amrvirkm/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/MK-vet/strepsuis-amrvirkm/releases/tag/v1.0.0
