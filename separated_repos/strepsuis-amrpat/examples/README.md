@@ -1,53 +1,108 @@
-# Example Data for StrepSuis-AMRVirKM
+# Example Datasets
 
-This directory contains example datasets for testing and demonstration purposes.
+This directory contains example datasets for testing and learning StrepSuis-AMRPat.
 
-## Files
+## Available Examples
 
-- `MIC.csv`: Minimum Inhibitory Concentration data
-- `AMR_genes.csv`: Antimicrobial resistance genes
-- `Virulence.csv`: Virulence factors
-- `MLST.csv`: Multi-locus sequence typing (optional)
-- `Serotype.csv`: Serological types (optional)
-- `Plasmid.csv`: Plasmid presence/absence (optional)
-- `MGE.csv`: Mobile genetic elements (optional)
+### 1. Basic Example (`basic/`)
 
-## Data Format
+**Purpose:** Quick test and learning
 
-All CSV files must have:
-- **Strain_ID** column (required): Unique identifier for each bacterial strain
-- **Binary features** (0 = absence, 1 = presence)
+**Files included:**
+- `AMR_genes.csv`
+- `MIC.csv`
+- `Virulence.csv`
 
-Example structure:
+**Dataset size:** ~91 strains, ~21 features per file
 
-```csv
-Strain_ID,Feature1,Feature2,Feature3
-Strain001,1,0,1
-Strain002,0,1,1
-Strain003,1,1,0
+**Expected runtime:** ~1-2 minutes
+
+**What you'll see:**
+- Bootstrap-based prevalence estimation and co-occurrence patterns
+- Summary statistics and visualizations
+- Interactive HTML reports
+
+**Use case:** First-time users, testing installation
+
+### 2. Advanced Example (`advanced/`)
+
+**Purpose:** Comprehensive analysis with all data types
+
+**Files included:**
+- `AMR_genes.csv`
+- `MGE.csv`
+- `MIC.csv`
+- `MLST.csv`
+- `Plasmid.csv`
+- `Serotype.csv`
+- `Virulence.csv`
+
+**Expected runtime:** ~5-8 minutes
+
+**What you'll see:**
+- Complete resistance network analysis with all metadata
+- More detailed associations and patterns
+- Complete metadata integration
+
+**Use case:** Publication-ready analysis, exploring all features
+
+## Using These Examples
+
+### Command Line
+
+```bash
+# Basic example
+strepsuis-amrpat --data-dir examples/basic/ --output results_basic/
+
+# Advanced example
+strepsuis-amrpat --data-dir examples/advanced/ --output results_advanced/
 ```
 
-## Usage
-
 ### Python API
-```python
-from strepsuis_amrvirkm import ClusterAnalyzer
 
-analyzer = ClusterAnalyzer(
-    data_dir="examples",
-    output_dir="output"
+```python
+from strepsuis_amrpat import Analyzer
+
+# Basic example
+analyzer = Analyzer(
+    data_dir='examples/basic/',
+    output_dir='results_basic/'
+)
+results = analyzer.run()
+
+# Advanced example with custom parameters
+analyzer = Analyzer(
+    data_dir='examples/advanced/',
+    output_dir='results_advanced/',
+    bootstrap_iterations=1000,
+    fdr_alpha=0.05
 )
 results = analyzer.run()
 ```
 
-### Command Line
-```bash
-strepsuis-amrvirkm --data-dir examples --output results
-```
-
 ### Google Colab
-Upload these files when prompted in the Colab notebook.
+Use the download buttons in the notebook to get these files, or upload them directly.
 
-## Data Source
+## Data Format
 
-These are example datasets for *Streptococcus suis* strains, demonstrating the expected data format and structure.
+All example files follow the required format:
+- First column: `Strain_ID`
+- Binary values: 0 (absent) / 1 (present)
+- UTF-8 encoding
+- No missing values
+
+## Creating Your Own Data
+
+Use these examples as templates:
+1. Keep the same column structure
+2. Replace `Strain_ID` values with your strain names
+3. Update binary values (0/1) based on your data
+4. Ensure no missing values
+
+## Expected Output
+
+Both `basic/` and `advanced/` directories contain `expected_output.txt` files describing what results you should see.
+
+## Questions?
+
+See [USER_GUIDE.md](../USER_GUIDE.md) for detailed data format requirements.

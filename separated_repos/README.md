@@ -1,5 +1,8 @@
 # Separated Repositories Summary
 
+> **Note:** This repository is being renamed from `MKrep` to `StrepSuis_Suite`. 
+> All documentation reflects the new name. GitHub URLs will be updated after repository rename.
+
 This document provides a high-level overview of the separated repository structure created for the StrepSuis Suite bioinformatics tools.
 
 ## Overview
@@ -72,13 +75,15 @@ Each separated repository is **production-ready** with:
 - ✅ **README.md** - Main documentation with installation and usage
 - ✅ **USER_GUIDE.md** - Detailed step-by-step instructions
 - ✅ **CONTRIBUTING.md** - Guidelines for contributors
+- ✅ **CHANGELOG.md** - Version history and release notes
 - ✅ **RELEASE_CHECKLIST.md** - Pre-release verification checklist
-- ✅ **Data Documentation** - Format specifications and examples
+- ✅ **LICENSE** - MIT License
+- ✅ **Data Documentation** - Format specifications in examples/ directories
 
 ### Quality Assurance
-- ✅ **Pre-commit Hooks** - Automated code formatting and linting
+- ✅ **Pre-commit Hooks** - Automated code formatting and linting (.pre-commit-config.yaml)
 - ✅ **Test Suite** - pytest-based tests with >80% coverage target
-- ✅ **GitHub Actions** - CI/CD workflows (test, release, docs)
+- ✅ **GitHub Actions** - CI/CD workflows (test.yml, release.yml, docs.yml)
 - ✅ **Type Checking** - mypy configuration for type safety
 - ✅ **Security Scanning** - bandit for security checks
 
@@ -88,6 +93,14 @@ Each separated repository is **production-ready** with:
 - ✅ `.gitignore` - Git ignore patterns
 - ✅ `pytest.ini` - Test configuration
 - ✅ `pyproject.toml` - Package configuration with dev dependencies
+- ✅ `requirements.txt` - Core dependencies
+- ✅ `docker-compose.yml` - Docker Compose configuration
+
+### Optional Components (may vary by tool)
+
+The following files may be present in some repositories depending on tool-specific requirements:
+- `.env.example` - Environment variables template (currently not needed - tools use CLI arguments)
+- Additional tool-specific documentation (see individual repository README)
 
 ## Key Features
 

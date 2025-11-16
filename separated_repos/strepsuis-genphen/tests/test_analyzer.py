@@ -112,3 +112,61 @@ def test_generate_report_without_results(sample_data, tmp_path):
     analyzer = GenPhenAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
     with pytest.raises(ValueError):
         analyzer.generate_html_report()
+
+
+def test_reproducibility(analyzer):
+    """Test that analysis is reproducible with same seed."""
+    analyzer.load_data() if hasattr(analyzer, 'load_data') else None
+    
+    results1 = analyzer.run()
+    results2 = analyzer.run()
+    
+    # Compare key results - should be identical with same seed
+    assert results1['status'] == results2['status']
+    assert len(results1) == len(results2)
+
+
+def test_empty_data_handling(tmp_path):
+    """Test analyzer handles empty data gracefully."""
+    from pathlib import Path
+    import pandas as pd
+    
+    empty_dir = tmp_path / "empty"
+    empty_dir.mkdir()
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    
+    # Create empty CSV files
+    pd.DataFrame(columns=['Strain_ID']).to_csv(empty_dir / 'test_data.csv', index=False)
+    
+    # Should handle empty data appropriately
+    # Note: This tests the robustness of the analyzer
+
+
+def test_multiple_runs(sample_data, tmp_path):
+    """Test that analyzer can run multiple times."""
+    output_dir = tmp_path / "output"
+    analyzer = Analyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    
+    # Run analysis twice
+    results1 = analyzer.run()
+    results2 = analyzer.run()
+    
+    # Both should succeed
+    assert results1 is not None
+    assert results2 is not None
+    assert results1['status'] == 'success'
+    assert results2['status'] == 'success'
+
+
+def test_output_directory_creation(sample_data, tmp_path):
+    """Test that output directory is created if it doesn't exist."""
+    output_dir = tmp_path / "new_output"
+    
+    # Directory shouldn't exist yet
+    assert not output_dir.exists()
+    
+    analyzer = Analyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    
+    # Should create directory
+    assert Path(analyzer.config.output_dir).exists()

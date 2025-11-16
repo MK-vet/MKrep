@@ -11,35 +11,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of StrepSuis-GenPhen
-- Bootstrap resampling for robust statistical analysis
-- Tree-aware clustering for phylogenetically informed analysis
-- Interactive UI for pattern exploration
-- Genotype-phenotype association analysis
-- Statistical significance testing with FDR correction
-- Interactive HTML reports with visualizations
-- Excel output with detailed statistical results
-- PNG chart export functionality
-- Comprehensive test suite with >80% coverage
-- Docker container support
-- Google Colab notebook for easy usage
-- Complete documentation (README, USER_GUIDE, CONTRIBUTING)
-- GitHub Actions CI/CD workflows
-- Pre-commit hooks for code quality
+- Tree-aware phylogenetic clustering with ensemble fallback for non-tree data
+- Comprehensive trait profiling with multiple statistical methods (chi-square, log-odds, RF importance)
+- Association rules mining with Apriori algorithm for pattern discovery
+- Multiple Correspondence Analysis (MCA) for dimensionality reduction
+- Interactive Bootstrap 5 UI with modern responsive design
+- Full CSV export capabilities for all analysis results
+- Bootstrap resampling for robust statistical inference (configurable iterations)
+- Statistical significance testing with FDR correction for multiple testing
+- Interactive HTML reports with sortable DataTables and Plotly visualizations
+- Excel output with detailed statistical results and methodology sheets
+- High-resolution PNG chart export (150+ DPI) for publications
+- Complete test suite with pytest
+- Docker container support with multi-stage build
+- Google Colab notebook for non-programmers
+- Comprehensive documentation (README, USER_GUIDE, CONTRIBUTING)
+- CI/CD workflows (GitHub Actions)
+- Pre-commit hooks for code quality (black, isort, ruff, mypy, bandit)
+- Example datasets with documentation
 
-### Changed
-- None (initial release)
+### Features
+- Phylogenetic tree integration for evolutionary-aware clustering
+- Automatic fallback to standard clustering when tree unavailable
+- Multi-method trait importance scoring (Random Forest, chi-square, log-odds ratio)
+- Genotype-phenotype association analysis with statistical validation
+- Pattern discovery across AMR genes, virulence factors, and phenotypes
+- Interactive web-based UI with data filtering and export
+- Support for MLST and serotype metadata integration
 
-### Deprecated
-- None
+### Technical Details
+- Python 3.8+ support
+- Reproducible analyses with fixed random seeds
+- Bootstrap resampling for statistical robustness
+- FDR correction for multiple testing
+- Interactive visualizations with Plotly and Bootstrap 5
+- Command-line interface (CLI) and Python API
+- Flexible data input (phylogenetic tree optional)
 
-### Removed
-- None
+## Project History
 
-### Fixed
-- None
-
-### Security
-- None
+This tool was developed as part of the StrepSuis Suite for bacterial genomics research, 
+with a focus on *Streptococcus suis* but applicable to any bacterial species.
 
 [Unreleased]: https://github.com/MK-vet/strepsuis-genphen/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/MK-vet/strepsuis-genphen/releases/tag/v1.0.0
