@@ -16,21 +16,38 @@ StrepSuis-PhyloTrait is a production-ready Python package for advanced bioinform
 
 ## Quick Start
 
+### Prerequisites
+- Python 3.8 or higher
+- pip package manager
+- 4GB RAM minimum (8GB recommended for large datasets)
+
 ### Installation
 
+#### Option 1: From PyPI (when published)
 ```bash
-# Install from PyPI
 pip install strepsuis-phylotrait
+```
 
-# Or install from source
+#### Option 2: From GitHub
+```bash
+pip install git+https://github.com/MK-vet/strepsuis-phylotrait.git
+```
+
+#### Option 3: From Source
+```bash
 git clone https://github.com/MK-vet/strepsuis-phylotrait.git
 cd strepsuis-phylotrait
 pip install -e .
 ```
 
-### Usage
+#### Option 4: Docker
+```bash
+docker pull ghcr.io/mk-vet/strepsuis-phylotrait:latest
+```
 
-#### Command Line Interface
+### Running Your First Analysis
+
+#### Command Line
 
 ```bash
 # Run analysis
@@ -89,22 +106,38 @@ docker run -v $(pwd)/data:/data -v $(pwd)/output:/output \
 
 ## Input Data Format
 
-Required files:
-- `tree.newick`\n- `MIC.csv`\n- `AMR_genes.csv`\n- `Virulence.csv`
+### Required Files
 
-- `MLST.csv` (optional)\n- `Serotype.csv` (optional)
+Your data directory must contain:
+
+**Mandatory:**
+- `tree.newick` or `tree.nwk` - Phylogenetic tree in Newick format
+- `AMR_genes.csv` - Antimicrobial resistance genes
+
+**Optional (but recommended):**
+- `MIC.csv` - Minimum Inhibitory Concentration data
+- `Virulence.csv` - Virulence factors
+- `MLST.csv` - Multi-locus sequence typing
+- `Serotype.csv` - Serological types
+
+### File Format Requirements
 
 All CSV files must have:
-- **Strain_ID** column (required): Unique identifier for each strain
-- **Binary features** (0 = absence, 1 = presence)
+1. **Strain_ID** column (first column, required)
+2. **Binary features**: 0 = absence, 1 = presence
+3. No missing values (use 0 or 1 explicitly)
+4. UTF-8 encoding
 
-Example:
+#### Example CSV structure:
+
 ```csv
 Strain_ID,Feature1,Feature2,Feature3
 Strain001,1,0,1
 Strain002,0,1,1
 Strain003,1,1,0
 ```
+
+See [examples/](examples/) directory for complete example datasets.
 
 ## Output
 
@@ -140,12 +173,42 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## Support
 
-- **GitHub Issues**: [github.com/MK-vet/strepsuis-phylotrait/issues](https://github.com/MK-vet/strepsuis-phylotrait/issues)
-- **Documentation**: [Full Documentation](https://mk-vet.github.io/strepsuis-phylotrait/)
+- **Issues**: [github.com/MK-vet/strepsuis-phylotrait/issues](https://github.com/MK-vet/strepsuis-phylotrait/issues)
+- **Documentation**: See [USER_GUIDE.md](USER_GUIDE.md)
+- **Main Project**: [StrepSuis Suite](https://github.com/MK-vet/StrepSuis_Suite)
+
+## Development
+
+### Running Tests Locally (Recommended)
+
+To save GitHub Actions minutes, run tests locally before pushing:
+
+```bash
+# Install dev dependencies
+pip install -e .[dev]
+
+# Run pre-commit checks
+pre-commit run --all-files
+
+# Run tests
+pytest --cov --cov-report=html
+
+# Build Docker image
+docker build -t strepsuis-phylotrait:test .
+```
+
+### GitHub Actions
+
+Automated workflows run on:
+- Pull requests to main
+- Manual trigger (Actions tab > workflow > Run workflow)
+- Release creation
+
+**Note:** Workflows do NOT run on every commit to conserve GitHub Actions minutes.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Related Tools
 

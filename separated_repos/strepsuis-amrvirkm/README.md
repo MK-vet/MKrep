@@ -23,21 +23,38 @@ StrepSuis-AMRVirKM is a production-ready Python package that performs advanced c
 
 ## Quick Start
 
+### Prerequisites
+- Python 3.8 or higher
+- pip package manager
+- 4GB RAM minimum (8GB recommended for large datasets)
+
 ### Installation
 
+#### Option 1: From PyPI (when published)
 ```bash
-# Install from PyPI
 pip install strepsuis-amrvirkm
+```
 
-# Or install from source
+#### Option 2: From GitHub
+```bash
+pip install git+https://github.com/MK-vet/strepsuis-amrvirkm.git
+```
+
+#### Option 3: From Source
+```bash
 git clone https://github.com/MK-vet/strepsuis-amrvirkm.git
 cd strepsuis-amrvirkm
 pip install -e .
 ```
 
-### Usage
+#### Option 4: Docker
+```bash
+docker pull ghcr.io/mk-vet/strepsuis-amrvirkm:latest
+```
 
-#### Command Line Interface
+### Running Your First Analysis
+
+#### Command Line
 
 ```bash
 # Run cluster analysis
@@ -99,28 +116,37 @@ docker run -v $(pwd)/data:/data -v $(pwd)/output:/output \
 
 ## Input Data Format
 
-All input files should be CSV format with:
-- **Strain_ID** column (required): Unique identifier for each strain
-- **Binary features** (0 = absence, 1 = presence): Gene presence, resistance, virulence factors
+### Required Files
 
-Required files:
-- `MIC.csv`: Minimum Inhibitory Concentration data
-- `AMR_genes.csv`: Antimicrobial resistance genes
-- `Virulence.csv`: Virulence factors
+Your data directory must contain:
 
-Optional files:
-- `MLST.csv`: Multi-locus sequence typing
-- `Serotype.csv`: Serological types
-- `Plasmid.csv`: Plasmid presence/absence
-- `MGE.csv`: Mobile genetic elements
+**Mandatory:**
+- `AMR_genes.csv` - Antimicrobial resistance genes
+- `MIC.csv` - Minimum Inhibitory Concentration data
 
-Example:
+**Optional (but recommended):**
+- `Virulence.csv` - Virulence factors
+- `MLST.csv` - Multi-locus sequence typing
+- `Serotype.csv` - Serological types
+
+### File Format Requirements
+
+All CSV files must have:
+1. **Strain_ID** column (first column, required)
+2. **Binary features**: 0 = absence, 1 = presence
+3. No missing values (use 0 or 1 explicitly)
+4. UTF-8 encoding
+
+#### Example CSV structure:
+
 ```csv
-Strain_ID,Gene1,Gene2,Antibiotic1,Virulence1
-Strain001,1,0,1,0
-Strain002,0,1,1,1
-Strain003,1,1,0,1
+Strain_ID,Feature1,Feature2,Feature3
+Strain001,1,0,1
+Strain002,0,1,1
+Strain003,1,1,0
 ```
+
+See [examples/](examples/) directory for complete example datasets.
 
 ## Output
 
@@ -194,6 +220,35 @@ MIT License - see [LICENSE](LICENSE) file for details
 - **GitHub Issues**: [github.com/MK-vet/strepsuis-amrvirkm/issues](https://github.com/MK-vet/strepsuis-amrvirkm/issues)
 - **Documentation**: [Full Documentation](https://mk-vet.github.io/strepsuis-amrvirkm/)
 - **Email**: support@strepsuis-suite.org
+
+## Development
+
+### Running Tests Locally (Recommended)
+
+To save GitHub Actions minutes, run tests locally before pushing:
+
+```bash
+# Install dev dependencies
+pip install -e .[dev]
+
+# Run pre-commit checks
+pre-commit run --all-files
+
+# Run tests
+pytest --cov --cov-report=html
+
+# Build Docker image
+docker build -t strepsuis-amrvirkm:test .
+```
+
+### GitHub Actions
+
+Automated workflows run on:
+- Pull requests to main
+- Manual trigger (Actions tab > workflow > Run workflow)
+- Release creation
+
+**Note:** Workflows do NOT run on every commit to conserve GitHub Actions minutes.
 
 ## Contributing
 
