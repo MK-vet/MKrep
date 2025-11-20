@@ -1473,7 +1473,7 @@ class TraitAnalyzer:
                         f"MemoryError - reducing to {len(selected_features)} features, min_support={adaptive_min_support}"
                     )
 
-            if not "frequent_itemsets" in locals() or frequent_itemsets.empty:
+            if "frequent_itemsets" not in locals() or frequent_itemsets.empty:
                 print("No frequent itemsets found with the specified support threshold.")
                 cols = ["Antecedent", "Consequent", "Support", "Confidence", "Lift"]
                 df_rules = pd.DataFrame(columns=cols)
@@ -2883,7 +2883,7 @@ class PhylogeneticAnalysis:
 
         print_section_header("PHYLOGENETIC ANALYSIS PIPELINE - STARTING")
         logging.info(f"Analysis Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        logging.info(f"Configuration:")
+        logging.info("Configuration:")
         logging.info(f"  - Tree file: {self.config.tree_file}")
         logging.info(f"  - MIC file: {self.config.mic_file}")
         logging.info(f"  - AMR genes file: {self.config.amr_genes_file}")
@@ -3045,7 +3045,7 @@ class PhylogeneticAnalysis:
             logging.info(f"Evolution rates saved ({len(rates_df)} clusters)")
 
             logging.info("Calculating phylogenetic signal...")
-            phylo_signal = EvolutionaryAnalysis.calculate_phylogenetic_signal(
+            EvolutionaryAnalysis.calculate_phylogenetic_signal(
                 cluster_df, self.output_folder
             )
             logging.info("Phylogenetic signal analysis complete")
@@ -3254,7 +3254,7 @@ Author: MK-vet (with tree-aware clustering improvements)
         logging.info(f"Output Directory: {config.output_folder}")
         logging.info(f"  - HTML Report: {os.path.basename(html_report_path)}")
         logging.info(f"  - Excel Report: {os.path.basename(excel_report_path)}")
-        logging.info(f"  - Log File: phylogenetic_analysis.log")
+        logging.info("  - Log File: phylogenetic_analysis.log")
         logging.info("")
         logging.info("Please review the reports for detailed analysis results.")
 

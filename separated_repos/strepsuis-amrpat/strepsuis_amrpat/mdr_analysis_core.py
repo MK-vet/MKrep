@@ -874,7 +874,6 @@ def build_hybrid_co_resistance_network(
         return nx.Graph()
 
     all_cols = pheno_cols + gene_cols
-    pvals = []
     combos = []
 
     # Calculate all pairwise associations

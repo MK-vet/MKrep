@@ -118,7 +118,6 @@ def test_reproducibility(analyzer):
 def test_empty_data_handling(tmp_path):
     """Test analyzer handles empty data gracefully."""
 
-    import pandas as pd
 
     empty_dir = tmp_path / "empty"
     empty_dir.mkdir()

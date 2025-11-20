@@ -3,7 +3,6 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.offline as pyo
 import statsmodels.stats.multitest as smm
 from scipy.stats import chi2_contingency
 from scipy.stats import entropy as scipy_entropy
@@ -22,9 +21,8 @@ import os
 import re
 import sys
 import time
-from collections import Counter
 
-from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+from excel_report_utils import ExcelReportGenerator
 
 
 def create_interactive_table(df: pd.DataFrame, table_id: str) -> str:
@@ -1243,17 +1241,17 @@ def perform_full_analysis():
     logging.info(f"Mutually exclusive triplets: {len(excl3_df)}")
     logging.info("=" * 80)
     logging.info("Output files generated:")
-    logging.info(f"  - report.html")
+    logging.info("  - report.html")
     logging.info(f"  - {excel_path}")
-    logging.info(f"  - output/png_charts/ (PNG visualizations)")
-    logging.info(f"  - output/network_analysis_log.txt (execution log)")
+    logging.info("  - output/png_charts/ (PNG visualizations)")
+    logging.info("  - output/network_analysis_log.txt (execution log)")
     logging.info("=" * 80)
 
     print("\n" + "=" * 80)
     print("ANALYSIS COMPLETE!")
     print("=" * 80)
     print(f"Total execution time: {elapsed_time:.2f} seconds ({elapsed_time/60:.2f} minutes)")
-    print(f"Check output/network_analysis_log.txt for detailed execution log")
+    print("Check output/network_analysis_log.txt for detailed execution log")
     print("=" * 80)
 
 
