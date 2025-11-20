@@ -1,11 +1,13 @@
 """Tests for CLI module."""
-import pytest
-import sys
+
 import shutil
-from io import StringIO
-from strepsuis_amrpat.cli import main
-from pathlib import Path
+import sys
 import tempfile
+from pathlib import Path
+
+import pytest
+
+from strepsuis_amrpat.cli import main
 
 
 def setup_test_data(data_dir):
@@ -20,27 +22,27 @@ def setup_test_data(data_dir):
 
 def test_cli_help(capsys, monkeypatch):
     """Test CLI help command."""
-    monkeypatch.setattr(sys, 'argv', ['strepsuis-amrpat', '--help'])
+    monkeypatch.setattr(sys, "argv", ["strepsuis-amrpat", "--help"])
     with pytest.raises(SystemExit) as exc_info:
         main()
     assert exc_info.value.code == 0
     captured = capsys.readouterr()
-    assert 'usage:' in captured.out.lower() or 'Usage:' in captured.out
+    assert "usage:" in captured.out.lower() or "Usage:" in captured.out
 
 
 def test_cli_version(capsys, monkeypatch):
     """Test CLI version command."""
-    monkeypatch.setattr(sys, 'argv', ['strepsuis-amrpat', '--version'])
+    monkeypatch.setattr(sys, "argv", ["strepsuis-amrpat", "--version"])
     with pytest.raises(SystemExit) as exc_info:
         main()
     assert exc_info.value.code == 0
     captured = capsys.readouterr()
-    assert '1.0.0' in captured.out
+    assert "1.0.0" in captured.out
 
 
 def test_cli_missing_required_args(monkeypatch):
     """Test CLI with missing required arguments."""
-    monkeypatch.setattr(sys, 'argv', ['strepsuis-amrpat'])
+    monkeypatch.setattr(sys, "argv", ["strepsuis-amrpat"])
     with pytest.raises(SystemExit) as exc_info:
         main()
     assert exc_info.value.code != 0
@@ -53,12 +55,18 @@ def test_cli_with_valid_args(monkeypatch):
         data_dir.mkdir()
         # Copy example data files
         setup_test_data(data_dir)
-        
-        monkeypatch.setattr(sys, 'argv', [
-            'strepsuis-amrpat',
-            '--data-dir', str(data_dir),
-            '--output', str(Path(tmpdir) / "output")
-        ])
+
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrpat",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(Path(tmpdir) / "output"),
+            ],
+        )
         result = main()
         assert result == 0
 
@@ -70,13 +78,20 @@ def test_cli_with_bootstrap_option(monkeypatch):
         data_dir.mkdir()
         # Copy example data files
         setup_test_data(data_dir)
-        
-        monkeypatch.setattr(sys, 'argv', [
-            'strepsuis-amrpat',
-            '--data-dir', str(data_dir),
-            '--output', str(Path(tmpdir) / "output"),
-            '--bootstrap', '100'
-        ])
+
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrpat",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(Path(tmpdir) / "output"),
+                "--bootstrap",
+                "100",
+            ],
+        )
         result = main()
         assert result == 0
 
@@ -88,13 +103,20 @@ def test_cli_with_fdr_alpha_option(monkeypatch):
         data_dir.mkdir()
         # Copy example data files
         setup_test_data(data_dir)
-        
-        monkeypatch.setattr(sys, 'argv', [
-            'strepsuis-amrpat',
-            '--data-dir', str(data_dir),
-            '--output', str(Path(tmpdir) / "output"),
-            '--fdr-alpha', '0.01'
-        ])
+
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrpat",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(Path(tmpdir) / "output"),
+                "--fdr-alpha",
+                "0.01",
+            ],
+        )
         result = main()
         assert result == 0
 
@@ -106,23 +128,29 @@ def test_cli_with_verbose_option(monkeypatch):
         data_dir.mkdir()
         # Copy example data files
         setup_test_data(data_dir)
-        
-        monkeypatch.setattr(sys, 'argv', [
-            'strepsuis-amrpat',
-            '--data-dir', str(data_dir),
-            '--output', str(Path(tmpdir) / "output"),
-            '--verbose'
-        ])
+
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrpat",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(Path(tmpdir) / "output"),
+                "--verbose",
+            ],
+        )
         result = main()
         assert result == 0
 
 
 def test_cli_with_invalid_data_dir(monkeypatch):
     """Test CLI with non-existent data directory."""
-    monkeypatch.setattr(sys, 'argv', [
-        'strepsuis-amrpat',
-        '--data-dir', '/nonexistent/path',
-        '--output', '/tmp/output'
-    ])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["strepsuis-amrpat", "--data-dir", "/nonexistent/path", "--output", "/tmp/output"],
+    )
     result = main()
     assert result != 0

@@ -9,72 +9,72 @@
 # -----------------------------------------
 # Run: pip install kmodes prince ydata-profiling joblib numba tqdm psutil statsmodels jinja2 plotly openpyxl
 
+import base64
+import gc
+import io
+import logging
+import multiprocessing
+import os
+
 # -----------------------------------------
 # 2. Imports
 # -----------------------------------------
 import sys
-import os
-import gc
 import traceback
-import logging
-import multiprocessing
-
-import numpy as np
-import pandas as pd
-import psutil
-from tqdm import tqdm
-from joblib import Parallel, delayed
-from numba import jit
-
-# K-Modes
-from kmodes.kmodes import KModes
-
-# Statistics
-from sklearn.utils import resample
-from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from scipy.stats import chi2_contingency, fisher_exact
-
-# Visualization
-import plotly.express as px
-from prince import MCA
-
-# Data Profiling (ydata-profiling)
-from ydata_profiling import ProfileReport
 
 # Jinja2 for HTML templating
 import jinja2
-import base64
-import io
+import numpy as np
+import pandas as pd
+
+# Visualization
+import plotly.express as px
+import psutil
 
 # Excel report generation
 from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+from joblib import Parallel, delayed
+
+# K-Modes
+from kmodes.kmodes import KModes
+from numba import jit
+from prince import MCA
+from scipy.stats import chi2_contingency, fisher_exact
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import calinski_harabasz_score, davies_bouldin_score, silhouette_score
+from sklearn.preprocessing import StandardScaler
+
+# Statistics
+from sklearn.utils import resample
+from tqdm import tqdm
+
+# Data Profiling (ydata-profiling)
+from ydata_profiling import ProfileReport
 
 # -----------------------------------------
 # 3. Logging & Global Configuration
 # -----------------------------------------
 logging.basicConfig(
-    filename="analysis.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    filename="analysis.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 sys.setrecursionlimit(10000)
 gc.enable()
 gc.set_threshold(100, 5, 5)
-np.seterr(all='ignore')
+np.seterr(all="ignore")
 np.random.seed(42)
 
 output_folder = "clustering_analysis_results6"
 os.makedirs(output_folder, exist_ok=True)
+
 
 def print_memory_usage():
     process = psutil.Process(os.getpid())
     mem = process.memory_info().rss / (1024**2)
     logging.info(f"Memory Usage: {mem:.2f} MB")
     print(f"Memory Usage: {mem:.2f} MB")
+
 
 # -----------------------------------------
 # 4. Retry Decorator
@@ -90,6 +90,7 @@ def retry_operation(func, max_attempts=3):
                 raise
     return None
 
+
 # -----------------------------------------
 # 5. Binary Data Validation
 # -----------------------------------------
@@ -97,14 +98,15 @@ def validate_binary_data(df):
     if not ((df.values == 0) | (df.values == 1)).all():
         raise ValueError("Data is not strictly 0/1 binary.")
 
+
 # -----------------------------------------
 # 6. K-Modes Clustering + Silhouette
 # -----------------------------------------
 def determine_optimal_clusters_sqrt(data):
     max_clusters = max(2, int(np.sqrt(len(data))))
     silhouette_scores = []
-    for k in range(2, max_clusters+1):
-        km = KModes(n_clusters=k, init='Huang', n_init=5, random_state=42)
+    for k in range(2, max_clusters + 1):
+        km = KModes(n_clusters=k, init="Huang", n_init=5, random_state=42)
         clusters = km.fit_predict(data)
         try:
             score = silhouette_score(data, clusters)
@@ -120,10 +122,12 @@ def determine_optimal_clusters_sqrt(data):
     else:
         raise ValueError("No valid silhouette score found.")
 
+
 def perform_kmodes(data, n_clusters):
-    km = KModes(n_clusters=n_clusters, init='Huang', n_init=5, random_state=42)
+    km = KModes(n_clusters=n_clusters, init="Huang", n_init=5, random_state=42)
     clusters = km.fit_predict(data)
     return km, clusters + 1  # shift to 1-based cluster labels
+
 
 def extract_characteristic_patterns(model, data):
     patterns = {}
@@ -133,8 +137,9 @@ def extract_characteristic_patterns(model, data):
             continue
         mode_row = cluster_data.mode().iloc[0]
         sig_feats = mode_row[mode_row > 0.5]
-        patterns[i+1] = sig_feats
+        patterns[i + 1] = sig_feats
     return patterns
+
 
 # -----------------------------------------
 # 7. Bootstrapping + CI
@@ -147,7 +152,10 @@ def _numba_bootstrap(total_samples, p, num_bootstrap):
         results[i] = sample / total_samples * 100
     return results
 
-def bootstrap_confidence_interval(percentage, count, total_samples, num_bootstrap=500, confidence_level=0.95):
+
+def bootstrap_confidence_interval(
+    percentage, count, total_samples, num_bootstrap=500, confidence_level=0.95
+):
     if total_samples == 0:
         return (np.nan, np.nan)
     p = (count + 0.5) / (total_samples + 1)
@@ -155,6 +163,7 @@ def bootstrap_confidence_interval(percentage, count, total_samples, num_bootstra
     ci_low = np.percentile(boots, ((1 - confidence_level) / 2) * 100)
     ci_high = np.percentile(boots, (1 - (1 - confidence_level) / 2) * 100)
     return round(ci_low, 2), round(ci_high, 2)
+
 
 def patterns_to_dataframe(patterns, pattern_type, data, clusters):
     out_list = []
@@ -177,18 +186,22 @@ def patterns_to_dataframe(patterns, pattern_type, data, clusters):
         else:
             details = ["No significant features"]
 
-        out_list.append({
-            "Cluster": cls,
-            "Size": total,
-            "Characteristic_Pattern": "; ".join(details),
-            "Type": pattern_type
-        })
+        out_list.append(
+            {
+                "Cluster": cls,
+                "Size": total,
+                "Characteristic_Pattern": "; ".join(details),
+                "Type": pattern_type,
+            }
+        )
     return pd.DataFrame(out_list)
+
 
 # -----------------------------------------
 # 8. Pairwise FDR Post-Hoc
 # -----------------------------------------
 from statsmodels.stats.multitest import multipletests
+
 
 def pairwise_fdr_post_hoc(data, clusters, category):
     unique_cls = np.unique(clusters)
@@ -197,11 +210,11 @@ def pairwise_fdr_post_hoc(data, clusters, category):
     results = []
     for feat in data.columns:
         for i in range(len(unique_cls)):
-            for j in range(i+1, len(unique_cls)):
+            for j in range(i + 1, len(unique_cls)):
                 cl_a = unique_cls[i]
                 cl_b = unique_cls[j]
-                mask_a = (clusters == cl_a)
-                mask_b = (clusters == cl_b)
+                mask_a = clusters == cl_a
+                mask_b = clusters == cl_b
                 a1 = data[feat][mask_a].sum()
                 a0 = mask_a.sum() - a1
                 b1 = data[feat][mask_b].sum()
@@ -220,22 +233,27 @@ def pairwise_fdr_post_hoc(data, clusters, category):
                     except:
                         p = np.nan
                         chi2_val = np.nan
-                results.append({
-                    "Feature": feat,
-                    "ClusterA": cl_a,
-                    "ClusterB": cl_b,
-                    "Chi2": round(chi2_val, 2) if not np.isnan(chi2_val) else np.nan,
-                    "P_Value": round(p, 2) if not np.isnan(p) else np.nan
-                })
+                results.append(
+                    {
+                        "Feature": feat,
+                        "ClusterA": cl_a,
+                        "ClusterB": cl_b,
+                        "Chi2": round(chi2_val, 2) if not np.isnan(chi2_val) else np.nan,
+                        "P_Value": round(p, 2) if not np.isnan(p) else np.nan,
+                    }
+                )
     df_res = pd.DataFrame(results).dropna(subset=["P_Value"])
     if df_res.empty:
         return df_res
     pvals = df_res["P_Value"].values
-    rej, corr, _, _ = multipletests(pvals, alpha=0.05, method='fdr_bh')
+    rej, corr, _, _ = multipletests(pvals, alpha=0.05, method="fdr_bh")
     df_res["Adjusted_P"] = corr
     df_res["FDR_Rejected"] = rej
-    df_res.to_csv(os.path.join(output_folder, f"{category.lower()}_fdr_post_hoc_results.csv"), index=False)
+    df_res.to_csv(
+        os.path.join(output_folder, f"{category.lower()}_fdr_post_hoc_results.csv"), index=False
+    )
     return df_res
+
 
 # -----------------------------------------
 # 9. Phi Correlation
@@ -245,10 +263,11 @@ def compute_phi(x, y):
     b = np.sum((x == 1) & (y == 0))
     c = np.sum((x == 0) & (y == 1))
     d = np.sum((x == 0) & (y == 0))
-    denom = (a + b)*(c + d)*(a + c)*(b + d)
+    denom = (a + b) * (c + d) * (a + c) * (b + d)
     if denom == 0:
         return np.nan
     return (a * d - b * c) / np.sqrt(denom)
+
 
 def phi_correlation_matrix(df):
     cols = df.columns
@@ -261,17 +280,19 @@ def phi_correlation_matrix(df):
             corr.iloc[j, i] = round(val, 2) if not np.isnan(val) else np.nan
     return corr
 
+
 def analyze_virulence_correlations(data, clusters):
     correlations = pd.DataFrame()
     for cluster in np.unique(clusters):
         cluster_data = data[clusters == cluster]
         if cluster_data.empty:
             continue
-        corr_matrix = phi_correlation_matrix(cluster_data).reset_index().melt(id_vars='index')
-        corr_matrix.columns = ['Row','Column','Phi']
-        corr_matrix['Cluster'] = cluster
+        corr_matrix = phi_correlation_matrix(cluster_data).reset_index().melt(id_vars="index")
+        corr_matrix.columns = ["Row", "Column", "Phi"]
+        corr_matrix["Cluster"] = cluster
         correlations = pd.concat([correlations, corr_matrix], ignore_index=True)
     return correlations
+
 
 def cluster_correlation_analysis(data, clusters, category):
     if category.lower() == "virulence":
@@ -284,18 +305,16 @@ def cluster_correlation_analysis(data, clusters, category):
                 phi_mat = phi_correlation_matrix(c_data).round(2)
                 for r in phi_mat.index:
                     for c in phi_mat.columns:
-                        out.append({
-                            "Cluster": cl,
-                            "Row": r,
-                            "Column": c,
-                            "Phi": phi_mat.loc[r, c]
-                        })
+                        out.append({"Cluster": cl, "Row": r, "Column": c, "Phi": phi_mat.loc[r, c]})
         if out:
             corr_df = pd.DataFrame(out).dropna(subset=["Phi"])
         else:
             corr_df = pd.DataFrame()
-    corr_df.to_csv(os.path.join(output_folder, f"{category.lower()}_cluster_correlation.csv"), index=False)
+    corr_df.to_csv(
+        os.path.join(output_folder, f"{category.lower()}_cluster_correlation.csv"), index=False
+    )
     return corr_df
+
 
 # -----------------------------------------
 # 10. Logistic Regression + Bootstrap
@@ -311,28 +330,29 @@ def stratified_bootstrap(X, y):
         yb_list.append(y_res)
     return np.vstack(Xb_list), np.concatenate(yb_list)
 
+
 def logistic_regression_feature_selection(data, clusters, with_ci=True, n_bootstrap=200):
     sc = StandardScaler()
     Xs = sc.fit_transform(data)
     y = clusters
-    model = LogisticRegression(penalty='l1', solver='saga', max_iter=10000, random_state=42)
+    model = LogisticRegression(penalty="l1", solver="saga", max_iter=10000, random_state=42)
     model.fit(Xs, y)
     feats = data.columns
     n_classes = model.coef_.shape[0]
 
     base_coef = model.coef_
     coef_df = pd.DataFrame(base_coef, columns=feats)
-    coef_df["Cluster"] = np.arange(1, n_classes+1)
+    coef_df["Cluster"] = np.arange(1, n_classes + 1)
     coef_long = coef_df.melt(id_vars=["Cluster"], var_name="Feature", value_name="Coefficient")
     coef_long["Abs_Coefficient"] = coef_long["Coefficient"].abs()
-    coef_long.sort_values(["Cluster","Abs_Coefficient"], ascending=[True,False], inplace=True)
+    coef_long.sort_values(["Cluster", "Abs_Coefficient"], ascending=[True, False], inplace=True)
 
     if not with_ci:
         return coef_long.round(2)
 
     def single_boot(_):
         Xb, yb = stratified_bootstrap(Xs, y)
-        mb = LogisticRegression(penalty='l1', solver='saga', max_iter=10000, random_state=None)
+        mb = LogisticRegression(penalty="l1", solver="saga", max_iter=10000, random_state=None)
         mb.fit(Xb, yb)
         return mb.coef_
 
@@ -351,17 +371,20 @@ def logistic_regression_feature_selection(data, clusters, with_ci=True, n_bootst
         class_c = boot_coefs[:, class_idx, :]
         ci_low = np.percentile(class_c, 2.5, axis=0)
         ci_high = np.percentile(class_c, 97.5, axis=0)
-        tmp = pd.DataFrame({
-            "Feature": feats,
-            "Cluster": class_idx + 1,
-            "CI_low": ci_low.round(2),
-            "CI_high": ci_high.round(2)
-        })
+        tmp = pd.DataFrame(
+            {
+                "Feature": feats,
+                "Cluster": class_idx + 1,
+                "CI_low": ci_low.round(2),
+                "CI_high": ci_high.round(2),
+            }
+        )
         ci_list.append(tmp)
     ci_df = pd.concat(ci_list, ignore_index=True)
-    coef_merged = pd.merge(coef_long, ci_df, on=["Cluster","Feature"], how="left")
-    coef_merged.sort_values(["Cluster","Abs_Coefficient"], ascending=[True,False], inplace=True)
+    coef_merged = pd.merge(coef_long, ci_df, on=["Cluster", "Feature"], how="left")
+    coef_merged.sort_values(["Cluster", "Abs_Coefficient"], ascending=[True, False], inplace=True)
     return coef_merged.round(2)
+
 
 # -----------------------------------------
 # 11. Modified Standard Cluster Stats (with Bootstrap CI)
@@ -382,18 +405,20 @@ def calculate_cluster_stats(clusters):
 
     return stats_df
 
+
 def validate_clusters(data, clusters):
     try:
         ch = calinski_harabasz_score(data, clusters)
-        ch = round(ch,2)
+        ch = round(ch, 2)
     except ValueError:
         ch = np.nan
     try:
         db = davies_bouldin_score(data, clusters)
-        db = round(db,2)
+        db = round(db, 2)
     except ValueError:
         db = np.nan
     return ch, db
+
 
 # -----------------------------------------
 # 12. Chi-square Analysis
@@ -405,7 +430,7 @@ def chi_square_analysis(data, clusters):
         expected = np.outer(cont.sum(axis=1), cont.sum(axis=0)) / cont.values.sum()
         if (expected < 5).any() or cont.values.sum() == 0:
             try:
-                if cont.shape == (2,2):
+                if cont.shape == (2, 2):
                     _, p = fisher_exact(cont)
                     chi2 = np.nan
                 else:
@@ -418,16 +443,18 @@ def chi_square_analysis(data, clusters):
             except:
                 chi2, p = np.nan, np.nan
 
-        results_global.append({
-            "Feature": feat,
-            "Chi2": round(chi2,2) if not np.isnan(chi2) else np.nan,
-            "P_Value": round(p,2) if not np.isnan(p) else np.nan
-        })
+        results_global.append(
+            {
+                "Feature": feat,
+                "Chi2": round(chi2, 2) if not np.isnan(chi2) else np.nan,
+                "P_Value": round(p, 2) if not np.isnan(p) else np.nan,
+            }
+        )
 
     dfg = pd.DataFrame(results_global).dropna(subset=["P_Value"])
     if not dfg.empty:
         pvals = dfg["P_Value"].values
-        rej, corr, _, _ = multipletests(pvals, alpha=0.05, method='fdr_bh')
+        rej, corr, _, _ = multipletests(pvals, alpha=0.05, method="fdr_bh")
         dfg["Adjusted_P"] = corr
         dfg["FDR_Rejected"] = rej
 
@@ -436,38 +463,41 @@ def chi_square_analysis(data, clusters):
         c_labels = (clusters == cl).astype(int)
         for feat in data.columns:
             cont = pd.crosstab(c_labels, data[feat])
-            if cont.shape != (2,2):
-                cont = cont.reindex(index=[0,1], columns=[0,1], fill_value=0)
+            if cont.shape != (2, 2):
+                cont = cont.reindex(index=[0, 1], columns=[0, 1], fill_value=0)
             if cont.values.sum() == 0:
                 p = np.nan
                 chi2_val = np.nan
             else:
                 try:
-                    if (cont < 5).any() and cont.shape == (2,2):
+                    if (cont < 5).any() and cont.shape == (2, 2):
                         _, p = fisher_exact(cont)
                         chi2_val = np.nan
                     else:
                         chi2_val, p, _, _ = chi2_contingency(cont)
                 except:
                     chi2_val, p = np.nan, np.nan
-            results_cluster.append({
-                "Cluster": cl,
-                "Feature": feat,
-                "Chi2": round(chi2_val,2) if not np.isnan(chi2_val) else np.nan,
-                "P_Value": round(p,2) if not np.isnan(p) else np.nan
-            })
+            results_cluster.append(
+                {
+                    "Cluster": cl,
+                    "Feature": feat,
+                    "Chi2": round(chi2_val, 2) if not np.isnan(chi2_val) else np.nan,
+                    "P_Value": round(p, 2) if not np.isnan(p) else np.nan,
+                }
+            )
 
     dfc = pd.DataFrame(results_cluster).dropna(subset=["P_Value"])
     if not dfc.empty:
         for cl in np.unique(clusters):
-            mask = (dfc["Cluster"] == cl)
-            subp = dfc.loc[mask,"P_Value"]
+            mask = dfc["Cluster"] == cl
+            subp = dfc.loc[mask, "P_Value"]
             if not subp.empty:
-                rej, corr, _, _ = multipletests(subp, alpha=0.05, method='fdr_bh')
-                dfc.loc[mask,"Adjusted_P"] = corr
-                dfc.loc[mask,"FDR_Rejected"] = rej
+                rej, corr, _, _ = multipletests(subp, alpha=0.05, method="fdr_bh")
+                dfc.loc[mask, "Adjusted_P"] = corr
+                dfc.loc[mask, "FDR_Rejected"] = rej
 
     return dfg, dfc
+
 
 # -----------------------------------------
 # 13. Log-Odds Ratio
@@ -477,58 +507,64 @@ def _bootstrap_log_odds(a, b, c, d, n_bootstrap=500):
     total_a = a + b
     total_b = c + d
     for _ in range(n_bootstrap):
-        a_star = np.random.binomial(total_a, a/(a+b) if (a+b)>0 else 0)
-        c_star = np.random.binomial(total_b, c/(c+d) if (c+d)>0 else 0)
+        a_star = np.random.binomial(total_a, a / (a + b) if (a + b) > 0 else 0)
+        c_star = np.random.binomial(total_b, c / (c + d) if (c + d) > 0 else 0)
         b_star = total_a - a_star
         d_star = total_b - c_star
         a_ = a_star + 0.5
         b_ = b_star + 0.5
         c_ = c_star + 0.5
         d_ = d_star + 0.5
-        ratio = (a_/b_) / (c_/d_) if (b_>0 and d_>0) else 0
-        out.append(np.log(ratio) if ratio>0 else 0)
+        ratio = (a_ / b_) / (c_ / d_) if (b_ > 0 and d_ > 0) else 0
+        out.append(np.log(ratio) if ratio > 0 else 0)
     return out
 
-def log_odds_ratio_analysis(data, clusters, with_bootstrap_ci=True, n_bootstrap=500, confidence_level=0.95):
+
+def log_odds_ratio_analysis(
+    data, clusters, with_bootstrap_ci=True, n_bootstrap=500, confidence_level=0.95
+):
     gl = []
     for feat in data.columns:
         a = data[feat].sum()
-        b = len(data)-a
-        ratio = (a/b) if b>0 else np.nan
-        lv = np.log(ratio) if (ratio and ratio>0) else 0
-        gl.append({"Feature":feat, "Log_Odds_Ratio":round(lv,2) if not np.isnan(lv) else np.nan})
+        b = len(data) - a
+        ratio = (a / b) if b > 0 else np.nan
+        lv = np.log(ratio) if (ratio and ratio > 0) else 0
+        gl.append({"Feature": feat, "Log_Odds_Ratio": round(lv, 2) if not np.isnan(lv) else np.nan})
 
     df_global = pd.DataFrame(gl)
 
     out = []
     for cl in np.unique(clusters):
-        c_mask = (clusters == cl)
+        c_mask = clusters == cl
         for feat in data.columns:
             a = data[feat][c_mask].sum()
-            b = c_mask.sum()-a
+            b = c_mask.sum() - a
             c = data[feat][~c_mask].sum()
-            d = (~c_mask).sum()-c
+            d = (~c_mask).sum() - c
             a_ = a + 0.5
             b_ = b + 0.5
             c_ = c + 0.5
             d_ = d + 0.5
-            ratio = (a_/b_) / (c_/d_) if (b_>0 and d_>0) else 0
-            lv = np.log(ratio) if ratio>0 else 0
+            ratio = (a_ / b_) / (c_ / d_) if (b_ > 0 and d_ > 0) else 0
+            lv = np.log(ratio) if ratio > 0 else 0
             ci_low, ci_high = np.nan, np.nan
             if with_bootstrap_ci:
                 lom = _bootstrap_log_odds(a, b, c, d, n_bootstrap=n_bootstrap)
-                ci_low = round(np.percentile(lom, ((1 - confidence_level)/2)*100),2)
-                ci_high = round(np.percentile(lom, (1-(1-confidence_level)/2)*100),2)
-            out.append({
-                "Cluster":cl,
-                "Feature":feat,
-                "Odds_Ratio":round(ratio,2) if not np.isnan(ratio) else np.nan,
-                "Log_Odds_Ratio":round(lv,2) if not np.isnan(lv) else np.nan,
-                "CI_low":ci_low,
-                "CI_high":ci_high
-            })
+                ci_low = round(np.percentile(lom, ((1 - confidence_level) / 2) * 100), 2)
+                ci_high = round(np.percentile(lom, (1 - (1 - confidence_level) / 2) * 100), 2)
+            out.append(
+                {
+                    "Cluster": cl,
+                    "Feature": feat,
+                    "Odds_Ratio": round(ratio, 2) if not np.isnan(ratio) else np.nan,
+                    "Log_Odds_Ratio": round(lv, 2) if not np.isnan(lv) else np.nan,
+                    "CI_low": ci_low,
+                    "CI_high": ci_high,
+                }
+            )
     df_cluster = pd.DataFrame(out)
     return df_global, df_cluster
+
 
 # -----------------------------------------
 # 14. Shared/Unique Features
@@ -538,7 +574,7 @@ def label_shared_unique_features(data, clusters):
     cluster_sets = {}
     for cluster_id in unique_clusters:
         c_data = data[clusters == cluster_id]
-        feats_in_cluster = c_data.columns[c_data.sum()>0]
+        feats_in_cluster = c_data.columns[c_data.sum() > 0]
         cluster_sets[cluster_id] = set(feats_in_cluster)
 
     global_counts = data.sum()
@@ -566,13 +602,15 @@ def label_shared_unique_features(data, clusters):
         count_in_data = global_counts[feat]
         num_clusters_feat = len(cls_list)
         percent_in_clusters = round(100.0 * num_clusters_feat / num_clusters_total, 2)
-        df_shared_rows.append({
-            "Feature": feat,
-            "Clusters": ",".join(map(str, sorted(cls_list))),
-            "NumClusters": num_clusters_feat,
-            "Count": int(count_in_data),
-            "Percent_in_Clusters": percent_in_clusters
-        })
+        df_shared_rows.append(
+            {
+                "Feature": feat,
+                "Clusters": ",".join(map(str, sorted(cls_list))),
+                "NumClusters": num_clusters_feat,
+                "Count": int(count_in_data),
+                "Percent_in_Clusters": percent_in_clusters,
+            }
+        )
     df_shared = pd.DataFrame(df_shared_rows)
 
     df_unique_rows = []
@@ -581,69 +619,71 @@ def label_shared_unique_features(data, clusters):
         cl = cls_list[0]
         sub_data = data[clusters == cl]
         count_in_cluster = sub_data[feat].sum()
-        df_unique_rows.append({
-            "Cluster": cl,
-            "Feature": feat,
-            "Count": int(count_in_cluster)
-        })
+        df_unique_rows.append({"Cluster": cl, "Feature": feat, "Count": int(count_in_cluster)})
     df_unique = pd.DataFrame(df_unique_rows)
     return df_shared, df_unique, cluster_sets
+
 
 # -----------------------------------------
 # 15. Association Rule Mining
 # -----------------------------------------
 def format_association_rules(df):
-    df['antecedent'] = df['antecedent'].apply(lambda x: ', '.join(sorted(list(x))))
-    df['consequent'] = df['consequent'].apply(lambda x: ', '.join(sorted(list(x))))
+    df["antecedent"] = df["antecedent"].apply(lambda x: ", ".join(sorted(list(x))))
+    df["consequent"] = df["consequent"].apply(lambda x: ", ".join(sorted(list(x))))
     return df
+
 
 def association_rule_mining(data, clusters, min_support=0.3, min_confidence=0.7):
     rules_list = []
     for cluster in np.unique(clusters):
-        c_mask = (clusters == cluster)
+        c_mask = clusters == cluster
         c_data = data[c_mask]
         if c_data.empty:
             continue
         try:
             chunk_size = 1000
-            n_chunks = max(1, len(c_data)//chunk_size)
+            n_chunks = max(1, len(c_data) // chunk_size)
             freq_items = set()
             for i in range(n_chunks):
                 start = i * chunk_size
                 end = start + chunk_size
                 chunk = c_data.iloc[start:end].astype(bool)
                 sup_counts = chunk.sum() / len(chunk)
-                chunk_frequent = sup_counts[sup_counts>=min_support].index.tolist()
+                chunk_frequent = sup_counts[sup_counts >= min_support].index.tolist()
                 freq_items.update(chunk_frequent)
             if not freq_items:
                 continue
             f_items = list(freq_items)
             local_rules = []
             for i in range(len(f_items)):
-                for j in range(i+1, len(f_items)):
+                for j in range(i + 1, len(f_items)):
                     it1 = f_items[i]
                     it2 = f_items[j]
                     sup1 = c_data[it1].mean()
                     sup2 = c_data[it2].mean()
                     joint_sup = (c_data[it1] & c_data[it2]).mean()
-                    if sup1>0:
+                    if sup1 > 0:
                         conf = joint_sup / sup1
-                        if conf>=min_confidence:
-                            local_rules.append({
-                                "antecedent": frozenset([it1]),
-                                "consequent": frozenset([it2]),
-                                "support": round(joint_sup, 2),
-                                "confidence": round(conf, 2)
-                            })
-                    if sup2>0:
+                        if conf >= min_confidence:
+                            local_rules.append(
+                                {
+                                    "antecedent": frozenset([it1]),
+                                    "consequent": frozenset([it2]),
+                                    "support": round(joint_sup, 2),
+                                    "confidence": round(conf, 2),
+                                }
+                            )
+                    if sup2 > 0:
                         conf = joint_sup / sup2
-                        if conf>=min_confidence:
-                            local_rules.append({
-                                "antecedent": frozenset([it2]),
-                                "consequent": frozenset([it1]),
-                                "support": round(joint_sup, 2),
-                                "confidence": round(conf, 2)
-                            })
+                        if conf >= min_confidence:
+                            local_rules.append(
+                                {
+                                    "antecedent": frozenset([it2]),
+                                    "consequent": frozenset([it1]),
+                                    "support": round(joint_sup, 2),
+                                    "confidence": round(conf, 2),
+                                }
+                            )
             if local_rules:
                 df_r = pd.DataFrame(local_rules)
                 df_r["Cluster"] = cluster
@@ -660,20 +700,21 @@ def association_rule_mining(data, clusters, min_support=0.3, min_confidence=0.7)
             return pd.DataFrame()
     return pd.DataFrame()
 
+
 # -----------------------------------------
 # 16. MCA with HTML
 # -----------------------------------------
 def multiple_correspondence_analysis(data, clusters, feature_group):
     try:
-        mca_data = data.astype('category')
+        mca_data = data.astype("category")
         mca = MCA(n_components=2, random_state=42)
         mca.fit(mca_data)
         row_coords = mca.row_coordinates(mca_data)
-        row_coords.columns = ["Component_1","Component_2"]
+        row_coords.columns = ["Component_1", "Component_2"]
         row_coords["Cluster"] = clusters
 
         col_coords = mca.column_coordinates(mca_data)
-        col_coords.columns = ["Component_1","Component_2"]
+        col_coords.columns = ["Component_1", "Component_2"]
 
         eigenvalues = mca.eigenvalues_
         total_inertia = sum(eigenvalues)
@@ -684,22 +725,32 @@ def multiple_correspondence_analysis(data, clusters, feature_group):
         heatmap_html = ""
         if os.path.exists(corr_path):
             corr_data = pd.read_csv(corr_path)
-            if not corr_data.empty and all(x in corr_data.columns for x in ["Phi","Row","Column"]):
-                phi_matrix = pd.pivot_table(corr_data, values='Phi', index='Row', columns='Column')
+            if not corr_data.empty and all(
+                x in corr_data.columns for x in ["Phi", "Row", "Column"]
+            ):
+                phi_matrix = pd.pivot_table(corr_data, values="Phi", index="Row", columns="Column")
                 heatmap_html = create_correlation_heatmap(phi_matrix, feature_group)
 
-        save_rounded_csv(row_coords, os.path.join(output_folder, f"MCA_{feature_group}_row_coordinates.csv"))
-        save_rounded_csv(col_coords, os.path.join(output_folder, f"MCA_{feature_group}_column_coordinates.csv"))
-        summary_df = pd.DataFrame({
-            "Component": range(1, len(eigenvalues)+1),
-            "Eigenvalue": [round(ev,2) for ev in eigenvalues],
-            "Explained_Variance": [round(ev/total_inertia,4) for ev in eigenvalues],
-            "Cumulative_Explained_Variance": [
-                round(np.sum(eigenvalues[:i+1])/total_inertia,4)
-                for i in range(len(eigenvalues))
-            ]
-        })
-        save_rounded_csv(summary_df, os.path.join(output_folder, f"MCA_{feature_group}_summary.csv"))
+        save_rounded_csv(
+            row_coords, os.path.join(output_folder, f"MCA_{feature_group}_row_coordinates.csv")
+        )
+        save_rounded_csv(
+            col_coords, os.path.join(output_folder, f"MCA_{feature_group}_column_coordinates.csv")
+        )
+        summary_df = pd.DataFrame(
+            {
+                "Component": range(1, len(eigenvalues) + 1),
+                "Eigenvalue": [round(ev, 2) for ev in eigenvalues],
+                "Explained_Variance": [round(ev / total_inertia, 4) for ev in eigenvalues],
+                "Cumulative_Explained_Variance": [
+                    round(np.sum(eigenvalues[: i + 1]) / total_inertia, 4)
+                    for i in range(len(eigenvalues))
+                ],
+            }
+        )
+        save_rounded_csv(
+            summary_df, os.path.join(output_folder, f"MCA_{feature_group}_summary.csv")
+        )
 
         return row_coords, mca_plot_html, heatmap_html
 
@@ -708,32 +759,35 @@ def multiple_correspondence_analysis(data, clusters, feature_group):
         traceback.print_exc()
         return pd.DataFrame(), "", ""
 
+
 def create_mca_plot(data, clusters, feature_group):
     COLOR_SCHEME = px.colors.qualitative.Set1
     fig = px.scatter(
         data,
-        x='Component_1',
-        y='Component_2',
+        x="Component_1",
+        y="Component_2",
         color=clusters.astype(str),
         color_discrete_sequence=COLOR_SCHEME,
-        title=f'MCA Analysis - {feature_group}',
-        labels={'Component_1':'Dim1','Component_2':'Dim2'},
-        hover_data=['Cluster']
+        title=f"MCA Analysis - {feature_group}",
+        labels={"Component_1": "Dim1", "Component_2": "Dim2"},
+        hover_data=["Cluster"],
     )
     return fig.to_html(full_html=False, include_plotlyjs=False)
+
 
 def create_correlation_heatmap(corr_data, feature_group):
     COLOR_SCHEME = px.colors.diverging.RdBu
     fig = px.imshow(
         corr_data,
-        title=f'Correlation Heatmap - {feature_group}',
+        title=f"Correlation Heatmap - {feature_group}",
         labels=dict(color="Phi Correlation"),
         x=corr_data.columns,
         y=corr_data.index,
         color_continuous_scale=COLOR_SCHEME,
-        aspect="auto"
+        aspect="auto",
     )
     return fig.to_html(full_html=False, include_plotlyjs=False)
+
 
 # -----------------------------------------
 # 17. RandomForest Analysis
@@ -743,12 +797,13 @@ def analyze_cluster_importance(data, clusters):
         rf = RandomForestClassifier(n_estimators=50, random_state=42)
         rf.fit(data, clusters)
         imps = rf.feature_importances_
-        df_imp = pd.DataFrame({"Feature":data.columns, "Importance":imps})
+        df_imp = pd.DataFrame({"Feature": data.columns, "Importance": imps})
         df_imp["Importance"] = df_imp["Importance"].round(4)
         return df_imp.sort_values("Importance", ascending=False)
     except Exception as e:
         print(f"RandomForest error: {e}")
         return pd.DataFrame()
+
 
 # -----------------------------------------
 # 18. Save CSV (rounded)
@@ -758,6 +813,7 @@ def save_rounded_csv(df, filename):
     df[numeric_cols] = df[numeric_cols].round(2)
     df.to_csv(filename, index=False)
 
+
 # -----------------------------------------
 # 19. Main Pipeline
 # -----------------------------------------
@@ -765,9 +821,21 @@ def run_pipeline():
     print_memory_usage()
 
     # Load data from CSV
-    mic_df = pd.read_csv("MIC.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("MIC.csv",nrows=0).columns if c!="Strain_ID"])
-    amr_df = pd.read_csv("AMR_genes.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("AMR_genes.csv",nrows=0).columns if c!="Strain_ID"])
-    vir_df = pd.read_csv("Virulence.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("Virulence.csv",nrows=0).columns if c!="Strain_ID"])
+    mic_df = pd.read_csv(
+        "MIC.csv",
+        usecols=["Strain_ID"]
+        + [c for c in pd.read_csv("MIC.csv", nrows=0).columns if c != "Strain_ID"],
+    )
+    amr_df = pd.read_csv(
+        "AMR_genes.csv",
+        usecols=["Strain_ID"]
+        + [c for c in pd.read_csv("AMR_genes.csv", nrows=0).columns if c != "Strain_ID"],
+    )
+    vir_df = pd.read_csv(
+        "Virulence.csv",
+        usecols=["Strain_ID"]
+        + [c for c in pd.read_csv("Virulence.csv", nrows=0).columns if c != "Strain_ID"],
+    )
 
     print_memory_usage()
 
@@ -792,11 +860,13 @@ def run_pipeline():
     validate_binary_data(bin_amr)
     validate_binary_data(bin_vir)
 
-    categories = ["MIC","AMR","Virulence"]
+    categories = ["MIC", "AMR", "Virulence"]
     dataframes = [bin_mic, bin_amr, bin_vir]
     results = {}
 
-    for cat, df in tqdm(zip(categories, dataframes), total=len(categories), desc="Analyzing categories"):
+    for cat, df in tqdm(
+        zip(categories, dataframes), total=len(categories), desc="Analyzing categories"
+    ):
         print(f"\n=== Analyzing {cat} Data ===")
         opt_k = retry_operation(lambda: determine_optimal_clusters_sqrt(df))
         model, clusters = retry_operation(lambda: perform_kmodes(df, opt_k))
@@ -807,50 +877,76 @@ def run_pipeline():
 
         # Cluster stats (with bootstrap CI for cluster proportions)
         stats_df = calculate_cluster_stats(clusters)
-        save_rounded_csv(stats_df, os.path.join(output_folder, f"{cat.lower()}_cluster_statistics.csv"))
-        save_rounded_csv(pat_df, os.path.join(output_folder, f"{cat.lower()}_characteristic_patterns.csv"))
+        save_rounded_csv(
+            stats_df, os.path.join(output_folder, f"{cat.lower()}_cluster_statistics.csv")
+        )
+        save_rounded_csv(
+            pat_df, os.path.join(output_folder, f"{cat.lower()}_characteristic_patterns.csv")
+        )
 
         # Chi-square
         chi2_global, chi2_per = chi_square_analysis(df, clusters)
         save_rounded_csv(chi2_global, os.path.join(output_folder, f"{cat.lower()}_chi2_global.csv"))
-        save_rounded_csv(chi2_per, os.path.join(output_folder, f"{cat.lower()}_chi2_per_cluster.csv"))
+        save_rounded_csv(
+            chi2_per, os.path.join(output_folder, f"{cat.lower()}_chi2_per_cluster.csv")
+        )
 
         # Log-odds
-        log_g, log_c = log_odds_ratio_analysis(df, clusters, with_bootstrap_ci=True, n_bootstrap=200)
+        log_g, log_c = log_odds_ratio_analysis(
+            df, clusters, with_bootstrap_ci=True, n_bootstrap=200
+        )
         save_rounded_csv(log_g, os.path.join(output_folder, f"{cat.lower()}_log_odds_global.csv"))
-        save_rounded_csv(log_c, os.path.join(output_folder, f"{cat.lower()}_log_odds_per_cluster.csv"))
+        save_rounded_csv(
+            log_c, os.path.join(output_folder, f"{cat.lower()}_log_odds_per_cluster.csv")
+        )
 
         # Shared/Unique
         df_shared, df_unique, _ = label_shared_unique_features(df, clusters)
-        save_rounded_csv(df_shared, os.path.join(output_folder, f"{cat.lower()}_shared_features.csv"))
-        save_rounded_csv(df_unique, os.path.join(output_folder, f"{cat.lower()}_unique_features.csv"))
+        save_rounded_csv(
+            df_shared, os.path.join(output_folder, f"{cat.lower()}_shared_features.csv")
+        )
+        save_rounded_csv(
+            df_unique, os.path.join(output_folder, f"{cat.lower()}_unique_features.csv")
+        )
 
         # Logistic Regression
         coef_df = logistic_regression_feature_selection(df, clusters, with_ci=True, n_bootstrap=50)
-        save_rounded_csv(coef_df, os.path.join(output_folder, f"{cat.lower()}_logistic_regression_coefficients.csv"))
+        save_rounded_csv(
+            coef_df,
+            os.path.join(output_folder, f"{cat.lower()}_logistic_regression_coefficients.csv"),
+        )
 
         # Association Rules
         rules_df = association_rule_mining(df, clusters, min_support=0.3, min_confidence=0.7)
         if not rules_df.empty:
-            save_rounded_csv(rules_df, os.path.join(output_folder, f"{cat.lower()}_association_rules.csv"))
+            save_rounded_csv(
+                rules_df, os.path.join(output_folder, f"{cat.lower()}_association_rules.csv")
+            )
 
         # MCA + correlation Heatmap
-        mca_coords, mca_plot_html, heatmap_html = multiple_correspondence_analysis(df, clusters, cat)
+        mca_coords, mca_plot_html, heatmap_html = multiple_correspondence_analysis(
+            df, clusters, cat
+        )
         if not mca_coords.empty:
-            save_rounded_csv(mca_coords, os.path.join(output_folder, f"{cat.lower()}_MCA_results.csv"))
+            save_rounded_csv(
+                mca_coords, os.path.join(output_folder, f"{cat.lower()}_MCA_results.csv")
+            )
 
         # Random Forest
         rf_df = analyze_cluster_importance(df, clusters)
         if not rf_df.empty:
-            save_rounded_csv(rf_df, os.path.join(output_folder, f"{cat.lower()}_cluster_importance.csv"))
+            save_rounded_csv(
+                rf_df, os.path.join(output_folder, f"{cat.lower()}_cluster_importance.csv")
+            )
 
         # Validation
         ch_score, db_score = validate_clusters(df, clusters)
-        val_df = pd.DataFrame({
-            "Metric": ["Calinski-Harabasz","Davies-Bouldin"],
-            "Score": [ch_score, db_score]
-        })
-        save_rounded_csv(val_df, os.path.join(output_folder, f"{cat.lower()}_validation_scores.csv"))
+        val_df = pd.DataFrame(
+            {"Metric": ["Calinski-Harabasz", "Davies-Bouldin"], "Score": [ch_score, db_score]}
+        )
+        save_rounded_csv(
+            val_df, os.path.join(output_folder, f"{cat.lower()}_validation_scores.csv")
+        )
 
         # Pairwise FDR
         post_hoc_df = pairwise_fdr_post_hoc(df, clusters, cat)
@@ -874,20 +970,28 @@ def run_pipeline():
             "cluster_importance": rf_df,
             "validation_scores": val_df,
             "mca_plot": mca_plot_html,
-            "heatmap_plot": heatmap_html
+            "heatmap_plot": heatmap_html,
         }
 
         print_memory_usage()
 
-    integrated_df = pd.DataFrame({
-        "Strain_ID": strain_ids,
-        "MIC_Cluster": results["MIC"]["clusters"],
-        "AMR_Cluster": results["AMR"]["clusters"],
-        "Virulence_Cluster": results["Virulence"]["clusters"]
-    })
-    save_rounded_csv(integrated_df, os.path.join(output_folder, "integrated_clustering_results.csv"))
+    integrated_df = pd.DataFrame(
+        {
+            "Strain_ID": strain_ids,
+            "MIC_Cluster": results["MIC"]["clusters"],
+            "AMR_Cluster": results["AMR"]["clusters"],
+            "Virulence_Cluster": results["Virulence"]["clusters"],
+        }
+    )
+    save_rounded_csv(
+        integrated_df, os.path.join(output_folder, "integrated_clustering_results.csv")
+    )
 
-    combo = integrated_df.groupby(["MIC_Cluster","AMR_Cluster","Virulence_Cluster"]).size().reset_index(name="Count")
+    combo = (
+        integrated_df.groupby(["MIC_Cluster", "AMR_Cluster", "Virulence_Cluster"])
+        .size()
+        .reset_index(name="Count")
+    )
     tot_samples = len(integrated_df)
     combo["Percentage"] = (combo["Count"] / tot_samples * 100).round(2)
     ci_list = []
@@ -906,6 +1010,7 @@ def run_pipeline():
 
     return integrated_df, results
 
+
 # -----------------------------------------
 # 20. Load All CSV (Excluding Certain Files)
 # -----------------------------------------
@@ -913,7 +1018,7 @@ def load_all_csv_from_folder(folder_path):
     excluded_substrings = [
         "_column_coordinates.csv",
         "_row_coordinates.csv",
-        "all_characteristic_patterns.csv"
+        "all_characteristic_patterns.csv",
     ]
     csv_results = {}
     for fname in os.listdir(folder_path):
@@ -928,14 +1033,12 @@ def load_all_csv_from_folder(folder_path):
                 print(f"[WARN] Could not load {fname}: {e}")
     return csv_results
 
+
 # -----------------------------------------
 # 21. Generate HTML Report
 # -----------------------------------------
 def generate_comprehensive_html_report(
-    output_folder,
-    results_dict,
-    integrated_clusters,
-    csv_results
+    output_folder, results_dict, integrated_clusters, csv_results
 ):
     # Expanded methodology text with more technical/statistical details
     methodology_text = """
@@ -1267,27 +1370,25 @@ def generate_comprehensive_html_report(
         integrated_clusters=integrated_clusters,
         csv_results=csv_results,
         output_folder=output_folder,
-        methodology_text=methodology_text
+        methodology_text=methodology_text,
     )
 
     final_report_path = os.path.join(output_folder, "comprehensive_cluster_analysis_report.html")
-    with open(final_report_path, "w", encoding='utf-8') as f:
+    with open(final_report_path, "w", encoding="utf-8") as f:
         f.write(rendered_html)
 
     print(f"\nFinal HTML report generated: {final_report_path}")
+
 
 # -----------------------------------------
 # 21b. Generate Excel Report
 # -----------------------------------------
 def generate_comprehensive_excel_report(
-    output_folder,
-    results_dict,
-    integrated_clusters,
-    csv_results
+    output_folder, results_dict, integrated_clusters, csv_results
 ):
     """
     Generate comprehensive Excel report with all analysis results and PNG charts.
-    
+
     This function creates a detailed Excel workbook with multiple sheets containing:
     - Metadata and methodology
     - Clustering results for each category (MIC, AMR, Virulence)
@@ -1297,33 +1398,36 @@ def generate_comprehensive_excel_report(
     - Association rules
     - Integrated cluster assignments
     - All CSV results from the analysis
-    
+
     Parameters:
         output_folder (str): Directory for output files
         results_dict (dict): Dictionary containing all analysis results by category
         integrated_clusters (pd.DataFrame): Integrated cluster assignments
         csv_results (dict): Dictionary of all CSV files from analysis
-        
+
     Returns:
         str: Path to generated Excel file
     """
     # Initialize Excel report generator
     excel_gen = ExcelReportGenerator(output_folder=output_folder)
-    
+
     # Save any plotly figures as PNG
     for category, cat_results in results_dict.items():
         # Save MCA scatter plots if available
-        if 'mca_scatter' in cat_results and cat_results['mca_scatter']:
+        if "mca_scatter" in cat_results and cat_results["mca_scatter"]:
             try:
                 # Parse base64 image data if present
                 import re
-                match = re.search(r'data:image/png;base64,([^"]+)', str(cat_results['mca_scatter']))
+
+                match = re.search(r'data:image/png;base64,([^"]+)', str(cat_results["mca_scatter"]))
                 if match:
                     img_data = match.group(1)
                     # Decode and save
                     import base64
-                    from PIL import Image
                     from io import BytesIO
+
+                    from PIL import Image
+
                     img = Image.open(BytesIO(base64.b64decode(img_data)))
                     filepath = os.path.join(excel_gen.png_folder, f"mca_scatter_{category}.png")
                     img.save(filepath)
@@ -1331,16 +1435,18 @@ def generate_comprehensive_excel_report(
                     print(f"Saved MCA scatter plot: {filepath}")
             except Exception as e:
                 print(f"Could not save MCA scatter for {category}: {e}")
-        
+
         # Save heatmaps if available
-        if 'heatmap' in cat_results and cat_results['heatmap']:
+        if "heatmap" in cat_results and cat_results["heatmap"]:
             try:
-                match = re.search(r'data:image/png;base64,([^"]+)', str(cat_results['heatmap']))
+                match = re.search(r'data:image/png;base64,([^"]+)', str(cat_results["heatmap"]))
                 if match:
                     img_data = match.group(1)
                     import base64
-                    from PIL import Image
                     from io import BytesIO
+
+                    from PIL import Image
+
                     img = Image.open(BytesIO(base64.b64decode(img_data)))
                     filepath = os.path.join(excel_gen.png_folder, f"heatmap_{category}.png")
                     img.save(filepath)
@@ -1348,7 +1454,7 @@ def generate_comprehensive_excel_report(
                     print(f"Saved heatmap: {filepath}")
             except Exception as e:
                 print(f"Could not save heatmap for {category}: {e}")
-    
+
     # Prepare methodology description
     methodology = {
         "K-Modes Clustering": (
@@ -1386,111 +1492,117 @@ def generate_comprehensive_excel_report(
         "Bootstrap Confidence Intervals": (
             "Applied to cluster percentages and log-odds ratios. "
             "0.5 pseudo-count corrects extreme values (0 or 100%)."
-        )
+        ),
     }
-    
+
     # Prepare sheets data
     sheets_data = {}
-    
+
     # Integrated clusters
     if integrated_clusters is not None and not integrated_clusters.empty:
-        sheets_data['Integrated_Clusters'] = (
+        sheets_data["Integrated_Clusters"] = (
             integrated_clusters,
-            f"Integrated cluster assignments across all categories (N={len(integrated_clusters)} strains)"
+            f"Integrated cluster assignments across all categories (N={len(integrated_clusters)} strains)",
         )
-    
+
     # Category-specific results
     for category, cat_results in results_dict.items():
         prefix = sanitize_sheet_name(category)[:20]  # Limit prefix length
-        
+
         # Cluster assignments
-        if 'cluster_df' in cat_results and cat_results['cluster_df'] is not None:
+        if "cluster_df" in cat_results and cat_results["cluster_df"] is not None:
             sheet_name = f"{prefix}_Clusters"
             sheets_data[sheet_name] = (
-                cat_results['cluster_df'],
-                f"Cluster assignments for {category}"
+                cat_results["cluster_df"],
+                f"Cluster assignments for {category}",
             )
-        
+
         # Chi-square results
-        if 'chi2_results' in cat_results and cat_results['chi2_results'] is not None:
+        if "chi2_results" in cat_results and cat_results["chi2_results"] is not None:
             sheet_name = f"{prefix}_Chi2"
             sheets_data[sheet_name] = (
-                cat_results['chi2_results'],
-                f"Chi-square test results for {category}"
+                cat_results["chi2_results"],
+                f"Chi-square test results for {category}",
             )
-        
+
         # Log-odds results
-        if 'log_odds_df' in cat_results and cat_results['log_odds_df'] is not None:
+        if "log_odds_df" in cat_results and cat_results["log_odds_df"] is not None:
             sheet_name = f"{prefix}_LogOdds"
             sheets_data[sheet_name] = (
-                cat_results['log_odds_df'],
-                f"Log-odds ratios with bootstrap CIs for {category}"
+                cat_results["log_odds_df"],
+                f"Log-odds ratios with bootstrap CIs for {category}",
             )
-        
+
         # Feature importance
-        if 'feature_importance' in cat_results and cat_results['feature_importance'] is not None:
+        if "feature_importance" in cat_results and cat_results["feature_importance"] is not None:
             sheet_name = f"{prefix}_RF_Import"
             sheets_data[sheet_name] = (
-                cat_results['feature_importance'],
-                f"Random Forest feature importance for {category}"
+                cat_results["feature_importance"],
+                f"Random Forest feature importance for {category}",
             )
-        
+
         # Association rules
-        if 'association_rules' in cat_results and cat_results['association_rules'] is not None:
+        if "association_rules" in cat_results and cat_results["association_rules"] is not None:
             sheet_name = f"{prefix}_Assoc_Rules"
             sheets_data[sheet_name] = (
-                cat_results['association_rules'],
-                f"Association rules for {category}"
+                cat_results["association_rules"],
+                f"Association rules for {category}",
             )
-        
+
         # MCA coordinates
-        if 'mca_coords' in cat_results and cat_results['mca_coords'] is not None:
+        if "mca_coords" in cat_results and cat_results["mca_coords"] is not None:
             sheet_name = f"{prefix}_MCA"
-            sheets_data[sheet_name] = (
-                cat_results['mca_coords'],
-                f"MCA coordinates for {category}"
-            )
-    
+            sheets_data[sheet_name] = (cat_results["mca_coords"], f"MCA coordinates for {category}")
+
     # Add CSV results that are not already included
-    excluded_files = ['mca_row_coordinates', 'mca_column_coordinates', 'all_characteristic_patterns']
+    excluded_files = [
+        "mca_row_coordinates",
+        "mca_column_coordinates",
+        "all_characteristic_patterns",
+    ]
     for csv_name, csv_df in csv_results.items():
         # Create sheet name from CSV filename
-        base_name = csv_name.replace('.csv', '')
+        base_name = csv_name.replace(".csv", "")
         # Check if not already added and not in exclusion list
         if not any(excl in base_name.lower() for excl in excluded_files):
             sheet_name = sanitize_sheet_name(base_name)
             if sheet_name not in sheets_data:
                 sheets_data[sheet_name] = (csv_df, f"Results from {csv_name}")
-    
+
     # Prepare metadata
     total_clusters_per_category = {}
     for category, cat_results in results_dict.items():
-        if 'cluster_df' in cat_results and cat_results['cluster_df'] is not None:
-            n_clusters = cat_results['cluster_df']['Cluster'].nunique() if 'Cluster' in cat_results['cluster_df'].columns else 0
+        if "cluster_df" in cat_results and cat_results["cluster_df"] is not None:
+            n_clusters = (
+                cat_results["cluster_df"]["Cluster"].nunique()
+                if "Cluster" in cat_results["cluster_df"].columns
+                else 0
+            )
             total_clusters_per_category[category] = n_clusters
-    
+
     metadata = {
-        'Total_Strains': len(integrated_clusters) if integrated_clusters is not None else 0,
-        'Categories_Analyzed': len(results_dict),
-        'Total_Sheets': len(sheets_data),
-        'Total_PNG_Charts': len(excel_gen.png_files)
+        "Total_Strains": len(integrated_clusters) if integrated_clusters is not None else 0,
+        "Categories_Analyzed": len(results_dict),
+        "Total_Sheets": len(sheets_data),
+        "Total_PNG_Charts": len(excel_gen.png_files),
     }
-    
+
     # Add cluster counts to metadata
     for category, n_clusters in total_clusters_per_category.items():
-        metadata[f'Clusters_{category}'] = n_clusters
-    
+        metadata[f"Clusters_{category}"] = n_clusters
+
     # Generate Excel report
     excel_path = excel_gen.generate_excel_report(
         report_name="Cluster_Analysis_Report",
         sheets_data=sheets_data,
         methodology=methodology,
-        **metadata
+        **metadata,
     )
-    
+
     print(f"\nExcel report generated: {excel_path}")
-    
+
     return excel_path
+
 
 # -----------------------------------------
 # 22. Main Function
@@ -1507,7 +1619,7 @@ def main():
         output_folder=output_folder,
         results_dict=results_dict,
         integrated_clusters=integrated_df,
-        csv_results=all_csv_results
+        csv_results=all_csv_results,
     )
 
     # 4. Generate comprehensive Excel report
@@ -1515,7 +1627,7 @@ def main():
         output_folder=output_folder,
         results_dict=results_dict,
         integrated_clusters=integrated_df,
-        csv_results=all_csv_results
+        csv_results=all_csv_results,
     )
 
     print("\nAnalysis complete. Please check the HTML and Excel reports in:", output_folder)

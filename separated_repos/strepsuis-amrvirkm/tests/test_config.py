@@ -1,17 +1,20 @@
 """Tests for config module."""
-import pytest
-from strepsuis_amrvirkm.config import Config
+
 import tempfile
 from pathlib import Path
+
+import pytest
+
+from strepsuis_amrvirkm.config import Config
 
 
 def test_config_defaults():
     """Test default configuration values."""
     with tempfile.TemporaryDirectory() as tmpdir:
         config = Config(data_dir=tmpdir)
-        assert hasattr(config, 'bootstrap_iterations')
-        assert hasattr(config, 'fdr_alpha')
-        assert hasattr(config, 'random_seed')
+        assert hasattr(config, "bootstrap_iterations")
+        assert hasattr(config, "fdr_alpha")
+        assert hasattr(config, "random_seed")
         assert config.bootstrap_iterations == 500
         assert config.fdr_alpha == 0.05
         assert config.random_seed == 42
@@ -25,7 +28,7 @@ def test_config_custom_values():
             output_dir=tmpdir,
             bootstrap_iterations=1000,
             fdr_alpha=0.01,
-            random_seed=123
+            random_seed=123,
         )
         assert config.bootstrap_iterations == 1000
         assert config.fdr_alpha == 0.01
@@ -66,10 +69,10 @@ def test_config_from_dict():
     """Test Config creation from dictionary."""
     with tempfile.TemporaryDirectory() as tmpdir:
         config_dict = {
-            'data_dir': tmpdir,
-            'output_dir': tmpdir,
-            'bootstrap_iterations': 200,
-            'fdr_alpha': 0.1
+            "data_dir": tmpdir,
+            "output_dir": tmpdir,
+            "bootstrap_iterations": 200,
+            "fdr_alpha": 0.1,
         }
         config = Config.from_dict(config_dict)
         assert config.bootstrap_iterations == 200
@@ -80,9 +83,9 @@ def test_config_reporting_parameters():
     """Test reporting configuration parameters."""
     with tempfile.TemporaryDirectory() as tmpdir:
         config = Config(data_dir=tmpdir)
-        assert hasattr(config, 'generate_html')
-        assert hasattr(config, 'generate_excel')
-        assert hasattr(config, 'save_png_charts')
+        assert hasattr(config, "generate_html")
+        assert hasattr(config, "generate_excel")
+        assert hasattr(config, "save_png_charts")
         assert config.generate_html is True
         assert config.generate_excel is True
 

@@ -15,8 +15,4 @@ __license__ = "MIT"
 from .analyzer import NetworkAnalyzer
 from .config import Config
 
-__all__ = [
-    "NetworkAnalyzer",
-    "Config",
-    "__version__"
-]
+__all__ = ["NetworkAnalyzer", "Config", "__version__"]

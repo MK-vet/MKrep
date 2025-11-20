@@ -2,9 +2,10 @@
 Pytest configuration and fixtures.
 """
 
-import pytest
 import shutil
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture
@@ -12,7 +13,7 @@ def data_dir(tmp_path):
     """Create a temporary data directory with example files."""
     data = tmp_path / "data"
     data.mkdir()
-    
+
     # Copy example data files if they exist
     example_dir = Path(__file__).parent.parent / "data" / "examples"
     if example_dir.exists():
@@ -20,7 +21,7 @@ def data_dir(tmp_path):
             shutil.copy(csv_file, data)
         for newick_file in example_dir.glob("*.newick"):
             shutil.copy(newick_file, data)
-    
+
     return data
 
 
