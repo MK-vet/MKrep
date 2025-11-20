@@ -1,10 +1,21 @@
 """Tests for CLI module."""
 import pytest
 import sys
+import shutil
 from io import StringIO
 from strepsuis_amrpat.cli import main
 from pathlib import Path
 import tempfile
+
+
+def setup_test_data(data_dir):
+    """Copy example data files to test directory."""
+    example_dir = Path(__file__).parent.parent / "data" / "examples"
+    if example_dir.exists():
+        for csv_file in example_dir.glob("*.csv"):
+            shutil.copy(csv_file, data_dir)
+        for newick_file in example_dir.glob("*.newick"):
+            shutil.copy(newick_file, data_dir)
 
 
 def test_cli_help(capsys, monkeypatch):
@@ -40,10 +51,8 @@ def test_cli_with_valid_args(monkeypatch):
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
-        # Create a dummy CSV file
-        import pandas as pd
-        df = pd.DataFrame({'test': [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
+        # Copy example data files
+        setup_test_data(data_dir)
         
         monkeypatch.setattr(sys, 'argv', [
             'strepsuis-amrpat',
@@ -59,9 +68,8 @@ def test_cli_with_bootstrap_option(monkeypatch):
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
-        import pandas as pd
-        df = pd.DataFrame({'test': [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
+        # Copy example data files
+        setup_test_data(data_dir)
         
         monkeypatch.setattr(sys, 'argv', [
             'strepsuis-amrpat',
@@ -78,9 +86,8 @@ def test_cli_with_fdr_alpha_option(monkeypatch):
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
-        import pandas as pd
-        df = pd.DataFrame({'test': [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
+        # Copy example data files
+        setup_test_data(data_dir)
         
         monkeypatch.setattr(sys, 'argv', [
             'strepsuis-amrpat',
@@ -97,9 +104,8 @@ def test_cli_with_verbose_option(monkeypatch):
     with tempfile.TemporaryDirectory() as tmpdir:
         data_dir = Path(tmpdir) / "data"
         data_dir.mkdir()
-        import pandas as pd
-        df = pd.DataFrame({'test': [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
+        # Copy example data files
+        setup_test_data(data_dir)
         
         monkeypatch.setattr(sys, 'argv', [
             'strepsuis-amrpat',
