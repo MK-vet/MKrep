@@ -2835,6 +2835,11 @@ class PhylogeneticAnalysis:
                 
                 logging.info("Performing log-odds ratio analysis...")
                 log_odds_global, log_odds_cluster = self.trait_analyzer.log_odds_ratio_analysis(merged_df)
+                # Save global log-odds results to CSV
+                log_odds_global_path = os.path.join(self.output_folder, "log_odds_global.csv")
+                if hasattr(log_odds_global, "to_csv"):
+                    log_odds_global.to_csv(log_odds_global_path, index=False)
+                    logging.info(f"Global log-odds results saved to: {log_odds_global_path}")
                 
                 logging.info("Mining association rules...")
                 self.trait_analyzer.association_rule_mining(merged_df)
