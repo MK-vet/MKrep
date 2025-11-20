@@ -42,7 +42,7 @@ import warnings
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 from itertools import combinations
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import networkx as nx
 import numpy as np
@@ -541,7 +541,7 @@ def bootstrap_pattern_freq(
         return Counter(s)
 
     alpha = 1.0 - conf_level
-    store = {p: [] for p in counts}
+    store: Dict[str, List[float]] = {p: [] for p in counts}
     for _ in range(n_iter):
         c = single_boot()
         for pat in counts:
@@ -969,7 +969,7 @@ def compute_louvain_communities(G: nx.Graph) -> pd.DataFrame:
         return pd.DataFrame(columns=["Node", "Community"])
 
 
-def create_hybrid_network_figure(G: nx.Graph) -> str:
+def create_hybrid_network_figure(G: nx.Graph) -> Tuple[str, Any]:
     """
     Create an interactive visualization of the hybrid network.
 

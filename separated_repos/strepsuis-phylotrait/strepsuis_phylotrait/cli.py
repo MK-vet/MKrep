@@ -7,7 +7,7 @@ import logging
 import sys
 
 from . import __version__
-from .analyzer import PhyloAnalyzer
+from .analyzer import PhyloTraitAnalyzer
 from .config import Config
 
 
@@ -68,7 +68,7 @@ def main():
         logger.info(f"Data directory: {config.data_dir}")
         logger.info(f"Output directory: {config.output_dir}")
 
-        analyzer = PhyloAnalyzer(config)
+        analyzer = PhyloTraitAnalyzer(config)
         logger.info("Starting analysis...")
 
         _ = analyzer.run()

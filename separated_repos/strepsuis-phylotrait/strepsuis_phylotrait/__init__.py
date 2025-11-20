@@ -12,7 +12,7 @@ __version__ = "1.0.0"
 __author__ = "MK-vet"
 __license__ = "MIT"
 
-from .analyzer import PhyloAnalyzer
+from .analyzer import PhyloTraitAnalyzer
 from .config import Config
 
-__all__ = ["PhyloAnalyzer", "Config", "__version__"]
+__all__ = ["PhyloTraitAnalyzer", "Config", "__version__"]
