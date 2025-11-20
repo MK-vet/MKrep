@@ -15,8 +15,4 @@ __license__ = "MIT"
 from .analyzer import GenPhenAnalyzer
 from .config import Config
 
-__all__ = [
-    "GenPhenAnalyzer",
-    "Config",
-    "__version__"
-]
+__all__ = ["GenPhenAnalyzer", "Config", "__version__"]

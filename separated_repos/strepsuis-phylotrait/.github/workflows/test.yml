@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.11", "3.12"]  # Test oldest, LTS, and latest
 
     steps:
       - name: Checkout code
@@ -50,6 +50,8 @@ jobs:
           fail_ci_if_error: false
 
   docker:
+    # Only run Docker build on releases or manual workflow dispatch to save runner minutes
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

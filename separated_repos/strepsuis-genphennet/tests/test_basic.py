@@ -5,6 +5,7 @@ Basic test suite to ensure the package is functional.
 """
 
 import pytest
+
 from strepsuis_genphennet import __version__
 
 
@@ -15,8 +16,8 @@ def test_version():
 
 def test_imports():
     """Test that main classes can be imported."""
-    from strepsuis_genphennet import NetworkAnalyzer, Config
-    
+    from strepsuis_genphennet import Config, NetworkAnalyzer
+
     assert NetworkAnalyzer is not None
     assert Config is not None
 
@@ -24,12 +25,9 @@ def test_imports():
 def test_config_initialization():
     """Test Config class initialization."""
     from strepsuis_genphennet import Config
-    
-    config = Config(
-        data_dir="./data",
-        output_dir="./output"
-    )
-    
+
+    config = Config(data_dir="./data", output_dir="./output")
+
     assert config.data_dir == "./data"
     assert config.output_dir == "./output"
 
@@ -37,12 +35,9 @@ def test_config_initialization():
 def test_analyzer_initialization():
     """Test NetworkAnalyzer initialization."""
     from strepsuis_genphennet import NetworkAnalyzer
-    
-    analyzer = NetworkAnalyzer(
-        data_dir="./data",
-        output_dir="./output"
-    )
-    
+
+    analyzer = NetworkAnalyzer(data_dir="./data", output_dir="./output")
+
     assert analyzer.data_dir == "./data"
     assert analyzer.output_dir == "./output"
 
@@ -51,7 +46,7 @@ def test_analyzer_initialization():
 def test_example_data_exists():
     """Test that example data files exist."""
     from pathlib import Path
-    
+
     examples_dir = Path("examples")
     if examples_dir.exists():
         csv_files = list(examples_dir.glob("*.csv"))

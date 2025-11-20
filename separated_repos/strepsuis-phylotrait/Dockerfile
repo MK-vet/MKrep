@@ -1,9 +1,9 @@
-# Multi-stage build for StrepSuis-PhyloTrait
+# Multi-stage build for StrepSuis-AMRPat
 # Stage 1: Builder - Install dependencies and package
 FROM python:3.11-slim as builder
 
 LABEL maintainer="MK-vet <support@strepsuis-suite.org>"
-LABEL description="StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis"
+LABEL description="StrepSuis-AMRPat: Automated Detection of Antimicrobial Resistance Patterns"
 LABEL version="1.0.0"
 
 # Install system dependencies needed for building
@@ -17,16 +17,21 @@ RUN apt-get update && apt-get install -y \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install the package directly from GitHub
-# This ensures no code duplication - the package is installed dynamically
+# Copy package files
+WORKDIR /build
+COPY pyproject.toml ./
+COPY strepsuis_phylotrait ./strepsuis_phylotrait
+COPY README.md ./
+
+# Install the package
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir git+https://github.com/MK-vet/strepsuis-phylotrait.git@main
+    pip install --no-cache-dir .
 
 # Stage 2: Runtime - Minimal image with only runtime dependencies
 FROM python:3.11-slim
 
 LABEL maintainer="MK-vet <support@strepsuis-suite.org>"
-LABEL description="StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis"
+LABEL description="StrepSuis-AMRPat: Automated Detection of Antimicrobial Resistance Patterns"
 LABEL version="1.0.0"
 
 # Copy virtual environment from builder

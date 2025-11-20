@@ -12,7 +12,12 @@ StrepSuis-AMRPat is a production-ready Python package for advanced bioinformatic
 
 ### Key Features
 
-- ✅ **Bootstrap resampling for robust prevalence estimation**\n- ✅ **Co-occurrence analysis for phenotypes and resistance genes**\n- ✅ **Association rule mining for resistance patterns**\n- ✅ **Hybrid co-resistance network construction**\n- ✅ **Louvain community detection**\n- ✅ **Publication-quality network visualizations**
+- ✅ **Bootstrap resampling for robust prevalence estimation**
+- ✅ **Co-occurrence analysis for phenotypes and resistance genes**
+- ✅ **Association rule mining for resistance patterns**
+- ✅ **Hybrid co-resistance network construction**
+- ✅ **Louvain community detection**
+- ✅ **Publication-quality network visualizations**
 
 ## Quick Start
 
@@ -64,10 +69,10 @@ strepsuis-amrpat \
 #### Python API
 
 ```python
-from strepsuis_amrpat import Analyzer
+from strepsuis_amrpat import MDRAnalyzer
 
 # Initialize analyzer
-analyzer = Analyzer(
+analyzer = MDRAnalyzer(
     data_dir="./data",
     output_dir="./results"
 )
@@ -75,9 +80,10 @@ analyzer = Analyzer(
 # Run analysis
 results = analyzer.run()
 
-# Generate reports
-analyzer.generate_html_report(results)
-analyzer.generate_excel_report(results)
+# Check results
+print(f"Analysis status: {results['status']}")
+print(f"Output directory: {results['output_dir']}")
+print(f"Generated files: {results['total_files']}")
 ```
 
 #### Or use Google Colab (No Installation Required!)

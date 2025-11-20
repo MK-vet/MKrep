@@ -12,7 +12,12 @@ StrepSuis-PhyloTrait is a production-ready Python package for advanced bioinform
 
 ### Key Features
 
-- ✅ **Tree-aware clustering with evolutionary metrics**\n- ✅ **Faith's Phylogenetic Diversity calculations**\n- ✅ **Pairwise phylogenetic distance matrices**\n- ✅ **Binary trait analysis for AMR and virulence factors**\n- ✅ **UMAP dimensionality reduction**\n- ✅ **Interactive HTML reports with DataTables and Plotly**
+- ✅ **Tree-aware clustering with evolutionary metrics**
+- ✅ **Faith's Phylogenetic Diversity calculations**
+- ✅ **Pairwise phylogenetic distance matrices**
+- ✅ **Binary trait analysis for AMR and virulence factors**
+- ✅ **UMAP dimensionality reduction**
+- ✅ **Interactive HTML reports with DataTables and Plotly**
 
 ## Quick Start
 

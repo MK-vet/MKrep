@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Optimized GitHub Actions workflows to reduce runner minutes
+- Reduced Python version matrix from 5 to 3 versions (3.8, 3.11, 3.12)
+- Docker builds now only run on releases and manual triggers
+
+### Fixed
+- Fixed example data files inclusion in repository
+- Updated .gitignore to properly track example CSV files
+- Corrected README Python API examples to match actual implementation
+
 ## [1.0.0] - 2025-01-14
 
 ### Added

@@ -5,12 +5,12 @@
 ENHANCED MDR ANALYSIS PIPELINE (HYBRID NETWORK APPROACH)
 -------------------------------------------------------
 This script implements comprehensive statistical analyses for phenotypic antibiotic resistance
-and antimicrobial resistance (AMR) genes in both the complete isolate collection and the 
+and antimicrobial resistance (AMR) genes in both the complete isolate collection and the
 Multi-Drug Resistant (MDR) subset.
 
 Statistical methods employed:
 1. Bootstrap resampling (5000 iterations) with 95% confidence intervals for prevalence estimation
-2. Chi-square test and Fisher's exact test (when expected cell counts <5) for association analysis 
+2. Chi-square test and Fisher's exact test (when expected cell counts <5) for association analysis
 3. Phi coefficient for association strength measurement
 4. Multiple hypothesis testing correction using Benjamini-Hochberg procedure (FDR)
 5. Louvain community detection algorithm for network module identification
@@ -34,23 +34,24 @@ Major analytical steps:
     c) Network communities (Louvain)
 """
 
+import logging
 import os
 import sys
 import time
-import logging
 import warnings
+from datetime import datetime
+from itertools import combinations
+from typing import Dict, List, Tuple
+
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
-
-from itertools import combinations
-from datetime import datetime
-from typing import Dict, List, Tuple, Optional
-from statsmodels.stats.multitest import multipletests
+from excel_report_utils import ExcelReportGenerator
 from scipy.stats import chi2_contingency, fisher_exact
-from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+from statsmodels.stats.multitest import multipletests
 
-warnings.filterwarnings('ignore')  # for cleaner console output
+warnings.filterwarnings("ignore")  # for cleaner console output
+
 
 ###############################################################################
 # 0) ENVIRONMENT SETUP
@@ -59,13 +60,13 @@ def setup_environment() -> str:
     """
     Detect if running on Google Colab or locally, handle user input,
     create output directories, and configure logging. Returns the CSV path.
-    
+
     The function performs the following operations:
     1. Detects execution environment (Google Colab or local machine)
     2. Creates necessary output directories for results storage
     3. Configures logging to both file and console
     4. Handles file upload in Colab or path input locally
-    
+
     Returns:
         str: Path to the input CSV file containing resistance data
     """
@@ -73,6 +74,7 @@ def setup_environment() -> str:
     try:
         import google.colab
         from google.colab import files
+
         IN_COLAB = True
         logging.info("Google Colab environment detected.")
     except ImportError:
@@ -90,17 +92,18 @@ def setup_environment() -> str:
     # Configure logging
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s | %(levelname)s | %(message)s',
+        format="%(asctime)s | %(levelname)s | %(message)s",
         handlers=[
             logging.FileHandler(os.path.join("output", "analysis_log.txt")),
-            logging.StreamHandler(sys.stdout)
-        ]
+            logging.StreamHandler(sys.stdout),
+        ],
     )
 
     # Get CSV path from user
     if IN_COLAB:
         print("Please upload your CSV file containing resistance data...")
         from google.colab import files
+
         uploaded = files.upload()
         if not uploaded:
             raise ValueError("No file was uploaded. Please run again and upload a file.")
@@ -113,54 +116,56 @@ def setup_environment() -> str:
             raise FileNotFoundError(f"File not found: {csv_path}")
         return csv_path
 
+
 ###############################################################################
 # 1) ANTIBIOTIC CLASSES
 ###############################################################################
 # Predefined classification of antibiotics into functional classes
 # This mapping is used for determining MDR status and analyzing class-level resistance patterns
 ANTIBIOTIC_CLASSES: Dict[str, List[str]] = {
-    'Tetracyclines': ['Oxytetracycline', 'Doxycycline'],
-    'Macrolides': ['Tulathromycin'],
-    'Aminoglycosides': ['Spectinomycin', 'Gentamicin'],
-    'Pleuromutilins': ['Tiamulin'],
-    'Sulfonamides': ['Trimethoprim_Sulphamethoxazole'],
-    'Fluoroquinolones': ['Enrofloxacin'],
-    'Penicillins': ['Penicillin', 'Ampicillin', 'Amoxicillin_Clavulanic_acid'],
-    'Cephalosporins': ['Ceftiofur'],
-    'Phenicols': ['Florfenicol']
+    "Tetracyclines": ["Oxytetracycline", "Doxycycline"],
+    "Macrolides": ["Tulathromycin"],
+    "Aminoglycosides": ["Spectinomycin", "Gentamicin"],
+    "Pleuromutilins": ["Tiamulin"],
+    "Sulfonamides": ["Trimethoprim_Sulphamethoxazole"],
+    "Fluoroquinolones": ["Enrofloxacin"],
+    "Penicillins": ["Penicillin", "Ampicillin", "Amoxicillin_Clavulanic_acid"],
+    "Cephalosporins": ["Ceftiofur"],
+    "Phenicols": ["Florfenicol"],
 }
+
 
 ###############################################################################
 # 2) CORE UTILITY FUNCTIONS
 ###############################################################################
 def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
     """
-    Compute contingency table analysis using Chi-square or Fisher's exact test 
+    Compute contingency table analysis using Chi-square or Fisher's exact test
     based on expected cell counts.
-    
+
     Statistical methods:
     - Chi-square test: Used when all expected cell frequencies are >= 5
     - Fisher's exact test: Used when any expected cell frequency is < 5
     - Phi coefficient: Calculated as sqrt(chi²/N) for 2×2 tables, with sign
       determined by whether (ad-bc) is positive or negative
-    
+
     Mathematical details:
     - Chi-square statistic: χ² = Σ[(O-E)²/E] where O=observed, E=expected
     - Expected cell counts: E_ij = (row_i total × column_j total)/grand total
     - Phi coefficient: φ = sqrt(χ²/N) for 2×2 tables
     - For 2×2 tables with cells [[a,b],[c,d]], φ = (ad-bc)/sqrt(r₁r₂c₁c₂)
       where r₁,r₂ are row sums and c₁,c₂ are column sums
-    
+
     Parameters:
         table (pd.DataFrame): 2×2 contingency table
-        
+
     Returns:
         Tuple[float, float, float]: (test_statistic, p_value, phi_coefficient)
         - test_statistic: Chi-square value (or 0 for Fisher's)
         - p_value: Statistical significance
         - phi_coefficient: Effect size measure (-1 to +1)
     """
-    if table.shape != (2,2):
+    if table.shape != (2, 2):
         return np.nan, np.nan, np.nan
 
     total = table.values.sum()
@@ -171,16 +176,16 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
     col_sums = table.sum(axis=0)
     expected = np.outer(row_sums, col_sums) / total
 
-    if (expected<5).any():
+    if (expected < 5).any():
         try:
             # Fisher's exact test for small expected frequencies
-            (a, b),(c, d) = table.values
+            (a, b), (c, d) = table.values
             _, p_val = fisher_exact(table)
-            
+
             # Calculate phi coefficient manually for 2×2 table
-            num = a*d - b*c
-            den = (row_sums[0]*row_sums[1]*col_sums[0]*col_sums[1])
-            phi_val = num/np.sqrt(den) if den>0 else 0.0
+            num = a * d - b * c
+            den = row_sums[0] * row_sums[1] * col_sums[0] * col_sums[1]
+            phi_val = num / np.sqrt(den) if den > 0 else 0.0
             return (0, p_val, phi_val)
         except:
             return (np.nan, np.nan, np.nan)
@@ -188,30 +193,31 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
         try:
             # Chi-square test for adequate expected frequencies
             chi2, p_val, _, _ = chi2_contingency(table)
-            
+
             # Calculate phi coefficient from chi-square
-            phi_val = np.sqrt(chi2/total)
-            
+            phi_val = np.sqrt(chi2 / total)
+
             # Determine sign of phi based on cell comparison
-            (a, b),(c, d) = table.values
-            if (a*d) < (b*c):
+            (a, b), (c, d) = table.values
+            if (a * d) < (b * c):
                 phi_val = -phi_val
             return (chi2, p_val, phi_val)
         except:
             return (np.nan, np.nan, np.nan)
 
+
 def add_significance_stars(p_value: float) -> str:
     """
     Add standard significance level indicators to p-values.
-    
+
     Statistical convention:
     - p < 0.05 (*): Statistically significant at 5% level
     - p < 0.01 (**): Statistically significant at 1% level
     - p < 0.001 (***): Statistically significant at 0.1% level
-    
+
     Parameters:
         p_value (float): The p-value to evaluate
-        
+
     Returns:
         str: Formatted p-value with significance stars:
              * p<0.05 (significant)
@@ -221,36 +227,37 @@ def add_significance_stars(p_value: float) -> str:
     if p_value is None or pd.isna(p_value):
         return ""
     p_str = f"{p_value:.3f}"
-    if p_value<0.001:
+    if p_value < 0.001:
         p_str += " ***"
-    elif p_value<0.01:
+    elif p_value < 0.01:
         p_str += " **"
-    elif p_value<0.05:
+    elif p_value < 0.05:
         p_str += " *"
     return p_str
+
+
+from concurrent.futures import ProcessPoolExecutor
+from typing import Tuple
 
 ###############################################################################
 # 3) BOOTSTRAP FREQUENCIES
 ###############################################################################
-import numpy as np
 import pandas as pd
-from concurrent.futures import ProcessPoolExecutor
-from typing import Tuple
 
-def _bootstrap_col(col_data: np.ndarray,
-                   size: int,
-                   n_iter: int,
-                   confidence: float) -> Tuple[float,float,float]:
+
+def _bootstrap_col(
+    col_data: np.ndarray, size: int, n_iter: int, confidence: float
+) -> Tuple[float, float, float]:
     """
     Perform bootstrap resampling for a single binary column to estimate
     proportion and confidence intervals.
-    
+
     Statistical method:
-    - Non-parametric bootstrap: Repeatedly sample with replacement to 
+    - Non-parametric bootstrap: Repeatedly sample with replacement to
       estimate the sampling distribution of a statistic (proportion)
     - Percentile method: CI bounds are determined by empirical quantiles
       of the bootstrap distribution
-    
+
     Mathematical details:
     - For each iteration i (1 to n_iter):
       1. Draw a random sample S_i of size 'size' with replacement
@@ -260,13 +267,13 @@ def _bootstrap_col(col_data: np.ndarray,
       - Lower bound: (alpha/2) percentile
       - Upper bound: (1-alpha/2) percentile
       where alpha = 1-confidence
-    
+
     Parameters:
         col_data (np.ndarray): Binary (0/1) column data
         size (int): Sample size (usually equal to original data size)
         n_iter (int): Number of bootstrap iterations
         confidence (float): Confidence level (e.g., 0.95 for 95% CI)
-        
+
     Returns:
         Tuple[float,float,float]: (mean_proportion, ci_lower, ci_upper)
     """
@@ -274,94 +281,99 @@ def _bootstrap_col(col_data: np.ndarray,
     for _ in range(n_iter):
         samp = np.random.choice(col_data, size=size, replace=True)
         proportions.append(samp.mean())
-    alpha = 1.0-confidence
-    lower = np.percentile(proportions, alpha/2*100)
-    upper = np.percentile(proportions, (1-alpha/2)*100)
+    alpha = 1.0 - confidence
+    lower = np.percentile(proportions, alpha / 2 * 100)
+    upper = np.percentile(proportions, (1 - alpha / 2) * 100)
     return (np.mean(proportions), lower, upper)
 
-def compute_bootstrap_ci(df: pd.DataFrame,
-                         n_iter: int=5000,
-                         confidence_level: float=0.95) -> pd.DataFrame:
+
+def compute_bootstrap_ci(
+    df: pd.DataFrame, n_iter: int = 5000, confidence_level: float = 0.95
+) -> pd.DataFrame:
     """
     Compute bootstrap confidence intervals for proportions in each column.
-    
+
     Statistical method:
     - Parallel implementation of non-parametric bootstrap for computational efficiency
     - Fixed confidence level (default 95%) with 5000 iterations for stable estimates
-    
+
     Mathematical details:
     - For each column, the _bootstrap_col function is called to:
       1. Generate n_iter bootstrap samples of the same size as original data
       2. Compute the proportion for each sample
       3. Calculate mean proportion and percentile-based CI
-    - Parallelization is achieved using ProcessPoolExecutor 
+    - Parallelization is achieved using ProcessPoolExecutor
       for efficient multi-core utilization
-    
+
     Parameters:
         df (pd.DataFrame): DataFrame with binary (0/1) columns
         n_iter (int): Number of bootstrap iterations (default: 5000)
         confidence_level (float): Confidence level for intervals (default: 0.95)
-        
+
     Returns:
         pd.DataFrame: Results with columns:
             - ColumnName: Original column name
             - Mean: Proportion as percentage
             - CI_Lower: Lower bound of confidence interval
             - CI_Upper: Upper bound of confidence interval
-            
+
     Note: Results are sorted by Mean in descending order.
     """
     if df.empty:
-        return pd.DataFrame(columns=["ColumnName","Mean","CI_Lower","CI_Upper"])
+        return pd.DataFrame(columns=["ColumnName", "Mean", "CI_Lower", "CI_Upper"])
 
     for c in df.columns:
         df[c] = df[c].astype(int)
 
-    results=[]
+    results = []
     size = len(df)
     with ProcessPoolExecutor() as executor:
-        futures={}
+        futures = {}
         for col in df.columns:
-            futures[col] = executor.submit(_bootstrap_col, df[col].values, size, n_iter, confidence_level)
-        for col,fut in futures.items():
+            futures[col] = executor.submit(
+                _bootstrap_col, df[col].values, size, n_iter, confidence_level
+            )
+        for col, fut in futures.items():
             try:
                 mean_val, low_val, up_val = fut.result()
-                results.append({
-                    "ColumnName": col,
-                    "Mean": round(mean_val*100,3),
-                    "CI_Lower": round(low_val*100,3),
-                    "CI_Upper": round(up_val*100,3)
-                })
+                results.append(
+                    {
+                        "ColumnName": col,
+                        "Mean": round(mean_val * 100, 3),
+                        "CI_Lower": round(low_val * 100, 3),
+                        "CI_Upper": round(up_val * 100, 3),
+                    }
+                )
             except Exception as e:
                 logging.error(f"Bootstrap for {col} failed: {e}")
     out = pd.DataFrame(results)
-    out.sort_values("Mean",ascending=False,inplace=True)
-    out.reset_index(drop=True,inplace=True)
+    out.sort_values("Mean", ascending=False, inplace=True)
+    out.reset_index(drop=True, inplace=True)
     return out
+
 
 ###############################################################################
 # 4) BASIC MDR ANALYSIS
 ###############################################################################
-def build_class_resistance(data: pd.DataFrame,
-                           pheno_cols: List[str]) -> pd.DataFrame:
+def build_class_resistance(data: pd.DataFrame, pheno_cols: List[str]) -> pd.DataFrame:
     """
     Construct a binary (0/1) matrix for antibiotic class resistance.
-    
+
     Method:
     - For each antibiotic class, combines all individual drug resistance
       indicators using logical OR operation (max function)
     - A value of 1 indicates resistance to at least one drug in that class
-    
+
     Mathematical representation:
     - Let X_i,j be the resistance status (0 or 1) of isolate i to drug j
     - Let C_k be the set of drugs belonging to class k
     - Then class resistance Y_i,k = max(X_i,j) for all j in C_k
       (equivalent to logical OR of all drug resistances in that class)
-    
+
     Parameters:
         data (pd.DataFrame): Original data with phenotypic resistance columns
         pheno_cols (List[str]): List of phenotypic resistance column names
-        
+
     Returns:
         pd.DataFrame: Binary matrix of antibiotic class resistance
     """
@@ -374,49 +386,50 @@ def build_class_resistance(data: pd.DataFrame,
             out[cls_name] = 0
     return out.astype(int)
 
-def identify_mdr_isolates(class_df: pd.DataFrame, threshold: int=3) -> pd.Series:
+
+def identify_mdr_isolates(class_df: pd.DataFrame, threshold: int = 3) -> pd.Series:
     """
     Identify Multi-Drug Resistant (MDR) isolates based on class resistance.
-    
+
     Definition:
     - An isolate is considered MDR if it shows resistance to at least
       'threshold' different antibiotic classes (default: 3)
-    
+
     Mathematical representation:
     - Let Y_i,k be the class resistance status (0 or 1) of isolate i to class k
     - Let n_i = sum(Y_i,k) for all classes k
     - Isolate i is MDR if n_i ≥ threshold
-    
+
     Parameters:
         class_df (pd.DataFrame): Antibiotic class resistance matrix (0/1)
         threshold (int): Minimum number of resistance classes for MDR (default: 3)
-        
+
     Returns:
         pd.Series: Boolean mask identifying MDR isolates
     """
-    return class_df.sum(axis=1)>=threshold
+    return class_df.sum(axis=1) >= threshold
+
 
 ###############################################################################
 # 5) AMR GENE + PATTERNS
 ###############################################################################
-def extract_amr_genes(data: pd.DataFrame,
-                      gene_cols: List[str]) -> pd.DataFrame:
+def extract_amr_genes(data: pd.DataFrame, gene_cols: List[str]) -> pd.DataFrame:
     """
     Extract antimicrobial resistance gene data as binary presence/absence.
-    
+
     Method:
     - Converts potentially mixed data types to binary (0/1) format
     - Any non-zero, non-empty value is considered present (1)
-    
+
     Data conversion details:
     - Numeric columns: All non-zero values converted to 1
     - Non-numeric columns: Values converted using the following rule:
       Value is 1 if not NA, not 0, and not empty string
-    
+
     Parameters:
         data (pd.DataFrame): Original data containing AMR gene information
         gene_cols (List[str]): Column names for AMR genes
-        
+
     Returns:
         pd.DataFrame: Binary matrix of AMR gene presence (0/1)
     """
@@ -426,71 +439,78 @@ def extract_amr_genes(data: pd.DataFrame,
             try:
                 amr[c] = amr[c].astype(int)
             except:
-                amr[c] = (~amr[c].isna() & (amr[c]!=0) & (amr[c]!='')).astype(int)
+                amr[c] = (~amr[c].isna() & (amr[c] != 0) & (amr[c] != "")).astype(int)
     return amr.astype(int)
+
 
 def get_mdr_patterns_pheno(mdr_class_df: pd.DataFrame) -> pd.Series:
     """
     Identify unique patterns of phenotypic resistance in MDR isolates.
-    
+
     Method:
     - Creates a tuple of resistance classes for each isolate
-    - Each tuple represents the specific combination of classes 
+    - Each tuple represents the specific combination of classes
       to which the isolate shows resistance
-    
+
     Pattern representation:
     - Each row in the input matrix represents an isolate
     - The pattern is a tuple of column names where the value is 1
     - Patterns are sorted alphabetically for consistency
     - Empty patterns return as ("No_Resistance",) for clarity
-    
+
     Parameters:
         mdr_class_df (pd.DataFrame): Binary matrix of class resistance in MDR isolates
-        
+
     Returns:
         pd.Series: Series with tuples of resistance patterns for each isolate
     """
+
     def row_pat(row):
-        items = [col for col,val in row.items() if val==1]
+        items = [col for col, val in row.items() if val == 1]
         return tuple(sorted(items)) if items else ("No_Resistance",)
+
     return mdr_class_df.apply(row_pat, axis=1)
+
 
 def get_mdr_patterns_geno(mdr_gene_df: pd.DataFrame) -> pd.Series:
     """
     Identify unique patterns of AMR gene presence in MDR isolates.
-    
+
     Method:
     - Creates a tuple of AMR genes present in each isolate
-    - Each tuple represents the specific combination of genes 
+    - Each tuple represents the specific combination of genes
       present in the isolate
-    
+
     Pattern representation:
     - Each row in the input matrix represents an isolate
     - The pattern is a tuple of column names where the value is 1
     - Patterns are sorted alphabetically for consistency
     - Empty patterns return as ("No_Genes",) for clarity
-    
+
     Parameters:
         mdr_gene_df (pd.DataFrame): Binary matrix of gene presence in MDR isolates
-        
+
     Returns:
         pd.Series: Series with tuples of gene patterns for each isolate
     """
+
     def row_pat(row):
-        items = [col for col,val in row.items() if val==1]
+        items = [col for col, val in row.items() if val == 1]
         return tuple(sorted(items)) if items else ("No_Genes",)
+
     return mdr_gene_df.apply(row_pat, axis=1)
 
-def bootstrap_pattern_freq(patterns: pd.Series,
-                           n_iter: int=5000,
-                           conf_level: float=0.95) -> pd.DataFrame:
+
+def bootstrap_pattern_freq(
+    patterns: pd.Series, n_iter: int = 5000, conf_level: float = 0.95
+) -> pd.DataFrame:
     """
     Calculate frequencies and bootstrap confidence intervals for resistance patterns.
-    
+
     Statistical method:
     - Non-parametric bootstrap resampling to estimate pattern frequency distribution
     - Percentile method for confidence interval calculation
-    
+
     Mathematical details:
     - Let P be the set of unique patterns
     - For each pattern p in P:
@@ -502,44 +522,42 @@ def bootstrap_pattern_freq(patterns: pd.Series,
          - Lower: (alpha/2) percentile of {f_p,1, f_p,2, ..., f_p,n_iter}
          - Upper: (1-alpha/2) percentile of {f_p,1, f_p,2, ..., f_p,n_iter}
          where alpha = 1-conf_level
-    
+
     Parameters:
         patterns (pd.Series): Series of pattern tuples
         n_iter (int): Number of bootstrap iterations (default: 5000)
         conf_level (float): Confidence level (default: 0.95 for 95% CI)
-        
+
     Returns:
         pd.DataFrame: Table with [Pattern, Count, Frequency(%), CI_Lower, CI_Upper]
     """
     from collections import Counter
+
     if patterns.empty:
-        return pd.DataFrame(columns=["Pattern","Count","Frequency(%)","CI_Lower","CI_Upper"])
+        return pd.DataFrame(columns=["Pattern", "Count", "Frequency(%)", "CI_Lower", "CI_Upper"])
     counts = Counter(patterns)
     total = len(patterns)
-    df = pd.DataFrame({
-        "Pattern": list(counts.keys()),
-        "Count": list(counts.values())
-    })
-    df["Frequency(%)"] = (df["Count"]/total)*100
+    df = pd.DataFrame({"Pattern": list(counts.keys()), "Count": list(counts.values())})
+    df["Frequency(%)"] = (df["Count"] / total) * 100
 
     def single_boot():
         s = patterns.sample(total, replace=True)
         return Counter(s)
-    
-    alpha = 1.0-conf_level
-    store = {p:[] for p in counts}
+
+    alpha = 1.0 - conf_level
+    store = {p: [] for p in counts}
     for _ in range(n_iter):
         c = single_boot()
         for pat in counts:
-            store[pat].append((c.get(pat,0)/total)*100)
+            store[pat].append((c.get(pat, 0) / total) * 100)
 
-    df["CI_Lower"]=0.0
-    df["CI_Upper"]=0.0
-    for i,r in df.iterrows():
+    df["CI_Lower"] = 0.0
+    df["CI_Upper"] = 0.0
+    for i, r in df.iterrows():
         pat = r["Pattern"]
         arr = np.array(store[pat])
-        df.at[i,"CI_Lower"] = round(np.percentile(arr, alpha/2*100), 3)
-        df.at[i,"CI_Upper"] = round(np.percentile(arr, (1-alpha/2)*100), 3)
+        df.at[i, "CI_Lower"] = round(np.percentile(arr, alpha / 2 * 100), 3)
+        df.at[i, "CI_Upper"] = round(np.percentile(arr, (1 - alpha / 2) * 100), 3)
 
     df["Frequency(%)"] = df["Frequency(%)"].round(3)
     df.sort_values("Count", ascending=False, inplace=True)
@@ -547,19 +565,20 @@ def bootstrap_pattern_freq(patterns: pd.Series,
     df["Pattern"] = df["Pattern"].apply(lambda x: ", ".join(x))
     return df
 
+
 ###############################################################################
 # 6) CO-OCCURRENCE
 ###############################################################################
-def pairwise_cooccurrence(df: pd.DataFrame,
-                          alpha: float=0.05,
-                          method: str='fdr_bh') -> pd.DataFrame:
+def pairwise_cooccurrence(
+    df: pd.DataFrame, alpha: float = 0.05, method: str = "fdr_bh"
+) -> pd.DataFrame:
     """
     Calculate statistically significant co-occurrences between all column pairs.
-    
+
     Statistical methods:
     - Contingency table analysis for each pair of binary variables
     - Multiple testing correction to control false discovery rate
-    
+
     Mathematical details:
     - For each pair of columns (A, B):
       1. Construct 2×2 contingency table
@@ -568,67 +587,69 @@ def pairwise_cooccurrence(df: pd.DataFrame,
     - After testing all pairs:
       1. Apply multiple testing correction using specified method
       2. Retain only statistically significant pairs (corrected p < alpha)
-    
+
     Multiple testing correction methods:
     - 'fdr_bh': Benjamini-Hochberg procedure (controls false discovery rate)
       Algorithm:
       1. Sort p-values in ascending order: p_1 ≤ p_2 ≤ ... ≤ p_m
       2. Find largest k such that p_k ≤ (k/m)×alpha
       3. Reject null hypotheses for all p_i where i ≤ k
-    
+
     Parameters:
         df (pd.DataFrame): Binary matrix (0/1 values)
         alpha (float): Significance threshold (default: 0.05)
         method (str): Multiple testing correction method (default: 'fdr_bh')
-        
+
     Returns:
         pd.DataFrame: Table with [Item1, Item2, Phi, Raw_p, Corrected_p]
     """
-    if df.shape[1]<2:
-        return pd.DataFrame(columns=["Item1","Item2","Phi","Corrected_p","Raw_p"])
+    if df.shape[1] < 2:
+        return pd.DataFrame(columns=["Item1", "Item2", "Phi", "Corrected_p", "Raw_p"])
 
     cols = df.columns
-    recs=[]
-    pvals=[]
-    combos=[]
+    recs = []
+    pvals = []
+    combos = []
     for i in range(len(cols)):
-        for j in range(i+1, len(cols)):
-            c1, c2=cols[i], cols[j]
+        for j in range(i + 1, len(cols)):
+            c1, c2 = cols[i], cols[j]
             tbl = pd.crosstab(df[c1], df[c2])
             _, p_val, phi_val = safe_contingency(tbl)
             if not np.isnan(p_val):
-                combos.append((c1,c2,phi_val))
+                combos.append((c1, c2, phi_val))
                 pvals.append(p_val)
 
     if not pvals:
-        return pd.DataFrame(columns=["Item1","Item2","Phi","Corrected_p","Raw_p"])
+        return pd.DataFrame(columns=["Item1", "Item2", "Phi", "Corrected_p", "Raw_p"])
 
     reject, corr, _, _ = multipletests(pvals, alpha=alpha, method=method)
-    for (it1,it2,phi), rp, cp, r in zip(combos,pvals,corr,reject):
+    for (it1, it2, phi), rp, cp, r in zip(combos, pvals, corr, reject):
         if r:
-            recs.append({
-                "Item1": it1,
-                "Item2": it2,
-                "Phi": round(phi, 3),
-                "Raw_p": round(rp, 3),
-                "Corrected_p": round(cp, 3)
-            })
+            recs.append(
+                {
+                    "Item1": it1,
+                    "Item2": it2,
+                    "Phi": round(phi, 3),
+                    "Raw_p": round(rp, 3),
+                    "Corrected_p": round(cp, 3),
+                }
+            )
     out = pd.DataFrame(recs)
     out.sort_values("Corrected_p", inplace=True)
     out.reset_index(drop=True, inplace=True)
     return out
 
-def phenotype_gene_cooccurrence(phen_df: pd.DataFrame,
-                                gene_df: pd.DataFrame,
-                                alpha: float=0.05,
-                                method: str='fdr_bh') -> pd.DataFrame:
+
+def phenotype_gene_cooccurrence(
+    phen_df: pd.DataFrame, gene_df: pd.DataFrame, alpha: float = 0.05, method: str = "fdr_bh"
+) -> pd.DataFrame:
     """
     Calculate statistically significant associations between phenotypes and genes.
-    
+
     Statistical methods:
     - Contingency table analysis for each phenotype-gene pair
     - Multiple testing correction to control false discovery rate
-    
+
     Mathematical details:
     - For each phenotype-gene pair (P, G):
       1. Construct 2×2 contingency table
@@ -637,70 +658,73 @@ def phenotype_gene_cooccurrence(phen_df: pd.DataFrame,
     - After testing all pairs:
       1. Apply multiple testing correction using specified method
       2. Retain only statistically significant pairs (corrected p < alpha)
-    
+
     Multiple testing correction methods:
     - 'fdr_bh': Benjamini-Hochberg procedure (controls false discovery rate)
       Algorithm:
       1. Sort p-values in ascending order: p_1 ≤ p_2 ≤ ... ≤ p_m
       2. Find largest k such that p_k ≤ (k/m)×alpha
       3. Reject null hypotheses for all p_i where i ≤ k
-    
+
     Parameters:
         phen_df (pd.DataFrame): Binary matrix for phenotypic resistance
         gene_df (pd.DataFrame): Binary matrix for AMR gene presence
         alpha (float): Significance threshold (default: 0.05)
         method (str): Multiple testing correction method (default: 'fdr_bh')
-        
+
     Returns:
         pd.DataFrame: Table with [Phenotype, Gene, Phi, Raw_p, Corrected_p]
     """
     if phen_df.empty or gene_df.empty:
-        return pd.DataFrame(columns=["Phenotype","Gene","Phi","Corrected_p","Raw_p"])
+        return pd.DataFrame(columns=["Phenotype", "Gene", "Phi", "Corrected_p", "Raw_p"])
 
     ph_cols = phen_df.columns
     g_cols = gene_df.columns
-    recs=[]
-    pvals=[]
-    combos=[]
+    recs = []
+    pvals = []
+    combos = []
     for ph in ph_cols:
         for gn in g_cols:
             tbl = pd.crosstab(phen_df[ph], gene_df[gn])
             _, p_val, phi_val = safe_contingency(tbl)
             if not np.isnan(p_val):
-                combos.append((ph,gn,phi_val))
+                combos.append((ph, gn, phi_val))
                 pvals.append(p_val)
 
     if not pvals:
-        return pd.DataFrame(columns=["Phenotype","Gene","Phi","Corrected_p","Raw_p"])
+        return pd.DataFrame(columns=["Phenotype", "Gene", "Phi", "Corrected_p", "Raw_p"])
 
-    reject, corr, _, _= multipletests(pvals, alpha=alpha, method=method)
-    for (p1,g1,phi), rp, cp, r in zip(combos,pvals,corr,reject):
+    reject, corr, _, _ = multipletests(pvals, alpha=alpha, method=method)
+    for (p1, g1, phi), rp, cp, r in zip(combos, pvals, corr, reject):
         if r:
-            recs.append({
-                "Phenotype": p1,
-                "Gene": g1,
-                "Phi": round(phi, 3),
-                "Raw_p": round(rp, 3),
-                "Corrected_p": round(cp, 3)
-            })
+            recs.append(
+                {
+                    "Phenotype": p1,
+                    "Gene": g1,
+                    "Phi": round(phi, 3),
+                    "Raw_p": round(rp, 3),
+                    "Corrected_p": round(cp, 3),
+                }
+            )
     out = pd.DataFrame(recs)
     out.sort_values("Corrected_p", inplace=True)
     out.reset_index(drop=True, inplace=True)
     return out
 
+
 ###############################################################################
 # 7) ASSOCIATION RULES
 ###############################################################################
-def association_rules_phenotypic(class_res_df: pd.DataFrame,
-                                 min_support: float=0.1,
-                                 lift_thresh: float=1.0) -> pd.DataFrame:
+def association_rules_phenotypic(
+    class_res_df: pd.DataFrame, min_support: float = 0.1, lift_thresh: float = 1.0
+) -> pd.DataFrame:
     """
     Discover association rules among phenotypic resistance classes.
-    
+
     Statistical methods:
     - Apriori algorithm for frequent itemset mining
     - Association rule generation with support, confidence, and lift metrics
-    
+
     Mathematical details:
     - Let D be the set of transactions (isolates)
     - For an itemset X (set of resistance classes):
@@ -715,20 +739,21 @@ def association_rules_phenotypic(class_res_df: pd.DataFrame,
         - Lift > 1: Positive association
         - Lift = 1: Independence
         - Lift < 1: Negative association
-    
+
     Parameters:
         class_res_df (pd.DataFrame): Binary matrix for antibiotic class resistance
         min_support (float): Minimum support threshold (default: 0.1 = 10% of isolates)
         lift_thresh (float): Minimum lift threshold (default: 1.0)
-        
+
     Returns:
         pd.DataFrame: Association rules with metrics (support, confidence, lift)
     """
     try:
         from mlxtend.frequent_patterns import apriori, association_rules
+
         if class_res_df.empty:
             return pd.DataFrame()
-        
+
         bool_df = class_res_df.astype(bool)
         itemsets = apriori(bool_df, min_support=min_support, use_colnames=True)
         if itemsets.empty:
@@ -736,9 +761,9 @@ def association_rules_phenotypic(class_res_df: pd.DataFrame,
         rules = association_rules(itemsets, metric="lift", min_threshold=lift_thresh)
         if rules.empty:
             return pd.DataFrame()
-        rules["antecedents"]= rules["antecedents"].apply(lambda x: ", ".join(list(x)))
-        rules["consequents"]= rules["consequents"].apply(lambda x: ", ".join(list(x)))
-        for c in ["support","confidence","lift","leverage","conviction"]:
+        rules["antecedents"] = rules["antecedents"].apply(lambda x: ", ".join(list(x)))
+        rules["consequents"] = rules["consequents"].apply(lambda x: ", ".join(list(x)))
+        for c in ["support", "confidence", "lift", "leverage", "conviction"]:
             if c in rules.columns:
                 rules[c] = rules[c].round(3)
         return rules.sort_values("lift", ascending=False).reset_index(drop=True)
@@ -746,16 +771,17 @@ def association_rules_phenotypic(class_res_df: pd.DataFrame,
         logging.warning("mlxtend not installed => skipping phenotypic association rules.")
         return pd.DataFrame()
 
-def association_rules_genes(amr_df: pd.DataFrame,
-                            min_support: float=0.1,
-                            lift_thresh: float=1.0) -> pd.DataFrame:
+
+def association_rules_genes(
+    amr_df: pd.DataFrame, min_support: float = 0.1, lift_thresh: float = 1.0
+) -> pd.DataFrame:
     """
     Discover association rules among AMR genes.
-    
+
     Statistical methods:
     - Apriori algorithm for frequent itemset mining
     - Association rule generation with support, confidence, and lift metrics
-    
+
     Mathematical details:
     - Let D be the set of transactions (isolates)
     - For an itemset X (set of AMR genes):
@@ -770,20 +796,21 @@ def association_rules_genes(amr_df: pd.DataFrame,
         - Lift > 1: Positive association
         - Lift = 1: Independence
         - Lift < 1: Negative association
-    
+
     Parameters:
         amr_df (pd.DataFrame): Binary matrix for AMR gene presence
         min_support (float): Minimum support threshold (default: 0.1 = 10% of isolates)
         lift_thresh (float): Minimum lift threshold (default: 1.0)
-        
+
     Returns:
         pd.DataFrame: Association rules with metrics (support, confidence, lift)
     """
     try:
         from mlxtend.frequent_patterns import apriori, association_rules
+
         if amr_df.empty:
             return pd.DataFrame()
-        
+
         bool_df = amr_df.astype(bool)
         itemsets = apriori(bool_df, min_support=min_support, use_colnames=True)
         if itemsets.empty:
@@ -791,9 +818,9 @@ def association_rules_genes(amr_df: pd.DataFrame,
         rules = association_rules(itemsets, metric="lift", min_threshold=lift_thresh)
         if rules.empty:
             return pd.DataFrame()
-        rules["antecedents"]= rules["antecedents"].apply(lambda x: ", ".join(list(x)))
-        rules["consequents"]= rules["consequents"].apply(lambda x: ", ".join(list(x)))
-        for c in ["support","confidence","lift","leverage","conviction"]:
+        rules["antecedents"] = rules["antecedents"].apply(lambda x: ", ".join(list(x)))
+        rules["consequents"] = rules["consequents"].apply(lambda x: ", ".join(list(x)))
+        for c in ["support", "confidence", "lift", "leverage", "conviction"]:
             if c in rules.columns:
                 rules[c] = rules[c].round(3)
         return rules.sort_values("lift", ascending=False).reset_index(drop=True)
@@ -801,24 +828,27 @@ def association_rules_genes(amr_df: pd.DataFrame,
         logging.warning("mlxtend not installed => skipping gene association rules.")
         return pd.DataFrame()
 
+
 ###############################################################################
 # 8) HYBRID NETWORK
 ###############################################################################
-def build_hybrid_co_resistance_network(data: pd.DataFrame,
-                                       pheno_cols: List[str],
-                                       gene_cols: List[str],
-                                       alpha: float=0.05,
-                                       method: str='fdr_bh') -> nx.Graph:
+def build_hybrid_co_resistance_network(
+    data: pd.DataFrame,
+    pheno_cols: List[str],
+    gene_cols: List[str],
+    alpha: float = 0.05,
+    method: str = "fdr_bh",
+) -> nx.Graph:
     """
     Build an integrated network of phenotypic resistances and AMR genes.
-    
+
     Network construction method:
     - Nodes represent either antibiotic classes or AMR genes
     - Edges represent statistically significant associations
     - Three types of edges: phenotype-phenotype, gene-gene, phenotype-gene
     - Edge weights correspond to association strength (phi coefficient)
     - Only statistically significant associations (after correction) are included
-    
+
     Mathematical details:
     - For all pairs of variables (phenotypes and genes):
       1. Construct 2×2 contingency table
@@ -829,14 +859,14 @@ def build_hybrid_co_resistance_network(data: pd.DataFrame,
       * phi: Strength and direction of association (-1 to +1)
       * pvalue: Corrected p-value
       * edge_type: Relationship type (pheno-pheno, gene-gene, pheno-gene)
-    
+
     Parameters:
         data (pd.DataFrame): Dataset with both phenotype and gene columns
         pheno_cols (List[str]): List of phenotypic resistance columns
         gene_cols (List[str]): List of AMR gene columns
         alpha (float): Significance threshold (default: 0.05)
         method (str): Multiple testing correction method (default: 'fdr_bh')
-        
+
     Returns:
         nx.Graph: NetworkX graph with significant associations as edges
     """
@@ -844,15 +874,15 @@ def build_hybrid_co_resistance_network(data: pd.DataFrame,
         return nx.Graph()
 
     all_cols = pheno_cols + gene_cols
-    pvals=[]
-    combos=[]
+    pvals = []
+    combos = []
 
     # Calculate all pairwise associations
-    for c1, c2 in combinations(all_cols,2):
+    for c1, c2 in combinations(all_cols, 2):
         tab = pd.crosstab(data[c1], data[c2])
         _, p_val, phi_val = safe_contingency(tab)
         if not np.isnan(p_val):
-            combos.append((c1,c2,phi_val,p_val))
+            combos.append((c1, c2, phi_val, p_val))
 
     if not combos:
         return nx.Graph()
@@ -871,7 +901,7 @@ def build_hybrid_co_resistance_network(data: pd.DataFrame,
         G.add_node(g, node_type="Genotype")
 
     # Add significant edges (avoiding isolated nodes)
-    for (c1,c2,phi,pv), c_p, is_sig in zip(combos, corrected, reject):
+    for (c1, c2, phi, pv), c_p, is_sig in zip(combos, corrected, reject):
         if is_sig:
             # determine edge type
             if (c1 in pheno_cols) and (c2 in pheno_cols):
@@ -887,14 +917,15 @@ def build_hybrid_co_resistance_network(data: pd.DataFrame,
 
     return G
 
+
 def compute_louvain_communities(G: nx.Graph) -> pd.DataFrame:
     """
     Identify communities in the hybrid network using the Louvain algorithm.
-    
+
     Statistical method:
     - Louvain algorithm for community detection in networks
     - Based on modularity optimization
-    
+
     Mathematical details:
     - Modularity (Q): Measures the density of links inside communities
       compared to links between communities
@@ -905,7 +936,7 @@ def compute_louvain_communities(G: nx.Graph) -> pd.DataFrame:
       * k_i, k_j are degrees of nodes i and j
       * c_i, c_j are communities of nodes i and j
       * δ is the Kronecker delta (1 if c_i=c_j, 0 otherwise)
-    
+
     Louvain algorithm steps:
     1. Initialize each node as its own community
     2. Iterative process:
@@ -914,37 +945,39 @@ def compute_louvain_communities(G: nx.Graph) -> pd.DataFrame:
        c. Repeat until no improvement in modularity
     3. Aggregate nodes in same community and build new network
     4. Repeat steps 2-3 until no further improvements
-    
+
     Parameters:
         G (nx.Graph): NetworkX graph of the hybrid network
-        
+
     Returns:
         pd.DataFrame: Table with [Node, Community] mapping
     """
-    if G.number_of_nodes()==0:
-        return pd.DataFrame(columns=["Node","Community"])
-    
+    if G.number_of_nodes() == 0:
+        return pd.DataFrame(columns=["Node", "Community"])
+
     try:
         from networkx.algorithms import community
-        cset = list(community.louvain_communities(G, weight='phi'))
-        recs=[]
-        for i, comm in enumerate(cset,1):
+
+        cset = list(community.louvain_communities(G, weight="phi"))
+        recs = []
+        for i, comm in enumerate(cset, 1):
             for nd in comm:
                 recs.append({"Node": nd, "Community": i})
-        df = pd.DataFrame(recs).sort_values(["Community","Node"])
-        df.reset_index(drop=True,inplace=True)
+        df = pd.DataFrame(recs).sort_values(["Community", "Node"])
+        df.reset_index(drop=True, inplace=True)
         return df
     except ImportError:
         logging.warning("networkx-louvain not installed => skipping communities.")
-        return pd.DataFrame(columns=["Node","Community"])
+        return pd.DataFrame(columns=["Node", "Community"])
     except Exception as e:
         logging.warning(f"Louvain error: {e}")
-        return pd.DataFrame(columns=["Node","Community"])
+        return pd.DataFrame(columns=["Node", "Community"])
+
 
 def create_hybrid_network_figure(G: nx.Graph) -> str:
     """
     Create an interactive visualization of the hybrid network.
-    
+
     Visualization details:
     - Force-directed layout algorithm (Fruchterman-Reingold variant)
     - Node color based on type: phenotype (red), gene (blue)
@@ -957,22 +990,22 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
       * Hover information for nodes and edges
       * Zoom and pan capabilities
       * Download options (PNG, SVG, CSV)
-    
+
     Layout algorithm:
     - Modified spring layout based on node-node repulsion
       and edge-based attraction
     - Position optimization using 50 iterations
     - Fixed random seed (42) for reproducibility
-    
+
     Parameters:
         G (nx.Graph): NetworkX graph of the hybrid network
-        
+
     Returns:
         tuple: (HTML string for interactive Plotly figure, Figure object)
     """
     import plotly.graph_objs as go
 
-    if G.number_of_nodes()==0:
+    if G.number_of_nodes() == 0:
         return "<p>No hybrid network to display.</p>", None
 
     # Use a force-directed layout algorithm for better node positioning
@@ -987,10 +1020,10 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
     for u, v, d in G.edges(data=True):
         x0, y0 = pos[u]
         x1, y1 = pos[v]
-        edge_type = d.get('edge_type', "unknown")
+        edge_type = d.get("edge_type", "unknown")
 
-        phi = d.get('phi', 0)
-        pval = d.get('pvalue', np.nan)
+        phi = d.get("phi", 0)
+        pval = d.get("pvalue", np.nan)
         st = add_significance_stars(pval)
 
         # Detailed edge information
@@ -1014,34 +1047,43 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
     traces = []
 
     if edge_x_pheno_pheno:
-        traces.append(go.Scatter(
-            x=edge_x_pheno_pheno, y=edge_y_pheno_pheno,
-            mode='lines',
-            line=dict(width=2, color='rgba(255,0,0,0.5)'),
-            hoverinfo='text',
-            text=edge_text_pheno_pheno,
-            name='pheno-pheno'
-        ))
+        traces.append(
+            go.Scatter(
+                x=edge_x_pheno_pheno,
+                y=edge_y_pheno_pheno,
+                mode="lines",
+                line=dict(width=2, color="rgba(255,0,0,0.5)"),
+                hoverinfo="text",
+                text=edge_text_pheno_pheno,
+                name="pheno-pheno",
+            )
+        )
 
     if edge_x_gene_gene:
-        traces.append(go.Scatter(
-            x=edge_x_gene_gene, y=edge_y_gene_gene,
-            mode='lines',
-            line=dict(width=2, color='rgba(0,0,255,0.5)'),
-            hoverinfo='text',
-            text=edge_text_gene_gene,
-            name='gene-gene'
-        ))
+        traces.append(
+            go.Scatter(
+                x=edge_x_gene_gene,
+                y=edge_y_gene_gene,
+                mode="lines",
+                line=dict(width=2, color="rgba(0,0,255,0.5)"),
+                hoverinfo="text",
+                text=edge_text_gene_gene,
+                name="gene-gene",
+            )
+        )
 
     if edge_x_pheno_gene:
-        traces.append(go.Scatter(
-            x=edge_x_pheno_gene, y=edge_y_pheno_gene,
-            mode='lines',
-            line=dict(width=2, color='rgba(128,0,128,0.5)'),
-            hoverinfo='text',
-            text=edge_text_pheno_gene,
-            name='pheno-gene'
-        ))
+        traces.append(
+            go.Scatter(
+                x=edge_x_pheno_gene,
+                y=edge_y_pheno_gene,
+                mode="lines",
+                line=dict(width=2, color="rgba(128,0,128,0.5)"),
+                hoverinfo="text",
+                text=edge_text_pheno_gene,
+                name="pheno-gene",
+            )
+        )
 
     # Node trace
     node_x, node_y = [], []
@@ -1063,7 +1105,7 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
 
         # Node size based on degree
         deg = nx.degree(G, node)
-        size_val = 15 + 3*deg
+        size_val = 15 + 3 * deg
         marker_size.append(size_val)
 
         # Node label
@@ -1077,20 +1119,19 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
         hover_text.append(hover_info)
 
     # Add node trace
-    traces.append(go.Scatter(
-        x=node_x, y=node_y,
-        mode='markers+text',
-        text=node_text,
-        textposition='top center',
-        hoverinfo='text',
-        hovertext=hover_text,
-        marker=dict(
-            size=marker_size,
-            color=marker_color,
-            line=dict(width=1, color='#333')
-        ),
-        name='Nodes'
-    ))
+    traces.append(
+        go.Scatter(
+            x=node_x,
+            y=node_y,
+            mode="markers+text",
+            text=node_text,
+            textposition="top center",
+            hoverinfo="text",
+            hovertext=hover_text,
+            marker=dict(size=marker_size, color=marker_color, line=dict(width=1, color="#333")),
+            name="Nodes",
+        )
+    )
 
     # Create figure with all traces
     fig = go.Figure(
@@ -1098,7 +1139,7 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
         layout=go.Layout(
             title=dict(text="Hybrid Co-resistance Network", font=dict(size=18)),
             showlegend=True,
-            hovermode='closest',
+            hovermode="closest",
             width=1000,
             height=800,
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
@@ -1111,43 +1152,39 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
                     direction="left",
                     buttons=[
                         dict(
-                            args=[{"width": 1000, "height": 800}],
-                            label="Reset",
-                            method="relayout"
+                            args=[{"width": 1000, "height": 800}], label="Reset", method="relayout"
                         ),
                         dict(
                             args=[{"width": 1500, "height": 1200}],
                             label="Enlarge",
-                            method="relayout"
-                        )
+                            method="relayout",
+                        ),
                     ],
                     pad={"r": 10, "t": 10},
                     showactive=False,
                     x=0.1,
                     xanchor="left",
                     y=1.1,
-                    yanchor="top"
+                    yanchor="top",
                 )
-            ]
-        )
+            ],
+        ),
     )
 
     # Add download options
     config = {
-        'toImageButtonOptions': {
-            'format': 'png',
-            'filename': 'hybrid_network',
-            'height': 800,
-            'width': 1000,
-            'scale': 2
+        "toImageButtonOptions": {
+            "format": "png",
+            "filename": "hybrid_network",
+            "height": 800,
+            "width": 1000,
+            "scale": 2,
         },
-        'modeBarButtonsToAdd': [
-            'downloadSVG',
-            'downloadCSV'
-        ]
+        "modeBarButtonsToAdd": ["downloadSVG", "downloadCSV"],
     }
 
-    return fig.to_html(full_html=False, include_plotlyjs='cdn', config=config), fig
+    return fig.to_html(full_html=False, include_plotlyjs="cdn", config=config), fig
+
 
 ###############################################################################
 # 9) REPORT + MAIN
@@ -1155,18 +1192,18 @@ def create_hybrid_network_figure(G: nx.Graph) -> str:
 def df_to_html(df: pd.DataFrame, caption: str) -> str:
     """
     Convert DataFrame to enhanced HTML table with interactive features.
-    
+
     Presentation details:
     - Integrates DataTables jQuery plugin for enhanced functionality
     - Adds interactive features: search, sort, pagination
     - Includes data export options (copy, CSV, Excel, PDF)
     - Creates unique ID for each table to allow multiple tables on page
     - Handles empty dataframes with informative message
-    
+
     Parameters:
         df (pd.DataFrame): Data to be displayed in the table
         caption (str): Table title/caption
-        
+
     Returns:
         str: HTML code for interactive DataTables display
     """
@@ -1175,11 +1212,12 @@ def df_to_html(df: pd.DataFrame, caption: str) -> str:
 
     # Generate unique ID for this table
     import hashlib
+
     table_id = f"table_{hashlib.md5(caption.encode()).hexdigest()[:8]}"
 
     # Round all float columns to 3 decimal places
     for col in df.columns:
-        if df[col].dtype == 'float64' or df[col].dtype == 'float32':
+        if df[col].dtype == "float64" or df[col].dtype == "float32":
             df[col] = df[col].round(3)
 
     # Convert DataFrame to HTML table with unique ID
@@ -1203,6 +1241,7 @@ def df_to_html(df: pd.DataFrame, caption: str) -> str:
 
     return f"<h4>{caption}</h4>\n<div class='table-responsive'>{html_table}</div>\n{script}"
 
+
 def generate_html_report(
     data: pd.DataFrame,
     class_res_all: pd.DataFrame,
@@ -1223,24 +1262,24 @@ def generate_html_report(
     hybrid_net: nx.Graph,
     edges_df: pd.DataFrame,
     comm_df: pd.DataFrame,
-    net_html: str
+    net_html: str,
 ) -> str:
     """
     Generate comprehensive HTML report with all analysis results.
-    
+
     Report structure:
     - Header with timestamp and dataset overview
     - Separate sections for each analysis type
     - Interactive tables and visualizations
     - Detailed statistical methodology descriptions
     - Downloads and export functionality
-    
+
     Technical details:
     - HTML5 compliant structure with responsive design
     - CSS styling for readability and visual consistency
     - jQuery and DataTables for client-side interactivity
     - Plotly for network visualization
-    
+
     Parameters:
         data: Original dataset
         class_res_all: Class resistance matrix (all isolates)
@@ -1262,7 +1301,7 @@ def generate_html_report(
         edges_df: Significant edges in the network
         comm_df: Communities identified in the network
         net_html: Interactive network visualization HTML
-        
+
     Returns:
         str: Complete HTML report with all visualizations and tables
     """
@@ -1664,7 +1703,7 @@ def generate_html_report(
 </html>
 """
     return html
-
+
 
 def generate_excel_report(
     data: pd.DataFrame,
@@ -1686,11 +1725,11 @@ def generate_excel_report(
     hybrid_net: nx.Graph,
     edges_df: pd.DataFrame,
     comm_df: pd.DataFrame,
-    fig_network=None
+    fig_network=None,
 ) -> str:
     """
     Generate comprehensive Excel report with all analysis results and PNG charts.
-    
+
     This function creates a detailed Excel workbook with multiple sheets containing:
     - Dataset overview and metadata
     - Methodology descriptions
@@ -1700,9 +1739,9 @@ def generate_excel_report(
     - Association rules
     - Network analysis results
     - Community detection outcomes
-    
+
     All network visualizations are saved as PNG files.
-    
+
     Parameters:
         data: Original dataset
         class_res_all: Class resistance matrix (all isolates)
@@ -1724,20 +1763,22 @@ def generate_excel_report(
         edges_df: Significant edges in the network
         comm_df: Communities identified in the network
         fig_network: Plotly figure object for the network (optional)
-        
+
     Returns:
         str: Path to generated Excel file
     """
     # Initialize Excel report generator
     excel_gen = ExcelReportGenerator(output_folder="output")
-    
+
     # Save network visualization as PNG if available
     if fig_network is not None:
         try:
-            excel_gen.save_plotly_figure_fallback(fig_network, "hybrid_network_visualization", width=1400, height=1000)
+            excel_gen.save_plotly_figure_fallback(
+                fig_network, "hybrid_network_visualization", width=1400, height=1000
+            )
         except Exception as e:
             print(f"Could not save network visualization: {e}")
-    
+
     # Prepare methodology description
     methodology = {
         "Bootstrap Resampling": (
@@ -1765,134 +1806,180 @@ def generate_excel_report(
             "Network combining phenotype-gene, phenotype-phenotype, and gene-gene edges. "
             "Edges represent significant associations (corrected p < 0.05). "
             "Louvain community detection identifies functional modules."
-        )
+        ),
     }
-    
+
     # Prepare sheets data
     sheets_data = {}
-    
+
     # Dataset Overview
     overview_data = {
-        'Metric': [
-            'Total Isolates',
-            'MDR Isolates',
-            'MDR Percentage',
-            'Phenotype Columns',
-            'Gene Columns'
+        "Metric": [
+            "Total Isolates",
+            "MDR Isolates",
+            "MDR Percentage",
+            "Phenotype Columns",
+            "Gene Columns",
         ],
-        'Value': [
+        "Value": [
             len(data),
             len(class_res_mdr) if class_res_mdr is not None else 0,
-            f"{(len(class_res_mdr) / len(data) * 100):.2f}%" if class_res_mdr is not None and len(data) > 0 else "N/A",
-            len([c for c in data.columns if 'MIC_' in c or 'Resistance_' in c]),
-            len([c for c in data.columns if c not in ['Strain_ID'] and 'MIC_' not in c and 'Resistance_' not in c])
-        ]
+            (
+                f"{(len(class_res_mdr) / len(data) * 100):.2f}%"
+                if class_res_mdr is not None and len(data) > 0
+                else "N/A"
+            ),
+            len([c for c in data.columns if "MIC_" in c or "Resistance_" in c]),
+            len(
+                [
+                    c
+                    for c in data.columns
+                    if c not in ["Strain_ID"] and "MIC_" not in c and "Resistance_" not in c
+                ]
+            ),
+        ],
     }
-    sheets_data['Dataset_Overview'] = (pd.DataFrame(overview_data), "Summary statistics for the analyzed dataset")
-    
+    sheets_data["Dataset_Overview"] = (
+        pd.DataFrame(overview_data),
+        "Summary statistics for the analyzed dataset",
+    )
+
     # Frequency Analyses
     if freq_pheno_all is not None and not freq_pheno_all.empty:
-        sheets_data['Freq_Pheno_All'] = (freq_pheno_all, "Phenotypic resistance frequencies in all isolates")
-    
+        sheets_data["Freq_Pheno_All"] = (
+            freq_pheno_all,
+            "Phenotypic resistance frequencies in all isolates",
+        )
+
     if freq_pheno_mdr is not None and not freq_pheno_mdr.empty:
-        sheets_data['Freq_Pheno_MDR'] = (freq_pheno_mdr, "Phenotypic resistance frequencies in MDR isolates")
-    
+        sheets_data["Freq_Pheno_MDR"] = (
+            freq_pheno_mdr,
+            "Phenotypic resistance frequencies in MDR isolates",
+        )
+
     if freq_gene_all is not None and not freq_gene_all.empty:
-        sheets_data['Freq_Gene_All'] = (freq_gene_all, "AMR gene frequencies in all isolates")
-    
+        sheets_data["Freq_Gene_All"] = (freq_gene_all, "AMR gene frequencies in all isolates")
+
     if freq_gene_mdr is not None and not freq_gene_mdr.empty:
-        sheets_data['Freq_Gene_MDR'] = (freq_gene_mdr, "AMR gene frequencies in MDR isolates")
-    
+        sheets_data["Freq_Gene_MDR"] = (freq_gene_mdr, "AMR gene frequencies in MDR isolates")
+
     # Pattern Analyses
     if pat_pheno_mdr is not None and not pat_pheno_mdr.empty:
-        sheets_data['Patterns_Pheno_MDR'] = (pat_pheno_mdr, "Phenotypic resistance patterns in MDR isolates")
-    
+        sheets_data["Patterns_Pheno_MDR"] = (
+            pat_pheno_mdr,
+            "Phenotypic resistance patterns in MDR isolates",
+        )
+
     if pat_gene_mdr is not None and not pat_gene_mdr.empty:
-        sheets_data['Patterns_Gene_MDR'] = (pat_gene_mdr, "AMR gene patterns in MDR isolates")
-    
+        sheets_data["Patterns_Gene_MDR"] = (pat_gene_mdr, "AMR gene patterns in MDR isolates")
+
     # Co-occurrence Analyses
     if coocc_pheno_mdr is not None and not coocc_pheno_mdr.empty:
-        sheets_data['Coocc_Pheno_MDR'] = (coocc_pheno_mdr, "Co-occurrence among antibiotic classes in MDR")
-    
+        sheets_data["Coocc_Pheno_MDR"] = (
+            coocc_pheno_mdr,
+            "Co-occurrence among antibiotic classes in MDR",
+        )
+
     if coocc_gene_mdr is not None and not coocc_gene_mdr.empty:
-        sheets_data['Coocc_Gene_MDR'] = (coocc_gene_mdr, "Co-occurrence among AMR genes in MDR")
-    
+        sheets_data["Coocc_Gene_MDR"] = (coocc_gene_mdr, "Co-occurrence among AMR genes in MDR")
+
     # Association Analyses
     if gene_pheno_assoc is not None and not gene_pheno_assoc.empty:
-        sheets_data['Gene_Pheno_Assoc'] = (gene_pheno_assoc, "Gene-Phenotype associations with statistical significance")
-    
+        sheets_data["Gene_Pheno_Assoc"] = (
+            gene_pheno_assoc,
+            "Gene-Phenotype associations with statistical significance",
+        )
+
     if assoc_rules_pheno is not None and not assoc_rules_pheno.empty:
-        sheets_data['Assoc_Rules_Pheno'] = (assoc_rules_pheno, "Association rules for phenotypic resistances")
-    
+        sheets_data["Assoc_Rules_Pheno"] = (
+            assoc_rules_pheno,
+            "Association rules for phenotypic resistances",
+        )
+
     if assoc_rules_genes is not None and not assoc_rules_genes.empty:
-        sheets_data['Assoc_Rules_Genes'] = (assoc_rules_genes, "Association rules for AMR genes")
-    
+        sheets_data["Assoc_Rules_Genes"] = (assoc_rules_genes, "Association rules for AMR genes")
+
     # Network Analyses
     if edges_df is not None and not edges_df.empty:
-        sheets_data['Network_Edges'] = (edges_df, f"Significant edges in hybrid network (total: {len(edges_df)})")
-    
+        sheets_data["Network_Edges"] = (
+            edges_df,
+            f"Significant edges in hybrid network (total: {len(edges_df)})",
+        )
+
     if comm_df is not None and not comm_df.empty:
-        sheets_data['Network_Communities'] = (comm_df, f"Louvain communities in network (total: {comm_df['Community'].nunique()} communities)")
-    
+        sheets_data["Network_Communities"] = (
+            comm_df,
+            f"Louvain communities in network (total: {comm_df['Community'].nunique()} communities)",
+        )
+
     # Network Statistics
     if hybrid_net is not None and hybrid_net.number_of_nodes() > 0:
         network_stats = {
-            'Metric': [
-                'Total Nodes',
-                'Total Edges',
-                'Phenotype Nodes',
-                'Gene Nodes',
-                'Average Degree',
-                'Network Density',
-                'Number of Communities'
+            "Metric": [
+                "Total Nodes",
+                "Total Edges",
+                "Phenotype Nodes",
+                "Gene Nodes",
+                "Average Degree",
+                "Network Density",
+                "Number of Communities",
             ],
-            'Value': [
+            "Value": [
                 hybrid_net.number_of_nodes(),
                 hybrid_net.number_of_edges(),
-                len([n for n, d in hybrid_net.nodes(data=True) if d.get('node_type') == 'Phenotype']),
-                len([n for n, d in hybrid_net.nodes(data=True) if d.get('node_type') == 'Gene']),
-                f"{sum(dict(hybrid_net.degree()).values()) / hybrid_net.number_of_nodes():.2f}" if hybrid_net.number_of_nodes() > 0 else 0,
+                len(
+                    [n for n, d in hybrid_net.nodes(data=True) if d.get("node_type") == "Phenotype"]
+                ),
+                len([n for n, d in hybrid_net.nodes(data=True) if d.get("node_type") == "Gene"]),
+                (
+                    f"{sum(dict(hybrid_net.degree()).values()) / hybrid_net.number_of_nodes():.2f}"
+                    if hybrid_net.number_of_nodes() > 0
+                    else 0
+                ),
                 f"{nx.density(hybrid_net):.4f}",
-                comm_df['Community'].nunique() if comm_df is not None and not comm_df.empty else 0
-            ]
+                comm_df["Community"].nunique() if comm_df is not None and not comm_df.empty else 0,
+            ],
         }
-        sheets_data['Network_Stats'] = (pd.DataFrame(network_stats), "Overall network statistics and topology metrics")
-    
+        sheets_data["Network_Stats"] = (
+            pd.DataFrame(network_stats),
+            "Overall network statistics and topology metrics",
+        )
+
     # Prepare metadata
     metadata = {
-        'Total_Isolates': len(data),
-        'MDR_Isolates': len(class_res_mdr) if class_res_mdr is not None else 0,
-        'Network_Nodes': hybrid_net.number_of_nodes() if hybrid_net is not None else 0,
-        'Network_Edges': hybrid_net.number_of_edges() if hybrid_net is not None else 0,
-        'Bootstrap_Iterations': 5000,
-        'FDR_Threshold': 0.05
+        "Total_Isolates": len(data),
+        "MDR_Isolates": len(class_res_mdr) if class_res_mdr is not None else 0,
+        "Network_Nodes": hybrid_net.number_of_nodes() if hybrid_net is not None else 0,
+        "Network_Edges": hybrid_net.number_of_edges() if hybrid_net is not None else 0,
+        "Bootstrap_Iterations": 5000,
+        "FDR_Threshold": 0.05,
     }
-    
+
     # Generate Excel report
     excel_path = excel_gen.generate_excel_report(
         report_name="MDR_Analysis_Hybrid_Report",
         sheets_data=sheets_data,
         methodology=methodology,
-        **metadata
+        **metadata,
     )
-    
+
     return excel_path
 
 
-def save_report(html_code: str, out_dir: str="output") -> str:
+def save_report(html_code: str, out_dir: str = "output") -> str:
     """
     Save the HTML report to a file with timestamp.
-    
+
     File handling details:
     - Creates output directory if it doesn't exist
     - Uses Unix timestamp for unique filename
     - UTF-8 encoding for proper character handling
     - Logs the file path for reference
-    
+
     Parameters:
         html_code (str): Complete HTML report content
         out_dir (str): Output directory path (default: "output")
-        
+
     Returns:
         str: Path to the saved HTML file
     """
@@ -1900,10 +1987,11 @@ def save_report(html_code: str, out_dir: str="output") -> str:
     ts = int(time.time())
     fname = f"mdr_analysis_hybrid_{ts}.html"
     path = os.path.join(out_dir, fname)
-    with open(path,"w",encoding='utf-8') as f:
+    with open(path, "w", encoding="utf-8") as f:
         f.write(html_code)
     logging.info(f"Report saved => {path}")
     return path
+
 
 ###############################################################################
 # MAIN
@@ -1911,19 +1999,19 @@ def save_report(html_code: str, out_dir: str="output") -> str:
 def main():
     """
     Main function that orchestrates the entire analysis pipeline.
-    
+
     Execution flow:
     1. Environment initialization and data loading
     2. Preprocessing and identification of phenotype/genotype columns
     3. MDR classification based on class resistance
     4. Frequency analysis with bootstrap confidence intervals
-    5. Pattern identification and quantification 
+    5. Pattern identification and quantification
     6. Co-occurrence analysis for phenotypes and genes
     7. Association rule mining for predictive patterns
     8. Hybrid network construction and community detection
     9. Interactive visualization generation
     10. Comprehensive HTML report creation
-    
+
     Statistical considerations:
     - Correction for multiple testing using Benjamini-Hochberg FDR
     - Bootstrap resampling for non-parametric confidence intervals
@@ -1935,7 +2023,7 @@ def main():
 
     csv_path = setup_environment()
     try:
-        data = pd.read_csv(csv_path, sep=None, engine='python')
+        data = pd.read_csv(csv_path, sep=None, engine="python")
     except Exception as e:
         logging.error(f"Error reading CSV: {e}")
         return
@@ -1945,8 +2033,10 @@ def main():
     # Identify phenotype vs. genotype columns
     antibiotic_list = [d for arr in ANTIBIOTIC_CLASSES.values() for d in arr]
     phenotype_cols = [c for c in data.columns if c in antibiotic_list]
-    skip_cols = {"id","strain","sample","isolate","date","strain_id"}
-    genotype_cols = [c for c in data.columns if c not in phenotype_cols and c.lower() not in skip_cols]
+    skip_cols = {"id", "strain", "sample", "isolate", "date", "strain_id"}
+    genotype_cols = [
+        c for c in data.columns if c not in phenotype_cols and c.lower() not in skip_cols
+    ]
 
     # 1) Build class-based resistance matrix and identify MDR isolates
     class_res_all = build_class_resistance(data, phenotype_cols)
@@ -1958,26 +2048,26 @@ def main():
     amr_mdr = amr_all[mdr_mask]
 
     # 3) Calculate frequencies with bootstrap confidence intervals
-    freq_pheno_all = compute_bootstrap_ci(class_res_all,5000,0.95)
-    freq_pheno_mdr = compute_bootstrap_ci(class_res_mdr,5000,0.95)
-    freq_gene_all = compute_bootstrap_ci(amr_all,5000,0.95)
-    freq_gene_mdr = compute_bootstrap_ci(amr_mdr,5000,0.95)
+    freq_pheno_all = compute_bootstrap_ci(class_res_all, 5000, 0.95)
+    freq_pheno_mdr = compute_bootstrap_ci(class_res_mdr, 5000, 0.95)
+    freq_gene_all = compute_bootstrap_ci(amr_all, 5000, 0.95)
+    freq_gene_mdr = compute_bootstrap_ci(amr_mdr, 5000, 0.95)
 
     # 4) Analyze resistance patterns
     pheno_mdr_ser = get_mdr_patterns_pheno(class_res_mdr)
-    pat_pheno_mdr = bootstrap_pattern_freq(pheno_mdr_ser, 5000,0.95)
+    pat_pheno_mdr = bootstrap_pattern_freq(pheno_mdr_ser, 5000, 0.95)
 
     gene_mdr_ser = get_mdr_patterns_geno(amr_mdr)
-    pat_gene_mdr = bootstrap_pattern_freq(gene_mdr_ser,5000,0.95)
+    pat_gene_mdr = bootstrap_pattern_freq(gene_mdr_ser, 5000, 0.95)
 
     # 5) Analyze co-occurrence among antibiotic classes in MDR isolates
-    if class_res_mdr.shape[1]>1:
+    if class_res_mdr.shape[1] > 1:
         coocc_pheno_mdr = pairwise_cooccurrence(class_res_mdr)
     else:
         coocc_pheno_mdr = pd.DataFrame()
 
     # 6) Analyze co-occurrence among AMR genes in MDR isolates
-    if amr_mdr.shape[1]>1:
+    if amr_mdr.shape[1] > 1:
         coocc_gene_mdr = pairwise_cooccurrence(amr_mdr)
     else:
         coocc_gene_mdr = pd.DataFrame()
@@ -1990,26 +2080,30 @@ def main():
     assoc_genes = association_rules_genes(amr_all)
 
     # 9) Prepare data for hybrid network analysis
-    df_hybrid = data[phenotype_cols+genotype_cols].copy()
+    df_hybrid = data[phenotype_cols + genotype_cols].copy()
     for c in df_hybrid.columns:
-        df_hybrid[c] = df_hybrid[c].apply(lambda x: 1 if x!=0 else 0 if pd.notna(x) else 0)
+        df_hybrid[c] = df_hybrid[c].apply(lambda x: 1 if x != 0 else 0 if pd.notna(x) else 0)
 
     # 10) Build enhanced hybrid network
-    hybrid_net = build_hybrid_co_resistance_network(df_hybrid, phenotype_cols, genotype_cols, alpha=0.05, method='fdr_bh')
+    hybrid_net = build_hybrid_co_resistance_network(
+        df_hybrid, phenotype_cols, genotype_cols, alpha=0.05, method="fdr_bh"
+    )
 
     # 11) Extract network edges for tabular display
-    edges_list=[]
-    for u,v,d in hybrid_net.edges(data=True):
-        pval = d.get('pvalue',np.nan)
-        ety = d.get('edge_type', "unknown")
-        edges_list.append({
-            "Node1": u,
-            "Node2": v,
-            "Edge_Type": ety,
-            "Phi": round(d.get('phi',0),3),
-            "p-value": round(pval,3),
-            "Significance": add_significance_stars(pval)
-        })
+    edges_list = []
+    for u, v, d in hybrid_net.edges(data=True):
+        pval = d.get("pvalue", np.nan)
+        ety = d.get("edge_type", "unknown")
+        edges_list.append(
+            {
+                "Node1": u,
+                "Node2": v,
+                "Edge_Type": ety,
+                "Phi": round(d.get("phi", 0), 3),
+                "p-value": round(pval, 3),
+                "Significance": add_significance_stars(pval),
+            }
+        )
     edges_df = pd.DataFrame(edges_list).sort_values("p-value") if edges_list else pd.DataFrame()
 
     # 12) Detect network communities
@@ -2039,12 +2133,12 @@ def main():
         hybrid_net=hybrid_net,
         edges_df=edges_df,
         comm_df=comm_df,
-        net_html=net_html
+        net_html=net_html,
     )
 
     # 15) Save HTML report
     out_html = save_report(html_report, "output")
-    
+
     # 16) Generate and save Excel report with PNG charts
     excel_path = generate_excel_report(
         data=data,
@@ -2066,14 +2160,14 @@ def main():
         hybrid_net=hybrid_net,
         edges_df=edges_df,
         comm_df=comm_df,
-        fig_network=fig_network
+        fig_network=fig_network,
     )
-    
+
     end_time = time.time()
     logging.info(f"Hybrid pipeline completed in {end_time - start_time:.2f}s")
     logging.info(f"HTML report: {out_html}")
     logging.info(f"Excel report: {excel_path}")
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

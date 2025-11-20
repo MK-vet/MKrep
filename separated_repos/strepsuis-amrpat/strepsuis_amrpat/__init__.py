@@ -15,8 +15,4 @@ __license__ = "MIT"
 from .analyzer import MDRAnalyzer
 from .config import Config
 
-__all__ = [
-    "MDRAnalyzer",
-    "Config",
-    "__version__"
-]
+__all__ = ["MDRAnalyzer", "Config", "__version__"]

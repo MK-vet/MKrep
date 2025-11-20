@@ -15,8 +15,4 @@ __license__ = "MIT"
 from .analyzer import PhyloAnalyzer
 from .config import Config
 
-__all__ = [
-    "PhyloAnalyzer",
-    "Config",
-    "__version__"
-]
+__all__ = ["PhyloAnalyzer", "Config", "__version__"]

@@ -4,60 +4,60 @@ Configuration module for StrepSuis-AMRVirKM
 Handles all configuration parameters for cluster analysis.
 """
 
+import os
 from dataclasses import dataclass
 from typing import Optional
-import os
 
 
 @dataclass
 class Config:
     """Configuration for cluster analysis."""
-    
+
     # Directories
     data_dir: str = "."
     output_dir: str = "./output"
-    
+
     # Clustering parameters
     max_clusters: int = 10
     min_clusters: int = 2
-    
+
     # Statistical parameters
     bootstrap_iterations: int = 500
     fdr_alpha: float = 0.05
     random_seed: int = 42
-    
+
     # MCA parameters
     mca_components: int = 2
-    
+
     # Association rules parameters
     min_support: float = 0.1
     min_confidence: float = 0.5
-    
+
     # Reporting parameters
     generate_html: bool = True
     generate_excel: bool = True
     save_png_charts: bool = True
     dpi: int = 150
-    
+
     # Parallel processing
     n_jobs: int = -1  # -1 means use all available cores
-    
+
     def __post_init__(self):
         """Validate configuration after initialization."""
         if not os.path.exists(self.data_dir):
             raise ValueError(f"Data directory does not exist: {self.data_dir}")
-        
+
         os.makedirs(self.output_dir, exist_ok=True)
-        
+
         if self.max_clusters < self.min_clusters:
             raise ValueError("max_clusters must be >= min_clusters")
-        
+
         if not 0 < self.fdr_alpha < 1:
             raise ValueError("fdr_alpha must be between 0 and 1")
-        
+
         if self.bootstrap_iterations < 100:
             raise ValueError("bootstrap_iterations should be at least 100")
-    
+
     @classmethod
     def from_dict(cls, config_dict: dict) -> "Config":
         """Create Config from dictionary."""

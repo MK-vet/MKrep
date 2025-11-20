@@ -17,10 +17,15 @@ RUN apt-get update && apt-get install -y \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install the package directly from GitHub
-# This ensures no code duplication - the package is installed dynamically
+# Copy package files
+WORKDIR /build
+COPY pyproject.toml ./
+COPY strepsuis_amrpat ./strepsuis_amrpat
+COPY README.md ./
+
+# Install the package
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir git+https://github.com/MK-vet/strepsuis-amrpat.git@main
+    pip install --no-cache-dir .
 
 # Stage 2: Runtime - Minimal image with only runtime dependencies
 FROM python:3.11-slim

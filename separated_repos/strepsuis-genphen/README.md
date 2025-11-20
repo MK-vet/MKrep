@@ -12,7 +12,12 @@ StrepSuis-GenPhen is a production-ready Python package for advanced bioinformati
 
 ### Key Features
 
-- ✅ **Tree-aware phylogenetic clustering with ensemble fallback**\n- ✅ **Comprehensive trait profiling (chi-square, log-odds, RF importance)**\n- ✅ **Association rules mining**\n- ✅ **Multiple Correspondence Analysis (MCA)**\n- ✅ **Interactive Bootstrap 5 UI**\n- ✅ **Full CSV export capabilities**
+- ✅ **Tree-aware phylogenetic clustering with ensemble fallback**
+- ✅ **Comprehensive trait profiling (chi-square, log-odds, RF importance)**
+- ✅ **Association rules mining**
+- ✅ **Multiple Correspondence Analysis (MCA)**
+- ✅ **Interactive Bootstrap 5 UI**
+- ✅ **Full CSV export capabilities**
 
 ## Quick Start
 

@@ -21,15 +21,26 @@ Note:
 - Section order is re-organized into five parts for logical flow.
 """
 
+import base64
+import datetime
+import importlib
+import os
+import random
+import re
+import subprocess
+
 # =========================
 # 0) Robust auto-installer
 # =========================
-import sys, subprocess, importlib, os, warnings, random, base64, datetime, re
+import sys
+import warnings
 from io import BytesIO
 from itertools import combinations
 
+
 def _pip_install(pkgs):
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "--upgrade", *pkgs])
+
 
 def _ensure(pip_pkg: str, import_name: str):
     """Ensure a library is importable. If import fails, pip-install then import."""
@@ -39,47 +50,60 @@ def _ensure(pip_pkg: str, import_name: str):
         _pip_install([pip_pkg])
         return importlib.import_module(import_name or pip_pkg)
 
+
 # Core scientific stack
-_ensure("numpy", "numpy"); _ensure("pandas", "pandas")
-_ensure("matplotlib", "matplotlib"); _ensure("seaborn", "seaborn")
+_ensure("numpy", "numpy")
+_ensure("pandas", "pandas")
+_ensure("matplotlib", "matplotlib")
+_ensure("seaborn", "seaborn")
 _ensure("scipy", "scipy")
 
 # Bio & ML toolchain
-_ensure("biopython", "Bio"); _ensure("scikit-learn", "sklearn")
-_ensure("umap-learn", "umap"); _ensure("mlxtend", "mlxtend")
-_ensure("optuna", "optuna"); _ensure("statsmodels", "statsmodels")
-_ensure("prince", "prince"); _ensure("plotly", "plotly")
-_ensure("tqdm", "tqdm"); _ensure("jinja2", "jinja2")
+_ensure("biopython", "Bio")
+_ensure("scikit-learn", "sklearn")
+_ensure("umap-learn", "umap")
+_ensure("mlxtend", "mlxtend")
+_ensure("optuna", "optuna")
+_ensure("statsmodels", "statsmodels")
+_ensure("prince", "prince")
+_ensure("plotly", "plotly")
+_ensure("tqdm", "tqdm")
+_ensure("jinja2", "jinja2")
+
+from functools import partial
+from multiprocessing import Pool, cpu_count
+
+import jinja2
+import matplotlib.pyplot as plt
 
 # Now imports are safe
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from Bio import Phylo
-from sklearn.cluster import KMeans, DBSCAN
-from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
-from sklearn.mixture import GaussianMixture
-from sklearn.ensemble import IsolationForest, RandomForestClassifier
-from sklearn.metrics import silhouette_score
-from scipy.spatial.distance import cdist
-from scipy.stats import chi2_contingency, fisher_exact
-from statsmodels.stats.multitest import multipletests
-from umap import UMAP
-from tqdm import tqdm
 import optuna
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import jinja2
 import prince
+import seaborn as sns
+from Bio import Phylo
+from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 from mlxtend.frequent_patterns import apriori, association_rules
-from multiprocessing import Pool, cpu_count
-from functools import partial
+from scipy.spatial.distance import cdist
+from scipy.stats import chi2_contingency, fisher_exact
+from sklearn.cluster import DBSCAN, KMeans
+from sklearn.ensemble import IsolationForest, RandomForestClassifier
+from sklearn.metrics import silhouette_score
+from sklearn.mixture import GaussianMixture
+from statsmodels.stats.multitest import multipletests
+from tqdm import tqdm
+from umap import UMAP
 
 # ------------------ Global settings ------------------
 warnings.filterwarnings("ignore", category=UserWarning)
-random.seed(42); np.random.seed(42)
-os.environ["PYTHONHASHSEED"]="0"; os.environ["OMP_NUM_THREADS"]="1"; os.environ["MKL_NUM_THREADS"]="1"
+random.seed(42)
+np.random.seed(42)
+os.environ["PYTHONHASHSEED"] = "0"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
 sns.set(style="whitegrid")
 
 
@@ -89,6 +113,7 @@ sns.set(style="whitegrid")
 def ensure_template_and_css(output_folder: str):
     """Create Jinja2 template + ensure shared_styles.css next to the final HTML (same folder)."""
     import shutil
+
     os.makedirs("templates", exist_ok=True)
     template_path = os.path.join("templates", "report_template.html")
 
@@ -383,7 +408,8 @@ def ensure_template_and_css(output_folder: str):
     if not os.path.isfile(css_target):
         for cand in ["shared_styles.css", "/mnt/data/shared_styles.css", "./shared_styles.css"]:
             if os.path.isfile(cand):
-                shutil.copyfile(cand, css_target); break
+                shutil.copyfile(cand, css_target)
+                break
         else:
             fallback = """:root{
   --primary-color:#2c3e50;--secondary-color:#3498db;--light:#f8f9fa;
@@ -417,10 +443,13 @@ class ParallelProcessor:
             row = np.zeros(len(terminals))
             a = terminals[i]
             for j in range(len(terminals)):
-                if i == j: continue
+                if i == j:
+                    continue
                 b = terminals[j]
-                try: row[j] = tree.distance(str(a), str(b))
-                except Exception: row[j] = np.nan
+                try:
+                    row[j] = tree.distance(str(a), str(b))
+                except Exception:
+                    row[j] = np.nan
             return i, row
 
         with Pool(processes=n_jobs) as pool:
@@ -429,15 +458,25 @@ class ParallelProcessor:
         for i, row in results:
             distance_matrix[i] = row
             for j in range(n):
-                if i != j: distance_matrix[j, i] = distance_matrix[i, j]
+                if i != j:
+                    distance_matrix[j, i] = distance_matrix[i, j]
         return distance_matrix
+
 
 class PhylogeneticCore:
     @staticmethod
     def find_tree_file(preferred: str):
-        candidates = [preferred, "tree.nwk", "tree.newick", "tree.newick.txt", "tree.nh", "tree.new"]
+        candidates = [
+            preferred,
+            "tree.nwk",
+            "tree.newick",
+            "tree.newick.txt",
+            "tree.nh",
+            "tree.new",
+        ]
         for c in candidates:
-            if os.path.isfile(c): return c
+            if os.path.isfile(c):
+                return c
         raise FileNotFoundError(f"Tree file not found. Tried: {', '.join(candidates)}")
 
     @staticmethod
@@ -451,165 +490,222 @@ class PhylogeneticCore:
         if parallel:
             dm = ParallelProcessor.parallel_tree_distance_matrix(tree, terminals, n_jobs=n_jobs)
         else:
-            n = len(terminals); dm = np.zeros((n, n))
+            n = len(terminals)
+            dm = np.zeros((n, n))
             for i, a in enumerate(terminals):
-                for j in range(i+1, n):
+                for j in range(i + 1, n):
                     b = terminals[j]
                     dm[i, j] = dm[j, i] = tree.distance(str(a), str(b))
         return dm, terminals
 
     @staticmethod
     def umap_embed(dist_matrix, n_components=2, n_neighbors=15, min_dist=0.1, random_state=42):
-        reducer = UMAP(n_components=n_components, metric='precomputed',
-                       n_neighbors=n_neighbors, min_dist=min_dist, random_state=random_state)
+        reducer = UMAP(
+            n_components=n_components,
+            metric="precomputed",
+            n_neighbors=n_neighbors,
+            min_dist=min_dist,
+            random_state=random_state,
+        )
         return reducer.fit_transform(dist_matrix)
 
     @staticmethod
     def detect_outliers(embeddings, contamination=0.05, n_estimators=200, random_state=42):
-        iso = IsolationForest(contamination=contamination, n_estimators=n_estimators, random_state=random_state)
+        iso = IsolationForest(
+            contamination=contamination, n_estimators=n_estimators, random_state=random_state
+        )
         mask = iso.fit_predict(embeddings) != -1
         return embeddings[mask], mask
 
 
 class TreeAwareClustering:
     def __init__(self, tree, terminals):
-        self.tree = tree; self.terminals = terminals
+        self.tree = tree
+        self.terminals = terminals
 
     def _auto_threshold(self, mode="max", factor=5.0):
-        vals=[]
+        vals = []
         for cl in self.tree.get_nonterminals():
             leaves = cl.get_terminals()
-            if len(leaves) < 2: continue
+            if len(leaves) < 2:
+                continue
             if mode == "max":
-                m=0.0
+                m = 0.0
                 for i in range(len(leaves)):
-                    for j in range(i+1, len(leaves)):
-                        try: m=max(m, self.tree.distance(leaves[i], leaves[j]))
-                        except: pass
+                    for j in range(i + 1, len(leaves)):
+                        try:
+                            m = max(m, self.tree.distance(leaves[i], leaves[j]))
+                        except:
+                            pass
                 vals.append(m)
             else:
-                s,c=0.0,0
+                s, c = 0.0, 0
                 for i in range(len(leaves)):
-                    for j in range(i+1, len(leaves)):
-                        try: s+=self.tree.distance(leaves[i], leaves[j]); c+=1
-                        except: pass
-                vals.append(s if mode=="sum" else (s/c if c else 0.0))
-        if not vals: return 0.1
-        q75,q25=np.percentile(vals,[75,25]); iqr=q75-q25
-        return np.median(vals) + factor*iqr
+                    for j in range(i + 1, len(leaves)):
+                        try:
+                            s += self.tree.distance(leaves[i], leaves[j])
+                            c += 1
+                        except:
+                            pass
+                vals.append(s if mode == "sum" else (s / c if c else 0.0))
+        if not vals:
+            return 0.1
+        q75, q25 = np.percentile(vals, [75, 25])
+        iqr = q75 - q25
+        return np.median(vals) + factor * iqr
 
     def _check(self, idxs, dm, mode, thr):
-        if len(idxs) <= 1: return True
+        if len(idxs) <= 1:
+            return True
         if mode == "max":
-            m=0.0
+            m = 0.0
             for i in range(len(idxs)):
-                for j in range(i+1, len(idxs)):
-                    m=max(m, dm[idxs[i], idxs[j]])
+                for j in range(i + 1, len(idxs)):
+                    m = max(m, dm[idxs[i], idxs[j]])
             return m <= thr
-        s,c=0.0,0
+        s, c = 0.0, 0
         for i in range(len(idxs)):
-            for j in range(i+1, len(idxs)):
-                s+=dm[idxs[i], idxs[j]]; c+=1
-        return (s<=thr) if mode=="sum" else ((s/c)<=thr if c else True)
+            for j in range(i + 1, len(idxs)):
+                s += dm[idxs[i], idxs[j]]
+                c += 1
+        return (s <= thr) if mode == "sum" else ((s / c) <= thr if c else True)
 
     def cluster(self, dm, mode="max", threshold=None):
-        if threshold is None: threshold=self._auto_threshold(mode)
-        n=len(self.terminals); labs=np.arange(n)
-        for node in self.tree.find_clades(order='postorder'):
-            if node.is_terminal(): continue
-            idxs=[]
+        if threshold is None:
+            threshold = self._auto_threshold(mode)
+        n = len(self.terminals)
+        labs = np.arange(n)
+        for node in self.tree.find_clades(order="postorder"):
+            if node.is_terminal():
+                continue
+            idxs = []
             for leaf in node.get_terminals():
-                for i,t in enumerate(self.terminals):
-                    if str(t)==str(leaf): idxs.append(i); break
-            if not idxs: continue
+                for i, t in enumerate(self.terminals):
+                    if str(t) == str(leaf):
+                        idxs.append(i)
+                        break
+            if not idxs:
+                continue
             if self._check(idxs, dm, mode, threshold):
-                m=min(labs[idx] for idx in idxs)
-                for idx in idxs: labs[idx]=m
-        uniq={v:i+1 for i,v in enumerate(sorted(np.unique(labs)))}
+                m = min(labs[idx] for idx in idxs)
+                for idx in idxs:
+                    labs[idx] = m
+        uniq = {v: i + 1 for i, v in enumerate(sorted(np.unique(labs)))}
         return np.array([uniq[v] for v in labs], dtype=int)
 
 
 class EnsembleClustering:
     def __init__(self, trials=20, seed=42):
-        self.trials=trials; self.seed=seed
+        self.trials = trials
+        self.seed = seed
 
     def _optimize_dbscan(self, X):
         def obj(trial):
-            eps=trial.suggest_float('eps', 0.1, 2.0)
-            ms =trial.suggest_int('min_samples', 3, 8)
-            labels=DBSCAN(eps=eps, min_samples=ms).fit_predict(X)
-            return -1.0 if len(set(labels))<=1 else silhouette_score(X, labels)
-        study=optuna.create_study(direction='maximize')
+            eps = trial.suggest_float("eps", 0.1, 2.0)
+            ms = trial.suggest_int("min_samples", 3, 8)
+            labels = DBSCAN(eps=eps, min_samples=ms).fit_predict(X)
+            return -1.0 if len(set(labels)) <= 1 else silhouette_score(X, labels)
+
+        study = optuna.create_study(direction="maximize")
         study.optimize(obj, n_trials=self.trials)
         return study.best_params
 
     def fit_best(self, X):
         best_s, best_labels = -1, None
-        db=self._optimize_dbscan(X)
-        for k in range(2,10):
-            for mdl in (KMeans(n_clusters=k, random_state=self.seed),
-                        GaussianMixture(n_components=k, random_state=self.seed)):
+        db = self._optimize_dbscan(X)
+        for k in range(2, 10):
+            for mdl in (
+                KMeans(n_clusters=k, random_state=self.seed),
+                GaussianMixture(n_components=k, random_state=self.seed),
+            ):
                 try:
-                    labs=mdl.fit_predict(X)
-                    if len(set(labs))>1:
-                        s=silhouette_score(X, labs)
-                        if s>best_s: best_s, best_labels = s, (labs+1)
-                except Exception: pass
+                    labs = mdl.fit_predict(X)
+                    if len(set(labs)) > 1:
+                        s = silhouette_score(X, labs)
+                        if s > best_s:
+                            best_s, best_labels = s, (labs + 1)
+                except Exception:
+                    pass
         try:
-            labs=DBSCAN(**db).fit_predict(X)
-            if len(set(labs))>1:
-                s=silhouette_score(X, labs)
-                if s>best_s: best_s, best_labels = s, (labs+1)
-        except Exception: pass
+            labs = DBSCAN(**db).fit_predict(X)
+            if len(set(labs)) > 1:
+                s = silhouette_score(X, labs)
+                if s > best_s:
+                    best_s, best_labels = s, (labs + 1)
+        except Exception:
+            pass
         return best_labels, best_s
 
 
 class Evolution:
     @staticmethod
     def by_cluster(tree, labels, names):
-        lab_u=np.unique(labels); rows=[]
+        lab_u = np.unique(labels)
+        rows = []
         for lab in lab_u:
-            ids=[names[i] for i in range(len(names)) if labels[i]==lab]
-            if len(ids)<=1:
-                rows.append([lab, ids, 0.0, 0.0, 0, len(ids)]); continue
+            ids = [names[i] for i in range(len(names)) if labels[i] == lab]
+            if len(ids) <= 1:
+                rows.append([lab, ids, 0.0, 0.0, 0, len(ids)])
+                continue
             try:
-                mrca=tree.common_ancestor(ids)
-                pd_val=sum((cl.branch_length or 0) for cl in mrca.find_clades())
-                d=[tree.distance(a,b) for i,a in enumerate(ids) for b in ids[i+1:]]
-                mpd=float(np.mean(d)) if d else 0.0
-                internal=sum(1 for cl in mrca.find_clades() if not cl.is_terminal())
+                mrca = tree.common_ancestor(ids)
+                pd_val = sum((cl.branch_length or 0) for cl in mrca.find_clades())
+                d = [tree.distance(a, b) for i, a in enumerate(ids) for b in ids[i + 1 :]]
+                mpd = float(np.mean(d)) if d else 0.0
+                internal = sum(1 for cl in mrca.find_clades() if not cl.is_terminal())
                 rows.append([lab, ids, pd_val, mpd, internal, len(mrca.get_terminals())])
             except Exception:
                 rows.append([lab, ids, np.nan, np.nan, np.nan, np.nan])
-        return pd.DataFrame(rows, columns=["Cluster_ID","Strains","PD","MeanPairwiseDist","InternalNodes","SubtreeTerminals"])
+        return pd.DataFrame(
+            rows,
+            columns=[
+                "Cluster_ID",
+                "Strains",
+                "PD",
+                "MeanPairwiseDist",
+                "InternalNodes",
+                "SubtreeTerminals",
+            ],
+        )
 
     @staticmethod
     def beta(tree, labels, names):
-        labs=np.unique(labels); m=np.zeros((len(labs), len(labs)))
-        by_lab={lab:[names[i] for i in range(len(names)) if labels[i]==lab] for lab in labs}
-        for i,a in enumerate(labs):
-            for j in range(i+1,len(labs)):
-                b=labs[j]
-                d=[tree.distance(x,y) for x in by_lab[a] for y in by_lab[b]]
-                m[i,j]=m[j,i]=float(np.mean(d)) if d else 0.0
+        labs = np.unique(labels)
+        m = np.zeros((len(labs), len(labs)))
+        by_lab = {lab: [names[i] for i in range(len(names)) if labels[i] == lab] for lab in labs}
+        for i, a in enumerate(labs):
+            for j in range(i + 1, len(labs)):
+                b = labs[j]
+                d = [tree.distance(x, y) for x in by_lab[a] for y in by_lab[b]]
+                m[i, j] = m[j, i] = float(np.mean(d)) if d else 0.0
         return pd.DataFrame(m, index=labs, columns=labs)
 
     @staticmethod
     def rates(df_clusters):
-        out=[]
-        for _,r in df_clusters.iterrows():
-            rate = (r["PD"]/r["InternalNodes"]) if r["InternalNodes"] and r["InternalNodes"]>0 else 0.0
-            out.append({"Cluster_ID":r["Cluster_ID"], "EvolutionRate":rate})
+        out = []
+        for _, r in df_clusters.iterrows():
+            rate = (
+                (r["PD"] / r["InternalNodes"])
+                if r["InternalNodes"] and r["InternalNodes"] > 0
+                else 0.0
+            )
+            out.append({"Cluster_ID": r["Cluster_ID"], "EvolutionRate": rate})
         return pd.DataFrame(out)
 
     @staticmethod
     def signal(df_clusters, outdir):
-        rec=[]
-        for _,r in df_clusters.iterrows():
-            n=len(r["Strains"]) if isinstance(r["Strains"], list) else 0
-            s=(r["PD"]/n) if n else np.nan
-            rec.append({"Cluster_ID":r["Cluster_ID"], "PhylogeneticSignal":round(s,2) if pd.notna(s) else np.nan})
-        df=pd.DataFrame(rec); df.to_csv(os.path.join(outdir,"phylogenetic_signal.csv"), index=False)
+        rec = []
+        for _, r in df_clusters.iterrows():
+            n = len(r["Strains"]) if isinstance(r["Strains"], list) else 0
+            s = (r["PD"] / n) if n else np.nan
+            rec.append(
+                {
+                    "Cluster_ID": r["Cluster_ID"],
+                    "PhylogeneticSignal": round(s, 2) if pd.notna(s) else np.nan,
+                }
+            )
+        df = pd.DataFrame(rec)
+        df.to_csv(os.path.join(outdir, "phylogenetic_signal.csv"), index=False)
         return df
 
 
@@ -622,16 +718,20 @@ class DataLoader:
 
     @staticmethod
     def _slug(s: str) -> str:
-        return re.sub(r'[^a-z0-9]+', '_', str(s).strip().lower()).strip('_')
+        return re.sub(r"[^a-z0-9]+", "_", str(s).strip().lower()).strip("_")
 
     def _load_and_prefix(self, path, prefix):
         df = pd.read_csv(path)
         # detect ID column
-        id_candidates = [c for c in df.columns if self._slug(c) in ("strain_id","strain","id","isolate","sample")]
+        id_candidates = [
+            c
+            for c in df.columns
+            if self._slug(c) in ("strain_id", "strain", "id", "isolate", "sample")
+        ]
         if not id_candidates:
             raise RuntimeError(f"{os.path.basename(path)}: missing Strain_ID/ID column")
         id_col = id_candidates[0]
-        df = df.rename(columns={id_col:"Strain_ID"})
+        df = df.rename(columns={id_col: "Strain_ID"})
         # normalize names & add prefix to all non-ID columns
         new_cols = {}
         for c in df.columns:
@@ -655,58 +755,90 @@ class DataLoader:
             c = pd.read_csv(clusters_csv)
             c["Strain_ID"] = c["Strain_ID"].astype(str).str.strip().str.lower()
 
-            mic = self._load_and_prefix(os.path.join(self.base_dir,"MIC.csv"), "mic_")
-            amr = self._load_and_prefix(os.path.join(self.base_dir,"AMR_genes.csv"), "amr_")
-            vir = self._load_and_prefix(os.path.join(self.base_dir,"Virulence3.csv"), "vir_")
+            mic = self._load_and_prefix(os.path.join(self.base_dir, "MIC.csv"), "mic_")
+            amr = self._load_and_prefix(os.path.join(self.base_dir, "AMR_genes.csv"), "amr_")
+            vir = self._load_and_prefix(os.path.join(self.base_dir, "Virulence3.csv"), "vir_")
 
-            df = c.merge(mic, on="Strain_ID", how="left").merge(amr, on="Strain_ID", how="left").merge(vir, on="Strain_ID", how="left")
-            feat_cols = [x for x in df.columns if x not in ("Strain_ID","Cluster")]
+            df = (
+                c.merge(mic, on="Strain_ID", how="left")
+                .merge(amr, on="Strain_ID", how="left")
+                .merge(vir, on="Strain_ID", how="left")
+            )
+            feat_cols = [x for x in df.columns if x not in ("Strain_ID", "Cluster")]
             df[feat_cols] = df[feat_cols].fillna(0).astype(int)
             return df
         except Exception as e:
-            raise RuntimeError(f"Data load error: {e}. Expect MIC.csv, AMR_genes.csv, Virulence3.csv in {self.base_dir}")
+            raise RuntimeError(
+                f"Data load error: {e}. Expect MIC.csv, AMR_genes.csv, Virulence3.csv in {self.base_dir}"
+            )
 
 
 # =====================================================
 # 4) Visuals
 # =====================================================
 class Visuals:
-    def __init__(self, outdir): self.outdir=outdir
+    def __init__(self, outdir):
+        self.outdir = outdir
 
     def cluster_distribution(self, df):
-        g=df.groupby("Cluster").agg(Strain_Count=("Strain_ID","count")).reset_index()
-        g["Percentage"]=(g["Strain_Count"]/len(df)*100).round(2)
-        g.to_csv(os.path.join(self.outdir,"cluster_distribution.csv"), index=False)
-        fig=px.bar(g, x="Cluster", y="Percentage", text="Strain_Count",
-                   title="Cluster Distribution (%)", labels={"Percentage":"% of strains"})
+        g = df.groupby("Cluster").agg(Strain_Count=("Strain_ID", "count")).reset_index()
+        g["Percentage"] = (g["Strain_Count"] / len(df) * 100).round(2)
+        g.to_csv(os.path.join(self.outdir, "cluster_distribution.csv"), index=False)
+        fig = px.bar(
+            g,
+            x="Cluster",
+            y="Percentage",
+            text="Strain_Count",
+            title="Cluster Distribution (%)",
+            labels={"Percentage": "% of strains"},
+        )
         fig.update_traces(textposition="outside")
         return g, fig.to_html(full_html=False, include_plotlyjs=False)
 
     def tree_png_html(self, tree, labels, names):
-        uniq=np.unique(labels); cmap=plt.cm.tab20(np.linspace(0,1,max(20,len(uniq))))
-        color_by_name={}
-        for i,lab in enumerate(uniq):
-            for idx,nm in enumerate(names):
-                if labels[idx]==lab: color_by_name[nm]=cmap[i]
-        plt.figure(figsize=(14, max(8,len(names)*0.22))); ax=plt.gca()
-        Phylo.draw(tree, axes=ax, do_show=False,
-                   label_func=lambda x: x.name if (x.is_terminal() and x.name in color_by_name) else None)
+        uniq = np.unique(labels)
+        cmap = plt.cm.tab20(np.linspace(0, 1, max(20, len(uniq))))
+        color_by_name = {}
+        for i, lab in enumerate(uniq):
+            for idx, nm in enumerate(names):
+                if labels[idx] == lab:
+                    color_by_name[nm] = cmap[i]
+        plt.figure(figsize=(14, max(8, len(names) * 0.22)))
+        ax = plt.gca()
+        Phylo.draw(
+            tree,
+            axes=ax,
+            do_show=False,
+            label_func=lambda x: x.name if (x.is_terminal() and x.name in color_by_name) else None,
+        )
         for txt in ax.texts:
-            nm=txt.get_text().strip()
+            nm = txt.get_text().strip()
             if nm in color_by_name:
-                txt.set_color(color_by_name[nm]); txt.set_fontweight("bold"); txt.set_fontsize(8.5)
-        buf=BytesIO(); plt.tight_layout(); plt.savefig(buf, format="png", dpi=110, bbox_inches="tight"); plt.close()
-        img64=base64.b64encode(buf.getvalue()).decode("utf-8")
+                txt.set_color(color_by_name[nm])
+                txt.set_fontweight("bold")
+                txt.set_fontsize(8.5)
+        buf = BytesIO()
+        plt.tight_layout()
+        plt.savefig(buf, format="png", dpi=110, bbox_inches="tight")
+        plt.close()
+        img64 = base64.b64encode(buf.getvalue()).decode("utf-8")
         return f'<div class="text-center"><img class="img-fluid" src="data:image/png;base64,{img64}"/></div>'
 
     def umap_plotly(self, emb, labels):
-        df=pd.DataFrame({"UMAP1":emb[:,0],"UMAP2":emb[:,1],"Cluster":labels})
-        fig=px.scatter(df, x="UMAP1", y="UMAP2", color="Cluster", title="UMAP (clusters)")
+        df = pd.DataFrame({"UMAP1": emb[:, 0], "UMAP2": emb[:, 1], "Cluster": labels})
+        fig = px.scatter(df, x="UMAP1", y="UMAP2", color="Cluster", title="UMAP (clusters)")
         return fig.to_html(full_html=False, include_plotlyjs=False)
 
     def heatmap_plotly(self, df, title, zlabel):
-        fig=go.Figure(data=go.Heatmap(z=df.values, x=df.columns, y=df.index, colorscale="Viridis",
-                                      colorbar=dict(title=zlabel)))
+        fig = go.Figure(
+            data=go.Heatmap(
+                z=df.values,
+                x=df.columns,
+                y=df.index,
+                colorscale="Viridis",
+                colorbar=dict(title=zlabel),
+            )
+        )
         fig.update_layout(title=title, height=520)
         return fig.to_html(full_html=False, include_plotlyjs=False)
 
@@ -715,7 +847,8 @@ class Visuals:
 # 5) Traits block
 # =====================================================
 class Traits:
-    def __init__(self, outdir): self.outdir=outdir
+    def __init__(self, outdir):
+        self.outdir = outdir
 
     @staticmethod
     def _to_dt_html(df, table_id):
@@ -736,128 +869,179 @@ class Traits:
             classes="display table table-striped table-hover",
             index=False,
             escape=False,
-            border=0
+            border=0,
         )
 
     def frequencies(self, df, prefix):
-        cols=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        fr=(df.groupby("Cluster")[cols].mean()*100).round(2)
+        cols = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        fr = (df.groupby("Cluster")[cols].mean() * 100).round(2)
         fr.to_csv(os.path.join(self.outdir, f"trait_frequencies_{prefix}.csv"))
         return fr
 
     def tests(self, df, prefix, alpha=0.05):
-        cols=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        rows=[]
+        cols = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        rows = []
         for feat in cols:
-            tab=pd.crosstab(df["Cluster"], df[feat])
-            if tab.values.sum()==0: continue
-            chi2,p,_,_=chi2_contingency(tab)
-            rows.append({"Feature":feat,"Chi2":chi2,"p_value":p})
-        res=pd.DataFrame(rows)
+            tab = pd.crosstab(df["Cluster"], df[feat])
+            if tab.values.sum() == 0:
+                continue
+            chi2, p, _, _ = chi2_contingency(tab)
+            rows.append({"Feature": feat, "Chi2": chi2, "p_value": p})
+        res = pd.DataFrame(rows)
         if not res.empty:
             _, padj, _, _ = multipletests(res["p_value"], alpha=alpha, method="fdr_bh")
-            res["p_adjusted"]=padj; res["significant"]=res["p_adjusted"]<alpha
+            res["p_adjusted"] = padj
+            res["significant"] = res["p_adjusted"] < alpha
         res.to_csv(os.path.join(self.outdir, f"statistical_tests_{prefix}.csv"), index=False)
         return res
 
     def rf_importance(self, df, prefix, n_bootstrap=100):
-        cols=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        X,y=df[cols].values, df["Cluster"].values
-        scores=[]
+        cols = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        X, y = df[cols].values, df["Cluster"].values
+        scores = []
         for _ in tqdm(range(n_bootstrap), desc=f"RF bootstrap {prefix}"):
-            idx=np.random.choice(len(X), len(X), replace=True)
-            rf=RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
-            rf.fit(X[idx], y[idx]); scores.append(rf.feature_importances_)
-        imp=pd.DataFrame({
-            "Feature":cols,
-            "Importance_Mean":np.mean(scores,axis=0),
-            "Importance_Std": np.std(scores,axis=0),
-            "Importance_Lower":np.percentile(scores,2.5,axis=0),
-            "Importance_Upper":np.percentile(scores,97.5,axis=0)
-        }).sort_values("Importance_Mean", ascending=False)
+            idx = np.random.choice(len(X), len(X), replace=True)
+            rf = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
+            rf.fit(X[idx], y[idx])
+            scores.append(rf.feature_importances_)
+        imp = pd.DataFrame(
+            {
+                "Feature": cols,
+                "Importance_Mean": np.mean(scores, axis=0),
+                "Importance_Std": np.std(scores, axis=0),
+                "Importance_Lower": np.percentile(scores, 2.5, axis=0),
+                "Importance_Upper": np.percentile(scores, 97.5, axis=0),
+            }
+        ).sort_values("Importance_Mean", ascending=False)
         imp.to_csv(os.path.join(self.outdir, f"feature_importance_{prefix}.csv"), index=False)
         return imp
 
     def log_odds(self, df):
-        feats=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        glob=[]; per=[]
+        feats = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        glob = []
+        per = []
         for f in feats:
-            a=df[f].sum(); b=len(df)-a
-            glob.append({"Feature":f,"Log_Odds_Ratio":round(np.log((a+0.5)/(b+0.5)),3)})
+            a = df[f].sum()
+            b = len(df) - a
+            glob.append({"Feature": f, "Log_Odds_Ratio": round(np.log((a + 0.5) / (b + 0.5)), 3)})
             for cl in sorted(df["Cluster"].unique()):
-                sub=df[df["Cluster"]==cl]; ac=sub[f].sum(); bc=len(sub)-ac
-                per.append({"Cluster":cl,"Feature":f,"Log_Odds_Ratio":round(np.log((ac+0.5)/(bc+0.5)),3)})
-        g=pd.DataFrame(glob); p=pd.DataFrame(per)
-        g.to_csv(os.path.join(self.outdir,"log_odds_global.csv"), index=False)
-        p.to_csv(os.path.join(self.outdir,"log_odds_per_cluster.csv"), index=False)
+                sub = df[df["Cluster"] == cl]
+                ac = sub[f].sum()
+                bc = len(sub) - ac
+                per.append(
+                    {
+                        "Cluster": cl,
+                        "Feature": f,
+                        "Log_Odds_Ratio": round(np.log((ac + 0.5) / (bc + 0.5)), 3),
+                    }
+                )
+        g = pd.DataFrame(glob)
+        p = pd.DataFrame(per)
+        g.to_csv(os.path.join(self.outdir, "log_odds_global.csv"), index=False)
+        p.to_csv(os.path.join(self.outdir, "log_odds_per_cluster.csv"), index=False)
         return g, p
 
     def assoc_rules(self, df, min_support=0.05, min_conf=0.7, max_features=50):
-        feats=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        top=df[feats].sum().sort_values(ascending=False).index[:max_features]
-        basket=df[top].astype(bool)  # boolean DF to avoid mlxtend warning
-        if basket.shape[1]==0:
-            out=pd.DataFrame(columns=["Antecedent","Consequent","Support","Confidence","Lift"])
-            out.to_csv(os.path.join(self.outdir,"association_rules.csv"), index=False); return out
-        freq=apriori(basket, min_support=min_support, use_colnames=True, max_len=3)
+        feats = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        top = df[feats].sum().sort_values(ascending=False).index[:max_features]
+        basket = df[top].astype(bool)  # boolean DF to avoid mlxtend warning
+        if basket.shape[1] == 0:
+            out = pd.DataFrame(
+                columns=["Antecedent", "Consequent", "Support", "Confidence", "Lift"]
+            )
+            out.to_csv(os.path.join(self.outdir, "association_rules.csv"), index=False)
+            return out
+        freq = apriori(basket, min_support=min_support, use_colnames=True, max_len=3)
         if freq.empty:
-            out=pd.DataFrame(columns=["Antecedent","Consequent","Support","Confidence","Lift"])
-            out.to_csv(os.path.join(self.outdir,"association_rules.csv"), index=False); return out
-        rules=association_rules(freq, metric="confidence", min_threshold=min_conf)
+            out = pd.DataFrame(
+                columns=["Antecedent", "Consequent", "Support", "Confidence", "Lift"]
+            )
+            out.to_csv(os.path.join(self.outdir, "association_rules.csv"), index=False)
+            return out
+        rules = association_rules(freq, metric="confidence", min_threshold=min_conf)
         if rules.empty:
-            out=pd.DataFrame(columns=["Antecedent","Consequent","Support","Confidence","Lift"])
+            out = pd.DataFrame(
+                columns=["Antecedent", "Consequent", "Support", "Confidence", "Lift"]
+            )
         else:
-            rules["Antecedent"]=rules["antecedents"].apply(lambda s:", ".join(sorted(list(s))))
-            rules["Consequent"]=rules["consequents"].apply(lambda s:", ".join(sorted(list(s))))
-            out=rules[["Antecedent","Consequent","support","confidence","lift"]].rename(
-                columns={"support":"Support","confidence":"Confidence","lift":"Lift"}).round(4)
-        out.to_csv(os.path.join(self.outdir,"association_rules.csv"), index=False)
+            rules["Antecedent"] = rules["antecedents"].apply(lambda s: ", ".join(sorted(list(s))))
+            rules["Consequent"] = rules["consequents"].apply(lambda s: ", ".join(sorted(list(s))))
+            out = (
+                rules[["Antecedent", "Consequent", "support", "confidence", "lift"]]
+                .rename(columns={"support": "Support", "confidence": "Confidence", "lift": "Lift"})
+                .round(4)
+            )
+        out.to_csv(os.path.join(self.outdir, "association_rules.csv"), index=False)
         return out
 
     def shared_unique(self, df, thr=0.30):
-        feats=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        clusters=sorted(df["Cluster"].unique())
-        shared=[]; unique=[]
+        feats = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        clusters = sorted(df["Cluster"].unique())
+        shared = []
+        unique = []
         for f in feats:
-            present=[]
+            present = []
             for cl in clusters:
-                sub=df[df["Cluster"]==cl]
-                if len(sub)==0: continue
-                if sub[f].mean()>=thr: present.append(cl)
-            if len(present)>1:
-                shared.append({"Feature":f,"Clusters":", ".join(map(str,present)),
-                               "NumClusters":len(present),"Count":int(df[f].sum()),
-                               "Percent_in_All":round(df[f].mean()*100,2)})
-            elif len(present)==1:
-                cl=present[0]; sub=df[df["Cluster"]==cl]
-                unique.append({"Cluster":cl,"Feature":f,"Count":int(sub[f].sum())})
-        dfS=pd.DataFrame(shared).sort_values(["NumClusters","Count"], ascending=[False,False])
-        dfU=pd.DataFrame(unique).sort_values(["Cluster","Count"], ascending=[True,False])
-        dfS.to_csv(os.path.join(self.outdir,"shared_features.csv"), index=False)
-        dfU.to_csv(os.path.join(self.outdir,"unique_features.csv"), index=False)
+                sub = df[df["Cluster"] == cl]
+                if len(sub) == 0:
+                    continue
+                if sub[f].mean() >= thr:
+                    present.append(cl)
+            if len(present) > 1:
+                shared.append(
+                    {
+                        "Feature": f,
+                        "Clusters": ", ".join(map(str, present)),
+                        "NumClusters": len(present),
+                        "Count": int(df[f].sum()),
+                        "Percent_in_All": round(df[f].mean() * 100, 2),
+                    }
+                )
+            elif len(present) == 1:
+                cl = present[0]
+                sub = df[df["Cluster"] == cl]
+                unique.append({"Cluster": cl, "Feature": f, "Count": int(sub[f].sum())})
+        dfS = pd.DataFrame(shared).sort_values(["NumClusters", "Count"], ascending=[False, False])
+        dfU = pd.DataFrame(unique).sort_values(["Cluster", "Count"], ascending=[True, False])
+        dfS.to_csv(os.path.join(self.outdir, "shared_features.csv"), index=False)
+        dfU.to_csv(os.path.join(self.outdir, "unique_features.csv"), index=False)
         return dfS, dfU
 
     def pairwise_fdr(self, df, alpha=0.05):
-        feats=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        cls=sorted(df["Cluster"].unique())
-        res=[]; pvals=[]
-        for f in [f for f in feats if df[f].sum()>0]:
+        feats = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        cls = sorted(df["Cluster"].unique())
+        res = []
+        pvals = []
+        for f in [f for f in feats if df[f].sum() > 0]:
             for i in range(len(cls)):
-                for j in range(i+1,len(cls)):
-                    A=df[df["Cluster"]==cls[i]][f]; B=df[df["Cluster"]==cls[j]][f]
-                    tab=[[int(A.sum()), int(B.sum())],
-                         [len(A)-int(A.sum()), len(B)-int(B.sum())]]
-                    if (tab[0][0]+tab[0][1])==0 or (tab[1][0]+tab[1][1])==0: continue
+                for j in range(i + 1, len(cls)):
+                    A = df[df["Cluster"] == cls[i]][f]
+                    B = df[df["Cluster"] == cls[j]][f]
+                    tab = [
+                        [int(A.sum()), int(B.sum())],
+                        [len(A) - int(A.sum()), len(B) - int(B.sum())],
+                    ]
+                    if (tab[0][0] + tab[0][1]) == 0 or (tab[1][0] + tab[1][1]) == 0:
+                        continue
                     _, p = fisher_exact(tab)
-                    res.append({"Feature":f,"ClusterA":int(cls[i]),"ClusterB":int(cls[j]),"p_value_raw":float(p)})
+                    res.append(
+                        {
+                            "Feature": f,
+                            "ClusterA": int(cls[i]),
+                            "ClusterB": int(cls[j]),
+                            "p_value_raw": float(p),
+                        }
+                    )
                     pvals.append(p)
         if pvals:
             _, padj, _, _ = multipletests(pvals, alpha=alpha, method="fdr_bh")
-            k=0
+            k = 0
             for r in res:
-                r["p_value_adj"]=float(padj[k]); r["significant"]=bool(padj[k]<alpha); k+=1
-        out=pd.DataFrame(res).sort_values(["p_value_adj","Feature","ClusterA","ClusterB"])
-        out.to_csv(os.path.join(self.outdir,"pairwise_fdr_post_hoc.csv"), index=False)
+                r["p_value_adj"] = float(padj[k])
+                r["significant"] = bool(padj[k] < alpha)
+                k += 1
+        out = pd.DataFrame(res).sort_values(["p_value_adj", "Feature", "ClusterA", "ClusterB"])
+        out.to_csv(os.path.join(self.outdir, "pairwise_fdr_post_hoc.csv"), index=False)
         return out
 
 
@@ -865,29 +1049,44 @@ class Traits:
 # 6) MCA
 # =====================================================
 class MCA:
-    def __init__(self, outdir): self.outdir=outdir
+    def __init__(self, outdir):
+        self.outdir = outdir
+
     def run(self, df):
-        cols=[c for c in df.columns if c not in ["Strain_ID","Cluster"]]
-        if not cols: return None, None, None
-        X=df[cols].astype("category")
-        m=prince.MCA(n_components=2, random_state=42).fit(X)
-        rows=m.row_coordinates(X); rows.columns=["Component_1","Component_2"]; rows["Cluster"]=df["Cluster"].values
-        colsC=m.column_coordinates(X); colsC.columns=["Component_1","Component_2"]; colsC["Feature_Type"]="Other"
+        cols = [c for c in df.columns if c not in ["Strain_ID", "Cluster"]]
+        if not cols:
+            return None, None, None
+        X = df[cols].astype("category")
+        m = prince.MCA(n_components=2, random_state=42).fit(X)
+        rows = m.row_coordinates(X)
+        rows.columns = ["Component_1", "Component_2"]
+        rows["Cluster"] = df["Cluster"].values
+        colsC = m.column_coordinates(X)
+        colsC.columns = ["Component_1", "Component_2"]
+        colsC["Feature_Type"] = "Other"
         for f in colsC.index:
-            fl=f.lower()
-            if fl.startswith("mic_"): colsC.loc[f,"Feature_Type"]="MIC"
-            elif fl.startswith("amr_"): colsC.loc[f,"Feature_Type"]="AMR"
-            elif fl.startswith("vir_"): colsC.loc[f,"Feature_Type"]="Virulence"
-        eig=m.eigenvalues_; total=sum(eig)
-        summ=pd.DataFrame({
-            "Component":range(1,len(eig)+1),
-            "Eigenvalue":[round(x,4) for x in eig],
-            "Explained_Inertia":[round(x/total,4) for x in eig],
-            "Cumulative_Explained_Inertia":[round(sum(eig[:i+1])/total,4) for i in range(len(eig))]
-        })
-        rows.to_csv(os.path.join(self.outdir,"mca_row_coordinates.csv"), index=False)
-        colsC.to_csv(os.path.join(self.outdir,"mca_column_coordinates.csv"))
-        summ.to_csv(os.path.join(self.outdir,"mca_summary.csv"), index=False)
+            fl = f.lower()
+            if fl.startswith("mic_"):
+                colsC.loc[f, "Feature_Type"] = "MIC"
+            elif fl.startswith("amr_"):
+                colsC.loc[f, "Feature_Type"] = "AMR"
+            elif fl.startswith("vir_"):
+                colsC.loc[f, "Feature_Type"] = "Virulence"
+        eig = m.eigenvalues_
+        total = sum(eig)
+        summ = pd.DataFrame(
+            {
+                "Component": range(1, len(eig) + 1),
+                "Eigenvalue": [round(x, 4) for x in eig],
+                "Explained_Inertia": [round(x / total, 4) for x in eig],
+                "Cumulative_Explained_Inertia": [
+                    round(sum(eig[: i + 1]) / total, 4) for i in range(len(eig))
+                ],
+            }
+        )
+        rows.to_csv(os.path.join(self.outdir, "mca_row_coordinates.csv"), index=False)
+        colsC.to_csv(os.path.join(self.outdir, "mca_column_coordinates.csv"))
+        summ.to_csv(os.path.join(self.outdir, "mca_summary.csv"), index=False)
         return rows, colsC, summ
 
 
@@ -896,57 +1095,68 @@ class MCA:
 # =====================================================
 class Report:
     def __init__(self, outdir, base_dir="."):
-        self.outdir=outdir; self.base_dir=base_dir
+        self.outdir = outdir
+        self.base_dir = base_dir
         ensure_template_and_css(outdir)
-        self.env=jinja2.Environment(loader=jinja2.FileSystemLoader("templates"),
-                                    autoescape=jinja2.select_autoescape(['html','xml']))
+        self.env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader("templates"),
+            autoescape=jinja2.select_autoescape(["html", "xml"]),
+        )
 
     @staticmethod
     def datatable(df, table_id):
         """Render a pandas DF as a DataTables-ready HTML table - OPTIMIZED."""
-        if df is None or (hasattr(df,"empty") and df.empty):
+        if df is None or (hasattr(df, "empty") and df.empty):
             return "<div class='alert alert-info mb-0'>No data available.</div>"
-        d=df.copy()
-        num_cols=d.select_dtypes(include=[np.number]).columns
+        d = df.copy()
+        num_cols = d.select_dtypes(include=[np.number]).columns
         for c in num_cols:
-            if c.lower()!="strain_id": d[c]=d[c].round(3)
-        d=d.fillna("")
-        return d.to_html(table_id=table_id, classes="display table table-striped table-hover", index=False, escape=False)
+            if c.lower() != "strain_id":
+                d[c] = d[c].round(3)
+        d = d.fillna("")
+        return d.to_html(
+            table_id=table_id,
+            classes="display table table-striped table-hover",
+            index=False,
+            escape=False,
+        )
 
     def scan_downloads(self):
-        rows=[]
+        rows = []
         for f in sorted(os.listdir(self.outdir)):
-            p=os.path.join(self.outdir,f)
-            if not os.path.isfile(p): continue
-            size=os.path.getsize(p)/1024.0
-            if f.lower().endswith((".csv",".txt",".tsv")) and size<5000:
-                with open(p,"rb") as fh:
-                    b64=base64.b64encode(fh.read()).decode("utf-8")
-                link=f"<a class='btn btn-sm btn-primary' download='{f}' href='data:text/plain;base64,{b64}'>Download</a>"
+            p = os.path.join(self.outdir, f)
+            if not os.path.isfile(p):
+                continue
+            size = os.path.getsize(p) / 1024.0
+            if f.lower().endswith((".csv", ".txt", ".tsv")) and size < 5000:
+                with open(p, "rb") as fh:
+                    b64 = base64.b64encode(fh.read()).decode("utf-8")
+                link = f"<a class='btn btn-sm btn-primary' download='{f}' href='data:text/plain;base64,{b64}'>Download</a>"
             else:
-                link="<span class='btn btn-sm btn-secondary disabled'>No direct link</span>"
-            rows.append({"File":f,"Size_KB":round(size,2),"Action":link})
-        df=pd.DataFrame(rows, columns=["File","Size_KB","Action"])
+                link = "<span class='btn btn-sm btn-secondary disabled'>No direct link</span>"
+            rows.append({"File": f, "Size_KB": round(size, 2), "Action": link})
+        df = pd.DataFrame(rows, columns=["File", "Size_KB", "Action"])
         return Report.datatable(df, "tbl-downloads")
 
     def create(self, payload, config, html_name="phylogenetic_report.html"):
-        tpl=self.env.get_template("report_template.html")
-        context={
-            "title":"StrepSuis-GenPhen: An Interactive Platform for Integrated Genomic–Phenotypic Analysis in Streptococcus suis",
+        tpl = self.env.get_template("report_template.html")
+        context = {
+            "title": "StrepSuis-GenPhen: An Interactive Platform for Integrated Genomic–Phenotypic Analysis in Streptococcus suis",
             "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "config": vars(config),
-            "results": payload
+            "results": payload,
         }
-        html=tpl.render(**context)
-        out=os.path.join(self.outdir, html_name)
-        with open(out,"w",encoding="utf-8") as f: f.write(html)
+        html = tpl.render(**context)
+        out = os.path.join(self.outdir, html_name)
+        with open(out, "w", encoding="utf-8") as f:
+            f.write(html)
         print(f"HTML report saved to: {out}")
         return out
-    
+
     def create_excel(self, payload, config):
         """
         Generate comprehensive Excel report with all analysis results and PNG charts.
-        
+
         This function creates a detailed Excel workbook with multiple sheets containing:
         - Metadata and methodology
         - Phylogenetic clustering results
@@ -954,29 +1164,32 @@ class Report:
         - Trait profiling (frequencies, chi-square, log-odds, RF importance)
         - Association rules and MCA results
         - All data tables from the analysis
-        
+
         Parameters:
             payload (dict): Dictionary containing all analysis results
             config (Config): Configuration object with analysis parameters
-            
+
         Returns:
             str: Path to generated Excel file
         """
         # Initialize Excel report generator
         excel_gen = ExcelReportGenerator(output_folder=self.outdir)
-        
+
         # Save matplotlib/seaborn figures as PNG
         # Tree visualization
         tree_png_html = payload.get("tree_plot", "")
         if tree_png_html and "data:image/png;base64," in tree_png_html:
             try:
                 import re
+
                 match = re.search(r'data:image/png;base64,([^"\']+)', tree_png_html)
                 if match:
                     img_data = match.group(1)
                     import base64
-                    from PIL import Image
                     from io import BytesIO
+
+                    from PIL import Image
+
                     img = Image.open(BytesIO(base64.b64decode(img_data)))
                     filepath = os.path.join(excel_gen.png_folder, "phylogenetic_tree.png")
                     img.save(filepath)
@@ -984,13 +1197,13 @@ class Report:
                     print(f"Saved phylogenetic tree: {filepath}")
             except Exception as e:
                 print(f"Could not save tree plot: {e}")
-        
+
         # UMAP visualization
         umap_html = payload.get("umap_plot", "")
         if umap_html and "plotly" in umap_html.lower():
             # This is likely a Plotly div, try to extract and save
             pass  # Plotly figures in HTML format can't easily be converted back
-        
+
         # Prepare methodology description
         methodology = {
             "Tree-aware Clustering": (
@@ -1020,68 +1233,68 @@ class Report:
             "Multiple Correspondence Analysis": (
                 "prince library for dimensionality reduction of categorical data. "
                 "Two principal components for visualization."
-            )
+            ),
         }
-        
+
         # Prepare sheets data
         sheets_data = {}
-        
+
         # Extract data from payload (payload contains HTML tables, we need to parse them or use raw data)
         # For tables, we'll need to extract DataFrames from the payload if available
         # Since payload contains HTML strings, we'll need to look for CSV files in the output folder
-        
+
         # Scan output folder for CSV files
         csv_files = {}
         for f in os.listdir(self.outdir):
-            if f.lower().endswith('.csv'):
+            if f.lower().endswith(".csv"):
                 try:
                     df = pd.read_csv(os.path.join(self.outdir, f))
                     csv_files[f] = df
                 except Exception as e:
                     print(f"Could not load {f}: {e}")
-        
+
         # Add CSV files as sheets
         for csv_name, df in csv_files.items():
-            sheet_name = sanitize_sheet_name(csv_name.replace('.csv', ''))
+            sheet_name = sanitize_sheet_name(csv_name.replace(".csv", ""))
             description = f"Data from {csv_name}"
-            
+
             # Add more specific descriptions based on filename
-            if 'cluster' in csv_name.lower():
+            if "cluster" in csv_name.lower():
                 description = "Phylogenetic cluster assignments for strains"
-            elif 'chi' in csv_name.lower() or 'chi2' in csv_name.lower():
+            elif "chi" in csv_name.lower() or "chi2" in csv_name.lower():
                 description = "Chi-square test results for trait associations"
-            elif 'odds' in csv_name.lower():
+            elif "odds" in csv_name.lower():
                 description = "Log-odds ratios for trait enrichment"
-            elif 'importance' in csv_name.lower() or 'feat' in csv_name.lower():
+            elif "importance" in csv_name.lower() or "feat" in csv_name.lower():
                 description = "Random Forest feature importance scores"
-            elif 'rules' in csv_name.lower() or 'assoc' in csv_name.lower():
+            elif "rules" in csv_name.lower() or "assoc" in csv_name.lower():
                 description = "Association rules for trait patterns"
-            elif 'mca' in csv_name.lower():
+            elif "mca" in csv_name.lower():
                 description = "Multiple Correspondence Analysis coordinates"
-            elif 'pd' in csv_name.lower() or 'diversity' in csv_name.lower():
+            elif "pd" in csv_name.lower() or "diversity" in csv_name.lower():
                 description = "Phylogenetic diversity and evolutionary metrics"
-            
+
             sheets_data[sheet_name] = (df, description)
-        
+
         # Prepare metadata
         metadata = {
-            'Base_Directory': config.base_dir,
-            'Tree_File': config.tree_file,
-            'UMAP_Components': config.umap_components,
-            'UMAP_Neighbors': config.umap_neighbors,
-            'Outlier_Contamination': config.outlier_contamination,
-            'Total_CSV_Files': len(csv_files),
-            'Total_PNG_Charts': len(excel_gen.png_files)
+            "Base_Directory": config.base_dir,
+            "Tree_File": config.tree_file,
+            "UMAP_Components": config.umap_components,
+            "UMAP_Neighbors": config.umap_neighbors,
+            "Outlier_Contamination": config.outlier_contamination,
+            "Total_CSV_Files": len(csv_files),
+            "Total_PNG_Charts": len(excel_gen.png_files),
         }
-        
+
         # Generate Excel report
         excel_path = excel_gen.generate_excel_report(
             report_name="StrepSuisPhyloCluster_Report",
             sheets_data=sheets_data,
             methodology=methodology,
-            **metadata
+            **metadata,
         )
-        
+
         print(f"Excel report saved to: {excel_path}")
         return excel_path
 
@@ -1091,26 +1304,27 @@ class Report:
 # =====================================================
 class Config:
     def __init__(self, **kw):
-        self.base_dir=kw.get("base_dir",".")
-        self.output_folder=kw.get("output_folder","phylogenetic_clustering_results_fixed")
-        self.tree_file=kw.get("tree_file","tree.nwk")
-        self.umap_components=kw.get("umap_components",2)
-        self.umap_neighbors=kw.get("umap_neighbors",15)
-        self.umap_min_dist=kw.get("umap_min_dist",0.1)
-        self.outlier_contamination=kw.get("outlier_contamination",0.05)
-        self.outlier_estimators=kw.get("outlier_estimators",200)
-        self.parallel_tree=kw.get("parallel_tree",False)
-        self.parallel_jobs=kw.get("parallel_jobs",1)
+        self.base_dir = kw.get("base_dir", ".")
+        self.output_folder = kw.get("output_folder", "phylogenetic_clustering_results_fixed")
+        self.tree_file = kw.get("tree_file", "tree.nwk")
+        self.umap_components = kw.get("umap_components", 2)
+        self.umap_neighbors = kw.get("umap_neighbors", 15)
+        self.umap_min_dist = kw.get("umap_min_dist", 0.1)
+        self.outlier_contamination = kw.get("outlier_contamination", 0.05)
+        self.outlier_estimators = kw.get("outlier_estimators", 200)
+        self.parallel_tree = kw.get("parallel_tree", False)
+        self.parallel_jobs = kw.get("parallel_jobs", 1)
+
 
 class Pipeline:
     def __init__(self, cfg: Config):
-        self.cfg=cfg
-        self.outdir=os.path.join(cfg.base_dir, cfg.output_folder)
+        self.cfg = cfg
+        self.outdir = os.path.join(cfg.base_dir, cfg.output_folder)
         os.makedirs(self.outdir, exist_ok=True)
-        self.core=PhylogeneticCore()
-        self.tr=Traits(self.outdir)
-        self.vis=Visuals(self.outdir)
-        self.mca=MCA(self.outdir)
+        self.core = PhylogeneticCore()
+        self.tr = Traits(self.outdir)
+        self.vis = Visuals(self.outdir)
+        self.mca = MCA(self.outdir)
 
     @staticmethod
     def _methodology_html():
@@ -1165,99 +1379,143 @@ class Pipeline:
 
         # Step 1: phylogeny & clustering
         print("\n=== Step 1: Phylogenetic Clustering ===")
-        tree_path=os.path.join(self.cfg.base_dir, self.cfg.tree_file)
-        tree=self.core.load_tree(tree_path)
-        dm, terms=self.core.tree_to_distance_matrix(tree, parallel=self.cfg.parallel_tree, n_jobs=self.cfg.parallel_jobs)
-        names=[str(t).strip() for t in terms]
-        emb=self.core.umap_embed(dm, self.cfg.umap_components, self.cfg.umap_neighbors, self.cfg.umap_min_dist, 42)
+        tree_path = os.path.join(self.cfg.base_dir, self.cfg.tree_file)
+        tree = self.core.load_tree(tree_path)
+        dm, terms = self.core.tree_to_distance_matrix(
+            tree, parallel=self.cfg.parallel_tree, n_jobs=self.cfg.parallel_jobs
+        )
+        names = [str(t).strip() for t in terms]
+        emb = self.core.umap_embed(
+            dm, self.cfg.umap_components, self.cfg.umap_neighbors, self.cfg.umap_min_dist, 42
+        )
 
-        tac=TreeAwareClustering(tree, terms)
-        best_labels=None; best_s=-1; best_method="TreeCluster"
-        for mode in ["max","avg","sum"]:
+        tac = TreeAwareClustering(tree, terms)
+        best_labels = None
+        best_s = -1
+        best_method = "TreeCluster"
+        for mode in ["max", "avg", "sum"]:
             try:
-                labs=tac.cluster(dm, mode=mode)
-                if len(np.unique(labs))>1:
-                    s=silhouette_score(dm, labs, metric="precomputed")
-                    if s>best_s: best_s, best_labels, best_method = s, labs, f"TreeCluster-{mode}"
-            except Exception: pass
+                labs = tac.cluster(dm, mode=mode)
+                if len(np.unique(labs)) > 1:
+                    s = silhouette_score(dm, labs, metric="precomputed")
+                    if s > best_s:
+                        best_s, best_labels, best_method = s, labs, f"TreeCluster-{mode}"
+            except Exception:
+                pass
         if best_labels is None:
-            clean, mask=self.core.detect_outliers(emb, self.cfg.outlier_contamination, self.cfg.outlier_estimators, 42)
-            ens=EnsembleClustering(trials=20, seed=42)
-            lbls, s=ens.fit_best(clean)
-            if lbls is None: raise RuntimeError("Clustering failed")
-            uniq=np.unique(lbls); centers=np.vstack([clean[lbls==u].mean(axis=0) for u in uniq])
-            full=np.zeros(len(emb), dtype=int); full[mask]=lbls
+            clean, mask = self.core.detect_outliers(
+                emb, self.cfg.outlier_contamination, self.cfg.outlier_estimators, 42
+            )
+            ens = EnsembleClustering(trials=20, seed=42)
+            lbls, s = ens.fit_best(clean)
+            if lbls is None:
+                raise RuntimeError("Clustering failed")
+            uniq = np.unique(lbls)
+            centers = np.vstack([clean[lbls == u].mean(axis=0) for u in uniq])
+            full = np.zeros(len(emb), dtype=int)
+            full[mask] = lbls
             if (~mask).any():
-                D=cdist(emb[~mask], centers); nearest=uniq[D.argmin(axis=1)]
-                full[~mask]=nearest
+                D = cdist(emb[~mask], centers)
+                nearest = uniq[D.argmin(axis=1)]
+                full[~mask] = nearest
             best_labels, best_s, best_method = full, s, "Ensemble"
         print(f"Best clustering: {best_method} | silhouette={best_s:.3f}")
 
         # Save clusters CSV (Strain_ID + Cluster)
         os.makedirs(self.outdir, exist_ok=True)
-        clusters_csv=os.path.join(self.outdir,"phylogenetic_clusters.csv")
-        pd.DataFrame({"Strain_ID":names, "Cluster":best_labels}).to_csv(clusters_csv, index=False)
+        clusters_csv = os.path.join(self.outdir, "phylogenetic_clusters.csv")
+        pd.DataFrame({"Strain_ID": names, "Cluster": best_labels}).to_csv(clusters_csv, index=False)
 
         # Visuals
-        tree_html=self.vis.tree_png_html(tree, best_labels, names)
-        umap_html=self.vis.umap_plotly(emb, best_labels)
+        tree_html = self.vis.tree_png_html(tree, best_labels, names)
+        umap_html = self.vis.umap_plotly(emb, best_labels)
 
         # Step 2: Evolutionary
         print("\n=== Step 2: Evolutionary Analysis ===")
-        evo_df=Evolution.by_cluster(tree, best_labels, names)
-        evo_df.to_csv(os.path.join(self.outdir,"evolutionary_cluster_analysis.csv"), index=False)
-        beta_df=Evolution.beta(tree, best_labels, names)
-        beta_df.to_csv(os.path.join(self.outdir,"phylogenetic_beta_diversity.csv"))
-        rates_df=Evolution.rates(evo_df); rates_df.to_csv(os.path.join(self.outdir,"evolution_rates.csv"), index=False)
-        signal_df=Evolution.signal(evo_df, self.outdir)
+        evo_df = Evolution.by_cluster(tree, best_labels, names)
+        evo_df.to_csv(os.path.join(self.outdir, "evolutionary_cluster_analysis.csv"), index=False)
+        beta_df = Evolution.beta(tree, best_labels, names)
+        beta_df.to_csv(os.path.join(self.outdir, "phylogenetic_beta_diversity.csv"))
+        rates_df = Evolution.rates(evo_df)
+        rates_df.to_csv(os.path.join(self.outdir, "evolution_rates.csv"), index=False)
+        signal_df = Evolution.signal(evo_df, self.outdir)
 
         # Step 3: Trait Analysis
         print("\n=== Step 3: Trait Analysis ===")
-        merged=DataLoader(self.cfg.base_dir).load(clusters_csv)
+        merged = DataLoader(self.cfg.base_dir).load(clusters_csv)
 
         mic_cols = [c for c in merged.columns if c.lower().startswith("mic_")]
         amr_cols = [c for c in merged.columns if c.lower().startswith("amr_")]
         vir_cols = [c for c in merged.columns if c.lower().startswith("vir_")]
         for cols in (mic_cols, amr_cols, vir_cols):
-            if cols: merged[cols] = (merged[cols] > 0).astype(int)
+            if cols:
+                merged[cols] = (merged[cols] > 0).astype(int)
 
-        blocks=[]; all_feat_imps=[]
+        blocks = []
+        all_feat_imps = []
 
         def _do_block(cat_name, cols, short):
-            sub = merged[["Strain_ID","Cluster"]+cols].copy()
-            fr  = self.tr.frequencies(sub, short)
+            sub = merged[["Strain_ID", "Cluster"] + cols].copy()
+            fr = self.tr.frequencies(sub, short)
             tst = self.tr.tests(sub, short)
-            imp = self.tr.rf_importance(sub, short, n_bootstrap=50)  # fewer iters for speed; summaries later
-            imp.insert(0,"Category",cat_name)
+            imp = self.tr.rf_importance(
+                sub, short, n_bootstrap=50
+            )  # fewer iters for speed; summaries later
+            imp.insert(0, "Category", cat_name)
             all_feat_imps.append(imp)
 
             # Build HTML blocks
-            blocks.append(f"<h5 class='mt-2'>{cat_name} Frequencies</h5>" + Traits._to_dt_html(fr.reset_index(), f"tbl-fr-{short}"))
-            blocks.append(f"<h6 class='mt-3'>Chi-square + FDR</h6>" + Traits._to_dt_html(tst, f"tbl-test-{short}"))
-            blocks.append(f"<h6 class='mt-3'>RF Importance (bootstrap)</h6>" + Traits._to_dt_html(imp.head(50), f"tbl-imp-{short}"))
+            blocks.append(
+                f"<h5 class='mt-2'>{cat_name} Frequencies</h5>"
+                + Traits._to_dt_html(fr.reset_index(), f"tbl-fr-{short}")
+            )
+            blocks.append(
+                f"<h6 class='mt-3'>Chi-square + FDR</h6>"
+                + Traits._to_dt_html(tst, f"tbl-test-{short}")
+            )
+            blocks.append(
+                f"<h6 class='mt-3'>RF Importance (bootstrap)</h6>"
+                + Traits._to_dt_html(imp.head(50), f"tbl-imp-{short}")
+            )
 
-        if mic_cols: _do_block("MIC", mic_cols, "mic")
-        if amr_cols: _do_block("AMR", amr_cols, "amr")
-        if vir_cols: _do_block("Virulence", vir_cols, "vir")
+        if mic_cols:
+            _do_block("MIC", mic_cols, "mic")
+        if amr_cols:
+            _do_block("AMR", amr_cols, "amr")
+        if vir_cols:
+            _do_block("Virulence", vir_cols, "vir")
 
         # Fallback: if none of the prefixed groups exist, show ALL traits together
         if not blocks:
-            all_cols = [c for c in merged.columns if c not in ("Strain_ID","Cluster")]
+            all_cols = [c for c in merged.columns if c not in ("Strain_ID", "Cluster")]
             if all_cols:
-                sub = merged[["Strain_ID","Cluster"]+all_cols].copy()
+                sub = merged[["Strain_ID", "Cluster"] + all_cols].copy()
                 sub[all_cols] = (sub[all_cols] > 0).astype(int)
-                fr  = self.tr.frequencies(sub, "all")
+                fr = self.tr.frequencies(sub, "all")
                 tst = self.tr.tests(sub, "all")
                 imp = self.tr.rf_importance(sub, "all", n_bootstrap=50)
-                imp.insert(0,"Category","All")
+                imp.insert(0, "Category", "All")
                 all_feat_imps.append(imp)
 
-                blocks.append("<h5 class='mt-2'>All Traits - Frequencies</h5>" + Traits._to_dt_html(fr.reset_index(), "tbl-fr-all"))
-                blocks.append("<h6 class='mt-3'>Chi-square + FDR</h6>" + Traits._to_dt_html(tst, "tbl-test-all"))
-                blocks.append("<h6 class='mt-3'>RF Importance (bootstrap)</h6>" + Traits._to_dt_html(imp.head(50), "tbl-imp-all"))
+                blocks.append(
+                    "<h5 class='mt-2'>All Traits - Frequencies</h5>"
+                    + Traits._to_dt_html(fr.reset_index(), "tbl-fr-all")
+                )
+                blocks.append(
+                    "<h6 class='mt-3'>Chi-square + FDR</h6>"
+                    + Traits._to_dt_html(tst, "tbl-test-all")
+                )
+                blocks.append(
+                    "<h6 class='mt-3'>RF Importance (bootstrap)</h6>"
+                    + Traits._to_dt_html(imp.head(50), "tbl-imp-all")
+                )
 
         # Combine blocks into trait_html
-        trait_html = "\n".join(blocks) if blocks else "<div class='alert alert-warning'>No trait data available</div>"
+        trait_html = (
+            "\n".join(blocks)
+            if blocks
+            else "<div class='alert alert-warning'>No trait data available</div>"
+        )
 
         # Cluster distribution (table + plot)
         dist_df, dist_plot_html = self.vis.cluster_distribution(merged)
@@ -1266,82 +1524,117 @@ class Pipeline:
         g_log, c_log = self.tr.log_odds(merged)
 
         # Association rules
-        rules_df=self.tr.assoc_rules(merged)
+        rules_df = self.tr.assoc_rules(merged)
 
         # Shared/unique
         shared_df, unique_df = self.tr.shared_unique(merged, thr=0.30)
 
         # Pairwise FDR
-        fdr_df=self.tr.pairwise_fdr(merged)
+        fdr_df = self.tr.pairwise_fdr(merged)
 
         # Step 4: MCA
         print("\n=== Step 4: MCA Analysis ===")
         mca_rows, mca_cols, mca_sum = self.mca.run(merged)
 
         # Assemble report payload
-        rep=Report(self.outdir, base_dir=self.cfg.base_dir)
-        payload={}
+        rep = Report(self.outdir, base_dir=self.cfg.base_dir)
+        payload = {}
 
         # --- PART I: FOUNDATIONAL ---
-        payload["summary_stats"]=Report.datatable(
-            dist_df.rename(columns={"Strain_Count":"Count","Percentage":"%"}), "tbl-summary")
-        payload["methodology"]=self._methodology_html()
+        payload["summary_stats"] = Report.datatable(
+            dist_df.rename(columns={"Strain_Count": "Count", "Percentage": "%"}), "tbl-summary"
+        )
+        payload["methodology"] = self._methodology_html()
 
         # --- PART II: PHYLOGENETIC STRUCTURE ---
-        payload["tree_plot"]=tree_html
-        payload["tree_stats"]=Report.datatable(evo_df, "tbl-tree-stats")
+        payload["tree_plot"] = tree_html
+        payload["tree_stats"] = Report.datatable(evo_df, "tbl-tree-stats")
 
-        payload["umap_plot"]=umap_html
-        payload["cluster_distribution"]=dist_plot_html
-        payload["cluster_validation"]=Report.datatable(
-            pd.DataFrame({"Best_Method":[best_method],
-                          "Silhouette":[round(best_s,3)],
-                          "Num_Clusters":[len(np.unique(best_labels))]}),
-            "tbl-valid")
+        payload["umap_plot"] = umap_html
+        payload["cluster_distribution"] = dist_plot_html
+        payload["cluster_validation"] = Report.datatable(
+            pd.DataFrame(
+                {
+                    "Best_Method": [best_method],
+                    "Silhouette": [round(best_s, 3)],
+                    "Num_Clusters": [len(np.unique(best_labels))],
+                }
+            ),
+            "tbl-valid",
+        )
 
-        payload["evolutionary_metrics"]=Report.datatable(evo_df, "tbl-evo")
-        payload["beta_diversity"]=self.vis.heatmap_plotly(beta_df, "Beta Diversity (Mean Inter-Cluster Distance)", "Distance")
-        payload["evolution_rates"]=px.bar(rates_df, x="Cluster_ID", y="EvolutionRate", title="Evolution Rates").to_html(False, False)
-        payload["phylogenetic_signal"]=Report.datatable(signal_df, "tbl-signal")
+        payload["evolutionary_metrics"] = Report.datatable(evo_df, "tbl-evo")
+        payload["beta_diversity"] = self.vis.heatmap_plotly(
+            beta_df, "Beta Diversity (Mean Inter-Cluster Distance)", "Distance"
+        )
+        payload["evolution_rates"] = px.bar(
+            rates_df, x="Cluster_ID", y="EvolutionRate", title="Evolution Rates"
+        ).to_html(False, False)
+        payload["phylogenetic_signal"] = Report.datatable(signal_df, "tbl-signal")
 
         # --- PART III: TRAIT PROFILING ---
-        payload["trait_analysis"]=trait_html
-        payload["global_log_odds"]=Report.datatable(g_log, "tbl-log-global")
-        payload["cluster_log_odds"]=Report.datatable(c_log, "tbl-log-cluster")
-        payload["association_rules"]=Report.datatable(rules_df, "tbl-assoc")
-        payload["shared_features"]=Report.datatable(shared_df, "tbl-shared")
-        payload["unique_features"]=Report.datatable(unique_df, "tbl-unique")
-        payload["pairwise_fdr"]=Report.datatable(fdr_df, "tbl-fdr")
+        payload["trait_analysis"] = trait_html
+        payload["global_log_odds"] = Report.datatable(g_log, "tbl-log-global")
+        payload["cluster_log_odds"] = Report.datatable(c_log, "tbl-log-cluster")
+        payload["association_rules"] = Report.datatable(rules_df, "tbl-assoc")
+        payload["shared_features"] = Report.datatable(shared_df, "tbl-shared")
+        payload["unique_features"] = Report.datatable(unique_df, "tbl-unique")
+        payload["pairwise_fdr"] = Report.datatable(fdr_df, "tbl-fdr")
 
         # --- PART IV: ADVANCED ANALYSES ---
         if mca_rows is not None and mca_sum is not None:
-            fig_row=px.scatter(mca_rows, x="Component_1", y="Component_2", color="Cluster",
-                               title="MCA Row Points (Strains)")
-            payload["mca_row_plot"]=fig_row.to_html(False, False)
-            dfc=mca_cols.reset_index().rename(columns={"index":"Feature"})
-            fig_col=px.scatter(dfc, x="Component_1", y="Component_2", color="Feature_Type",
-                               hover_name="Feature", title="MCA Column Points (Features)")
-            payload["mca_column_plot"]=fig_col.to_html(False, False)
-            payload["mca_summary"]=Report.datatable(mca_sum, "tbl-mca-sum")
+            fig_row = px.scatter(
+                mca_rows,
+                x="Component_1",
+                y="Component_2",
+                color="Cluster",
+                title="MCA Row Points (Strains)",
+            )
+            payload["mca_row_plot"] = fig_row.to_html(False, False)
+            dfc = mca_cols.reset_index().rename(columns={"index": "Feature"})
+            fig_col = px.scatter(
+                dfc,
+                x="Component_1",
+                y="Component_2",
+                color="Feature_Type",
+                hover_name="Feature",
+                title="MCA Column Points (Features)",
+            )
+            payload["mca_column_plot"] = fig_col.to_html(False, False)
+            payload["mca_summary"] = Report.datatable(mca_sum, "tbl-mca-sum")
         else:
-            payload["mca_row_plot"]="<div class='alert alert-secondary mb-0'>MCA not available.</div>"
-            payload["mca_column_plot"]="<div class='alert alert-secondary mb-0'>MCA not available.</div>"
-            payload["mca_summary"]="<div class='alert alert-secondary mb-0'>MCA not available.</div>"
+            payload["mca_row_plot"] = (
+                "<div class='alert alert-secondary mb-0'>MCA not available.</div>"
+            )
+            payload["mca_column_plot"] = (
+                "<div class='alert alert-secondary mb-0'>MCA not available.</div>"
+            )
+            payload["mca_summary"] = (
+                "<div class='alert alert-secondary mb-0'>MCA not available.</div>"
+            )
 
         # Bootstrap summary table (top features across categories)
-        comb_imp=pd.concat(all_feat_imps, ignore_index=True) if all_feat_imps else pd.DataFrame()
-        comb_imp=comb_imp.sort_values("Importance_Mean", ascending=False).head(50) if not comb_imp.empty else comb_imp
-        payload["bootstrap_feature_importance"]=Report.datatable(comb_imp, "tbl-boot-feat") if not comb_imp.empty else ""
-        payload["bootstrap_log_odds"]=Report.datatable(pd.DataFrame(), "tbl-boot-log")  # placeholder
+        comb_imp = pd.concat(all_feat_imps, ignore_index=True) if all_feat_imps else pd.DataFrame()
+        comb_imp = (
+            comb_imp.sort_values("Importance_Mean", ascending=False).head(50)
+            if not comb_imp.empty
+            else comb_imp
+        )
+        payload["bootstrap_feature_importance"] = (
+            Report.datatable(comb_imp, "tbl-boot-feat") if not comb_imp.empty else ""
+        )
+        payload["bootstrap_log_odds"] = Report.datatable(
+            pd.DataFrame(), "tbl-boot-log"
+        )  # placeholder
 
         # --- PART V: RESOURCES ---
-        payload["download_section"]=rep.scan_downloads()
+        payload["download_section"] = rep.scan_downloads()
 
         # Create HTML report
-        path=rep.create(payload, self.cfg, html_name="phylogenetic_report.html")
-        
+        path = rep.create(payload, self.cfg, html_name="phylogenetic_report.html")
+
         # Create Excel report
-        excel_path=rep.create_excel(payload, self.cfg)
+        excel_path = rep.create_excel(payload, self.cfg)
 
         print("\n=== Analysis completed successfully! ===")
         print("End:", pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -1354,16 +1647,16 @@ class Pipeline:
 # 9) Run (adjust paths if needed)
 # =====================================================
 if __name__ == "__main__":
-    cfg=Config(
-        base_dir=".",                      # CSVs + tree file live here
+    cfg = Config(
+        base_dir=".",  # CSVs + tree file live here
         output_folder="phylogenetic_clustering_results_fixed-001",
-        tree_file="tree.nwk",              # auto-tries common alternatives if missing
+        tree_file="tree.nwk",  # auto-tries common alternatives if missing
         umap_components=2,
         umap_neighbors=15,
         umap_min_dist=0.1,
         outlier_contamination=0.05,
         outlier_estimators=200,
         parallel_tree=False,
-        parallel_jobs=1
+        parallel_jobs=1,
     )
     Pipeline(cfg).run()
