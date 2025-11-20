@@ -1,70 +1,62 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to StrepSuis-PhyloTrait will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Changed
-- Optimized GitHub Actions workflows to reduce runner minutes
-- Reduced Python version matrix from 5 to 3 versions (3.8, 3.11, 3.12)
-- Docker builds now only run on releases and manual triggers
-
-### Fixed
-- Fixed example data files inclusion in repository
-- Updated .gitignore to properly track example CSV files
-- Corrected README formatting issues
-
-## [1.0.0] - 2025-01-14
+## [1.0.0] - 2025-11-20
 
 ### Added
 - Initial release of StrepSuis-PhyloTrait
-- Tree-aware clustering with evolutionary distance metrics
-- Faith's Phylogenetic Diversity (PD) calculations for biodiversity assessment
-- Pairwise phylogenetic distance matrices from Newick trees
-- Binary trait analysis for AMR genes and virulence factors
-- UMAP dimensionality reduction for phylogenetic visualization
-- Bootstrap resampling for robust statistical inference (configurable iterations)
-- Phylogenetic diversity analysis with tree-based metrics
-- Trait evolution analysis on phylogenetic trees
-- Tree-based statistical testing (phylogenetic signal, trait clustering)
-- Statistical significance testing with FDR correction for multiple testing
-- Interactive HTML reports with phylogenetic trees and DataTables
-- Plotly visualizations for tree exploration and trait mapping
-- Excel output with detailed statistical results and phylogenetic metrics
-- High-resolution PNG chart export (150+ DPI) for publications
+- Phylogenetic and binary trait analysis
+- Tree-aware clustering with phylogenetic constraints
+- Evolutionary metrics (phylogenetic diversity, beta diversity)
+- Phylogenetic signal detection (Pagel's lambda, Bloomberg's K)
+- Trait profiling across phylogeny
+- Interactive phylogenetic tree visualizations
 - Complete test suite with pytest
-- Docker container support with multi-stage build
-- Google Colab notebook for non-programmers
-- Comprehensive documentation (README, USER_GUIDE, CONTRIBUTING)
-- CI/CD workflows (GitHub Actions)
-- Pre-commit hooks for code quality (black, isort, ruff, mypy, bandit)
-- Example datasets with phylogenetic trees
+- Docker container support
+- Google Colab notebook
+- Comprehensive documentation
+- CI/CD workflows
+- Pre-commit hooks
+- Example datasets with Newick trees
+
+### Changed
+- Optimized GitHub Actions workflows to reduce runner minutes
+- Docker builds now only run on releases and manual triggers
+- Updated mypy configuration to Python 3.9
+
+### Fixed
+- Fixed 12 code quality issues identified by ruff linting
+- Fixed class naming inconsistency (PhyloAnalyzer → PhyloTraitAnalyzer)
+- Fixed ambiguous variable name 'l' → 'label'
+- Fixed all bare except clauses with specific exception handling
+- Fixed type annotation issues for mypy compliance
+- Fixed import statements in __init__.py and cli.py
+- Fixed example data and tree file inclusion
 
 ### Features
-- Phylogenetic tree parsing from Newick format
-- Evolutionary-aware trait clustering
-- Phylogenetic signal detection (Moran's I, phylogenetic autocorrelation)
-- Ancestral state reconstruction for binary traits
-- Tree visualization with trait mapping
-- Support for ultrametric and non-ultrametric trees
-- Integration with standard genomic data (AMR, virulence, MIC)
+- Phylogenetic tree parsing and manipulation
+- Ancestral state reconstruction
+- Phylogenetic conservation analysis
+- Tree-based clustering methods
+- Statistical testing with phylogenetic correction
+- Interactive HTML reports with phylogenetic visualizations
 
 ### Technical Details
 - Python 3.8+ support
+- BioPython for phylogenetic tree handling
 - Reproducible analyses with fixed random seeds
-- Bootstrap resampling for statistical robustness
-- FDR correction for multiple testing
-- Interactive visualizations with Plotly
-- Phylogenetic analysis with Bio.Phylo and ETE Toolkit
-- Command-line interface (CLI) and Python API
-- Newick tree format support
+- Command-line interface and Python API
+- Docker containerization
 
 ## Project History
 
-This tool was developed as part of the StrepSuis Suite for bacterial genomics research, 
+This tool was developed as part of the StrepSuis Suite for bacterial genomics research,
 with a focus on *Streptococcus suis* but applicable to any bacterial species.
 
 [Unreleased]: https://github.com/MK-vet/strepsuis-phylotrait/compare/v1.0.0...HEAD

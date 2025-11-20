@@ -1,67 +1,59 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to StrepSuis-GenPhenNet will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Changed
-- Optimized GitHub Actions workflows to reduce runner minutes
-- Reduced Python version matrix from 5 to 3 versions (3.8, 3.11, 3.12)
-- Docker builds now only run on releases and manual triggers
-
-### Fixed
-- Fixed example data files inclusion in repository
-- Updated .gitignore to properly track example CSV files
-- Corrected README formatting issues
-
-## [1.0.0] - 2025-01-14
+## [1.0.0] - 2025-11-20
 
 ### Added
 - Initial release of StrepSuis-GenPhenNet
-- Chi-square and Fisher exact tests with FDR correction for statistical rigor
-- Information theory metrics (entropy, mutual information, Cramér's V) for association strength
-- Mutually exclusive pattern detection for competitive relationships
-- 3D network visualization with Plotly for interactive exploration
-- Community detection algorithms (Louvain, label propagation) for module identification
-- Bootstrap resampling for robust network inference (configurable iterations)
-- Network-based integration of genome-phenome data
-- Multi-omics data integration (AMR genes, virulence, MIC, MLST, serotypes)
-- Statistical significance testing with FDR correction for multiple testing
-- Interactive HTML reports with sortable tables and network visualizations
-- Excel output with detailed statistical results and network metrics
-- High-resolution PNG chart export (150+ DPI) for publications
+- Network-based genome-phenome integration
+- Hybrid network construction (genotype-phenotype edges)
+- Community detection for resistance modules
+- Centrality analysis for key resistance determinants
+- Interactive network visualizations
+- Publication-quality network layouts
 - Complete test suite with pytest
-- Docker container support with multi-stage build
-- Google Colab notebook for non-programmers
-- Comprehensive documentation (README, USER_GUIDE, CONTRIBUTING)
-- CI/CD workflows (GitHub Actions)
-- Pre-commit hooks for code quality (black, isort, ruff, mypy, bandit)
-- Example datasets with documentation
+- Docker container support
+- Google Colab notebook
+- Comprehensive documentation
+- CI/CD workflows
+- Pre-commit hooks
+- Example datasets
+
+### Changed
+- Optimized GitHub Actions workflows to reduce runner minutes
+- Docker builds now only run on releases and manual triggers
+- Updated mypy configuration to Python 3.9
+
+### Fixed
+- Fixed 5 code quality issues identified by ruff linting
+- Fixed all bare except clauses with specific exception handling
+- Fixed type annotation issues for mypy compliance
+- Fixed example data inclusion in repository
 
 ### Features
-- Network construction from binary genomic and phenotypic features
-- Edge weight calculation using multiple statistical measures
-- Community structure analysis for functional module detection
-- Pathway enrichment and pattern discovery
-- Interactive 3D network exploration with node/edge filtering
-- Support for directed and undirected networks
-- Statistical validation of network properties
+- Network topology analysis
+- Module detection with Louvain algorithm
+- Path analysis between genotypes and phenotypes
+- Statistical significance testing for network edges
+- Interactive HTML reports
+- High-resolution network visualizations
 
 ### Technical Details
 - Python 3.8+ support
-- Reproducible analyses with fixed random seeds
-- Bootstrap resampling for statistical robustness
-- FDR correction for multiple testing
-- Interactive 3D visualizations with Plotly
-- Graph analysis with NetworkX
-- Command-line interface (CLI) and Python API
+- NetworkX-based network analysis
+- Plotly for interactive visualizations
+- Command-line interface and Python API
+- Docker containerization
 
 ## Project History
 
-This tool was developed as part of the StrepSuis Suite for bacterial genomics research, 
+This tool was developed as part of the StrepSuis Suite for bacterial genomics research,
 with a focus on *Streptococcus suis* but applicable to any bacterial species.
 
 [Unreleased]: https://github.com/MK-vet/strepsuis-genphennet/compare/v1.0.0...HEAD

@@ -7,17 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- Optimized GitHub Actions workflows to reduce runner minutes
-- Reduced Python version matrix from 5 to 3 versions (3.8, 3.11, 3.12)
-- Docker builds now only run on releases and manual triggers
-
-### Fixed
-- Fixed example data files inclusion in repository
-- Updated .gitignore to properly track example CSV files
-- Corrected README formatting issues
-
-## [1.0.0] - 2025-01-14
+## [1.0.0] - 2025-11-20
 
 ### Added
 - Initial release of StrepSuis-AMRVirKM
@@ -38,6 +28,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD workflows (GitHub Actions)
 - Pre-commit hooks for code quality (black, isort, ruff, mypy, bandit)
 - Example datasets with documentation
+
+### Changed
+- Optimized GitHub Actions workflows to reduce runner minutes
+- Reduced Python version matrix from 5 to 3 versions (3.8, 3.11, 3.12)
+- Docker builds now only run on releases and manual triggers
+- Updated mypy configuration to Python 3.9 for better type checking
+
+### Fixed
+- Fixed 13 code quality issues identified by ruff linting
+- Fixed all bare except clauses with specific exception handling
+- Fixed unused variables and ambiguous naming
+- Fixed module-level import organization
+- Fixed type annotation issues for mypy compliance
+- Fixed example data files inclusion in repository
+- Updated .gitignore to properly track example CSV files
+- Corrected README formatting issues
+- Fixed test fixtures to properly use example data
 
 ### Features
 - Automatic optimal cluster detection via silhouette analysis
