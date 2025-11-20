@@ -588,7 +588,6 @@ def perform_full_analysis():
         # Local execution - use files from current directory
         print("Looking for CSV files in current directory...")
         expected = ['MGE.csv','MIC.csv','MLST.csv','Plasmid.csv','Serotype.csv','Virulence.csv','AMR_genes.csv']
-        uploaded_files = {f: None for f in expected if os.path.exists(f)}
         file_mapping = {f: f for f in expected if os.path.exists(f)}
         missing = [fn for fn in expected if fn not in file_mapping]
         if missing:
