@@ -1208,7 +1208,7 @@ def df_to_html(df: pd.DataFrame, caption: str) -> str:
     # Generate unique ID for this table
     import hashlib
 
-    table_id = f"table_{hashlib.md5(caption.encode()).hexdigest()[:8]}"
+    table_id = f"table_{hashlib.md5(caption.encode(), usedforsecurity=False).hexdigest()[:8]}"
 
     # Round all float columns to 3 decimal places
     for col in df.columns:
