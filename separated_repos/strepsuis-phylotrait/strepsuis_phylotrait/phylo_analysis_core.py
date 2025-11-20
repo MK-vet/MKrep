@@ -634,7 +634,7 @@ class TreeAwareClusteringModule:
         labels = np.array([cluster_map[i] for i in range(n_terminals)])
         unique_labels = np.unique(labels)
         relabel_map = {old: new for new, old in enumerate(unique_labels)}
-        labels = np.array([relabel_map[l] for l in labels])
+        labels = np.array([relabel_map[label] for label in labels])
         return labels
 
     def _auto_threshold_max(self, conservative_factor=7.0):
@@ -1045,7 +1045,7 @@ class EvolutionaryAnalysis:
                 internal_nodes,
                 len(mrca.get_terminals()),
             )
-        except:
+        except (ValueError, TypeError, AttributeError):
             return (cluster_id, cluster_strains.tolist(), np.nan, np.nan, np.nan, np.nan)
 
     @staticmethod

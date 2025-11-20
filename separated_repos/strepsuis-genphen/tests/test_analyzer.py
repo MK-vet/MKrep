@@ -143,7 +143,7 @@ def test_empty_data_handling(tmp_path):
 def test_multiple_runs(sample_data, tmp_path):
     """Test that analyzer can run multiple times."""
     output_dir = tmp_path / "output"
-    analyzer = Analyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    analyzer = GenPhenAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
 
     # Run analysis twice
     results1 = analyzer.run()
@@ -163,7 +163,7 @@ def test_output_directory_creation(sample_data, tmp_path):
     # Directory shouldn't exist yet
     assert not output_dir.exists()
 
-    analyzer = Analyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    analyzer = GenPhenAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
 
     # Should create directory
     assert Path(analyzer.config.output_dir).exists()

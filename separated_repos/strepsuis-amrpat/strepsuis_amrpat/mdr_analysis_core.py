@@ -39,6 +39,7 @@ import os
 import sys
 import time
 import warnings
+from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 from itertools import combinations
 from typing import Dict, List, Tuple
@@ -72,7 +73,6 @@ def setup_environment() -> str:
     """
     IN_COLAB = False
     try:
-        import google.colab
         from google.colab import files
 
         IN_COLAB = True
@@ -187,7 +187,7 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
             den = row_sums[0] * row_sums[1] * col_sums[0] * col_sums[1]
             phi_val = num / np.sqrt(den) if den > 0 else 0.0
             return (0, p_val, phi_val)
-        except:
+        except (ValueError, TypeError, ZeroDivisionError):
             return (np.nan, np.nan, np.nan)
     else:
         try:
@@ -202,7 +202,7 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
             if (a * d) < (b * c):
                 phi_val = -phi_val
             return (chi2, p_val, phi_val)
-        except:
+        except (ValueError, TypeError, ZeroDivisionError):
             return (np.nan, np.nan, np.nan)
 
 
@@ -236,13 +236,9 @@ def add_significance_stars(p_value: float) -> str:
     return p_str
 
 
-from concurrent.futures import ProcessPoolExecutor
-from typing import Tuple
-
 ###############################################################################
 # 3) BOOTSTRAP FREQUENCIES
 ###############################################################################
-import pandas as pd
 
 
 def _bootstrap_col(
@@ -438,7 +434,7 @@ def extract_amr_genes(data: pd.DataFrame, gene_cols: List[str]) -> pd.DataFrame:
         if not pd.api.types.is_numeric_dtype(amr[c]):
             try:
                 amr[c] = amr[c].astype(int)
-            except:
+            except (ValueError, TypeError):
                 amr[c] = (~amr[c].isna() & (amr[c] != 0) & (amr[c] != "")).astype(int)
     return amr.astype(int)
 
