@@ -9,9 +9,7 @@
 # -----------------------------------------
 # Run: pip install kmodes prince ydata-profiling joblib numba tqdm psutil statsmodels jinja2 plotly openpyxl
 
-import base64
 import gc
-import io
 import logging
 import multiprocessing
 import os
@@ -47,10 +45,10 @@ from sklearn.preprocessing import StandardScaler
 
 # Statistics
 from sklearn.utils import resample
+from statsmodels.stats.multitest import multipletests
 from tqdm import tqdm
 
 # Data Profiling (ydata-profiling)
-from ydata_profiling import ProfileReport
 
 # -----------------------------------------
 # 3. Logging & Global Configuration
@@ -181,8 +179,8 @@ def patterns_to_dataframe(patterns, pattern_type, data, clusters):
         if ci_vals:
             ci_low, ci_high = zip(*ci_vals)
             details = []
-            for f, c, p, l, h in zip(feats.index, counts, perc, ci_low, ci_high):
-                details.append(f"{f} ({c}/{total}, {p}%, CI:{l}-{h}%)")
+            for f, c, p, ci_l, ci_h in zip(feats.index, counts, perc, ci_low, ci_high):
+                details.append(f"{f} ({c}/{total}, {p}%, CI:{ci_l}-{ci_h}%)")
         else:
             details = ["No significant features"]
 
@@ -200,7 +198,6 @@ def patterns_to_dataframe(patterns, pattern_type, data, clusters):
 # -----------------------------------------
 # 8. Pairwise FDR Post-Hoc
 # -----------------------------------------
-from statsmodels.stats.multitest import multipletests
 
 
 def pairwise_fdr_post_hoc(data, clusters, category):
@@ -230,7 +227,7 @@ def pairwise_fdr_post_hoc(data, clusters, category):
                             chi2_val = np.nan
                         else:
                             chi2_val, p, _, _ = chi2_contingency(cont)
-                    except:
+                    except (ValueError, TypeError):
                         p = np.nan
                         chi2_val = np.nan
                 results.append(
@@ -435,12 +432,12 @@ def chi_square_analysis(data, clusters):
                     chi2 = np.nan
                 else:
                     chi2, p, _, _ = chi2_contingency(cont)
-            except:
+            except (ValueError, TypeError):
                 chi2, p = np.nan, np.nan
         else:
             try:
                 chi2, p, _, _ = chi2_contingency(cont)
-            except:
+            except (ValueError, TypeError):
                 chi2, p = np.nan, np.nan
 
         results_global.append(
@@ -475,7 +472,7 @@ def chi_square_analysis(data, clusters):
                         chi2_val = np.nan
                     else:
                         chi2_val, p, _, _ = chi2_contingency(cont)
-                except:
+                except (ValueError, TypeError):
                     chi2_val, p = np.nan, np.nan
             results_cluster.append(
                 {
@@ -696,7 +693,7 @@ def association_rule_mining(data, clusters, min_support=0.3, min_confidence=0.7)
             df_rules = pd.concat(rules_list, ignore_index=True)
             df_rules = format_association_rules(df_rules)
             return df_rules
-        except:
+        except (ValueError, TypeError, KeyError):
             return pd.DataFrame()
     return pd.DataFrame()
 
@@ -949,7 +946,7 @@ def run_pipeline():
         )
 
         # Pairwise FDR
-        post_hoc_df = pairwise_fdr_post_hoc(df, clusters, cat)
+        _ = pairwise_fdr_post_hoc(df, clusters, cat)
         # Correlation
         corr_df = cluster_correlation_analysis(df, clusters, cat)
 

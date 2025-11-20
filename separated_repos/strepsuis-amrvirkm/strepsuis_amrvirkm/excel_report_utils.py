@@ -4,15 +4,11 @@ This module provides common functions for creating detailed Excel reports
 with consistent structure across all analysis scripts.
 """
 
-import base64
 import os
 from datetime import datetime
-from io import BytesIO
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 
 
 class ExcelReportGenerator:
@@ -162,7 +158,7 @@ class ExcelReportGenerator:
                 try:
                     if len(str(cell.value)) > max_length:
                         max_length = len(str(cell.value))
-                except:
+                except (TypeError, AttributeError):
                     pass
             adjusted_width = min(max_length + 2, 100)
             worksheet.column_dimensions[column].width = adjusted_width
@@ -237,7 +233,7 @@ class ExcelReportGenerator:
                 try:
                     if cell.value and len(str(cell.value)) > max_length:
                         max_length = len(str(cell.value))
-                except:
+                except (TypeError, AttributeError):
                     pass
             adjusted_width = min(max_length + 2, 50)
             worksheet.column_dimensions[column].width = adjusted_width

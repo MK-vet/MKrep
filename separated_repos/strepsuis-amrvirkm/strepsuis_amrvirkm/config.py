@@ -6,7 +6,6 @@ Handles all configuration parameters for cluster analysis.
 
 import os
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
