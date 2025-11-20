@@ -1,13 +1,14 @@
 """
 Main analyzer module for StrepSuis-AMRVirKM
 
-This module provides a wrapper around the original Cluster_MIC_AMR_Viruelnce.py script
-to provide a clean API for cluster analysis.
+This module provides a wrapper around the cluster analysis functionality.
 """
 
 import os
 import sys
 import logging
+import subprocess
+import shutil
 from pathlib import Path
 from typing import Dict, Any, Optional
 
@@ -18,8 +19,8 @@ class ClusterAnalyzer:
     """
     Main analyzer class for K-Modes clustering analysis of AMR and virulence profiles.
     
-    This class wraps the original cluster analysis script to provide a clean,
-    production-ready API for performing comprehensive clustering analysis.
+    This class provides a clean API for performing comprehensive clustering analysis
+    using the underlying cluster analysis engine.
     
     Attributes:
         config: Configuration object with analysis parameters
@@ -34,9 +35,25 @@ class ClusterAnalyzer:
             config: Config object. If None, creates from kwargs
             **kwargs: Configuration parameters (used if config is None)
         """
-        self.config = config if config is not None else Config(**kwargs)
+        if config is None:
+            # Extract known config parameters
+            config_params = {}
+            for key in ['data_dir', 'output_dir', 'max_clusters', 'min_clusters', 
+                       'bootstrap_iterations', 'fdr_alpha', 'random_seed',  
+                       'mca_components', 'verbose']:
+                if key in kwargs:
+                    config_params[key] = kwargs.pop(key)
+            config = Config(**config_params)
+            
+        self.config = config
+        self.data_dir = config.data_dir
+        self.output_dir = config.output_dir
         self.logger = logging.getLogger(__name__)
         self.results = None
+        
+        # Set up logging
+        if hasattr(config, 'verbose') and config.verbose:
+            self.logger.setLevel(logging.DEBUG)
     
     def run(self) -> Dict[str, Any]:
         """
@@ -51,7 +68,7 @@ class ClusterAnalyzer:
         - Report generation
         
         Returns:
-            Dictionary containing analysis results
+            Dictionary containing analysis results with paths to generated reports
             
         Raises:
             FileNotFoundError: If required data files are not found
@@ -59,63 +76,109 @@ class ClusterAnalyzer:
         """
         self.logger.info("Starting cluster analysis pipeline...")
         
-        # Import and run the original script
-        # This ensures we use the tested, production-ready code
-        import importlib.util
+        # Validate data files exist
+        required_files = ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv']
+        data_dir = Path(self.data_dir)
         
-        # Get the path to the original script
-        script_path = Path(__file__).parent / "cluster_analysis_core.py"
+        if not data_dir.exists():
+            raise FileNotFoundError(f"Data directory not found: {data_dir}")
         
-        if not script_path.exists():
-            # If not packaged, inform user to use the standalone script
-            self.logger.warning(
-                "Core analysis script not found. "
-                "This package requires the original Cluster_MIC_AMR_Viruelnce.py script."
+        missing_files = []
+        for filename in required_files:
+            filepath = data_dir / filename
+            if not filepath.exists():
+                missing_files.append(filename)
+        
+        if missing_files:
+            raise FileNotFoundError(
+                f"Required files not found in {data_dir}: {', '.join(missing_files)}\n"
+                f"Please ensure all required CSV files (MIC.csv, AMR_genes.csv, Virulence.csv) "
+                f"are present in the data directory."
             )
-            self.logger.info("Running analysis with current configuration...")
-            return self._run_analysis()
         
-        # Load and execute the script
-        spec = importlib.util.spec_from_file_location("cluster_core", script_path)
-        cluster_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(cluster_module)
+        # Create output directory
+        output_dir = Path(self.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Run the analysis
-        self.results = cluster_module.run_analysis(self.config)
+        self.logger.info(f"Data directory: {data_dir}")
+        self.logger.info(f"Output directory: {output_dir}")
+        
+        # Execute core analysis
+        try:
+            self._execute_analysis()
+        except Exception as e:
+            self.logger.error(f"Analysis failed: {str(e)}")
+            raise
+        
+        # Collect results
+        self.results = self._collect_results()
         
         self.logger.info("Analysis completed successfully!")
         return self.results
     
-    def _run_analysis(self) -> Dict[str, Any]:
-        """
-        Internal method to run analysis when core script is not available.
+    def _execute_analysis(self):
+        """Execute the core cluster analysis."""
+        # The core analysis is in cluster_analysis_core.py
+        # We execute it in the context of the data directory
         
-        This provides basic functionality for testing and development.
-        """
-        self.logger.info("Checking required data files...")
+        script_path = Path(__file__).parent / "cluster_analysis_core.py"
         
-        required_files = ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv']
-        data_dir = Path(self.config.data_dir)
+        if not script_path.exists():
+            raise FileNotFoundError(
+                f"Core analysis script not found: {script_path}\n"
+                "The package installation may be incomplete. "
+                "Please reinstall with: pip install --force-reinstall strepsuis-amrvirkm"
+            )
         
-        for filename in required_files:
-            filepath = data_dir / filename
-            if not filepath.exists():
-                raise FileNotFoundError(
-                    f"Required file not found: {filepath}\\n"
-                    f"Please ensure all required CSV files are in {data_dir}"
-                )
+        # Import and modify the core module to use our configuration
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("cluster_core", script_path)
+        cluster_module = importlib.util.module_from_spec(spec)
         
-        self.logger.info("All required files found.")
-        self.logger.info(
-            "Note: For full analysis functionality, please ensure the complete "
-            "package is installed with: pip install strepsuis-amrvirkm"
-        )
+        # Temporarily modify sys.path and working directory
+        original_cwd = os.getcwd()
+        original_path = sys.path.copy()
         
-        # Return basic structure
+        try:
+            # Add data directory to path so imports work
+            sys.path.insert(0, str(Path(self.data_dir).absolute()))
+            sys.path.insert(0, str(script_path.parent))
+            
+            # Change to data directory
+            os.chdir(self.data_dir)
+            
+            # Execute the module
+            spec.loader.exec_module(cluster_module)
+            
+            # Override the output folder in the module
+            cluster_module.output_folder = str(Path(self.output_dir).absolute())
+            os.makedirs(cluster_module.output_folder, exist_ok=True)
+            
+            # Run the main pipeline
+            self.logger.info("Executing cluster analysis core...")
+            cluster_module.main()
+            
+        finally:
+            # Restore original state
+            os.chdir(original_cwd)
+            sys.path = original_path
+    
+    def _collect_results(self) -> Dict[str, Any]:
+        """Collect analysis results from the output directory."""
+        output_dir = Path(self.output_dir)
+        
+        # Find generated reports
+        html_reports = list(output_dir.glob("*.html"))
+        excel_reports = list(output_dir.glob("Cluster_Analysis_Report_*.xlsx"))
+        csv_files = list(output_dir.glob("*.csv"))
+        
         return {
             "status": "success",
-            "message": "Data files validated. Full analysis requires complete package.",
-            "config": self.config
+            "output_dir": str(output_dir),
+            "html_reports": [str(p) for p in html_reports],
+            "excel_reports": [str(p) for p in excel_reports],
+            "csv_files": [str(p) for p in csv_files],
+            "total_files": len(html_reports) + len(excel_reports) + len(csv_files)
         }
     
     def generate_html_report(self, results: Optional[Dict[str, Any]] = None) -> str:
