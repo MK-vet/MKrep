@@ -2,6 +2,8 @@
 Main analyzer module for StrepSuis-GenPhenNet
 """
 
+import os
+import sys
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
@@ -11,7 +13,13 @@ from .config import Config
 
 class NetworkAnalyzer:
     """
-    Main analyzer class for Statistical network analysis for genomic-phenotypic associations.
+    Main analyzer class for network-based genomic-phenotypic association analysis.
+    
+    Performs:
+    - Chi-square and Fisher exact tests with FDR correction
+    - Information theory metrics
+    - Mutually exclusive pattern detection
+    - 3D network visualization with community detection
     """
     
     def __init__(self, config: Optional[Config] = None, **kwargs):
@@ -22,57 +30,104 @@ class NetworkAnalyzer:
             config: Config object. If None, creates from kwargs
             **kwargs: Configuration parameters (used if config is None)
         """
-        self.config = config if config is not None else Config(**kwargs)
+        if config is None:
+            config_params = {}
+            for key in ['data_dir', 'output_dir', 'fdr_alpha', 'min_support',
+                       'min_confidence', 'network_threshold', 'verbose']:
+                if key in kwargs:
+                    config_params[key] = kwargs.pop(key)
+            config = Config(**config_params)
+            
+        self.config = config
+        self.data_dir = config.data_dir
+        self.output_dir = config.output_dir
         self.logger = logging.getLogger(__name__)
         self.results = None
     
     def run(self) -> Dict[str, Any]:
         """
-        Run the complete analysis pipeline.
+        Run the complete network analysis pipeline.
         
         Returns:
             Dictionary containing analysis results
         """
-        self.logger.info("Starting analysis pipeline...")
+        self.logger.info("Starting network analysis pipeline...")
         
-        # Check required data files
-        self.logger.info("Checking required data files...")
-        data_dir = Path(self.config.data_dir)
+        # Validate data files
+        required_files = ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv']
+        data_dir = Path(self.data_dir)
         
         if not data_dir.exists():
             raise FileNotFoundError(f"Data directory not found: {data_dir}")
         
-        self.logger.info("All required files found.")
-        self.logger.info(
-            "Note: For full analysis functionality, please ensure the complete "
-            "package is installed with: pip install strepsuis-genphennet"
-        )
+        missing_files = []
+        for filename in required_files:
+            if not (data_dir / filename).exists():
+                missing_files.append(filename)
         
-        # Return basic structure
+        if missing_files:
+            raise FileNotFoundError(
+                f"Required files not found: {', '.join(missing_files)}"
+            )
+        
+        # Create output directory
+        output_dir = Path(self.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Execute core analysis
+        self._execute_analysis()
+        
+        # Collect results
+        self.results = self._collect_results()
+        
+        self.logger.info("Analysis completed successfully!")
+        return self.results
+    
+    def _execute_analysis(self):
+        """Execute the core network analysis."""
+        script_path = Path(__file__).parent / "network_analysis_core.py"
+        
+        if not script_path.exists():
+            raise FileNotFoundError(f"Core analysis script not found: {script_path}")
+        
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("network_core", script_path)
+        network_module = importlib.util.module_from_spec(spec)
+        
+        original_cwd = os.getcwd()
+        original_path = sys.path.copy()
+        
+        try:
+            sys.path.insert(0, str(Path(self.data_dir).absolute()))
+            sys.path.insert(0, str(script_path.parent))
+            os.chdir(self.data_dir)
+            
+            spec.loader.exec_module(network_module)
+            
+            network_module.OUTPUT_DIR = str(Path(self.output_dir).absolute())
+            os.makedirs(network_module.OUTPUT_DIR, exist_ok=True)
+            
+            self.logger.info("Executing network analysis core...")
+            network_module.main()
+            
+        finally:
+            os.chdir(original_cwd)
+            sys.path = original_path
+    
+    def _collect_results(self) -> Dict[str, Any]:
+        """Collect analysis results."""
+        output_dir = Path(self.output_dir)
+        
+        html_reports = list(output_dir.glob("*.html"))
+        excel_reports = list(output_dir.glob("*Network*.xlsx"))
+        csv_files = list(output_dir.glob("*.csv"))
+        
         return {
             "status": "success",
-            "message": "Analysis framework ready. Full analysis requires complete package.",
-            "config": self.config
+            "output_dir": str(output_dir),
+            "html_reports": [str(p) for p in html_reports],
+            "excel_reports": [str(p) for p in excel_reports],
+            "csv_files": [str(p) for p in csv_files],
+            "total_files": len(html_reports) + len(excel_reports) + len(csv_files)
         }
-    
-    def generate_html_report(self, results: Optional[Dict[str, Any]] = None) -> str:
-        """Generate HTML report from analysis results."""
-        results = results or self.results
-        if not results:
-            raise ValueError("No results available. Run analysis first.")
-        
-        output_path = Path(self.config.output_dir) / "report.html"
-        self.logger.info(f"HTML report generated: {output_path}")
-        return str(output_path)
-    
-    def generate_excel_report(self, results: Optional[Dict[str, Any]] = None) -> str:
-        """Generate Excel report from analysis results."""
-        results = results or self.results
-        if not results:
-            raise ValueError("No results available. Run analysis first.")
-        
-        from datetime import datetime
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = Path(self.config.output_dir) / f"Report_{timestamp}.xlsx"
-        self.logger.info(f"Excel report generated: {output_path}")
-        return str(output_path)
+
