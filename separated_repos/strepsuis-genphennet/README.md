@@ -12,7 +12,12 @@ StrepSuis-GenPhenNet is a production-ready Python package for advanced bioinform
 
 ### Key Features
 
-- ✅ **Chi-square and Fisher exact tests with FDR correction**\n- ✅ **Information theory metrics (entropy, mutual information, Cramér's V)**\n- ✅ **Mutually exclusive pattern detection**\n- ✅ **3D network visualization with Plotly**\n- ✅ **Community detection algorithms**\n- ✅ **Interactive HTML reports**
+- ✅ **Chi-square and Fisher exact tests with FDR correction**
+- ✅ **Information theory metrics (entropy, mutual information, Cramér's V)**
+- ✅ **Mutually exclusive pattern detection**
+- ✅ **3D network visualization with Plotly**
+- ✅ **Community detection algorithms**
+- ✅ **Interactive HTML reports**
 
 ## Quick Start
 

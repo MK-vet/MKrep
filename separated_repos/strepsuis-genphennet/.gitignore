@@ -88,6 +88,7 @@ data/*
 !data/results/
 !data/*/README.md
 *.csv
+!data/examples/*.csv
 !examples/*.csv
 
 # Logs
