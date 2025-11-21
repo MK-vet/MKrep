@@ -29,11 +29,11 @@ def example_data_with_output(tmp_path):
     output_dir = tmp_path / "output"
     output_dir.mkdir()
     
-    return {{
+    return {
         "data_dir": test_data_dir,
         "output_dir": output_dir,
         "example_dir": example_dir
-    }}
+    }
 
 
 def test_example_data_structure(example_data_with_output):
@@ -58,7 +58,7 @@ def test_data_loading_with_real_files(example_data_with_output):
     csv_files = list(data_dir.glob("*.csv"))
     assert len(csv_files) > 0, "Should have CSV files"
     
-    dataframes = {{}}
+    dataframes = {}
     for csv_file in csv_files:
         try:
             df = pd.read_csv(csv_file)
