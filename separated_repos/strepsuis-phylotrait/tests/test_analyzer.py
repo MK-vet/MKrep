@@ -43,7 +43,7 @@ def test_analyzer_initialization_with_config(sample_data, tmp_path):
 def test_load_data(sample_data, tmp_path):
     """Test data loading."""
     output_dir = tmp_path / "output"
-    analyzer = PhyloAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    _ = PhyloAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
     # Verify data directory exists
     assert Path(sample_data).exists()
     csv_files = list(Path(sample_data).glob("*.csv"))
@@ -123,7 +123,6 @@ def test_reproducibility(analyzer):
 
 def test_empty_data_handling(tmp_path):
     """Test analyzer handles empty data gracefully."""
-    from pathlib import Path
 
     import pandas as pd
 

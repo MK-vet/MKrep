@@ -43,7 +43,7 @@ def test_analyzer_initialization_with_config(sample_data, tmp_path):
 def test_load_data(sample_data, tmp_path):
     """Test data loading."""
     output_dir = tmp_path / "output"
-    analyzer = GenPhenAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    _ = GenPhenAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
     # Verify data directory exists
     assert Path(sample_data).exists()
     csv_files = list(Path(sample_data).glob("*.csv"))
@@ -125,7 +125,6 @@ def test_reproducibility(analyzer):
 
 def test_empty_data_handling(tmp_path):
     """Test analyzer handles empty data gracefully."""
-    from pathlib import Path
 
     import pandas as pd
 
@@ -144,7 +143,7 @@ def test_empty_data_handling(tmp_path):
 def test_multiple_runs(sample_data, tmp_path):
     """Test that analyzer can run multiple times."""
     output_dir = tmp_path / "output"
-    analyzer = Analyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    analyzer = GenPhenAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
 
     # Run analysis twice
     results1 = analyzer.run()
@@ -164,7 +163,7 @@ def test_output_directory_creation(sample_data, tmp_path):
     # Directory shouldn't exist yet
     assert not output_dir.exists()
 
-    analyzer = Analyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    analyzer = GenPhenAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
 
     # Should create directory
     assert Path(analyzer.config.output_dir).exists()

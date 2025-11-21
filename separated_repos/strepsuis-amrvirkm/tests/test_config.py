@@ -61,7 +61,7 @@ def test_config_output_dir_creation():
     """Test output directory is created if it doesn't exist."""
     with tempfile.TemporaryDirectory() as tmpdir:
         output_dir = Path(tmpdir) / "output"
-        config = Config(data_dir=tmpdir, output_dir=str(output_dir))
+        _ = Config(data_dir=tmpdir, output_dir=str(output_dir))
         assert output_dir.exists()
 
 

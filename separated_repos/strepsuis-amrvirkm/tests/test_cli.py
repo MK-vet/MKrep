@@ -2,7 +2,6 @@
 
 import sys
 import tempfile
-from io import StringIO
 from pathlib import Path
 
 import pytest
@@ -38,17 +37,9 @@ def test_cli_missing_required_args(monkeypatch):
     assert exc_info.value.code != 0
 
 
-def test_cli_with_valid_args(monkeypatch):
+def test_cli_with_valid_args(data_dir, monkeypatch):
     """Test CLI with valid arguments."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        data_dir = Path(tmpdir) / "data"
-        data_dir.mkdir()
-        # Create a dummy CSV file
-        import pandas as pd
-
-        df = pd.DataFrame({"test": [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
-
         monkeypatch.setattr(
             sys,
             "argv",
@@ -64,16 +55,9 @@ def test_cli_with_valid_args(monkeypatch):
         assert result == 0
 
 
-def test_cli_with_bootstrap_option(monkeypatch):
+def test_cli_with_bootstrap_option(data_dir, monkeypatch):
     """Test CLI with bootstrap iterations option."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        data_dir = Path(tmpdir) / "data"
-        data_dir.mkdir()
-        import pandas as pd
-
-        df = pd.DataFrame({"test": [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
-
         monkeypatch.setattr(
             sys,
             "argv",
@@ -91,16 +75,9 @@ def test_cli_with_bootstrap_option(monkeypatch):
         assert result == 0
 
 
-def test_cli_with_fdr_alpha_option(monkeypatch):
+def test_cli_with_fdr_alpha_option(data_dir, monkeypatch):
     """Test CLI with FDR alpha option."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        data_dir = Path(tmpdir) / "data"
-        data_dir.mkdir()
-        import pandas as pd
-
-        df = pd.DataFrame({"test": [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
-
         monkeypatch.setattr(
             sys,
             "argv",
@@ -118,16 +95,9 @@ def test_cli_with_fdr_alpha_option(monkeypatch):
         assert result == 0
 
 
-def test_cli_with_verbose_option(monkeypatch):
+def test_cli_with_verbose_option(data_dir, monkeypatch):
     """Test CLI with verbose option."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        data_dir = Path(tmpdir) / "data"
-        data_dir.mkdir()
-        import pandas as pd
-
-        df = pd.DataFrame({"test": [1, 2, 3]})
-        df.to_csv(data_dir / "test.csv", index=False)
-
         monkeypatch.setattr(
             sys,
             "argv",

@@ -10,16 +10,8 @@ from strepsuis_amrvirkm.config import Config
 
 
 @pytest.fixture
-def sample_data(tmp_path):
-    """Create sample test data."""
-    data_dir = tmp_path / "data"
-    data_dir.mkdir()
-
-    # Create sample CSV files
-    df = pd.DataFrame(
-        {"Strain_ID": ["S001", "S002", "S003"], "Feature1": [1, 0, 1], "Feature2": [0, 1, 1]}
-    )
-    df.to_csv(data_dir / "test_data.csv", index=False)
+def sample_data(data_dir):
+    """Create sample test data using example files."""
     return data_dir
 
 
@@ -43,7 +35,7 @@ def test_analyzer_initialization_with_config(sample_data, tmp_path):
 def test_load_data(sample_data, tmp_path):
     """Test data loading."""
     output_dir = tmp_path / "output"
-    analyzer = ClusterAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
+    _ = ClusterAnalyzer(data_dir=str(sample_data), output_dir=str(output_dir))
     # Verify data directory exists
     assert Path(sample_data).exists()
     csv_files = list(Path(sample_data).glob("*.csv"))
@@ -125,9 +117,7 @@ def test_reproducibility(analyzer):
 
 def test_empty_data_handling(tmp_path):
     """Test analyzer handles empty data gracefully."""
-    from pathlib import Path
 
-    import pandas as pd
 
     empty_dir = tmp_path / "empty"
     empty_dir.mkdir()

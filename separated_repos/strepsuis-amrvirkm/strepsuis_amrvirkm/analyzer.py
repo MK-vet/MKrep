@@ -6,8 +6,6 @@ This module provides a wrapper around the cluster analysis functionality.
 
 import logging
 import os
-import shutil
-import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -57,7 +55,7 @@ class ClusterAnalyzer:
         self.data_dir = config.data_dir
         self.output_dir = config.output_dir
         self.logger = logging.getLogger(__name__)
-        self.results = None
+        self.results: Optional[Dict[str, Any]] = None
 
         # Set up logging
         if hasattr(config, "verbose") and config.verbose:

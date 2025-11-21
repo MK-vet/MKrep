@@ -5,7 +5,6 @@ Command-line interface for StrepSuis-GenPhenNet
 import argparse
 import logging
 import sys
-from pathlib import Path
 
 from . import __version__
 from .analyzer import NetworkAnalyzer
@@ -72,7 +71,7 @@ def main():
         analyzer = NetworkAnalyzer(config)
         logger.info("Starting analysis...")
 
-        results = analyzer.run()
+        _ = analyzer.run()
 
         logger.info("Analysis completed successfully!")
         logger.info(f"Results saved to: {config.output_dir}")

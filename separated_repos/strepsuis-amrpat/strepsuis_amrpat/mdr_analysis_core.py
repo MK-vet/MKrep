@@ -39,9 +39,10 @@ import os
 import sys
 import time
 import warnings
+from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 from itertools import combinations
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import networkx as nx
 import numpy as np
@@ -72,7 +73,6 @@ def setup_environment() -> str:
     """
     IN_COLAB = False
     try:
-        import google.colab
         from google.colab import files
 
         IN_COLAB = True
@@ -187,7 +187,7 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
             den = row_sums[0] * row_sums[1] * col_sums[0] * col_sums[1]
             phi_val = num / np.sqrt(den) if den > 0 else 0.0
             return (0, p_val, phi_val)
-        except:
+        except (ValueError, TypeError, ZeroDivisionError):
             return (np.nan, np.nan, np.nan)
     else:
         try:
@@ -202,7 +202,7 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
             if (a * d) < (b * c):
                 phi_val = -phi_val
             return (chi2, p_val, phi_val)
-        except:
+        except (ValueError, TypeError, ZeroDivisionError):
             return (np.nan, np.nan, np.nan)
 
 
@@ -236,13 +236,9 @@ def add_significance_stars(p_value: float) -> str:
     return p_str
 
 
-from concurrent.futures import ProcessPoolExecutor
-from typing import Tuple
-
 ###############################################################################
 # 3) BOOTSTRAP FREQUENCIES
 ###############################################################################
-import pandas as pd
 
 
 def _bootstrap_col(
@@ -438,7 +434,7 @@ def extract_amr_genes(data: pd.DataFrame, gene_cols: List[str]) -> pd.DataFrame:
         if not pd.api.types.is_numeric_dtype(amr[c]):
             try:
                 amr[c] = amr[c].astype(int)
-            except:
+            except (ValueError, TypeError):
                 amr[c] = (~amr[c].isna() & (amr[c] != 0) & (amr[c] != "")).astype(int)
     return amr.astype(int)
 
@@ -545,7 +541,7 @@ def bootstrap_pattern_freq(
         return Counter(s)
 
     alpha = 1.0 - conf_level
-    store = {p: [] for p in counts}
+    store: Dict[str, List[float]] = {p: [] for p in counts}
     for _ in range(n_iter):
         c = single_boot()
         for pat in counts:
@@ -874,7 +870,6 @@ def build_hybrid_co_resistance_network(
         return nx.Graph()
 
     all_cols = pheno_cols + gene_cols
-    pvals = []
     combos = []
 
     # Calculate all pairwise associations
@@ -974,7 +969,7 @@ def compute_louvain_communities(G: nx.Graph) -> pd.DataFrame:
         return pd.DataFrame(columns=["Node", "Community"])
 
 
-def create_hybrid_network_figure(G: nx.Graph) -> str:
+def create_hybrid_network_figure(G: nx.Graph) -> Tuple[str, Any]:
     """
     Create an interactive visualization of the hybrid network.
 
@@ -1213,7 +1208,7 @@ def df_to_html(df: pd.DataFrame, caption: str) -> str:
     # Generate unique ID for this table
     import hashlib
 
-    table_id = f"table_{hashlib.md5(caption.encode()).hexdigest()[:8]}"
+    table_id = f"table_{hashlib.md5(caption.encode(), usedforsecurity=False).hexdigest()[:8]}"
 
     # Round all float columns to 3 decimal places
     for col in df.columns:

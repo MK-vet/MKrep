@@ -5,7 +5,6 @@ Command-line interface for StrepSuis-AMRVirKM
 import argparse
 import logging
 import sys
-from pathlib import Path
 
 from . import __version__
 from .analyzer import ClusterAnalyzer
@@ -128,7 +127,7 @@ For more information, visit: https://github.com/MK-vet/strepsuis-amrvirkm
         analyzer = ClusterAnalyzer(config)
         logger.info("Starting cluster analysis...")
 
-        results = analyzer.run()
+        _ = analyzer.run()
 
         logger.info("Analysis completed successfully!")
         logger.info(f"Results saved to: {config.output_dir}")

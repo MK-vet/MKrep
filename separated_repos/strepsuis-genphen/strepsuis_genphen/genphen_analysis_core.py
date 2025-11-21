@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# ruff: noqa: E402
 
 """
 StrepSuisPhyloCluster
@@ -35,7 +36,6 @@ import subprocess
 import sys
 import warnings
 from io import BytesIO
-from itertools import combinations
 
 
 def _pip_install(pkgs):
@@ -535,7 +535,7 @@ class TreeAwareClustering:
                     for j in range(i + 1, len(leaves)):
                         try:
                             m = max(m, self.tree.distance(leaves[i], leaves[j]))
-                        except:
+                        except (ValueError, TypeError):
                             pass
                 vals.append(m)
             else:
@@ -545,7 +545,7 @@ class TreeAwareClustering:
                         try:
                             s += self.tree.distance(leaves[i], leaves[j])
                             c += 1
-                        except:
+                        except (ValueError, TypeError):
                             pass
                 vals.append(s if mode == "sum" else (s / c if c else 0.0))
         if not vals:
@@ -1470,11 +1470,11 @@ class Pipeline:
                 + Traits._to_dt_html(fr.reset_index(), f"tbl-fr-{short}")
             )
             blocks.append(
-                f"<h6 class='mt-3'>Chi-square + FDR</h6>"
+                "<h6 class='mt-3'>Chi-square + FDR</h6>"
                 + Traits._to_dt_html(tst, f"tbl-test-{short}")
             )
             blocks.append(
-                f"<h6 class='mt-3'>RF Importance (bootstrap)</h6>"
+                "<h6 class='mt-3'>RF Importance (bootstrap)</h6>"
                 + Traits._to_dt_html(imp.head(50), f"tbl-imp-{short}")
             )
 

@@ -5,10 +5,9 @@ Command-line interface for StrepSuis-PhyloTrait
 import argparse
 import logging
 import sys
-from pathlib import Path
 
 from . import __version__
-from .analyzer import PhyloAnalyzer
+from .analyzer import PhyloTraitAnalyzer
 from .config import Config
 
 
@@ -69,10 +68,10 @@ def main():
         logger.info(f"Data directory: {config.data_dir}")
         logger.info(f"Output directory: {config.output_dir}")
 
-        analyzer = PhyloAnalyzer(config)
+        analyzer = PhyloTraitAnalyzer(config)
         logger.info("Starting analysis...")
 
-        results = analyzer.run()
+        _ = analyzer.run()
 
         logger.info("Analysis completed successfully!")
         logger.info(f"Results saved to: {config.output_dir}")
