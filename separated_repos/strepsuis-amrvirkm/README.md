@@ -3,6 +3,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/strepsuis-amrvirkm/blob/main/notebooks/AMRVirKM_Analysis.ipynb)
+[![Coverage](https://img.shields.io/badge/coverage-pending-lightgrey)]()
 
 **Professional bioinformatics tool for comprehensive clustering analysis of antimicrobial resistance and virulence profiles in bacterial genomics.**
 
