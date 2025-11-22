@@ -96,11 +96,11 @@ class TestAnalyzerInitialization:
         """Test creating analyzer with keyword arguments."""
         with tempfile.TemporaryDirectory() as tmpdir:
             analyzer = NetworkAnalyzer(
-                data_dir=tmpdir, bootstrap_iterations=300
+                data_dir=tmpdir, fdr_alpha=0.01
             )
 
             assert analyzer.config.data_dir == tmpdir
-            assert analyzer.config.bootstrap_iterations == 300
+            assert analyzer.config.fdr_alpha == 0.01
 
     def test_analyzer_without_args_uses_defaults(self):
         """Test that analyzer without args uses current directory."""
