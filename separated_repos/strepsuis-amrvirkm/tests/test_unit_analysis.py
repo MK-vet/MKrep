@@ -8,7 +8,7 @@ import tempfile
 import pandas as pd
 import pytest
 
-from strepsuis_amrvirkm.analyzer import KModesAnalyzer
+from strepsuis_amrvirkm.analyzer import ClusterAnalyzer
 from strepsuis_amrvirkm.config import Config
 
 
@@ -77,13 +77,13 @@ class TestConfigValidation:
 
 
 class TestAnalyzerInitialization:
-    """Test KModesAnalyzer initialization."""
+    """Test ClusterAnalyzer initialization."""
 
     def test_analyzer_with_config_object(self):
         """Test creating analyzer with Config object."""
         with tempfile.TemporaryDirectory() as tmpdir:
             config = Config(data_dir=tmpdir)
-            analyzer = KModesAnalyzer(config=config)
+            analyzer = ClusterAnalyzer(config=config)
 
             assert analyzer.config == config
             assert analyzer.data_dir == tmpdir
@@ -91,7 +91,7 @@ class TestAnalyzerInitialization:
     def test_analyzer_with_kwargs(self):
         """Test creating analyzer with keyword arguments."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            analyzer = KModesAnalyzer(
+            analyzer = ClusterAnalyzer(
                 data_dir=tmpdir, bootstrap_iterations=300, max_clusters=8
             )
 
@@ -101,7 +101,7 @@ class TestAnalyzerInitialization:
 
     def test_analyzer_without_args_uses_defaults(self):
         """Test that analyzer without args uses current directory."""
-        analyzer = KModesAnalyzer()
+        analyzer = ClusterAnalyzer()
         assert analyzer.config is not None
 
 
