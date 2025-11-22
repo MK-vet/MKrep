@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 50  # Hard limit to stay under 50 min
     
+    permissions:
+      contents: write  # Required to commit and push results
+      actions: read    # Required to read workflow configuration
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
