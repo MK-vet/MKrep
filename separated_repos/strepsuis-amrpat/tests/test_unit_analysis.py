@@ -208,9 +208,9 @@ class TestConfigDefaults:
         """Test default reporting flags are True."""
         with tempfile.TemporaryDirectory() as tmpdir:
             config = Config(data_dir=tmpdir)
-            assert config.generate_html is True
-            assert config.generate_excel is True
-            assert config.save_png_charts is True
+            assert config.generate_html
+            assert config.generate_excel
+            assert config.save_png_charts
 
     def test_default_dpi(self):
         """Test default DPI is 150."""

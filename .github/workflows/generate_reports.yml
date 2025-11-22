@@ -68,7 +68,7 @@ jobs:
             echo "Processing: $module"
             echo "========================================="
             
-            cd /home/runner/work/MKrep/MKrep/separated_repos/$module
+            cd ${GITHUB_WORKSPACE}/separated_repos/$module
             module_python=$(echo $module | tr '-' '_')
             
             # Install module with dev dependencies
@@ -144,7 +144,7 @@ ANALYSIS_EOF
             
             echo "✅ Analysis summary written to separated_repos/analysis_reports/$module/ANALYSIS_SUMMARY.md"
             
-            cd /home/runner/work/MKrep/MKrep
+            cd ${GITHUB_WORKSPACE}
           done
           
           echo ""
