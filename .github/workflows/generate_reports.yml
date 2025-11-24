@@ -79,15 +79,15 @@ jobs:
             echo "Installing $module..."
             pip install -e .[dev] -q 2>&1 | tail -5
             
-            # Run tests with coverage (excluding slow tests for speed)
+            # Run tests with coverage (ALL tests for maximum coverage)
             echo "Running tests and generating coverage report..."
-            pytest -m "not slow" \
-                   --cov=${module_python} \
+            pytest --cov=${module_python} \
                    --cov-report=term \
                    --cov-report=html:htmlcov \
                    --cov-report=xml:coverage.xml \
                    --cov-report=json:coverage.json \
                    --cov-fail-under=0 \
+                   --timeout=300 \
                    -v 2>&1 | tail -50 || echo "Tests completed"
             
             # Copy coverage report to main reports directory
