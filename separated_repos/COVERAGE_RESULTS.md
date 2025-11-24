@@ -1,75 +1,66 @@
 # Test Coverage Report - All Modules
 
-**Generated**: 2025-11-22
+**Last Updated**: 2025-11-24  
+**Test Methodology**: All fast tests (`pytest -m "not slow"`) - consistent across all modules
 
 ## Coverage Results (Verified)
 
-| Module | Before | After | Change | Status |
-|--------|--------|-------|--------|--------|
-| strepsuis-amrpat | 11% | **61%** | +50% | ✅ Target exceeded |
-| strepsuis-amrvirkm | ~8% | **8%** | - | ⚠️ Needs work |
-| strepsuis-genphen | ~7% | **19%** | +12% | ⚠️ Below target |
-| strepsuis-genphennet | ~7% | **21%** | +14% | ⚠️ Below target |
-| strepsuis-phylotrait | ~7% | **13%** | +6% | ⚠️ Below target |
+| Module | Coverage | Test Files | Status |
+|--------|----------|------------|--------|
+| strepsuis-amrpat | **61.1%** | 100 passed, 8 failed* | ✅ Exceeds target |
+| strepsuis-amrvirkm | **34.0%** | 74 passed, 1 failed* | ⚠️ Approaching target |
+| strepsuis-genphen | **31.7%** | 77 passed, 1 failed* | ⚠️ Approaching target |
+| strepsuis-genphennet | **35.8%** | 77 passed, 1 failed* | ⚠️ Approaching target |
+| strepsuis-phylotrait | **21.9%** | 75 passed, 3 failed* | ⚠️ Below target |
 
-**Note**: The unit tests alone provide limited coverage (7-21%). When combined with ALL existing tests (including end-to-end tests marked as "slow"), coverage reaches 50-65% for most modules. The workflow intentionally excludes slow tests for speed (<15 min execution).
+***Note**: Test failures are pre-existing issues (stdin capture, CLI args) not introduced by new tests.
 
-## What Was Added
+## Methodology
 
-### Unit Tests Created
-- `tests/test_unit_analysis.py` for each module
-- Total: 82 new tests
-- Focus: Configuration validation, analyzer initialization, error handling
+All modules use **identical test methodology**:
+- Run all tests marked as "not slow" (`pytest -m "not slow"`)
+- Includes: unit tests, config tests, workflow tests, integration tests, utilities
+- Excludes: end-to-end tests with full dataset (marked as "slow")
+- Execution time: ~2-5 seconds per module
 
-### Coverage by Test Type
+### Test Coverage Breakdown
 
-**strepsuis-amrpat** (Best Performance):
-- Unit tests alone: 11%
-- Unit + config + basic + utilities: **61%** ✅
-- With all tests (including slow): Estimated 65-70%
+**Coverage Components** (example from strepsuis-amrpat):
+- Configuration modules: 84-100%
+- CLI modules: 89-100%
+- Analyzer initialization: 84-100%
+- **Core analysis**: 11-56% (target for improvement)
+- Utilities: 11-100%
+- Test infrastructure: 83-100%
 
-**Other Modules**:
-- Unit tests alone: 7-8%
-- Unit + config + basic + utilities: 13-21%
-- With all tests (including slow): Estimated 50-60%
+## Test Execution
 
-## How to Improve Coverage
-
-### For Immediate 50%+ Coverage
-
-Run ALL tests (including slow ones marked with `@pytest.mark.slow`):
-
+### Local Testing
 ```bash
-cd separated_repos/strepsuis-{module}
-pytest --cov={module} --cov-report=html
-```
+cd separated_repos/{module}
+pip install -e .[dev]
 
-This includes:
-- End-to-end tests (11 tests per module)
-- Integration tests
-- Workflow tests
-- All unit tests
+# Run all fast tests (same as CI)
+pytest -m "not slow" --cov --cov-report=html
 
-### For Future Enhancement
-
-Add more unit tests targeting:
-- Core analysis functions (currently 0% coverage)
-- Data processing pipelines
-- Excel report generation
-- Visualization functions
-
-## GitHub Actions Workflow
-
-The workflow in `.github/workflows/generate_reports.yml` runs **fast tests only** (`-m "not slow"`) to keep execution time under 15 minutes. This provides basic validation but lower coverage numbers.
-
-To get full coverage locally:
-```bash
+# Run ALL tests including slow ones
 pytest --cov --cov-report=html
 ```
 
-## Files Location
+### CI/CD (GitHub Actions)
+The workflow uses the same methodology:
+```yaml
+pytest -m "not slow" --cov=${module} --cov-report=html
+```
 
-- Coverage reports: `separated_repos/coverage_reports/`
-- Analysis reports: `separated_repos/analysis_reports/`
-- Workflow: `.github/workflows/generate_reports.yml`
-- Usage guide: `separated_repos/WORKFLOW_USAGE_GUIDE.md`
+## Files Generated
+
+- HTML Coverage: `separated_repos/coverage_reports/{module}_htmlcov/index.html`
+- JSON Data: `separated_repos/{module}/coverage.json`
+- Analysis Summary: `separated_repos/analysis_reports/{module}/ANALYSIS_SUMMARY.md`
+
+## References
+
+- **Workflow**: `.github/workflows/generate_reports.yml`
+- **Usage Guide**: `separated_repos/WORKFLOW_USAGE_GUIDE.md`
+- **Test Files**: `separated_repos/{module}/tests/test_unit_analysis.py`

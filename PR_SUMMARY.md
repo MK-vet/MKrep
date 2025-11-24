@@ -4,23 +4,25 @@
 
 Added 82 unit tests across all 5 modules with automated GitHub Actions workflow for coverage reporting.
 
-## Coverage Results (Verified)
+## Coverage Results (Verified - Consistent Methodology)
+
+All modules tested with identical methodology: `pytest -m "not slow"`
 
 | Module | Coverage | Status |
 |--------|----------|--------|
-| strepsuis-amrpat | **61%** | ✅ Exceeds target |
-| strepsuis-amrvirkm | **8%** | ⚠️ Unit tests only |
-| strepsuis-genphen | **19%** | ⚠️ Unit tests only |
-| strepsuis-genphennet | **21%** | ⚠️ Unit tests only |
-| strepsuis-phylotrait | **13%** | ⚠️ Unit tests only |
+| strepsuis-amrpat | **61.1%** | ✅ Exceeds 50% target |
+| strepsuis-amrvirkm | **34.0%** | ⚠️ Approaching target |
+| strepsuis-genphen | **31.7%** | ⚠️ Approaching target |
+| strepsuis-genphennet | **35.8%** | ⚠️ Approaching target |
+| strepsuis-phylotrait | **21.9%** | ⚠️ Below target |
 
-**Note**: Coverage shown is with fast tests only. Run full test suite (including slow tests) for 50-65% coverage.
+**Test Methodology**: All fast tests (unit + config + workflow + integration), excluding slow end-to-end tests. Execution time: 2-5 seconds per module.
 
 ## What Was Added
 
 - **82 unit tests** in `tests/test_unit_analysis.py` for each module
 - **GitHub Actions workflow** in `.github/workflows/generate_reports.yml`
-- **Documentation** in `separated_repos/WORKFLOW_USAGE_GUIDE.md`
+- **Comprehensive documentation** in English
 
 ## Quick Start
 
@@ -33,12 +35,19 @@ Added 82 unit tests across all 5 modules with automated GitHub Actions workflow 
 ```bash
 cd separated_repos/strepsuis-amrpat
 pip install -e .[dev]
-pytest --cov --cov-report=html
+pytest -m "not slow" --cov --cov-report=html
 ```
 
 ## Files
 
-- Workflow: `.github/workflows/generate_reports.yml`
-- Tests: `separated_repos/{module}/tests/test_unit_analysis.py`
-- Coverage results: `separated_repos/COVERAGE_RESULTS.md`
-- Usage guide: `separated_repos/WORKFLOW_USAGE_GUIDE.md`
+- **Workflow**: `.github/workflows/generate_reports.yml`
+- **Tests**: `separated_repos/{module}/tests/test_unit_analysis.py`
+- **Coverage Results**: `separated_repos/COVERAGE_RESULTS.md`
+- **Usage Guide**: `separated_repos/WORKFLOW_USAGE_GUIDE.md`
+
+## Next Steps
+
+To reach 50%+ for all modules, add 20-30 more targeted tests focusing on:
+- Core analysis functions
+- Data validation
+- Output generation
