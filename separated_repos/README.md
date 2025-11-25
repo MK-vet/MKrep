@@ -258,6 +258,8 @@ Complete end-to-end testing infrastructure now deployed across all modules!
 
 ### Test Coverage Summary
 
+> **Note**: Coverage badges show "pending" until the generate_reports workflow is run. The workflow will update these badges with actual coverage percentages (target: 50-65%).
+
 | Module | Tests | Coverage Badge | Fast Tests | Full Suite | End-to-End |
 |--------|-------|----------------|------------|------------|------------|
 | strepsuis-amrpat | 93+ | [![Coverage](https://img.shields.io/badge/coverage-pending-lightgrey)]() | ~4s | ~30s | ✅ |

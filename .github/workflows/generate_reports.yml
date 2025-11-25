@@ -249,7 +249,7 @@ EOF
 
 **Analysis Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")  
 **Repository**: MK-vet/MKrep  
-**Branch**: main
+**Branch**: ${GITHUB_REF_NAME}
 
 ## 🎯 Objective Achieved
 
@@ -265,35 +265,35 @@ This workflow successfully:
 ### 1. strepsuis-amrpat - MDR Pattern Analysis
 **Focus**: Multidrug resistance pattern detection and co-resistance network analysis
 
-- **Coverage**: \${COVERAGE_strepsuis_amrpat:-pending}%
+- **Coverage**: ${COVERAGE_strepsuis_amrpat:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-amrpat/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-amrpat_htmlcov/index.html)
 
 ### 2. strepsuis-amrvirkm - K-Modes Clustering
 **Focus**: K-modes clustering of AMR and virulence profiles
 
-- **Coverage**: \${COVERAGE_strepsuis_amrvirkm:-pending}%
+- **Coverage**: ${COVERAGE_strepsuis_amrvirkm:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-amrvirkm/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-amrvirkm_htmlcov/index.html)
 
 ### 3. strepsuis-genphen - Genotype-Phenotype Integration
 **Focus**: Integrated genomic-phenotypic analysis
 
-- **Coverage**: \${COVERAGE_strepsuis_genphen:-pending}%
+- **Coverage**: ${COVERAGE_strepsuis_genphen:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-genphen/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-genphen_htmlcov/index.html)
 
 ### 4. strepsuis-genphennet - Network-Based Analysis
 **Focus**: Network-based genome-phenome integration
 
-- **Coverage**: \${COVERAGE_strepsuis_genphennet:-pending}%
+- **Coverage**: ${COVERAGE_strepsuis_genphennet:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-genphennet/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-genphennet_htmlcov/index.html)
 
 ### 5. strepsuis-phylotrait - Phylogenetic Analysis
 **Focus**: Phylogenetic and binary trait analysis
 
-- **Coverage**: \${COVERAGE_strepsuis_phylotrait:-pending}%
+- **Coverage**: ${COVERAGE_strepsuis_phylotrait:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-phylotrait/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-phylotrait_htmlcov/index.html)
 
