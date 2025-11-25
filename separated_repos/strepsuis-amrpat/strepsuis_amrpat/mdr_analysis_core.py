@@ -47,9 +47,13 @@ from typing import Any, Dict, List, Tuple
 import networkx as nx
 import numpy as np
 import pandas as pd
-from excel_report_utils import ExcelReportGenerator
 from scipy.stats import chi2_contingency, fisher_exact
 from statsmodels.stats.multitest import multipletests
+
+try:
+    from .excel_report_utils import ExcelReportGenerator
+except ImportError:
+    from strepsuis_amrpat.excel_report_utils import ExcelReportGenerator
 
 warnings.filterwarnings("ignore")  # for cleaner console output
 
