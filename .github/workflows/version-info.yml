@@ -23,7 +23,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install voila jupyter nbconvert
+        pip install jupyter nbconvert
         cd python_package && pip install -e . && cd ..
     
     - name: Collect version information
@@ -52,9 +52,8 @@ jobs:
         echo '```' >> VERSION_INFO.md
         echo "" >> VERSION_INFO.md
         
-        echo "## Voilà & Jupyter" >> VERSION_INFO.md
+        echo "## Jupyter" >> VERSION_INFO.md
         echo '```' >> VERSION_INFO.md
-        voila --version >> VERSION_INFO.md
         jupyter --version >> VERSION_INFO.md
         echo '```' >> VERSION_INFO.md
         echo "" >> VERSION_INFO.md
@@ -127,7 +126,6 @@ jobs:
         grep -q "Quick Start" README.md && echo "✓ Quick Start section found"
         grep -q "Installation" README.md && echo "✓ Installation section found"
         grep -q "Google Colab" README.md && echo "✓ Colab instructions found"
-        grep -q "voila" README.md && echo "✓ Voilà instructions found"
         grep -q "CLI" README.md && echo "✓ CLI instructions found"
         
         echo ""
@@ -160,9 +158,6 @@ jobs:
       run: |
         echo "Main requirements.txt:"
         cat requirements.txt
-        echo ""
-        echo "Voilà requirements.txt:"
-        cat huggingface_demo/requirements.txt
 
   comprehensive-check:
     name: Comprehensive Deployment Check
@@ -200,10 +195,6 @@ jobs:
         echo "3. 📦 CLI Package (mkrep)"
         echo "   - Location: python_package/"
         test -f python_package/pyproject.toml && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
-        echo ""
-        echo "4. 🎨 Voilà Dashboard"
-        echo "   - Location: huggingface_demo/"
-        test -f huggingface_demo/MKrep_Dashboard.ipynb && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
         echo ""
         echo "## Supported Python Versions:"
         echo "   - Python 3.8 ✅"
