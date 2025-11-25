@@ -31,24 +31,27 @@ StrepSuis-AMRPat is a production-ready Python package for advanced bioinformatic
 
 ### Installation
 
-#### Option 1: From PyPI (when published)
+> **Note**: This module is currently part of the MKrep repository. Install from the MKrep repository using the instructions below. Future standalone installation will be available once the module is published to its own repository.
+
+#### Option 1: From Current Location (MKrep Repository)
+```bash
+# Clone the main repository
+git clone https://github.com/MK-vet/MKrep.git
+cd MKrep/separated_repos/strepsuis-amrpat
+pip install -e .
+```
+
+#### Option 2: From PyPI (when published)
 ```bash
 pip install strepsuis-amrpat
 ```
 
-#### Option 2: From GitHub
+#### Option 3: From Standalone GitHub Repo (future)
 ```bash
 pip install git+https://github.com/MK-vet/strepsuis-amrpat.git
 ```
 
-#### Option 3: From Source
-```bash
-git clone https://github.com/MK-vet/strepsuis-amrpat.git
-cd strepsuis-amrpat
-pip install -e .
-```
-
-#### Option 4: Docker
+#### Option 4: Docker (future)
 ```bash
 docker pull ghcr.io/mk-vet/strepsuis-amrpat:latest
 ```
