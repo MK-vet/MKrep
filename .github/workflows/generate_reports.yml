@@ -158,7 +158,7 @@ ANALYSIS_EOF
 
       - name: Generate coverage summary
         run: |
-          cat > separated_repos/COVERAGE_REPORT_COMPLETE.md <<'EOF'
+          cat > separated_repos/COVERAGE_REPORT_COMPLETE.md <<EOF
 # Test Coverage Report - All Modules
 
 **Generated**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
@@ -191,11 +191,11 @@ EOF
             fi
           done
           
-          cat >> separated_repos/COVERAGE_REPORT_COMPLETE.md <<'EOF'
+          cat >> separated_repos/COVERAGE_REPORT_COMPLETE.md <<EOF
 
 ## Analysis Reports
 
-Full analysis summaries available in `separated_repos/analysis_reports/`:
+Full analysis summaries available in \`separated_repos/analysis_reports/\`:
 
 EOF
           
@@ -205,12 +205,12 @@ EOF
             fi
           done
           
-          cat >> separated_repos/COVERAGE_REPORT_COMPLETE.md <<'EOF'
+          cat >> separated_repos/COVERAGE_REPORT_COMPLETE.md <<EOF
 
 ## Test Execution Summary
 
 All tests executed successfully:
-- Fast tests only (marked `not slow`)
+- Fast tests only (marked \`not slow\`)
 - Total execution time: <10 minutes
 - All modules installed and tested
 - Coverage reports generated
@@ -219,7 +219,7 @@ All tests executed successfully:
 
 1. **View Coverage**: Open the HTML coverage reports to see line-by-line coverage
 2. **Check Analysis**: Read the analysis summaries for each module
-3. **Local Testing**: Run `pytest --cov` in any module directory
+3. **Local Testing**: Run \`pytest --cov\` in any module directory
 4. **Full Analysis**: Use the full 92-strain dataset locally for complete analysis
 
 ---
@@ -244,12 +244,12 @@ EOF
 
       - name: Create full analysis summary index
         run: |
-          cat > separated_repos/FULL_ANALYSIS_SUMMARY.md <<'EOF'
+          cat > separated_repos/FULL_ANALYSIS_SUMMARY.md <<EOF
 # Full Analysis Summary - StrepSuis Suite
 
 **Analysis Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")  
 **Repository**: MK-vet/MKrep  
-**Branch**: copilot/add-unit-tests-and-reports
+**Branch**: main
 
 ## 🎯 Objective Achieved
 
@@ -265,35 +265,35 @@ This workflow successfully:
 ### 1. strepsuis-amrpat - MDR Pattern Analysis
 **Focus**: Multidrug resistance pattern detection and co-resistance network analysis
 
-- **Coverage**: ${COVERAGE_strepsuis_amrpat:-pending}%
+- **Coverage**: \${COVERAGE_strepsuis_amrpat:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-amrpat/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-amrpat_htmlcov/index.html)
 
 ### 2. strepsuis-amrvirkm - K-Modes Clustering
 **Focus**: K-modes clustering of AMR and virulence profiles
 
-- **Coverage**: ${COVERAGE_strepsuis_amrvirkm:-pending}%
+- **Coverage**: \${COVERAGE_strepsuis_amrvirkm:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-amrvirkm/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-amrvirkm_htmlcov/index.html)
 
 ### 3. strepsuis-genphen - Genotype-Phenotype Integration
 **Focus**: Integrated genomic-phenotypic analysis
 
-- **Coverage**: ${COVERAGE_strepsuis_genphen:-pending}%
+- **Coverage**: \${COVERAGE_strepsuis_genphen:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-genphen/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-genphen_htmlcov/index.html)
 
 ### 4. strepsuis-genphennet - Network-Based Analysis
 **Focus**: Network-based genome-phenome integration
 
-- **Coverage**: ${COVERAGE_strepsuis_genphennet:-pending}%
+- **Coverage**: \${COVERAGE_strepsuis_genphennet:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-genphennet/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-genphennet_htmlcov/index.html)
 
 ### 5. strepsuis-phylotrait - Phylogenetic Analysis
 **Focus**: Phylogenetic and binary trait analysis
 
-- **Coverage**: ${COVERAGE_strepsuis_phylotrait:-pending}%
+- **Coverage**: \${COVERAGE_strepsuis_phylotrait:-pending}%
 - [Analysis Report](analysis_reports/strepsuis-phylotrait/ANALYSIS_SUMMARY.md)
 - [Coverage Report](coverage_reports/strepsuis-phylotrait_htmlcov/index.html)
 
@@ -301,7 +301,7 @@ This workflow successfully:
 
 ### What Was Added
 
-For each module, added `tests/test_unit_analysis.py` with:
+For each module, added \`tests/test_unit_analysis.py\` with:
 - **Configuration validation tests** (~7 tests per module)
   - Invalid parameter handling
   - Edge case testing
@@ -333,16 +333,16 @@ Tests focused on:
 
 ### View Reports Locally
 
-bash
+\`\`\`bash
 cd separated_repos/strepsuis-amrpat
 pip install -e .[dev]
 pytest --cov --cov-report=html
 open htmlcov/index.html  # View coverage report
-
+\`\`\`
 
 ### Run Full Analysis (92 strains)
 
-bash
+\`\`\`bash
 cd separated_repos/strepsuis-amrpat
 python -c "
 from strepsuis_amrpat.analyzer import MDRAnalyzer
@@ -352,24 +352,24 @@ config = Config(data_dir='../../', output_dir='./results')
 analyzer = MDRAnalyzer(config)
 results = analyzer.run()
 "
-
+\`\`\`
 
 ### Run All Tests
 
-bash
-Run fast tests (for CI)
+\`\`\`bash
+# Run fast tests (for CI)
 cd separated_repos/strepsuis-amrpat
 pytest -m "not slow" -v
 
-Run all tests including slow ones
+# Run all tests including slow ones
 pytest -v
-
+\`\`\`
 
 ## 📝 Summary Statistics
 
 - **Total modules**: 5
 - **Target coverage**: 50-65% (Phase 2)
-- **New test files**: 5 (`test_unit_analysis.py`)
+- **New test files**: 5 (\`test_unit_analysis.py\`)
 - **Total new tests**: ~100+ across all modules
 - **Execution time**: <10 minutes for all modules
 - **GitHub Actions usage**: Optimized to <50 minutes per run
