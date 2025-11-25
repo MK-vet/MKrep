@@ -12,7 +12,6 @@ on:
         - all
         - python-scripts
         - cli-package
-        - voila-dashboard
         - notebooks
 
 jobs:
@@ -112,50 +111,6 @@ jobs:
         echo "  OR"
         echo "  cd python_package && pip install -e ."
 
-  demo-voila-dashboard:
-    name: Demo - Voilà Dashboard
-    runs-on: ubuntu-latest
-    if: github.event.inputs.tool_choice == 'voila-dashboard' || github.event.inputs.tool_choice == 'all'
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-        cache: 'pip'
-    
-    - name: Install Voilà
-      run: |
-        cd huggingface_demo
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Demo Voilà dashboard
-      run: |
-        echo "==================================="
-        echo "    Voilà Dashboard Demo"
-        echo "==================================="
-        echo ""
-        echo "Voilà version:"
-        voila --version
-        echo ""
-        echo "Dashboard location:"
-        ls -lh huggingface_demo/MKrep_Dashboard.ipynb
-        echo ""
-        echo "Example data:"
-        ls huggingface_demo/example_data/
-        echo ""
-        echo "To run locally:"
-        echo "  cd huggingface_demo"
-        echo "  voila MKrep_Dashboard.ipynb --port 8866"
-        echo ""
-        echo "Then open: http://localhost:8866"
-        echo ""
-        echo "For Hugging Face Spaces deployment, see:"
-        echo "  huggingface_demo/README.md"
-
   demo-notebooks:
     name: Demo - Jupyter/Colab Notebooks
     runs-on: ubuntu-latest
@@ -202,7 +157,7 @@ jobs:
   demo-summary:
     name: Demo Summary
     runs-on: ubuntu-latest
-    needs: [demo-python-scripts, demo-cli-package, demo-voila-dashboard, demo-notebooks]
+    needs: [demo-python-scripts, demo-cli-package, demo-notebooks]
     if: always()
     
     steps:

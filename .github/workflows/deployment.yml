@@ -78,43 +78,6 @@ jobs:
       run: |
         pip show mkrep
 
-  test-voila-deployment:
-    name: Test Voilà Dashboard Deployment
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-        cache: 'pip'
-    
-    - name: Install Voilà and dependencies
-      run: |
-        cd huggingface_demo
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Test Voilà can start (dry run)
-      run: |
-        cd huggingface_demo
-        echo "Testing Voilà dashboard readiness"
-        voila --help
-        
-        echo "Checking notebook exists"
-        test -f MKrep_Dashboard.ipynb && echo "Dashboard notebook found"
-        
-        echo "Checking example data"
-        test -d example_data && echo "Example data directory found"
-        ls example_data/
-    
-    - name: Validate notebook structure
-      run: |
-        cd huggingface_demo
-        python -c "import json; f=open('MKrep_Dashboard.ipynb'); data=json.load(f); print(f'Notebook has {len(data[\"cells\"])} cells'); f.close()"
-
   test-colab-notebooks:
     name: Test Colab Notebooks
     runs-on: ubuntu-latest
@@ -193,7 +156,7 @@ jobs:
   deployment-summary:
     name: Deployment Summary
     runs-on: ubuntu-latest
-    needs: [test-standalone-execution, test-cli-full, test-voila-deployment, test-colab-notebooks, version-matrix-test]
+    needs: [test-standalone-execution, test-cli-full, test-colab-notebooks, version-matrix-test]
     
     steps:
     - name: Summary
@@ -204,7 +167,6 @@ jobs:
         echo ""
         echo "✅ Python Standalone Scripts - READY"
         echo "✅ CLI Package (mkrep) - READY"
-        echo "✅ Voilà Dashboard - READY"
         echo "✅ Colab Notebooks - READY"
         echo "✅ Version Compatibility - VERIFIED"
         echo ""

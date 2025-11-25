@@ -123,21 +123,6 @@ pip install mkrep  # When published
 mkrep-cluster --data-dir ./data --output ./results
 ```
 
-### Option 5: Interactive Dashboard (Production Ready)
-Our [Voilà Dashboard](huggingface_demo/MKrep_Dashboard.ipynb) is a fully functional, production-ready interface for non-programmers.
-
-```bash
-cd huggingface_demo
-voila MKrep_Dashboard.ipynb --port 8866
-```
-
-Features:
-- Drag-and-drop file upload with validation
-- Interactive parameter configuration
-- Real-time progress tracking
-- Professional report generation
-- No programming knowledge required
-
 ### Option 5: Standalone Scripts (Traditional)
 ```bash
 git clone https://github.com/MK-vet/MKrep.git
@@ -216,15 +201,7 @@ All scripts generate **professional, consistent reports** with:
    - Full command-line interface for all analyses
    - Python API for programmatic access
 
-3. **🎨 Voilà Dashboard (Production Ready)**: Fully functional web interface
-   - See [huggingface_demo/](huggingface_demo/) directory
-   - Complete file upload and validation
-   - Interactive parameter configuration
-   - Real-time progress tracking
-   - Professional report generation
-   - Designed for non-programmers
-
-4. **💻 Standalone Scripts**: Traditional execution
+3. **💻 Standalone Scripts**: Traditional execution
    - Direct Python script execution
    - Maximum flexibility and customization
 
@@ -265,14 +242,13 @@ See [APPLICATION_VARIANTS_GUIDE.md](APPLICATION_VARIANTS_GUIDE.md) for complete 
 All tools can be tested and run directly from GitHub using automated workflows:
 
 - **CI - All Tools**: Continuous integration testing for all deployment options
-  - Tests Python scripts, CLI package, Voilà dashboard, and notebooks
+  - Tests Python scripts, CLI package, and notebooks
   - Runs on Python 3.8-3.12 across multiple operating systems
   - Automatically validates all tools on every push
   
 - **Deployment Tests**: Comprehensive deployment verification
   - Verifies standalone script execution
   - Tests CLI package installation and commands
-  - Validates Voilà dashboard deployment
   - Checks Colab notebook compatibility
   
 - **Version Info**: Collects and displays version information
@@ -307,7 +283,6 @@ pip install -r requirements.txt
 - See [requirements.txt](requirements.txt) for complete list
 
 ### Optional:
-- `voila` - For interactive dashboards
 - `jupyter` - For notebook execution
 - GPU support - For accelerated processing (Google Colab)
 
@@ -333,7 +308,6 @@ pip install -r requirements.txt
 **Specialized Guides:**
 - **[colab_notebooks/README.md](colab_notebooks/README.md)** - Google Colab usage
 - **[python_package/README.md](python_package/README.md)** - Package documentation
-- **[huggingface_demo/README.md](huggingface_demo/README.md)** - Voilà dashboard guide
 
 ## Usage
 
@@ -542,7 +516,6 @@ This tool was developed for the microbial genomics research community. We thank 
   - Improved instructions for beginners
 
 ### 2025-01-15 - Version 1.1.0 🎉
-- ✨ **Production-ready Voilà Dashboard** with full functionality
 - ✨ **Standardized report templates** across all analysis tools
 - ✨ **Comprehensive interpretation sections** in all reports
 - ✨ **Complete user guide** (USER_GUIDE.md) with step-by-step instructions
@@ -557,9 +530,8 @@ This tool was developed for the microbial genomics research community. We thank 
 ### 2025-01-07 - Version 1.0.0 🎉
 - ✨ **Added Google Colab notebooks** for cloud-based analysis
 - ✨ **Created Python package** with full CLI support
-- ✨ **Developed Hugging Face demo** with Voilà dashboard
 - ✨ **Comprehensive installation guide** (INSTALLATION.md)
-- ✨ **Multiple deployment options** (Colab, CLI, Dashboard, Scripts)
+- ✨ **Multiple deployment options** (Colab, CLI, Scripts)
 - 📝 **Enhanced documentation** with usage examples
 - 📝 **Binary data handling** explicitly documented (0=absence, 1=presence)
 - ✨ Added comprehensive Excel report generation to all scripts

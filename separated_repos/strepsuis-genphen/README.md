@@ -1,8 +1,10 @@
 # StrepSuis-GenPhen: Interactive Platform for Integrated Genomic-Phenotypic Analysis
 
+> **Current Location**: This module is currently part of the [MKrep repository](https://github.com/MK-vet/MKrep) under `separated_repos/strepsuis-genphen/`. It is designed to become a standalone repository in the future.
+
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/strepsuis-genphen/blob/main/notebooks/GenPhen_Analysis.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/separated_repos/strepsuis-genphen/notebooks/GenPhen_Analysis.ipynb)
 [![Coverage](https://img.shields.io/badge/coverage-pending-lightgrey)]()
 
 **Integrative genomic-phenotypic analysis platform for Streptococcus suis**
@@ -29,24 +31,27 @@ StrepSuis-GenPhen is a production-ready Python package for advanced bioinformati
 
 ### Installation
 
-#### Option 1: From PyPI (when published)
+> **Note**: This module is currently part of the MKrep repository. Install from the MKrep repository using the instructions below. Future standalone installation will be available once the module is published to its own repository.
+
+#### Option 1: From Current Location (MKrep Repository)
+```bash
+# Clone the main repository
+git clone https://github.com/MK-vet/MKrep.git
+cd MKrep/separated_repos/strepsuis-genphen
+pip install -e .
+```
+
+#### Option 2: From PyPI (when published)
 ```bash
 pip install strepsuis-genphen
 ```
 
-#### Option 2: From GitHub
+#### Option 3: From Standalone GitHub Repo (future)
 ```bash
 pip install git+https://github.com/MK-vet/strepsuis-genphen.git
 ```
 
-#### Option 3: From Source
-```bash
-git clone https://github.com/MK-vet/strepsuis-genphen.git
-cd strepsuis-genphen
-pip install -e .
-```
-
-#### Option 4: Docker
+#### Option 4: Docker (future)
 ```bash
 docker pull ghcr.io/mk-vet/strepsuis-genphen:latest
 ```
