@@ -110,33 +110,36 @@ def test_module_imports():
 def test_config_initialization_variations():
     """Test various config initialization patterns"""
     from strepsuis_phylotrait.config import Config
+    import tempfile
+    import os
     
-    # Default config
-    c1 = Config()
-    assert c1.bootstrap_iterations >= 100
-    assert 0 < c1.fdr_alpha < 1
-    
-    # Custom config
-    c2 = Config(
-        data_dir="/tmp/test",
-        output_dir="/tmp/out",
-        bootstrap_iterations=500,
-        fdr_alpha=0.05,
-        random_seed=42
-    )
-    assert c2.bootstrap_iterations == 500
-    assert c2.fdr_alpha == 0.05
-    
-    # from_dict
-    c3 = Config.from_dict({"bootstrap_iterations": 1000})
-    assert c3.bootstrap_iterations == 1000
+    # Default config with existing dir
+    with tempfile.TemporaryDirectory() as tmpdir:
+        c1 = Config(data_dir=tmpdir, output_dir=tmpdir)
+        assert c1.bootstrap_iterations >= 100
+        assert 0 < c1.fdr_alpha < 1
+        
+        # Custom config
+        c2 = Config(
+            data_dir=tmpdir,
+            output_dir=tmpdir,
+            bootstrap_iterations=500,
+            fdr_alpha=0.05,
+            random_seed=42
+        )
+        assert c2.bootstrap_iterations == 500
+        assert c2.fdr_alpha == 0.05
+        
+        # from_dict
+        c3 = Config.from_dict({"data_dir": tmpdir, "output_dir": tmpdir, "bootstrap_iterations": 1000})
+        assert c3.bootstrap_iterations == 1000
 
 
 def test_analyzer_initialization(module_config):
     """Test analyzer creation"""
-    from strepsuis_phylotrait.analyzer import get_analyzer
+    from strepsuis_phylotrait.analyzer import PhyloTraitAnalyzer
     
-    analyzer = get_analyzer(module_config)
+    analyzer = PhyloTraitAnalyzer(module_config)
     assert analyzer is not None
     assert analyzer.config == module_config
 
@@ -148,7 +151,7 @@ def test_analyzer_initialization(module_config):
 def test_data_to_analysis_setup(all_csv_files, module_config, tmp_path):
     """Test complete workflow setup"""
     from strepsuis_phylotrait.config import Config
-    from strepsuis_phylotrait.analyzer import get_analyzer
+    from strepsuis_phylotrait.analyzer import PhyloTraitAnalyzer
     
     # Update config with real examples path
     config = Config.from_dict({
@@ -159,7 +162,7 @@ def test_data_to_analysis_setup(all_csv_files, module_config, tmp_path):
     })
     
     # Initialize analyzer
-    analyzer = get_analyzer(config)
+    analyzer = PhyloTraitAnalyzer(config)
     
     # Verify setup
     assert analyzer.config.data_dir
@@ -305,18 +308,18 @@ def test_mini_analysis_with_real_data(all_csv_files, tmp_path):
         pytest.skip("No CSV files available")
     
     from strepsuis_phylotrait.config import Config
-    from strepsuis_phylotrait.analyzer import get_analyzer
+    from strepsuis_phylotrait.analyzer import PhyloTraitAnalyzer
     
     examples_dir = Path(__file__).parent.parent / "examples"
     
     config = Config(
         data_dir=str(examples_dir),
         output_dir=str(tmp_path),
-        bootstrap_iterations=10,  # Minimal for testing
+        bootstrap_iterations=100,  # Minimal for testing
         random_seed=42
     )
     
-    analyzer = get_analyzer(config)
+    analyzer = PhyloTraitAnalyzer(config)
     
     # Try to run analysis (may fail if data incomplete, that's ok)
     try:
@@ -335,7 +338,7 @@ def test_coverage_boost_summary():
     print("\n" + "="*70)
     print("COVERAGE BOOST TEST SUMMARY")
     print("="*70)
-    print(f"Module: {module_name}")
+    print(f"Module: strepsuis_phylotrait")
     print(f"CSV files tested: {len(list(Path(__file__).parent.parent.glob('examples/*.csv')))} ")
     print(f"Test categories: Data loading, Workflow, Config, CLI, Integration")
     print(f"Target coverage: 70-80%")
