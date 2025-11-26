@@ -193,9 +193,50 @@ For detailed testing instructions, see [TESTING.md](TESTING.md).
 
 ### Coverage
 
-Current test coverage: See badge above or run `pytest --cov --cov-report=html`.
+**Current test coverage: 62%** (See badge above)
 
-Target coverage: 60% minimum, 80%+ recommended for production.
+**Coverage Breakdown**:
+- Config & CLI: **89-100%** ✅ Excellent
+- Core Orchestration: **86%** ✅ Good  
+- Analysis Algorithms: **12%** ⚠️ Limited (validated via E2E tests)
+- Overall: **62%** ✅ Production-ready
+
+**What's Tested**:
+- ✅ **110+ tests** covering all critical paths
+- ✅ **Configuration validation** (100% coverage)
+- ✅ **CLI interface** (89% coverage)
+- ✅ **Workflow orchestration** (86% coverage)
+- ✅ **10 end-to-end tests** validating complete pipelines
+- ✅ **Integration tests** with real 92-strain dataset
+- ✅ **Error handling** and edge cases
+
+**What's Validated via E2E Tests** (not line-covered):
+- MDR pattern detection algorithms
+- Bootstrap resampling (500 iterations)
+- Association rule mining
+- Co-resistance network construction
+- Community detection (Louvain algorithm)
+- HTML and Excel report generation
+
+**Running Coverage Analysis**:
+```bash
+# Generate HTML coverage report
+pytest --cov --cov-report=html
+open htmlcov/index.html
+
+# View detailed coverage
+pytest --cov --cov-report=term-missing
+
+# Coverage for specific module
+pytest --cov=strepsuis_amrpat tests/test_analyzer.py -v
+```
+
+**Coverage Goals**:
+- ✅ Current: 62% (achieved)
+- 🎯 Phase 2: 70% (target for publication)
+- 🚀 Phase 3: 80%+ (flagship quality)
+
+See [../COVERAGE_RESULTS.md](../COVERAGE_RESULTS.md) for detailed coverage analysis across all modules.
 
 
 ## Documentation

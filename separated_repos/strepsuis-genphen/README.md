@@ -198,9 +198,50 @@ For detailed testing instructions, see [TESTING.md](TESTING.md).
 
 ### Coverage
 
-Current test coverage: See badge above or run `pytest --cov --cov-report=html`.
+**Current test coverage: 32%** (See badge above) ⚠️ Needs Improvement
 
-Target coverage: 60% minimum, 80%+ recommended for production.
+**Coverage Breakdown**:
+- Config & CLI: **83-100%** ✅ Excellent
+- Core Orchestration: **78%** ✅ Good  
+- Analysis Algorithms: **6%** ⚠️ Limited (validated via E2E tests)
+- Overall: **32%**
+
+**What's Tested**:
+- ✅ **100+ tests** covering critical paths
+- ✅ **Configuration validation** (100% coverage)
+- ✅ **CLI interface** (83 coverage)
+- ✅ **Workflow orchestration** (78% coverage)
+- ✅ **10+ end-to-end tests** validating complete pipelines
+- ✅ **Integration tests** with real 92-strain dataset
+- ✅ **Error handling** and edge cases
+
+**What's Validated via E2E Tests** (not line-covered):
+- Phylogenetic tree processing
+- Tree-aware clustering
+- Chi-square trait associations
+- Random Forest feature importance
+- MCA and ensemble methods
+- Interactive HTML reports
+
+**Running Coverage Analysis**:
+```bash
+# Generate HTML coverage report
+pytest --cov --cov-report=html
+open htmlcov/index.html
+
+# View detailed coverage
+pytest --cov --cov-report=term-missing
+
+# Coverage for specific module
+pytest --cov=strepsuis_genphen tests/test_analyzer.py -v
+```
+
+**Coverage Improvement Goals**:
+- Current: 32%
+- 🎯 Phase 2 Target: 60%
+- 🚀 Phase 3 Target: 80%+
+
+See [../COVERAGE_RESULTS.md](../COVERAGE_RESULTS.md) for detailed coverage analysis across all modules.
 
 
 ## Documentation
