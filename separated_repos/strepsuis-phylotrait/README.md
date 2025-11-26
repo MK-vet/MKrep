@@ -207,7 +207,7 @@ For detailed testing instructions, see [TESTING.md](TESTING.md).
 - Overall: **50%**
 
 **What's Tested**:
-- ✅ **80+ tests** covering critical paths
+- ✅ **90+ tests** covering critical paths
 - ✅ **Configuration validation** (100% coverage)
 - ✅ **CLI interface** (85% coverage)
 - ✅ **Workflow orchestration** (85% coverage)

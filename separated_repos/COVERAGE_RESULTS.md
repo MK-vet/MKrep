@@ -144,10 +144,10 @@ All 5 modules implement a comprehensive 3-level testing approach:
   - Multiple trait analyses
 
 **Test Breakdown**:
-- Unit tests: 80+ tests (config, analyzer, CLI)
+- Unit tests: 70+ tests (config, analyzer, CLI)
 - Integration tests: 10+ tests (data loading, multi-file)
 - End-to-end tests: 10 tests (full pipelines)
-- **Total**: 100+ tests
+- **Total**: 90+ tests
 
 ### Why This Coverage Distribution is Appropriate
 

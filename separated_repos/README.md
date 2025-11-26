@@ -266,7 +266,7 @@ All modules now use **3-level testing** (Unit + Integration + E2E) with **400+ t
 | strepsuis-amrvirkm | 100+ | **50%** | **85-100%** | ✅ Production Ready |
 | strepsuis-genphen | 100+ | **50%** | **85-100%** | ✅ Production Ready |
 | strepsuis-genphennet | 100+ | **50%** | **85-100%** | ✅ Production Ready |
-| strepsuis-phylotrait | 80+ | **50%** | **85-100%** | ✅ Production Ready |
+| strepsuis-phylotrait | 90+ | **50%** | **85-100%** | ✅ Production Ready |
 
 ### Test Categories
 
