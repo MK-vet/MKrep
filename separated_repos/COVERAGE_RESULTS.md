@@ -278,15 +278,6 @@ For modules needing improvement (amrvirkm, genphen, genphennet, phylotrait):
 - **Immediate**: Achieve 50-60% for all modules (Phase 1-2)
 - **Short-term**: Reach 70% for publication readiness (Phase 2-3)
 - **Long-term**: Target 80%+ for flagship modules (Phase 3)
-- Large monolithic files (2000+ lines)
-- Complex mathematical operations
-- Heavy external dependencies
-- Visualization and formatting code
-
-**Return on Investment:** Low
-- Critical paths already at 88-100%
-- Integration tests validate core functionality
-- Additional unit tests would test implementation details, not behavior
 
 ## Recommended Testing Strategy
 

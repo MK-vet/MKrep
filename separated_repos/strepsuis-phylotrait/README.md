@@ -209,7 +209,7 @@ For detailed testing instructions, see [TESTING.md](TESTING.md).
 **What's Tested**:
 - ✅ **90+ tests** covering critical paths
 - ✅ **Configuration validation** (100% coverage)
-- ✅ **CLI interface** (78 coverage)
+- ✅ **CLI interface** (78% coverage)
 - ✅ **Workflow orchestration** (72% coverage)
 - ✅ **10+ end-to-end tests** validating complete pipelines
 - ✅ **Integration tests** with real 92-strain dataset
