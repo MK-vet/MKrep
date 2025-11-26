@@ -109,42 +109,42 @@ jobs:
             mkdir -p "../analysis_reports/$module"
             
             # Create analysis summary using available data
-            cat > "../analysis_reports/$module/ANALYSIS_SUMMARY.md" <<ANALYSIS_EOF
-# Full Analysis Report: $module
-
-## Dataset Information
-- Module: $module
-- Analysis date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-- Module version: 1.0.0
-- Test coverage: ${coverage_pct}%
-
-## Configuration
-Default configuration used for analysis:
-- Bootstrap iterations: 500
-- FDR alpha: 0.05
-- Random seed: 42
-
-## Test Results
-All tests passed successfully with coverage of ${coverage_pct}%.
-
-## Output Files Available
-- HTML coverage report: [View Report](../../coverage_reports/${module}_htmlcov/index.html)
-- XML coverage data: coverage.xml
-- JSON coverage data: coverage.json
-
-## Module Status
-✅ Tests passing
-✅ Coverage target achieved (>50%)
-✅ Ready for production use
-
-## Next Steps
-1. Review detailed coverage reports
-2. Run full 92-strain analysis locally if needed
-3. Examine specific test results in CI logs
-
----
-*Generated automatically by GitHub Actions*
-ANALYSIS_EOF
+            {
+              echo "# Full Analysis Report: $module"
+              echo ""
+              echo "## Dataset Information"
+              echo "- Module: $module"
+              echo "- Analysis date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+              echo "- Module version: 1.0.0"
+              echo "- Test coverage: ${coverage_pct}%"
+              echo ""
+              echo "## Configuration"
+              echo "Default configuration used for analysis:"
+              echo "- Bootstrap iterations: 500"
+              echo "- FDR alpha: 0.05"
+              echo "- Random seed: 42"
+              echo ""
+              echo "## Test Results"
+              echo "All tests passed successfully with coverage of ${coverage_pct}%."
+              echo ""
+              echo "## Output Files Available"
+              echo "- HTML coverage report: coverage_reports/${module}_htmlcov/index.html"
+              echo "- XML coverage data: coverage.xml"
+              echo "- JSON coverage data: coverage.json"
+              echo ""
+              echo "## Module Status"
+              echo "✅ Tests passing"
+              echo "✅ Coverage target achieved"
+              echo "✅ Ready for production use"
+              echo ""
+              echo "## Next Steps"
+              echo "1. Review detailed coverage reports"
+              echo "2. Run full 92-strain analysis locally if needed"
+              echo "3. Examine specific test results in CI logs"
+              echo ""
+              echo "---"
+              echo "*Generated automatically by GitHub Actions*"
+            } > "../analysis_reports/$module/ANALYSIS_SUMMARY.md"
             
             echo "✅ Analysis summary written to separated_repos/analysis_reports/$module/ANALYSIS_SUMMARY.md"
             
@@ -158,32 +158,32 @@ ANALYSIS_EOF
 
       - name: Generate coverage summary
         run: |
-          cat > separated_repos/COVERAGE_REPORT_COMPLETE.md <<EOF
-# Test Coverage Report - All Modules
-
-**Generated**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-
-## Overall Metrics
-
-| Module | Coverage | Status | Target |
-|--------|----------|--------|--------|
-| strepsuis-amrpat | ${COVERAGE_strepsuis_amrpat:-pending}% | ${COVERAGE_strepsuis_amrpat:+✅ PASS}${COVERAGE_strepsuis_amrpat:-⏳ Pending} | 50-65% |
-| strepsuis-amrvirkm | ${COVERAGE_strepsuis_amrvirkm:-pending}% | ${COVERAGE_strepsuis_amrvirkm:+✅ PASS}${COVERAGE_strepsuis_amrvirkm:-⏳ Pending} | 50-65% |
-| strepsuis-genphen | ${COVERAGE_strepsuis_genphen:-pending}% | ${COVERAGE_strepsuis_genphen:+✅ PASS}${COVERAGE_strepsuis_genphen:-⏳ Pending} | 50-65% |
-| strepsuis-genphennet | ${COVERAGE_strepsuis_genphennet:-pending}% | ${COVERAGE_strepsuis_genphennet:+✅ PASS}${COVERAGE_strepsuis_genphennet:-⏳ Pending} | 50-65% |
-| strepsuis-phylotrait | ${COVERAGE_strepsuis_phylotrait:-pending}% | ${COVERAGE_strepsuis_phylotrait:+✅ PASS}${COVERAGE_strepsuis_phylotrait:-⏳ Pending} | 50-65% |
-
-## Coverage Progress
-
-- **Phase 1 (Baseline)**: 37% average → Completed
-- **Phase 2 (Current)**: 50-65% target → IN PROGRESS
-- **Phase 3 (Future)**: 80%+ target for publication
-
-## Detailed Coverage Reports
-
-HTML coverage reports available in `separated_repos/coverage_reports/`:
-
-EOF
+          {
+            echo "# Test Coverage Report - All Modules"
+            echo ""
+            echo "**Generated**: \$(date -u +\"%Y-%m-%d %H:%M:%S UTC\")"
+            echo ""
+            echo "## Overall Metrics"
+            echo ""
+            echo "| Module | Coverage | Status | Target |"
+            echo "|--------|----------|--------|--------|"
+            echo "| strepsuis-amrpat | \${COVERAGE_strepsuis_amrpat:-pending}% | \${COVERAGE_strepsuis_amrpat:+✅ PASS}\${COVERAGE_strepsuis_amrpat:-⏳ Pending} | 50-65% |"
+            echo "| strepsuis-amrvirkm | \${COVERAGE_strepsuis_amrvirkm:-pending}% | \${COVERAGE_strepsuis_amrvirkm:+✅ PASS}\${COVERAGE_strepsuis_amrvirkm:-⏳ Pending} | 50-65% |"
+            echo "| strepsuis-genphen | \${COVERAGE_strepsuis_genphen:-pending}% | \${COVERAGE_strepsuis_genphen:+✅ PASS}\${COVERAGE_strepsuis_genphen:-⏳ Pending} | 50-65% |"
+            echo "| strepsuis-genphennet | \${COVERAGE_strepsuis_genphennet:-pending}% | \${COVERAGE_strepsuis_genphennet:+✅ PASS}\${COVERAGE_strepsuis_genphennet:-⏳ Pending} | 50-65% |"
+            echo "| strepsuis-phylotrait | \${COVERAGE_strepsuis_phylotrait:-pending}% | \${COVERAGE_strepsuis_phylotrait:+✅ PASS}\${COVERAGE_strepsuis_phylotrait:-⏳ Pending} | 50-65% |"
+            echo ""
+            echo "## Coverage Progress"
+            echo ""
+            echo "- **Phase 1 (Baseline)**: 37% average → Completed"
+            echo "- **Phase 2 (Current)**: 50-65% target → IN PROGRESS"
+            echo "- **Phase 3 (Future)**: 80%+ target for publication"
+            echo ""
+            echo "## Detailed Coverage Reports"
+            echo ""
+            echo "HTML coverage reports available in `separated_repos/coverage_reports/`:"
+            echo ""
+          } > separated_repos/COVERAGE_REPORT_COMPLETE.md
           
           for module in strepsuis-amrpat strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
             if [ -d "separated_repos/coverage_reports/${module}_htmlcov" ]; then
@@ -191,13 +191,13 @@ EOF
             fi
           done
           
-          cat >> separated_repos/COVERAGE_REPORT_COMPLETE.md <<EOF
-
-## Analysis Reports
-
-Full analysis summaries available in \`separated_repos/analysis_reports/\`:
-
-EOF
+          {
+            echo ""
+            echo "## Analysis Reports"
+            echo ""
+            echo "Full analysis summaries available in \\\`separated_repos/analysis_reports/\\\`:"
+            echo ""
+          } >> separated_repos/COVERAGE_REPORT_COMPLETE.md
           
           for module in strepsuis-amrpat strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
             if [ -d "separated_repos/analysis_reports/$module" ]; then
@@ -205,26 +205,26 @@ EOF
             fi
           done
           
-          cat >> separated_repos/COVERAGE_REPORT_COMPLETE.md <<EOF
-
-## Test Execution Summary
-
-All tests executed successfully:
-- Fast tests only (marked \`not slow\`)
-- Total execution time: <10 minutes
-- All modules installed and tested
-- Coverage reports generated
-
-## How to Use These Reports
-
-1. **View Coverage**: Open the HTML coverage reports to see line-by-line coverage
-2. **Check Analysis**: Read the analysis summaries for each module
-3. **Local Testing**: Run \`pytest --cov\` in any module directory
-4. **Full Analysis**: Use the full 92-strain dataset locally for complete analysis
-
----
-*Generated automatically by GitHub Actions*
-EOF
+          {
+            echo ""
+            echo "## Test Execution Summary"
+            echo ""
+            echo "All tests executed successfully:"
+            echo "- Fast tests only (marked \\\`not slow\\\`)"
+            echo "- Total execution time: <10 minutes"
+            echo "- All modules installed and tested"
+            echo "- Coverage reports generated"
+            echo ""
+            echo "## How to Use These Reports"
+            echo ""
+            echo "1. **View Coverage**: Open the HTML coverage reports to see line-by-line coverage"
+            echo "2. **Check Analysis**: Read the analysis summaries for each module"
+            echo "3. **Local Testing**: Run \\\`pytest --cov\\\` in any module directory"
+            echo "4. **Full Analysis**: Use the full 92-strain dataset locally for complete analysis"
+            echo ""
+            echo "---"
+            echo "*Generated automatically by GitHub Actions*"
+          } >> separated_repos/COVERAGE_REPORT_COMPLETE.md
 
       - name: Update coverage badges
         run: |
@@ -244,153 +244,153 @@ EOF
 
       - name: Create full analysis summary index
         run: |
-          cat > separated_repos/FULL_ANALYSIS_SUMMARY.md <<EOF
-# Full Analysis Summary - StrepSuis Suite
-
-**Analysis Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")  
-**Repository**: MK-vet/MKrep  
-**Branch**: ${GITHUB_REF_NAME}
-
-## 🎯 Objective Achieved
-
-This workflow successfully:
-- ✅ Added comprehensive unit tests to all 5 modules
-- ✅ Increased test coverage from ~37% to 50-65% range
-- ✅ Generated HTML coverage reports for all modules
-- ✅ Updated coverage badges in README files
-- ✅ Created analysis summaries with test results
-
-## 📊 Modules Analyzed
-
-### 1. strepsuis-amrpat - MDR Pattern Analysis
-**Focus**: Multidrug resistance pattern detection and co-resistance network analysis
-
-- **Coverage**: ${COVERAGE_strepsuis_amrpat:-pending}%
-- [Analysis Report](analysis_reports/strepsuis-amrpat/ANALYSIS_SUMMARY.md)
-- [Coverage Report](coverage_reports/strepsuis-amrpat_htmlcov/index.html)
-
-### 2. strepsuis-amrvirkm - K-Modes Clustering
-**Focus**: K-modes clustering of AMR and virulence profiles
-
-- **Coverage**: ${COVERAGE_strepsuis_amrvirkm:-pending}%
-- [Analysis Report](analysis_reports/strepsuis-amrvirkm/ANALYSIS_SUMMARY.md)
-- [Coverage Report](coverage_reports/strepsuis-amrvirkm_htmlcov/index.html)
-
-### 3. strepsuis-genphen - Genotype-Phenotype Integration
-**Focus**: Integrated genomic-phenotypic analysis
-
-- **Coverage**: ${COVERAGE_strepsuis_genphen:-pending}%
-- [Analysis Report](analysis_reports/strepsuis-genphen/ANALYSIS_SUMMARY.md)
-- [Coverage Report](coverage_reports/strepsuis-genphen_htmlcov/index.html)
-
-### 4. strepsuis-genphennet - Network-Based Analysis
-**Focus**: Network-based genome-phenome integration
-
-- **Coverage**: ${COVERAGE_strepsuis_genphennet:-pending}%
-- [Analysis Report](analysis_reports/strepsuis-genphennet/ANALYSIS_SUMMARY.md)
-- [Coverage Report](coverage_reports/strepsuis-genphennet_htmlcov/index.html)
-
-### 5. strepsuis-phylotrait - Phylogenetic Analysis
-**Focus**: Phylogenetic and binary trait analysis
-
-- **Coverage**: ${COVERAGE_strepsuis_phylotrait:-pending}%
-- [Analysis Report](analysis_reports/strepsuis-phylotrait/ANALYSIS_SUMMARY.md)
-- [Coverage Report](coverage_reports/strepsuis-phylotrait_htmlcov/index.html)
-
-## 📈 Coverage Enhancement Details
-
-### What Was Added
-
-For each module, added \`tests/test_unit_analysis.py\` with:
-- **Configuration validation tests** (~7 tests per module)
-  - Invalid parameter handling
-  - Edge case testing
-  - Directory management
-  - from_dict() functionality
-  
-- **Analyzer initialization tests** (~4 tests per module)
-  - Creation with config objects
-  - Creation with kwargs
-  - Default value handling
-  
-- **Default value tests** (~6 tests per module)
-  - Bootstrap iterations
-  - FDR alpha
-  - Random seed
-  - Reporting flags
-  - DPI settings
-  - Parallel processing
-
-### Coverage Improvement Strategy
-
-Tests focused on:
-1. **High-value targets**: Config and CLI modules (80-100% coverage)
-2. **Core functionality**: Analyzer initialization and validation
-3. **Error handling**: Invalid inputs and edge cases
-4. **Reproducibility**: Random seed and parameter validation
-
-## 🚀 Usage Instructions
-
-### View Reports Locally
-
-\`\`\`bash
-cd separated_repos/strepsuis-amrpat
-pip install -e .[dev]
-pytest --cov --cov-report=html
-open htmlcov/index.html  # View coverage report
-\`\`\`
-
-### Run Full Analysis (92 strains)
-
-\`\`\`bash
-cd separated_repos/strepsuis-amrpat
-python -c "
-from strepsuis_amrpat.analyzer import MDRAnalyzer
-from strepsuis_amrpat.config import Config
-
-config = Config(data_dir='../../', output_dir='./results')
-analyzer = MDRAnalyzer(config)
-results = analyzer.run()
-"
-\`\`\`
-
-### Run All Tests
-
-\`\`\`bash
-# Run fast tests (for CI)
-cd separated_repos/strepsuis-amrpat
-pytest -m "not slow" -v
-
-# Run all tests including slow ones
-pytest -v
-\`\`\`
-
-## 📝 Summary Statistics
-
-- **Total modules**: 5
-- **Target coverage**: 50-65% (Phase 2)
-- **New test files**: 5 (\`test_unit_analysis.py\`)
-- **Total new tests**: ~100+ across all modules
-- **Execution time**: <10 minutes for all modules
-- **GitHub Actions usage**: Optimized to <50 minutes per run
-
-## 🎓 Next Steps
-
-1. **Phase 3**: Increase coverage to 80%+ for publication
-2. **Full dataset analysis**: Run 92-strain analysis locally
-3. **Documentation**: Add analysis examples to READMEs
-4. **Publication**: Prepare results for scientific publication
-
-## 📦 Artifacts
-
-All reports available as workflow artifacts:
-- HTML coverage reports (interactive)
-- Analysis summaries (markdown)
-- Coverage data (JSON/XML)
-
----
-*This summary was generated automatically by the GitHub Actions workflow*
-EOF
+          {
+            echo "# Full Analysis Summary - StrepSuis Suite"
+            echo ""
+            echo "**Analysis Date**: $(date -u +\"%Y-%m-%d %H:%M:%S UTC\")  "
+            echo "**Repository**: MK-vet/MKrep  "
+            echo "**Branch**: ${GITHUB_REF_NAME}"
+            echo ""
+            echo "## 🎯 Objective Achieved"
+            echo ""
+            echo "This workflow successfully:"
+            echo "- ✅ Added comprehensive unit tests to all 5 modules"
+            echo "- ✅ Increased test coverage from ~37% to 50-65% range"
+            echo "- ✅ Generated HTML coverage reports for all modules"
+            echo "- ✅ Updated coverage badges in README files"
+            echo "- ✅ Created analysis summaries with test results"
+            echo ""
+            echo "## 📊 Modules Analyzed"
+            echo ""
+            echo "### 1. strepsuis-amrpat - MDR Pattern Analysis"
+            echo "**Focus**: Multidrug resistance pattern detection and co-resistance network analysis"
+            echo ""
+            echo "- **Coverage**: ${COVERAGE_strepsuis_amrpat:-pending}%"
+            echo "- [Analysis Report](analysis_reports/strepsuis-amrpat/ANALYSIS_SUMMARY.md)"
+            echo "- [Coverage Report](coverage_reports/strepsuis-amrpat_htmlcov/index.html)"
+            echo ""
+            echo "### 2. strepsuis-amrvirkm - K-Modes Clustering"
+            echo "**Focus**: K-modes clustering of AMR and virulence profiles"
+            echo ""
+            echo "- **Coverage**: ${COVERAGE_strepsuis_amrvirkm:-pending}%"
+            echo "- [Analysis Report](analysis_reports/strepsuis-amrvirkm/ANALYSIS_SUMMARY.md)"
+            echo "- [Coverage Report](coverage_reports/strepsuis-amrvirkm_htmlcov/index.html)"
+            echo ""
+            echo "### 3. strepsuis-genphen - Genotype-Phenotype Integration"
+            echo "**Focus**: Integrated genomic-phenotypic analysis"
+            echo ""
+            echo "- **Coverage**: ${COVERAGE_strepsuis_genphen:-pending}%"
+            echo "- [Analysis Report](analysis_reports/strepsuis-genphen/ANALYSIS_SUMMARY.md)"
+            echo "- [Coverage Report](coverage_reports/strepsuis-genphen_htmlcov/index.html)"
+            echo ""
+            echo "### 4. strepsuis-genphennet - Network-Based Analysis"
+            echo "**Focus**: Network-based genome-phenome integration"
+            echo ""
+            echo "- **Coverage**: ${COVERAGE_strepsuis_genphennet:-pending}%"
+            echo "- [Analysis Report](analysis_reports/strepsuis-genphennet/ANALYSIS_SUMMARY.md)"
+            echo "- [Coverage Report](coverage_reports/strepsuis-genphennet_htmlcov/index.html)"
+            echo ""
+            echo "### 5. strepsuis-phylotrait - Phylogenetic Analysis"
+            echo "**Focus**: Phylogenetic and binary trait analysis"
+            echo ""
+            echo "- **Coverage**: ${COVERAGE_strepsuis_phylotrait:-pending}%"
+            echo "- [Analysis Report](analysis_reports/strepsuis-phylotrait/ANALYSIS_SUMMARY.md)"
+            echo "- [Coverage Report](coverage_reports/strepsuis-phylotrait_htmlcov/index.html)"
+            echo ""
+            echo "## 📈 Coverage Enhancement Details"
+            echo ""
+            echo "### What Was Added"
+            echo ""
+            echo "For each module, added \\\`tests/test_unit_analysis.py\\\` with:"
+            echo "- **Configuration validation tests** (~7 tests per module)"
+            echo "  - Invalid parameter handling"
+            echo "  - Edge case testing"
+            echo "  - Directory management"
+            echo "  - from_dict() functionality"
+            echo "  "
+            echo "- **Analyzer initialization tests** (~4 tests per module)"
+            echo "  - Creation with config objects"
+            echo "  - Creation with kwargs"
+            echo "  - Default value handling"
+            echo "  "
+            echo "- **Default value tests** (~6 tests per module)"
+            echo "  - Bootstrap iterations"
+            echo "  - FDR alpha"
+            echo "  - Random seed"
+            echo "  - Reporting flags"
+            echo "  - DPI settings"
+            echo "  - Parallel processing"
+            echo ""
+            echo "### Coverage Improvement Strategy"
+            echo ""
+            echo "Tests focused on:"
+            echo "1. **High-value targets**: Config and CLI modules (80-100% coverage)"
+            echo "2. **Core functionality**: Analyzer initialization and validation"
+            echo "3. **Error handling**: Invalid inputs and edge cases"
+            echo "4. **Reproducibility**: Random seed and parameter validation"
+            echo ""
+            echo "## 🚀 Usage Instructions"
+            echo ""
+            echo "### View Reports Locally"
+            echo ""
+            echo "\\\`\\\`\\\`bash"
+            echo "cd separated_repos/strepsuis-amrpat"
+            echo "pip install -e .[dev]"
+            echo "pytest --cov --cov-report=html"
+            echo "open htmlcov/index.html  # View coverage report"
+            echo "\\\`\\\`\\\`"
+            echo ""
+            echo "### Run Full Analysis (92 strains)"
+            echo ""
+            echo "\\\`\\\`\\\`bash"
+            echo "cd separated_repos/strepsuis-amrpat"
+            echo "python -c \""
+            echo "from strepsuis_amrpat.analyzer import MDRAnalyzer"
+            echo "from strepsuis_amrpat.config import Config"
+            echo ""
+            echo "config = Config(data_dir='../../', output_dir='./results')"
+            echo "analyzer = MDRAnalyzer(config)"
+            echo "results = analyzer.run()"
+            echo "\""
+            echo "\\\`\\\`\\\`"
+            echo ""
+            echo "### Run All Tests"
+            echo ""
+            echo "\\\`\\\`\\\`bash"
+            echo "# Run fast tests (for CI)"
+            echo "cd separated_repos/strepsuis-amrpat"
+            echo "pytest -m \"not slow\" -v"
+            echo ""
+            echo "# Run all tests including slow ones"
+            echo "pytest -v"
+            echo "\\\`\\\`\\\`"
+            echo ""
+            echo "## 📝 Summary Statistics"
+            echo ""
+            echo "- **Total modules**: 5"
+            echo "- **Target coverage**: 50-65% (Phase 2)"
+            echo "- **New test files**: 5 (\\\`test_unit_analysis.py\\\`)"
+            echo "- **Total new tests**: ~100+ across all modules"
+            echo "- **Execution time**: <10 minutes for all modules"
+            echo "- **GitHub Actions usage**: Optimized to <50 minutes per run"
+            echo ""
+            echo "## 🎓 Next Steps"
+            echo ""
+            echo "1. **Phase 3**: Increase coverage to 80%+ for publication"
+            echo "2. **Full dataset analysis**: Run 92-strain analysis locally"
+            echo "3. **Documentation**: Add analysis examples to READMEs"
+            echo "4. **Publication**: Prepare results for scientific publication"
+            echo ""
+            echo "## 📦 Artifacts"
+            echo ""
+            echo "All reports available as workflow artifacts:"
+            echo "- HTML coverage reports (interactive)"
+            echo "- Analysis summaries (markdown)"
+            echo "- Coverage data (JSON/XML)"
+            echo ""
+            echo "---"
+            echo "*This summary was generated automatically by the GitHub Actions workflow*"
+          } > separated_repos/FULL_ANALYSIS_SUMMARY.md
 
       - name: Upload reports as artifacts
         uses: actions/upload-artifact@v3

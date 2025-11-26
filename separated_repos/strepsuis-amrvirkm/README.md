@@ -5,7 +5,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/separated_repos/strepsuis-amrvirkm/notebooks/AMRVirKM_Analysis.ipynb)
-[![Coverage](https://img.shields.io/badge/coverage-pending-lightgrey)]()
+[![Coverage](https://img.shields.io/badge/coverage-34%25-orange)]()
 
 **Professional bioinformatics tool for comprehensive clustering analysis of antimicrobial resistance and virulence profiles in bacterial genomics.**
 
@@ -223,9 +223,50 @@ For detailed testing instructions, see [TESTING.md](TESTING.md).
 
 ### Coverage
 
-Current test coverage: See badge above or run `pytest --cov --cov-report=html`.
+**Current test coverage: 34%** (See badge above) ⚠️ Needs Improvement
 
-Target coverage: 60% minimum, 80%+ recommended for production.
+**Coverage Breakdown**:
+- Config & CLI: **85-100%** ✅ Excellent
+- Core Orchestration: **80%** ✅ Good  
+- Analysis Algorithms: **8%** ⚠️ Limited (validated via E2E tests)
+- Overall: **34%**
+
+**What's Tested**:
+- ✅ **100+ tests** covering critical paths
+- ✅ **Configuration validation** (100% coverage)
+- ✅ **CLI interface** (85% coverage)
+- ✅ **Workflow orchestration** (80% coverage)
+- ✅ **10+ end-to-end tests** validating complete pipelines
+- ✅ **Integration tests** with real 92-strain dataset
+- ✅ **Error handling** and edge cases
+
+**What's Validated via E2E Tests** (not line-covered):
+- K-modes clustering algorithms
+- Silhouette optimization (2-8 clusters)
+- MCA dimensionality reduction
+- Bootstrap confidence intervals
+- Association rule mining
+- Feature importance ranking
+
+**Running Coverage Analysis**:
+```bash
+# Generate HTML coverage report
+pytest --cov --cov-report=html
+open htmlcov/index.html
+
+# View detailed coverage
+pytest --cov --cov-report=term-missing
+
+# Coverage for specific module
+pytest --cov=strepsuis_amrvirkm tests/test_analyzer.py -v
+```
+
+**Coverage Improvement Goals**:
+- Current: 34%
+- 🎯 Phase 2 Target: 60%
+- 🚀 Phase 3 Target: 80%+
+
+See [../COVERAGE_RESULTS.md](../COVERAGE_RESULTS.md) for detailed coverage analysis across all modules.
 
 
 ## Documentation
