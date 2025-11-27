@@ -1,53 +1,55 @@
-# StrepSuis Suite - Separated Modules Documentation
+# StrepSuis Suite - Documentation Index
 
-**Repository**: MK-vet/MKrep  
-**Last Updated**: 2025-11-26  
-**Status**: Production-Ready (All 5 Modules)
+## Quick Navigation
 
-## 📋 Quick Navigation
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| [README.md](README.md) | Suite overview and module descriptions | All users |
+| [TESTING.md](TESTING.md) | Comprehensive testing guide | Developers |
+| [TESTING_QUICK_START.md](TESTING_QUICK_START.md) | Quick reference for running tests | Developers |
+| [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Deployment and publishing instructions | DevOps |
+| [ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md) | Example analysis results | Researchers |
+| [WORKFLOW_USAGE_GUIDE.md](WORKFLOW_USAGE_GUIDE.md) | GitHub Actions workflow guide | Developers |
 
-| Document | Purpose | Target Audience |
-|----------|---------|-----------------|
-| **[INDEX.md](INDEX.md)** | Main documentation index | All users |
-| **[COVERAGE_RESULTS.md](COVERAGE_RESULTS.md)** | Test coverage analysis | Developers |
-| **[END_TO_END_TESTS.md](END_TO_END_TESTS.md)** | E2E test documentation | Developers, QA |
-| **[ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md)** | Complete analysis examples | Researchers, users |
-| **[README.md](README.md)** | Modules overview | All users |
-| **[IMPLEMENTATION_COMPLETE_COVERAGE.md](IMPLEMENTATION_COMPLETE_COVERAGE.md)** | Implementation summary | Developers, reviewers |
+## Modules
 
-## 📊 Module Overview
+| Module | Coverage | Function |
+|--------|----------|----------|
+| [strepsuis-amrpat](strepsuis-amrpat/) | 62% | MDR pattern detection |
+| [strepsuis-amrvirkm](strepsuis-amrvirkm/) | 50% | K-modes clustering |
+| [strepsuis-genphen](strepsuis-genphen/) | 50% | Genotype-phenotype integration |
+| [strepsuis-genphennet](strepsuis-genphennet/) | 50% | Network-based analysis |
+| [strepsuis-phylotrait](strepsuis-phylotrait/) | 50% | Phylogenetic trait analysis |
 
-### All Modules Production-Ready
+## Testing Summary
 
-| Module | Coverage | Status | Primary Function |
-|--------|----------|--------|------------------|
-| [strepsuis-amrpat](strepsuis-amrpat/) | **62%** ✅ | Production Ready | MDR pattern detection |
-| [strepsuis-amrvirkm](strepsuis-amrvirkm/) | **50%** ✅ | Production Ready | K-modes clustering |
-| [strepsuis-genphen](strepsuis-genphen/) | **50%** ✅ | Production Ready | Genotype-phenotype integration |
-| [strepsuis-genphennet](strepsuis-genphennet/) | **50%** ✅ | Production Ready | Network-based analysis |
-| [strepsuis-phylotrait](strepsuis-phylotrait/) | **50%** ✅ | Production Ready | Phylogenetic + traits |
+- 400+ tests across all modules
+- 3-level testing: Unit, Integration, End-to-End
+- 85-100% coverage of critical paths
+- 50-62% total coverage
 
-**Testing Summary**:
-- ✅ **400+ tests** across all modules  
-- ✅ **3-level testing**: Unit + Integration + E2E
-- ✅ **85-100% coverage** of critical paths (config, CLI, orchestration)
-- ✅ **50-62% total coverage** with complex analysis validated via E2E
+## Utility Scripts
 
-## 🎯 Testing Strategy
+| Script | Purpose |
+|--------|---------|
+| `generate_coverage_badge.py` | Generate coverage reports |
+| `generate_coverage_reports.sh` | Run coverage for all modules |
+| `run_all_tests.sh` | Execute tests for all modules |
+| `replicate_tests.py` | Copy test structure to new modules |
 
-All modules implement comprehensive 3-level testing:
+## Quick Start
 
-| Level | Description | Coverage |
-|-------|-------------|----------|
-| **Unit Tests** | Config validation, analyzer initialization | 85-100% |
-| **Integration Tests** | Multi-component workflows | Complete |
-| **E2E Tests** | Full analysis pipelines with real data | Complete |
+```bash
+# Run tests for a module
+cd strepsuis-amrpat
+pip install -e .[dev]
+pytest -v
+```
 
-## 🚀 Quick Start
-
-See [ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md) for comprehensive examples with real data.
+See [TESTING_QUICK_START.md](TESTING_QUICK_START.md) for more commands.
 
 ---
 
-**Version**: 1.0.0  
-**Status**: Production-Ready (All 5 Modules)
+**Version:** 1.0.0  
+**Python:** 3.8+  
+**License:** MIT

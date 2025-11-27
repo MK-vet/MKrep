@@ -1,195 +1,154 @@
-# Separated Repositories Summary
+# StrepSuis Suite - Separated Repositories
 
-> **Note:** This repository is being renamed from `MKrep` to `StrepSuis_Suite`. 
-> All documentation reflects the new name. GitHub URLs will be updated after repository rename.
-
-This document provides a high-level overview of the separated repository structure created for the StrepSuis Suite bioinformatics tools.
+This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of five independent, publication-ready modules for antimicrobial resistance and genomic analysis.
 
 ## Overview
 
-The MKrep repository has been structured to support **5 independent, publication-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed to be deployed as a separate GitHub repository.
+The StrepSuis Suite contains **five production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed for independent deployment as a GitHub repository.
 
-## Repository List
+## Module Overview
 
-### 1. strepsuis-amrpat
-**Location:** `separated_repos/strepsuis-amrpat/`
-**Full Name:** StrepSuis-AMRPat
-**Purpose:** Automated Detection of Antimicrobial Resistance Patterns
-**Key Features:**
+| Module | Purpose | Key Capabilities |
+|--------|---------|------------------|
+| [strepsuis-amrpat](strepsuis-amrpat/) | AMR Pattern Detection | Bootstrap prevalence estimation, co-occurrence analysis, association rules, network visualization |
+| [strepsuis-amrvirkm](strepsuis-amrvirkm/) | K-Modes Clustering | Silhouette-optimized clustering, MCA, feature importance, bootstrap CIs |
+| [strepsuis-genphennet](strepsuis-genphennet/) | Network Integration | Chi-square/Fisher tests, FDR correction, information theory, 3D visualization |
+| [strepsuis-phylotrait](strepsuis-phylotrait/) | Phylogenetic Traits | Tree-aware clustering, Faith's PD, binary trait analysis, interactive reports |
+| [strepsuis-genphen](strepsuis-genphen/) | Genomic-Phenotypic | Phylogenetic clustering, trait profiling, MCA, Bootstrap 5 UI |
+
+### strepsuis-amrpat
+**StrepSuis-AMRPat** provides automated detection of antimicrobial resistance patterns through:
 - Bootstrap resampling for robust prevalence estimation
 - Co-occurrence analysis for phenotypes and resistance genes
 - Association rule mining for resistance patterns
 - Hybrid co-resistance network construction and visualization
 
-### 2. strepsuis-amrvirkm
-**Location:** `separated_repos/strepsuis-amrvirkm/`
-**Full Name:** StrepSuis-AMRVirKM
-**Purpose:** K-Modes Clustering of Antimicrobial Resistance and Virulence Profiles
-**Key Features:**
+### strepsuis-amrvirkm
+**StrepSuis-AMRVirKM** performs K-Modes clustering of antimicrobial resistance and virulence profiles:
 - K-Modes clustering with automatic silhouette optimization
 - Multiple Correspondence Analysis (MCA)
 - Feature importance ranking
 - Bootstrap confidence intervals
 
-### 3. strepsuis-genphennet
-**Location:** `separated_repos/strepsuis-genphennet/`
-**Full Name:** StrepSuis-GenPhenNet
-**Purpose:** Network-Based Integration of Genome-Phenome Data
-**Key Features:**
+### strepsuis-genphennet
+**StrepSuis-GenPhenNet** enables network-based integration of genome-phenome data:
 - Chi-square and Fisher exact tests with FDR correction
 - Information theory metrics (entropy, mutual information)
 - Mutually exclusive pattern detection
 - 3D network visualization with community detection
 
-### 4. strepsuis-phylotrait
-**Location:** `separated_repos/strepsuis-phylotrait/`
-**Full Name:** StrepSuis-PhyloTrait
-**Purpose:** Integrated Phylogenetic and Binary Trait Analysis
-**Key Features:**
+### strepsuis-phylotrait
+**StrepSuis-PhyloTrait** provides integrated phylogenetic and binary trait analysis:
 - Tree-aware clustering with evolutionary metrics
 - Faith's Phylogenetic Diversity calculations
 - Binary trait analysis for AMR and virulence factors
 - Interactive HTML reports with DataTables and Plotly
 
-### 5. strepsuis-genphen
-**Location:** `separated_repos/strepsuis-genphen/`
-**Full Name:** StrepSuis-GenPhen
-**Purpose:** Interactive Platform for Integrated Genomic-Phenotypic Analysis
-**Key Features:**
+### strepsuis-genphen
+**StrepSuis-GenPhen** offers an interactive platform for integrated genomic-phenotypic analysis:
 - Tree-aware phylogenetic clustering with ensemble fallback
 - Comprehensive trait profiling (chi-square, log-odds, RF importance)
 - Association rules mining and Multiple Correspondence Analysis
 - Interactive Bootstrap 5 UI with full CSV export capabilities
 
-## What's Included in Each Repository
+## Repository Contents
 
-Each separated repository is **production-ready** with:
+Each module is **production-ready** with the following components:
 
 ### Core Components
-- ✅ **Python Package** - Professional package structure with `pyproject.toml`
-- ✅ **Docker Container** - Multi-stage build with dynamic GitHub installation
-- ✅ **Google Colab Notebook** - User-friendly notebook for non-programmers
-- ✅ **Example Data** - Representative CSV datasets for testing
+- **Python Package** - Professional package structure with `pyproject.toml`
+- **Docker Container** - Multi-stage build with dynamic GitHub installation
+- **Google Colab Notebook** - User-friendly notebook for non-programmers
+- **Example Data** - Representative CSV datasets for testing
 
 ### Documentation
-- ✅ **README.md** - Main documentation with installation and usage
-- ✅ **USER_GUIDE.md** - Detailed step-by-step instructions
-- ✅ **CONTRIBUTING.md** - Guidelines for contributors
-- ✅ **CHANGELOG.md** - Version history and release notes
-- ✅ **RELEASE_CHECKLIST.md** - Pre-release verification checklist
-- ✅ **LICENSE** - MIT License
-- ✅ **Data Documentation** - Format specifications in examples/ directories
+- **README.md** - Main documentation with installation and usage
+- **USER_GUIDE.md** - Detailed step-by-step instructions
+- **CONTRIBUTING.md** - Guidelines for contributors
+- **CHANGELOG.md** - Version history and release notes
+- **TESTING.md** - Comprehensive testing documentation
+- **LICENSE** - MIT License
 
 ### Quality Assurance
-- ✅ **Pre-commit Hooks** - Automated code formatting and linting (.pre-commit-config.yaml)
-- ✅ **Test Suite** - pytest-based tests with >80% coverage target
-- ✅ **GitHub Actions** - CI/CD workflows (test.yml, release.yml, docs.yml)
-- ✅ **Type Checking** - mypy configuration for type safety
-- ✅ **Security Scanning** - bandit for security checks
+- **Pre-commit Hooks** - Automated code formatting and linting
+- **Test Suite** - pytest-based tests with comprehensive coverage
+- **GitHub Actions** - CI/CD workflows (test.yml, release.yml, docs.yml)
+- **Type Checking** - mypy configuration for type safety
+- **Security Scanning** - bandit for security checks
 
 ### Configuration Files
-- ✅ `.pre-commit-config.yaml` - Pre-commit hooks setup
-- ✅ `.dockerignore` - Docker build optimization
-- ✅ `.gitignore` - Git ignore patterns
-- ✅ `pytest.ini` - Test configuration
-- ✅ `pyproject.toml` - Package configuration with dev dependencies
-- ✅ `requirements.txt` - Core dependencies
-- ✅ `docker-compose.yml` - Docker Compose configuration
+- `.pre-commit-config.yaml` - Pre-commit hooks setup
+- `.dockerignore` - Docker build optimization
+- `.gitignore` - Git ignore patterns
+- `pytest.ini` - Test configuration
+- `pyproject.toml` - Package configuration with dev dependencies
+- `requirements.txt` - Core dependencies
+- `docker-compose.yml` - Docker Compose configuration
 
-### Optional Components (may vary by tool)
+## Installation and Distribution
 
-The following files may be present in some repositories depending on tool-specific requirements:
-- `.env.example` - Environment variables template (currently not needed - tools use CLI arguments)
-- Additional tool-specific documentation (see individual repository README)
+Each module supports three distribution methods:
 
-## Key Features
-
-### 1. No Code Duplication
-- Docker containers install packages from GitHub dynamically
-- Colab notebooks install packages from GitHub dynamically
-- Single source of truth for each tool's code
-
-### 2. Smart Automation
-**Local (Free):**
-- Pre-commit hooks run before commits
-- Immediate feedback on code quality
-- Prevents broken code from entering repository
-
-**Cloud (Minimal):**
-- GitHub Actions only on PR and releases
-- Estimated usage: 15-45 minutes/month
-- Well within free tier limits
-
-### 3. Three Distribution Methods
-
-**Method 1: Python Package**
+### Python Package
 ```bash
 pip install git+https://github.com/MK-vet/REPO-NAME.git
 ```
 
-**Method 2: Docker Container**
+### Docker Container
 ```bash
 docker pull ghcr.io/mk-vet/REPO-NAME:latest
 ```
 
-**Method 3: Google Colab**
-- Click badge in README
-- No installation required
+### Google Colab
+Click the Colab badge in each module's README to run without installation.
 
-### 4. Production Ready
-- Version 1.0.0 throughout
-- MIT License
-- Complete English documentation
-- Publication-quality outputs
-- Reproducible analyses
+## Architecture
 
-## Directory Structure Example
+### Code Organization
+- Docker containers install packages from GitHub dynamically
+- Colab notebooks install packages from GitHub dynamically
+- Single source of truth for each tool's code
+
+### Automation Strategy
+
+**Local Automation:**
+- Pre-commit hooks execute before every commit
+- Tools: black, isort, ruff, mypy, bandit
+- Provides immediate feedback on code quality
+
+**Cloud Automation:**
+- GitHub Actions trigger on pull requests and releases
+- Estimated usage: 15-45 minutes/month
+- Workflows: test.yml, release.yml, docs.yml
+
+## Directory Structure
 
 ```
 strepsuis-amrpat/
 ├── .github/workflows/       # CI/CD workflows
-├── .dockerignore           # Docker optimization
-├── .gitignore              # Git ignore rules
-├── .pre-commit-config.yaml # Code quality hooks
-├── CONTRIBUTING.md         # Contribution guide
-├── Dockerfile              # Multi-stage build
-├── LICENSE                 # MIT License
-├── README.md               # Main documentation
-├── RELEASE_CHECKLIST.md    # Release verification
-├── USER_GUIDE.md           # User instructions
-├── docker-compose.yml      # Docker Compose
-├── pyproject.toml          # Package config
-├── pytest.ini              # Test config
-├── requirements.txt        # Dependencies
-├── data/
-│   ├── examples/           # Example data + docs
-│   └── results/            # Expected results + docs
-├── examples/               # CSV data files
-├── notebooks/              # Colab notebooks
-├── strepsuis_amrpat/       # Python package
+├── .pre-commit-config.yaml  # Code quality hooks
+├── Dockerfile               # Multi-stage build
+├── LICENSE                  # MIT License
+├── README.md                # Main documentation
+├── USER_GUIDE.md            # User instructions
+├── TESTING.md               # Test documentation
+├── pyproject.toml           # Package config
+├── requirements.txt         # Dependencies
+├── examples/                # CSV data files
+├── notebooks/               # Colab notebooks
+├── strepsuis_amrpat/        # Python package
 │   ├── __init__.py
 │   ├── analyzer.py
 │   ├── cli.py
 │   └── config.py
-└── tests/                  # Test suite
+└── tests/                   # Test suite
 ```
 
-## Next Steps
+## Development
 
-### For Deployment
+### Setup
 
-See `separated_repos/DEPLOYMENT_GUIDE.md` for comprehensive deployment instructions including:
-- Creating GitHub repositories
-- Testing each component
-- Publishing to PyPI (optional)
-- Publishing to Docker Hub (optional)
-- Automation strategy
-- Maintenance procedures
-
-### For Development
-
-Each repository includes:
-1. **Setup pre-commit hooks:**
+1. **Install pre-commit hooks:**
    ```bash
    pip install pre-commit
    pre-commit install
@@ -210,92 +169,56 @@ Each repository includes:
    docker build -t tool-name:dev .
    ```
 
-## Version Information
+### Deployment
 
-- **Version:** 1.0.0
-- **Status:** Production Ready
-- **License:** MIT
-- **Language:** Python 3.8+
-- **Documentation:** English
-
-## Automation Summary
-
-### Local Automation (Free)
-- **Pre-commit hooks** run before every commit
-- **Tools:** black, isort, ruff, mypy, bandit
-- **Cost:** $0
-- **Speed:** Immediate
-
-### Cloud Automation (Minimal)
-- **GitHub Actions** run on PR and releases only
-- **Workflows:** test.yml, release.yml, docs.yml
-- **Estimated usage:** 15-45 minutes/month
-- **Cost:** Free (within GitHub's 2,000 min/month limit)
-
-### Manual Steps (One-time)
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions:
+- Creating GitHub repositories
+- Testing each component
 - Publishing to PyPI (optional)
 - Publishing to Docker Hub (optional)
-- Creating GitHub releases
 
 
 ## Testing Infrastructure
 
-All repositories now include **comprehensive test coverage** designed for both scientific validity and minimal CI consumption.
+The suite implements comprehensive test coverage with 3-level validation across all modules.
 
-### ✨ NEW: Enhanced Test Coverage (2025-11-21)
+### Test Coverage
 
-Complete end-to-end testing infrastructure now deployed across all modules!
+| Module | Tests | Coverage | Critical Paths |
+|--------|-------|----------|----------------|
+| strepsuis-amrpat | 110+ | 62% | 85-100% |
+| strepsuis-amrvirkm | 100+ | 50% | 85-100% |
+| strepsuis-genphen | 100+ | 50% | 85-100% |
+| strepsuis-genphennet | 100+ | 50% | 85-100% |
+| strepsuis-phylotrait | 90+ | 50% | 85-100% |
 
-**Key Enhancements:**
-- ✅ End-to-end workflow tests using real example datasets
-- ✅ Mini datasets (10 strains) for fast CI execution (<5s per module)
-- ✅ Full datasets (92 strains) for comprehensive local validation
-- ✅ Coverage badges in all module READMEs
-- ✅ Automated coverage reporting infrastructure
-- ✅ Comprehensive documentation with coverage roadmap
+### Testing Strategy
 
-**See [TEST_COVERAGE_ENHANCEMENT.md](TEST_COVERAGE_ENHANCEMENT.md) for complete details.**
+The testing framework includes:
+- **Unit Tests** - Configuration validation, analyzer initialization
+- **Integration Tests** - Multi-component workflows, data loading
+- **End-to-End Tests** - Complete analysis pipelines with real data
 
-### Test Coverage Summary
+End-to-end tests validate:
+- Complete pipeline execution (Input → Processing → Output)
+- Data preprocessing (CSV loading, merging, validation)
+- Output generation (HTML, Excel, PNG charts)
+- Reproducibility (consistent results with identical inputs)
+- Error handling (missing files, invalid data, edge cases)
 
-All modules now use **3-level testing** (Unit + Integration + E2E) with **400+ tests** total.
+### Test Data
 
-| Module | Tests | Coverage | Critical Paths | Status |
-|--------|-------|----------|----------------|--------|
-| strepsuis-amrpat | 110+ | **62%** | **85-100%** | ✅ Production Ready |
-| strepsuis-amrvirkm | 100+ | **50%** | **85-100%** | ✅ Production Ready |
-| strepsuis-genphen | 100+ | **50%** | **85-100%** | ✅ Production Ready |
-| strepsuis-genphennet | 100+ | **50%** | **85-100%** | ✅ Production Ready |
-| strepsuis-phylotrait | 90+ | **50%** | **85-100%** | ✅ Production Ready |
+**Mini Datasets (CI):**
+- 10 strains from real example data
+- Execution time: <5 seconds per module
+- Purpose: Fast feedback in CI pipelines
 
-### Test Categories
+**Full Datasets (Local):**
+- 92 strains (complete example data)
+- Execution time: 30-60 seconds per module
+- Purpose: Comprehensive validation before releases
 
-Each repository implements **3-level testing**:
-- ✅ **Level 1 - Unit Tests**: Configuration validation, analyzer initialization
-- ✅ **Level 2 - Integration Tests**: Multi-component workflows, data loading
-- ✅ **Level 3 - End-to-End Tests**: Complete analysis pipelines with real data
-
-All categories tested:
-- **Unit Tests**: Fast tests of individual components
-- **Integration Tests (Fast)**: Tests using mini datasets (10 strains) - CI-friendly
-- **Integration Tests (Slow)**: Tests using full datasets (92 strains) - Local only
-- **End-to-End Tests**: Complete pipeline validation from input to output
-- **Workflow Tests**: Multi-step pipeline validation
-- **CLI Tests**: Command-line interface validation
-- **Data Validation Tests**: Input data format checking
-
-### End-to-End Test Coverage ✨ NEW
-
-Each module's `test_end_to_end.py` validates:
-1. **Complete Pipeline Execution** - Input → Processing → Output
-2. **Data Preprocessing** - CSV loading, merging, validation
-3. **Output Generation** - HTML, Excel, PNG charts
-4. **Output Validation** - Structure, content, formatting
-5. **Reproducibility** - Consistent results with identical inputs
-6. **Error Handling** - Missing files, invalid data, edge cases
-7. **Configuration Impact** - Parameter effects on analysis
-
-### Quick Testing Commands
+### Running Tests
 
 ```bash
 # Fast tests (for CI/development)
@@ -304,104 +227,39 @@ pytest -m "not slow" -v
 # Full test suite (for local validation)
 pytest -v
 
-# End-to-end tests only ✨ NEW
+# End-to-end tests only
 pytest tests/test_end_to_end.py -v
 
 # With coverage report
 pytest --cov --cov-report=html
-open htmlcov/index.html
 ```
-
-### Test Data Strategy ✨ NEW
-
-**Mini Datasets (CI)**:
-- 10 strains from real example data
-- Execution: <5 seconds per module
-- Purpose: Fast feedback in GitHub Actions
-- Coverage: All code paths exercised
-
-**Full Datasets (Local)**:
-- 92 strains (complete example data)
-- Execution: 30-60 seconds per module
-- Purpose: Comprehensive validation before releases
-- Coverage: Publication-ready outputs validated
 
 ### CI/CD Optimization
 
-- Tests run on: Pull requests, manual triggers, releases only
-- Fast tests only in CI (slow tests marked and skipped)
+- Tests trigger on pull requests, manual dispatch, and releases
+- Fast tests execute in CI; slow tests run locally
 - Estimated CI time: 3-5 minutes per module
-- Monthly usage: ~30-50 minutes total
-- **Well within GitHub's free tier (2,000 min/month)** ✅
+- Monthly usage: approximately 30-50 minutes total
 
-### Automation Scripts ✨ NEW
-
-```bash
-# Generate coverage reports for all modules
-cd separated_repos
-python generate_coverage_badge.py
-
-# Replicate test structure to new modules
-python replicate_tests.py
-
-# Add coverage badges to README files
-python add_coverage_badges.py
-```
-
-### Documentation
-
-- [📊 **Test Coverage Enhancement**](TEST_COVERAGE_ENHANCEMENT.md) - ✨ NEW: Complete testing infrastructure guide
-- [⚡ Local Testing Guide](LOCAL_TESTING_GUIDE.md) - Quick reference (if exists)
-- Module-specific: Each repository has an enhanced `TESTING.md` file (200+ lines each)
-
-### Generate Coverage Reports
-
-```bash
-cd separated_repos
-python generate_coverage_badge.py
-```
-
-**Output:**
-- `COVERAGE_SUMMARY.md` - Summary with badges
-- `coverage_report.json` - Machine-readable data
-- Badge URLs for README updates
-
-### Coverage Goals
-
-All modules have achieved production-ready coverage:
-
-| Module | Current | Critical Paths | Status |
-|--------|---------|----------------|--------|
-| strepsuis-amrpat | **62%** | 85-100% | ✅ Production Ready |
-| strepsuis-amrvirkm | **50%** | 85-100% | ✅ Production Ready |
-| strepsuis-genphen | **50%** | 85-100% | ✅ Production Ready |
-| strepsuis-genphennet | **50%** | 85-100% | ✅ Production Ready |
-| strepsuis-phylotrait | **50%** | 85-100% | ✅ Production Ready |
-
-**Why 70%+ total is not practical**:
-- Large monolithic analysis files (2000+ lines/module)
-- Better validated through integration/e2e tests
-- Would require 100-150 mocking tests per module
-- Low ROI: Critical paths already at 85-100%
+For comprehensive testing documentation, see [TESTING.md](TESTING.md).
 
 
 ## Quality Standards
 
-All repositories meet:
-- ✅ **Code Quality:** Black, isort, ruff, mypy, bandit
-- ✅ **Testing:** >80% coverage target
-- ✅ **Documentation:** Complete English docs
-- ✅ **Reproducibility:** Fixed seeds, documented parameters
-- ✅ **Publication Ready:** High-resolution outputs (150+ DPI)
-- ✅ **User Friendly:** Three distribution methods
-- ✅ **Maintainable:** Clear structure, comprehensive tests
+All modules meet the following standards:
+- **Code Quality:** Black, isort, ruff, mypy, bandit
+- **Testing:** Comprehensive test coverage with 3-level validation
+- **Documentation:** Complete English documentation
+- **Reproducibility:** Fixed seeds, documented parameters
+- **Publication Ready:** High-resolution outputs (150+ DPI)
+- **User Friendly:** Three distribution methods
+- **Maintainable:** Clear structure, comprehensive tests
 
 ## Resources
 
-- **Main Repository:** https://github.com/MK-vet/MKrep
 - **Deployment Guide:** [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-- **Original Documentation:** ../README.md
-- **Module Separation Guide:** ../REPOSITORY_SEPARATION_GUIDE.md
+- **Testing Guide:** [TESTING.md](TESTING.md)
+- **Analysis Examples:** [ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md)
 
 ## Support
 
@@ -412,7 +270,6 @@ For questions or issues:
 
 ---
 
-**Created:** 2025-01-14
-**Version:** 1.0.0
-**Status:** Production Ready
-**License:** MIT
+**Version:** 1.0.0  
+**License:** MIT  
+**Python:** 3.8+

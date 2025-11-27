@@ -25,14 +25,14 @@ The MKrep repository has been restructured into 5 independent, publication-ready
 5. **strepsuis-genphen** - Interactive Platform for Integrated Genomic-Phenotypic Analysis
 
 Each repository is **production-ready** with:
-- ✅ Professional Python package structure
-- ✅ Multi-stage Docker container
-- ✅ Google Colab notebook
-- ✅ Complete English documentation
-- ✅ Pre-commit hooks for code quality
-- ✅ GitHub Actions for CI/CD
-- ✅ Comprehensive test suite
-- ✅ User and contributor guides
+- Professional Python package structure
+- Multi-stage Docker container
+- Google Colab notebook
+- Complete English documentation
+- Pre-commit hooks for code quality
+- GitHub Actions for CI/CD
+- Comprehensive test suite
+- User and contributor guides
 
 ## Repository Structure
 
@@ -182,23 +182,23 @@ For each repository:
 1. Go to the repository on GitHub
 2. Navigate to **Releases** → **Create a new release**
 3. Click **Choose a tag** → Type `v1.0.0` → **Create new tag**
-4. Release title: `Version 1.0.0 - Initial Release`
+4. Release title: `Version 1.0.0`
 5. Description:
 
 ```markdown
-# Version 1.0.0 - Initial Release 🎉
+# Version 1.0.0
 
 Production-ready bioinformatics tool for [specific tool purpose].
 
 ## Features
 
-- ✅ Professional Python package with command-line interface
-- ✅ Multi-stage Docker container for reproducible environments
-- ✅ Google Colab notebook for non-programmers
-- ✅ Comprehensive documentation in English
-- ✅ Example datasets included
-- ✅ >80% test coverage
-- ✅ Publication-quality outputs (150+ DPI)
+- Professional Python package with command-line interface
+- Multi-stage Docker container for reproducible environments
+- Google Colab notebook for non-programmers
+- Comprehensive documentation in English
+- Example datasets included
+- Comprehensive test coverage
+- Publication-quality outputs (150+ DPI)
 
 ## Installation
 
@@ -535,7 +535,5 @@ For questions about deployment:
 
 ---
 
-**Version:** 1.0.0
-**Last Updated:** 2025-01-14
-**Maintained by:** MK-vet
+**Version:** 1.0.0  
 **License:** MIT

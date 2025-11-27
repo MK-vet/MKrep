@@ -1,11 +1,10 @@
 # End-to-End Test Documentation
 
-**Last Updated**: 2025-11-26  
-**Coverage**: All 5 StrepSuis Suite Modules
+This document details the end-to-end (E2E) test coverage for all five StrepSuis Suite modules.
 
 ## Overview
 
-End-to-end (E2E) tests validate complete analysis pipelines from data loading through result generation. These tests use real sample data to ensure the entire workflow functions correctly in production scenarios.
+End-to-end tests validate complete analysis pipelines from data loading through result generation. These tests use real sample data to ensure the entire workflow functions correctly in production scenarios.
 
 ## Test Structure by Module
 
@@ -51,12 +50,12 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 
 #### Key Features Tested
 
-- ✅ Bootstrap resampling (500 iterations)
-- ✅ Co-resistance network construction
-- ✅ Association rule mining (confidence, lift metrics)
-- ✅ Louvain community detection
-- ✅ HTML and Excel report generation
-- ✅ PNG chart export (network visualizations)
+- Bootstrap resampling (500 iterations)
+- Co-resistance network construction
+- Association rule mining (confidence, lift metrics)
+- Louvain community detection
+- HTML and Excel report generation
+- PNG chart export (network visualizations)
 
 #### Sample Data Details
 
@@ -103,13 +102,13 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 
 #### Unique Features Tested
 
-- ✅ Phylogenetic tree parsing (Newick format)
-- ✅ Tree-aware clustering (patristic distances)
-- ✅ Faith's Phylogenetic Diversity calculations
-- ✅ Chi-square tests for trait associations
-- ✅ Random Forest feature importance
-- ✅ Interactive HTML reports with DataTables
-- ✅ Bootstrap confidence intervals (500 iterations)
+- Phylogenetic tree parsing (Newick format)
+- Tree-aware clustering (patristic distances)
+- Faith's Phylogenetic Diversity calculations
+- Chi-square tests for trait associations
+- Random Forest feature importance
+- Interactive HTML reports with DataTables
+- Bootstrap confidence intervals (500 iterations)
 
 **Tree Data**: `Snp_tree.newick` with 92 taxa  
 **Binary Traits**: AMR genes, virulence factors, serotypes
@@ -122,13 +121,13 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 
 #### Network Analysis Features
 
-- ✅ Chi-square and Fisher exact tests
-- ✅ FDR correction (Benjamini-Hochberg)
-- ✅ Mutual information calculations
-- ✅ Cramér's V correlation metrics
-- ✅ 3D network visualization (NetworkX + Plotly)
-- ✅ Community detection (Louvain algorithm)
-- ✅ Mutually exclusive pattern detection
+- Chi-square and Fisher exact tests
+- FDR correction (Benjamini-Hochberg)
+- Mutual information calculations
+- Cramér's V correlation metrics
+- 3D network visualization (NetworkX + Plotly)
+- Community detection (Louvain algorithm)
+- Mutually exclusive pattern detection
 
 **Graph Statistics**:
 - Node count: Genes + phenotypes (~150-200 nodes)
@@ -143,12 +142,12 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 
 #### Phylogenetic Methods Tested
 
-- ✅ Phylogenetic tree processing (BioPython)
-- ✅ Patristic distance matrices
-- ✅ Tree-aware clustering algorithms
-- ✅ Phylogenetic diversity metrics
-- ✅ Branch length preservation
-- ✅ Evolutionary signal detection
+- Phylogenetic tree processing (BioPython)
+- Patristic distance matrices
+- Tree-aware clustering algorithms
+- Phylogenetic diversity metrics
+- Branch length preservation
+- Evolutionary signal detection
 
 **Special Focus**: Integration of phylogenetic relationships with trait data
 
@@ -264,17 +263,17 @@ E2E tests significantly improve coverage of:
 
 ### Reliability
 
-- ✅ **100% Pass Rate**: All E2E tests pass consistently
-- ✅ **No Flaky Tests**: Deterministic with fixed random seeds
-- ✅ **Fast Execution**: Average 2-3 seconds per E2E test
-- ✅ **Comprehensive**: Cover all critical workflows
+- **100% Pass Rate**: All E2E tests pass consistently
+- **No Flaky Tests**: Deterministic with fixed random seeds
+- **Fast Execution**: Average 2-3 seconds per E2E test
+- **Comprehensive**: Cover all critical workflows
 
 ### Maintenance
 
-- ✅ **Well Documented**: Clear test names and docstrings
-- ✅ **Reusable Fixtures**: Shared test data across tests
-- ✅ **Modular Design**: Independent test cases
-- ✅ **Easy Debugging**: Detailed assertion messages
+- **Well Documented**: Clear test names and docstrings
+- **Reusable Fixtures**: Shared test data across tests
+- **Modular Design**: Independent test cases
+- **Easy Debugging**: Detailed assertion messages
 
 ## Real-World Validation
 
@@ -299,16 +298,16 @@ When running `test_mini_pipeline_execution`:
 **Typical Output Files Validated**:
 ```
 results/
-├── MDR_Report_YYYYMMDD_HHMMSS.html          ✅
-├── MDR_Report_YYYYMMDD_HHMMSS.xlsx          ✅
+├── MDR_Report_YYYYMMDD_HHMMSS.html
+├── MDR_Report_YYYYMMDD_HHMMSS.xlsx
 └── png_charts/
-    ├── mdr_prevalence_bootstrap.png         ✅
-    ├── cooccurrence_heatmap_pheno.png       ✅
-    ├── cooccurrence_heatmap_genes.png       ✅
-    ├── association_rules_pheno.png          ✅
-    ├── association_rules_genes.png          ✅
-    ├── hybrid_network_3d.png                ✅
-    └── community_detection_network.png      ✅
+    ├── mdr_prevalence_bootstrap.png
+    ├── cooccurrence_heatmap_pheno.png
+    ├── cooccurrence_heatmap_genes.png
+    ├── association_rules_pheno.png
+    ├── association_rules_genes.png
+    ├── hybrid_network_3d.png
+    └── community_detection_network.png
 ```
 
 ## Best Practices
@@ -316,10 +315,10 @@ results/
 ### When to Add E2E Tests
 
 Add new E2E tests when:
-- ✅ Adding a new analysis workflow
-- ✅ Supporting a new data format
-- ✅ Adding a new output type
-- ✅ Implementing a new feature that spans multiple components
+- Adding a new analysis workflow
+- Supporting a new data format
+- Adding a new output type
+- Implementing a new feature that spans multiple components
 
 ### E2E vs Integration vs Unit
 
