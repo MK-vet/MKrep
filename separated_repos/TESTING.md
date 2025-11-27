@@ -427,9 +427,3 @@ python generate_coverage_badge.py
 - [pytest-cov Documentation](https://pytest-cov.readthedocs.io/)
 - [Coverage.py Documentation](https://coverage.readthedocs.io/)
 - Module-specific `TESTING.md` files in each repository
-
----
-
-**Total Tests:** 400+  
-**Coverage Target:** 50-62% total, 85-100% critical paths  
-**Test Execution:** <5 minutes for CI suite
