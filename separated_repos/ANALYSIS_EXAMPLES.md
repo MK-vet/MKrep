@@ -1,18 +1,16 @@
 # Analysis Results Examples - StrepSuis Suite
 
-**Generated**: 2025-11-26  
-**Repository**: MK-vet/MKrep  
-**Modules**: All 5 StrepSuis Suite modules
+This document provides comprehensive examples of analysis results from all StrepSuis Suite modules.
 
 ## Overview
 
-This document provides comprehensive examples of analysis results from all StrepSuis Suite modules. Each module has been tested with real *Streptococcus suis* genomic data (92 strains) to demonstrate the complete analytical workflow and outputs.
+Each module has been tested with real *Streptococcus suis* genomic data (92 strains) to demonstrate the complete analytical workflow and outputs.
 
 ## Dataset Information
 
 **Standard Test Dataset** (used across all modules):
-- **Strain Count**: 92 *Streptococcus suis* isolates
-- **Geographic Origin**: Multi-country collection
+- **Strain Count:** 92 *Streptococcus suis* isolates
+- **Geographic Origin:** Multi-country collection
 - **Data Types**:
   - Minimum Inhibitory Concentration (MIC) data for 16 antibiotics
   - AMR gene presence/absence (42 resistance genes)
@@ -590,19 +588,18 @@ All modules accept configuration parameters:
 ## Validation and Quality Assurance
 
 All results have been validated through:
-- ✅ **Statistical correctness**: Cross-checked with R implementations
-- ✅ **Reproducibility**: Fixed random seeds ensure identical results
-- ✅ **Biological plausibility**: Results consistent with published literature
-- ✅ **Computational performance**: Optimized for reasonable execution times
-- ✅ **Output quality**: Publication-ready figures and tables
+- **Statistical correctness:** Cross-checked with R implementations
+- **Reproducibility:** Fixed random seeds ensure identical results
+- **Biological plausibility:** Results consistent with published literature
+- **Computational performance:** Optimized for reasonable execution times
+- **Output quality:** Publication-ready figures and tables
 
 ## References
 
 - **Module Documentation**: See individual module `README.md` files
-- **Testing Documentation**: `separated_repos/END_TO_END_TESTS.md`
-- **Coverage Reports**: `separated_repos/COVERAGE_RESULTS.md`
-- **Example Data**: `separated_repos/strepsuis-*/examples/`
+- **Testing Documentation:** `separated_repos/END_TO_END_TESTS.md`
+- **Example Data:** `separated_repos/strepsuis-*/examples/`
 
 ---
 
-*Generated 2025-11-26 for StrepSuis Suite v1.0.0*
+**Version:** 1.0.0
