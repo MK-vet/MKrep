@@ -145,27 +145,27 @@ ANTIBIOTIC_CLASSES: Dict[str, List[str]] = {
 def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
     """
     Compute contingency table analysis using Chi-square or Fisher's exact test
-    based on expected cell counts.
+    based on expected cell counts (Cochran's rule).
 
     Statistical methods:
-    - Chi-square test: Used when all expected cell frequencies are >= 5
-    - Fisher's exact test: Used when any expected cell frequency is < 5
-    - Phi coefficient: Calculated as sqrt(chi²/N) for 2×2 tables, with sign
-      determined by whether (ad-bc) is positive or negative
+    - Chi-square test: Used when all expected cell frequencies >= 5 and at least
+      80% of cells have expected frequency >= 5
+    - Fisher's exact test: Used when minimum expected frequency < 1 or <80%
+      of cells have expected frequency >= 5
+    - Phi coefficient: Calculated as (ad-bc)/sqrt(r₁r₂c₁c₂) for 2×2 tables
 
     Mathematical details:
     - Chi-square statistic: χ² = Σ[(O-E)²/E] where O=observed, E=expected
     - Expected cell counts: E_ij = (row_i total × column_j total)/grand total
-    - Phi coefficient: φ = sqrt(χ²/N) for 2×2 tables
-    - For 2×2 tables with cells [[a,b],[c,d]], φ = (ad-bc)/sqrt(r₁r₂c₁c₂)
-      where r₁,r₂ are row sums and c₁,c₂ are column sums
+    - Phi coefficient: φ = (ad-bc)/sqrt(r₁r₂c₁c₂) bounded in [-1, 1]
+    - When Fisher's test is used, chi2 is derived as φ² × N for consistency
 
     Parameters:
         table (pd.DataFrame): 2×2 contingency table
 
     Returns:
-        Tuple[float, float, float]: (test_statistic, p_value, phi_coefficient)
-        - test_statistic: Chi-square value (or 0 for Fisher's)
+        Tuple[float, float, float]: (chi2_statistic, p_value, phi_coefficient)
+        - chi2_statistic: Chi-square value (always derived from phi for consistency)
         - p_value: Statistical significance
         - phi_coefficient: Effect size measure (-1 to +1)
     """
@@ -176,36 +176,37 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
     if total == 0:
         return np.nan, np.nan, np.nan
 
+    (a, b), (c, d) = table.values
     row_sums = table.sum(axis=1)
     col_sums = table.sum(axis=0)
-    expected = np.outer(row_sums, col_sums) / total
 
-    if (expected < 5).any():
+    # Calculate phi coefficient for 2×2 table
+    num = float(a * d - b * c)
+    den = float(row_sums.iloc[0] * row_sums.iloc[1] * col_sums.iloc[0] * col_sums.iloc[1])
+    phi_val = num / np.sqrt(den) if den > 0 else np.nan
+
+    if np.isnan(phi_val):
+        return np.nan, np.nan, np.nan
+
+    expected = np.outer(row_sums, col_sums) / total
+    min_expected = expected.min()
+    pct_above_5 = (expected >= 5).sum() / expected.size
+
+    # Cochran's rule: use Fisher's if min expected < 1 or <80% cells have expected >= 5
+    if min_expected < 1 or pct_above_5 < 0.8:
         try:
             # Fisher's exact test for small expected frequencies
-            (a, b), (c, d) = table.values
             _, p_val = fisher_exact(table)
-
-            # Calculate phi coefficient manually for 2×2 table
-            num = a * d - b * c
-            den = row_sums[0] * row_sums[1] * col_sums[0] * col_sums[1]
-            phi_val = num / np.sqrt(den) if den > 0 else 0.0
-            return (0, p_val, phi_val)
+            # Derive chi2 from phi² × N for consistency
+            chi2 = phi_val ** 2 * total
+            return (float(chi2), float(p_val), float(phi_val))
         except (ValueError, TypeError, ZeroDivisionError):
             return (np.nan, np.nan, np.nan)
     else:
         try:
             # Chi-square test for adequate expected frequencies
             chi2, p_val, _, _ = chi2_contingency(table)
-
-            # Calculate phi coefficient from chi-square
-            phi_val = np.sqrt(chi2 / total)
-
-            # Determine sign of phi based on cell comparison
-            (a, b), (c, d) = table.values
-            if (a * d) < (b * c):
-                phi_val = -phi_val
-            return (chi2, p_val, phi_val)
+            return (float(chi2), float(p_val), float(phi_val))
         except (ValueError, TypeError, ZeroDivisionError):
             return (np.nan, np.nan, np.nan)
 
