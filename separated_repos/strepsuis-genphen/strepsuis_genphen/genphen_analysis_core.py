@@ -85,7 +85,10 @@ import plotly.graph_objects as go
 import prince
 import seaborn as sns
 from Bio import Phylo
-from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+try:
+    from .excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+except ImportError:
+    from strepsuis_genphen.excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 from mlxtend.frequent_patterns import apriori, association_rules
 from scipy.spatial.distance import cdist
 from scipy.stats import chi2_contingency, fisher_exact

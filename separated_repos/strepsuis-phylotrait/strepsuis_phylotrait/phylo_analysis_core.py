@@ -49,7 +49,10 @@ import weasyprint
 from Bio import Phylo
 
 # Excel report generation
-from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+try:
+    from .excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+except ImportError:
+    from strepsuis_phylotrait.excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 
 # For association rule mining:
 from mlxtend.frequent_patterns import apriori, association_rules
