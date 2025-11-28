@@ -30,7 +30,10 @@ import plotly.express as px
 import psutil
 
 # Excel report generation
-from excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+try:
+    from .excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
+except ImportError:
+    from strepsuis_amrvirkm.excel_report_utils import ExcelReportGenerator, sanitize_sheet_name
 from joblib import Parallel, delayed
 
 # K-Modes

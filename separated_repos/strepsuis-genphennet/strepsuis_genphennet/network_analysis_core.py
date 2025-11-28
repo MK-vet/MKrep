@@ -22,7 +22,10 @@ import re
 import sys
 import time
 
-from excel_report_utils import ExcelReportGenerator
+try:
+    from .excel_report_utils import ExcelReportGenerator
+except ImportError:
+    from strepsuis_genphennet.excel_report_utils import ExcelReportGenerator
 
 
 def create_interactive_table(df: pd.DataFrame, table_id: str) -> str:
