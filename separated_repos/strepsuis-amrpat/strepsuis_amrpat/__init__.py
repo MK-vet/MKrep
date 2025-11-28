@@ -13,6 +13,23 @@ __author__ = "MK-vet"
 __license__ = "MIT"
 
 from .analyzer import MDRAnalyzer
-from .config import Config
+from .config import Config, AnalysisConfig
+from .validation_utils import validate_input_data, validate_mdr_output, get_data_summary
+from .synthetic_data_utils import (
+    generate_synthetic_amr_data,
+    generate_cooccurrence_data,
+    run_synthetic_smoke_test,
+)
 
-__all__ = ["MDRAnalyzer", "Config", "__version__"]
+__all__ = [
+    "MDRAnalyzer",
+    "Config",
+    "AnalysisConfig",
+    "validate_input_data",
+    "validate_mdr_output",
+    "get_data_summary",
+    "generate_synthetic_amr_data",
+    "generate_cooccurrence_data",
+    "run_synthetic_smoke_test",
+    "__version__",
+]

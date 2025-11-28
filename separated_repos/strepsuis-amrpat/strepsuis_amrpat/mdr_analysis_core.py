@@ -642,8 +642,9 @@ def pairwise_cooccurrence(
                 }
             )
     out = pd.DataFrame(recs)
-    out.sort_values("Corrected_p", inplace=True)
-    out.reset_index(drop=True, inplace=True)
+    if not out.empty:
+        out.sort_values("Corrected_p", inplace=True)
+        out.reset_index(drop=True, inplace=True)
     return out
 
 
@@ -714,8 +715,9 @@ def phenotype_gene_cooccurrence(
                 }
             )
     out = pd.DataFrame(recs)
-    out.sort_values("Corrected_p", inplace=True)
-    out.reset_index(drop=True, inplace=True)
+    if not out.empty:
+        out.sort_values("Corrected_p", inplace=True)
+        out.reset_index(drop=True, inplace=True)
     return out
 
 
@@ -1195,6 +1197,11 @@ def create_hybrid_network_figure(G: nx.Graph) -> Tuple[str, Any]:
 ###############################################################################
 # 9) REPORT + MAIN
 ###############################################################################
+
+# Module-level counter for deterministic table IDs
+_table_id_counter = 0
+
+
 def df_to_html(df: pd.DataFrame, caption: str) -> str:
     """
     Convert DataFrame to enhanced HTML table with interactive features.
@@ -1213,13 +1220,15 @@ def df_to_html(df: pd.DataFrame, caption: str) -> str:
     Returns:
         str: HTML code for interactive DataTables display
     """
+    global _table_id_counter
+    
     if df.empty:
         return f"<h4>{caption}</h4><p>No data available.</p>"
 
-    # Generate unique ID for this table
-    import hashlib
-
-    table_id = f"table_{hashlib.md5(caption.encode(), usedforsecurity=False).hexdigest()[:8]}"
+    # Generate deterministic unique ID using a counter
+    # This ensures reproducibility while maintaining uniqueness within a session
+    _table_id_counter += 1
+    table_id = f"table_{_table_id_counter:04d}"
 
     # Round all float columns to 3 decimal places
     for col in df.columns:
