@@ -195,12 +195,16 @@ class TestBinaryTraitAnalysis:
         """Test Fisher's exact test for small samples."""
         from scipy.stats import fisher_exact
 
-        # Small 2x2 contingency table
+        # Small 2x2 contingency table with perfect separation
         table = np.array([[3, 0], [0, 3]])
         odds_ratio, p = fisher_exact(table)
 
-        # Perfect association should have low p-value (<=0.1 for small samples)
-        assert p <= 0.11, f"Perfect association should have p <= 0.11, got {p}"
+        # Fisher's exact test with this small sample (n=6) and perfect separation
+        # yields p=0.1 exactly due to the discrete nature of the test.
+        # The exact p-value is computed from hypergeometric distribution.
+        FISHER_EXACT_P_THRESHOLD = 0.11  # Slightly above 0.1 to account for floating-point
+        assert p <= FISHER_EXACT_P_THRESHOLD, \
+            f"Perfect association in 3x3 table should have p <= {FISHER_EXACT_P_THRESHOLD}, got {p}"
 
 
 class TestEdgeCases:

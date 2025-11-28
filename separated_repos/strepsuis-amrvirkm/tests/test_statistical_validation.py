@@ -255,14 +255,18 @@ class TestEdgeCases:
         data = np.array([[1, 0, 1], [0, 1, 1], [1, 1, 0]])
         labels = np.array([0, 0, 0])  # All same cluster
 
-        # Silhouette is undefined for single cluster
-        # Should handle gracefully
+        # Silhouette score is mathematically undefined for a single cluster
+        # (there's no between-cluster distance to compare against).
+        # sklearn raises ValueError in this case, which is the expected behavior.
         try:
             score = silhouette_score(data, labels)
-            # If it doesn't raise, score should be 0 or NaN
-            assert np.isnan(score) or score == 0
-        except ValueError:
-            pass  # Expected for single cluster
+            # If implementation doesn't raise, it should return an undefined indicator
+            assert np.isnan(score), \
+                "Single cluster silhouette should raise ValueError or return NaN"
+        except ValueError as e:
+            # This is the expected behavior - silhouette is undefined for single cluster
+            assert "Number of labels" in str(e) or "single" in str(e).lower(), \
+                "Should raise ValueError about single cluster"
 
     def test_empty_contingency_handling(self):
         """Test handling of empty data in contingency tables."""

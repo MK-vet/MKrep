@@ -300,8 +300,9 @@ class TestNumericalStability:
 
         # Phi should be very close to 1.0 (allowing for numerical precision)
         assert abs(phi) > 0.95, f"Perfect association should have |phi| > 0.95, got {phi}"
-        # P-value should be very small
-        assert p < 0.001 or np.isnan(p), "Perfect association should have very small p-value"
+        # P-value should be very small for this well-formed contingency table
+        # NaN would indicate an error in computation, not expected here
+        assert p < 0.001, f"Perfect association (n=100) should have p < 0.001, got {p}"
 
     def test_independence(self):
         """Test phi coefficient for independence."""

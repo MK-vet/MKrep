@@ -214,14 +214,19 @@ class TestEdgeCases:
     """Test edge cases for robustness."""
 
     def test_entropy_empty_series(self):
-        """Test entropy of empty series."""
+        """Test entropy of empty series.
+        
+        Empty series has no probability distribution, so entropy is undefined.
+        Implementation should return 0.0 as a safe default (matching scipy behavior
+        for empty input) since log(0) is undefined.
+        """
         from strepsuis_genphennet.network_analysis_core import calculate_entropy
 
         empty = pd.Series([], dtype=int)
         H, Hn = calculate_entropy(empty)
         
-        # Should handle gracefully
-        assert H == 0.0 or np.isnan(H), "Empty series entropy should be 0 or NaN"
+        # Empty series has no distribution, entropy defaults to 0.0
+        assert H == 0.0, "Empty series entropy should be 0.0 (safe default)"
 
     def test_entropy_single_element(self):
         """Test entropy of single-element series."""
@@ -233,24 +238,34 @@ class TestEdgeCases:
         assert H == 0.0, "Single element series should have zero entropy"
 
     def test_cramers_v_single_row(self):
-        """Test Cramér's V with single-row table."""
+        """Test Cramér's V with single-row table.
+        
+        Cramér's V requires at least 2 rows and 2 columns to compute.
+        Single-row tables return V=0.0 as the formula is undefined (division by zero).
+        """
         from strepsuis_genphennet.network_analysis_core import cramers_v
 
         single_row = pd.DataFrame([[10, 20]])
         v, lo, hi = cramers_v(single_row)
         
-        # Should handle gracefully
-        assert v == 0.0, "Single row table should return V=0"
+        # Single row table is degenerate; V=0.0 is the defined behavior
+        np.testing.assert_almost_equal(v, 0.0, decimal=5,
+            err_msg="Single row table should return V≈0")
 
     def test_cramers_v_single_column(self):
-        """Test Cramér's V with single-column table."""
+        """Test Cramér's V with single-column table.
+        
+        Cramér's V requires at least 2 rows and 2 columns to compute.
+        Single-column tables return V=0.0 as the formula is undefined.
+        """
         from strepsuis_genphennet.network_analysis_core import cramers_v
 
         single_col = pd.DataFrame([[10], [20]])
         v, lo, hi = cramers_v(single_col)
         
-        # Should handle gracefully
-        assert v == 0.0, "Single column table should return V=0"
+        # Single column table is degenerate; V=0.0 is the defined behavior
+        np.testing.assert_almost_equal(v, 0.0, decimal=5,
+            err_msg="Single column table should return V≈0")
 
 
 class TestMutuallyExclusivePatterns:
@@ -346,7 +361,13 @@ class TestNumericalStability:
         assert -1 <= phi <= 1, f"Phi should be in [-1,1], got {phi}"
 
     def test_chi2_phi_with_all_same_values(self):
-        """Test chi2_phi with constant data."""
+        """Test chi2_phi with constant data.
+        
+        When one variable is constant (no variance), the contingency table has
+        a zero row or column, making the chi-square test and phi coefficient
+        undefined or 0. Implementation should return phi=0.0 as the association
+        is undefined when one variable doesn't vary.
+        """
         from strepsuis_genphennet.network_analysis_core import chi2_phi
 
         constant_x = pd.Series([1, 1, 1, 1])
@@ -354,9 +375,9 @@ class TestNumericalStability:
         
         p, phi, contingency, lo, hi = chi2_phi(constant_x, varied_y)
         
-        # Should handle gracefully without crashing
-        # Phi should be 0 or near 0 since x doesn't vary
-        assert phi == 0.0 or np.isnan(phi), "Constant variable should have phi=0 or NaN"
+        # Constant variable has no variance, so phi=0.0 (no computable association)
+        np.testing.assert_almost_equal(phi, 0.0, decimal=5,
+            err_msg="Constant variable should have phi=0 (undefined association)")
 
 
 @pytest.mark.slow
