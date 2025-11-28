@@ -2,6 +2,9 @@
 """
 Unit and integration tests for Cluster Analysis module (Cluster_MIC_AMR_Viruelnce.py).
 
+Note: The module filename contains a typo ("Viruelnce" instead of "Virulence")
+which is preserved for compatibility with the existing codebase.
+
 Tests cover:
 - K-Modes clustering functions
 - Bootstrap confidence interval calculations
