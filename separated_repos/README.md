@@ -260,6 +260,9 @@ All modules meet the following standards:
 - **Deployment Guide:** [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
 - **Testing Guide:** [TESTING.md](TESTING.md)
 - **Analysis Examples:** [ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md)
+- **Mathematical Validation:** [MATHEMATICAL_VALIDATION.md](MATHEMATICAL_VALIDATION.md)
+- **Synthetic Data Validation:** [SYNTHETIC_DATA_VALIDATION.md](SYNTHETIC_DATA_VALIDATION.md)
+- **Documentation Index:** [INDEX.md](INDEX.md)
 
 ## Support
 

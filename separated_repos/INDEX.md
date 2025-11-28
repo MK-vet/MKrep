@@ -10,6 +10,9 @@
 | [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Deployment and publishing instructions | DevOps |
 | [ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md) | Example analysis results | Researchers |
 | [WORKFLOW_USAGE_GUIDE.md](WORKFLOW_USAGE_GUIDE.md) | GitHub Actions workflow guide | Developers |
+| [MATHEMATICAL_VALIDATION.md](MATHEMATICAL_VALIDATION.md) | Statistical validation methodology | Developers/Researchers |
+| [SYNTHETIC_DATA_VALIDATION.md](SYNTHETIC_DATA_VALIDATION.md) | Synthetic data and validation | Developers/Researchers |
+| [COVERAGE_RESULTS.md](COVERAGE_RESULTS.md) | Test coverage analysis | Developers |
 
 ## Modules
 
