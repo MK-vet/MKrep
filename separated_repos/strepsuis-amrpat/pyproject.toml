@@ -49,7 +49,9 @@ dependencies = [
     "tqdm>=4.62.0,<5.0.0",
     "joblib>=1.1.0,<2.0.0",
     "biopython>=1.79,<2.0.0",
-    "networkx>=2.6.0,<4.0.0"
+    "networkx>=2.6.0,<4.0.0",
+    "mlxtend>=0.19.0,<1.0.0",
+    "pydantic>=2.0.0,<3.0.0"
 ]
 
 [project.optional-dependencies]
@@ -83,6 +85,23 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
 ignore_missing_imports = true
+# Progressively enable stricter typing as annotations are added
+# Target: strict = true once all modules are typed
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "**/test_*.py",
+    "**/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
 
 [tool.ruff]
 line-length = 100

@@ -642,8 +642,9 @@ def pairwise_cooccurrence(
                 }
             )
     out = pd.DataFrame(recs)
-    out.sort_values("Corrected_p", inplace=True)
-    out.reset_index(drop=True, inplace=True)
+    if not out.empty:
+        out.sort_values("Corrected_p", inplace=True)
+        out.reset_index(drop=True, inplace=True)
     return out
 
 
@@ -714,8 +715,9 @@ def phenotype_gene_cooccurrence(
                 }
             )
     out = pd.DataFrame(recs)
-    out.sort_values("Corrected_p", inplace=True)
-    out.reset_index(drop=True, inplace=True)
+    if not out.empty:
+        out.sort_values("Corrected_p", inplace=True)
+        out.reset_index(drop=True, inplace=True)
     return out
 
 
@@ -1216,10 +1218,11 @@ def df_to_html(df: pd.DataFrame, caption: str) -> str:
     if df.empty:
         return f"<h4>{caption}</h4><p>No data available.</p>"
 
-    # Generate unique ID for this table
-    import hashlib
+    # Generate unique ID for this table using uuid for Python 3.8 compatibility
+    # (hashlib.md5(..., usedforsecurity=False) was added in Python 3.9)
+    import uuid
 
-    table_id = f"table_{hashlib.md5(caption.encode(), usedforsecurity=False).hexdigest()[:8]}"
+    table_id = f"table_{uuid.uuid4().hex[:8]}"
 
     # Round all float columns to 3 decimal places
     for col in df.columns:
