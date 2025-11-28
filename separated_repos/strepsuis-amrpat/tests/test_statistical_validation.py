@@ -23,6 +23,10 @@ import pytest
 from scipy.stats import chi2_contingency, fisher_exact
 from statsmodels.stats.multitest import multipletests
 
+# Module-level constants for statistical validation
+# Numerical tolerance for floating-point comparisons in statistical tests
+NUMERICAL_TOLERANCE = 1e-10
+
 
 class TestChiSquareValidation:
     """Validate chi-square tests against scipy gold standard."""
@@ -136,13 +140,13 @@ class TestChiSquareValidation:
             
             if np.isnan(chi2) or np.isnan(phi):
                 continue
-            
+
             total = table.values.sum()
             expected_chi2 = phi ** 2 * total
-            
+
             # For chi-square path, allow some tolerance due to Yates' correction
             # The relationship chi2 ≈ phi² × N is approximate
-            rel_error = abs(chi2 - expected_chi2) / max(chi2, expected_chi2, 1e-10)
+            rel_error = abs(chi2 - expected_chi2) / max(chi2, expected_chi2, NUMERICAL_TOLERANCE)
             assert rel_error < 0.15, \
                 f"Chi2 ({chi2}) should be approximately phi²×N ({expected_chi2}), rel_error={rel_error:.3f}"
 
@@ -250,19 +254,18 @@ class TestMultipleTestingCorrection:
         
         # Sort by Raw_p
         result_sorted = result.sort_values('Raw_p').reset_index(drop=True)
-        
+
         # FDR monotonicity: corrected p-values must be non-decreasing when sorted by raw p
         corrected = result_sorted['Corrected_p'].to_numpy()
-        tolerance = 1e-10
-        
+
         for i in range(len(corrected) - 1):
-            assert corrected[i] <= corrected[i + 1] + tolerance, \
+            assert corrected[i] <= corrected[i + 1] + NUMERICAL_TOLERANCE, \
                 f"FDR monotonicity violated: Corrected_p[{i}]={corrected[i]} > Corrected_p[{i+1}]={corrected[i+1]}"
-        
+
         # Corrected p-values should never be less than raw p-values (beyond tolerance)
         raw_p = result['Raw_p'].to_numpy()
         corr_p = result['Corrected_p'].to_numpy()
-        assert np.all(corr_p >= raw_p - tolerance), \
+        assert np.all(corr_p >= raw_p - NUMERICAL_TOLERANCE), \
             "Corrected p-values should be >= raw p-values"
 
     def test_fdr_monotonicity_in_phenotype_gene_cooccurrence(self):
@@ -270,17 +273,17 @@ class TestMultipleTestingCorrection:
         Test FDR monotonicity in phenotype_gene_cooccurrence function.
         """
         from strepsuis_amrpat.mdr_analysis_core import phenotype_gene_cooccurrence
-        
+
         np.random.seed(123)
         n_samples = 80
-        
+
         # Create phenotype data
         pheno_df = pd.DataFrame({
             'Pheno_A': np.random.binomial(1, 0.4, n_samples),
             'Pheno_B': np.random.binomial(1, 0.5, n_samples),
             'Pheno_C': np.random.binomial(1, 0.6, n_samples),
         })
-        
+
         # Create gene data with some correlation to phenotypes
         gene_df = pd.DataFrame({
             'Gene_1': (pheno_df['Pheno_A'] | np.random.binomial(1, 0.1, n_samples)).clip(0, 1),
@@ -288,19 +291,18 @@ class TestMultipleTestingCorrection:
             'Gene_3': np.random.binomial(1, 0.3, n_samples),
             'Gene_4': (pheno_df['Pheno_B'] & np.random.binomial(1, 0.9, n_samples)).astype(int),
         })
-        
+
         result = phenotype_gene_cooccurrence(pheno_df, gene_df, alpha=0.99, method='fdr_bh')
-        
+
         if result.empty:
             pytest.skip("No significant associations found with test data")
-        
+
         # Sort by Raw_p and verify monotonicity
         result_sorted = result.sort_values('Raw_p').reset_index(drop=True)
         corrected = result_sorted['Corrected_p'].to_numpy()
-        tolerance = 1e-10
-        
+
         for i in range(len(corrected) - 1):
-            assert corrected[i] <= corrected[i + 1] + tolerance, \
+            assert corrected[i] <= corrected[i + 1] + NUMERICAL_TOLERANCE, \
                 f"FDR monotonicity violated at index {i}"
 
 

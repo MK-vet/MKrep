@@ -7,6 +7,10 @@ on:
     branches: [ main, develop ]
   workflow_dispatch:
 
+# Limit the permissions of the GITHUB_TOKEN for security
+permissions:
+  contents: read
+
 jobs:
   test-python-scripts:
     name: Test Python Scripts
@@ -127,17 +131,17 @@ jobs:
     - name: Run statistical validation tests
       run: |
         cd separated_repos/strepsuis-amrpat
-        pytest tests/test_statistical_validation.py -v --tb=short
+        pytest tests/test_statistical_validation.py -v --tb=short --no-cov
 
     - name: Run reproducibility checks with seed 42
       run: |
         cd separated_repos/strepsuis-amrpat
-        pytest tests/test_statistical_validation.py::TestReproducibility -v --seed=42 || pytest tests/test_statistical_validation.py::TestReproducibility -v
+        pytest tests/test_statistical_validation.py::TestReproducibility -v --no-cov
 
     - name: Run reproducibility checks with seed 123
       run: |
         cd separated_repos/strepsuis-amrpat
-        pytest tests/test_statistical_validation.py::TestReproducibility -v --seed=123 || pytest tests/test_statistical_validation.py::TestReproducibility -v
+        pytest tests/test_statistical_validation.py::TestReproducibility -v --no-cov
 
   test-notebooks:
     name: Test Jupyter Notebooks

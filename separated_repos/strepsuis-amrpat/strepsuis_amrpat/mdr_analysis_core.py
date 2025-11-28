@@ -192,12 +192,18 @@ def safe_contingency(table: pd.DataFrame) -> Tuple[float, float, float]:
     min_expected = expected.min()
     pct_above_5 = (expected >= 5).sum() / expected.size
 
-    # Cochran's rule: use Fisher's if min expected < 1 or <80% cells have expected >= 5
+    # Cochran's rule for test selection:
+    # - Use Fisher's exact test if minimum expected frequency < 1
+    # - Use Fisher's exact test if fewer than 80% of cells have expected >= 5
+    # - Otherwise use chi-square test
+    # This is the standard statistical decision tree for contingency analysis.
     if min_expected < 1 or pct_above_5 < 0.8:
         try:
             # Fisher's exact test for small expected frequencies
             _, p_val = fisher_exact(table)
-            # Derive chi2 from phi² × N for consistency
+            # Derive chi2 from phi² × N to ensure statistical consistency.
+            # This allows all outputs to be comparable regardless of which test was used,
+            # which is essential for downstream analyses and network construction.
             chi2 = phi_val ** 2 * total
             return (float(chi2), float(p_val), float(phi_val))
         except (ValueError, TypeError, ZeroDivisionError):
