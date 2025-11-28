@@ -320,16 +320,198 @@ print("IMPORT_SUCCESS")
         success = self.generate_summary_report()
         
         return success
+    
+    def run_integration_tests(self):
+        """Run integration tests for all modules using pytest test files."""
+        self.print_header("Running Integration Tests")
+        
+        test_files = [
+            ('Cluster Analysis', 'test_cluster_analysis.py'),
+            ('MDR Analysis', 'test_mdr_analysis.py'),
+            ('Network Analysis', 'test_network_analysis.py'),
+            ('Phylogenetic Clustering', 'test_phylogenetic_analysis.py'),
+            ('StrepSuis Analysis', 'test_strepsuis_analysis.py'),
+        ]
+        
+        all_passed = True
+        test_results = {}
+        
+        for module_name, test_file in test_files:
+            test_path = self.base_dir / test_file
+            
+            if not test_path.exists():
+                self.print_warning(f"Test file not found: {test_file}")
+                test_results[module_name] = {'status': 'SKIPPED', 'reason': 'Test file not found'}
+                continue
+            
+            self.print_info(f"Running tests for {module_name}...")
+            
+            try:
+                result = subprocess.run(
+                    [sys.executable, '-m', 'pytest', str(test_path), '-v', '--tb=short', '-q'],
+                    capture_output=True,
+                    text=True,
+                    timeout=300,
+                    cwd=str(self.base_dir)
+                )
+                
+                # Check for test results in output
+                if 'passed' in result.stdout:
+                    # Parse passed/failed counts
+                    import re
+                    match = re.search(r'(\d+) passed', result.stdout)
+                    passed_count = int(match.group(1)) if match else 0
+                    
+                    failed_match = re.search(r'(\d+) failed', result.stdout)
+                    failed_count = int(failed_match.group(1)) if failed_match else 0
+                    
+                    skipped_match = re.search(r'(\d+) skipped', result.stdout)
+                    skipped_count = int(skipped_match.group(1)) if skipped_match else 0
+                    
+                    if failed_count == 0:
+                        self.print_success(f"{module_name}: {passed_count} passed, {skipped_count} skipped")
+                        test_results[module_name] = {
+                            'status': 'PASSED',
+                            'passed': passed_count,
+                            'failed': 0,
+                            'skipped': skipped_count
+                        }
+                    else:
+                        self.print_error(f"{module_name}: {passed_count} passed, {failed_count} failed")
+                        test_results[module_name] = {
+                            'status': 'FAILED',
+                            'passed': passed_count,
+                            'failed': failed_count,
+                            'skipped': skipped_count
+                        }
+                        all_passed = False
+                else:
+                    self.print_warning(f"{module_name}: Could not parse test results")
+                    test_results[module_name] = {
+                        'status': 'UNKNOWN',
+                        'output': result.stdout[:500]
+                    }
+                    
+            except subprocess.TimeoutExpired:
+                self.print_error(f"{module_name}: Tests timed out")
+                test_results[module_name] = {'status': 'TIMEOUT'}
+                all_passed = False
+            except Exception as e:
+                self.print_error(f"{module_name}: Test error - {e}")
+                test_results[module_name] = {'status': 'ERROR', 'error': str(e)}
+                all_passed = False
+        
+        self.results['integration_tests'] = test_results
+        
+        # Print summary
+        print(f"\n{BOLD}Integration Test Summary:{RESET}")
+        for module, result in test_results.items():
+            status = result.get('status', 'UNKNOWN')
+            if status == 'PASSED':
+                print(f"  {GREEN}✓ {module}{RESET}")
+            elif status == 'SKIPPED':
+                print(f"  {YELLOW}○ {module} (skipped){RESET}")
+            else:
+                print(f"  {RED}✗ {module} ({status}){RESET}")
+        
+        return all_passed
+    
+    def validate_outputs(self, output_dir='output'):
+        """Validate that expected output files are generated."""
+        self.print_header("Validating Output Files")
+        
+        output_path = self.base_dir / output_dir
+        
+        if not output_path.exists():
+            self.print_warning(f"Output directory not found: {output_dir}")
+            return True  # Not a failure, just no outputs yet
+        
+        expected_patterns = {
+            'HTML Reports': ['*.html'],
+            'Excel Reports': ['*.xlsx'],
+            'PNG Charts': ['png_charts/*.png', '*.png'],
+            'Log Files': ['*.log', '*.txt']
+        }
+        
+        found_files = {}
+        for category, patterns in expected_patterns.items():
+            files = []
+            for pattern in patterns:
+                files.extend(output_path.glob(pattern))
+            found_files[category] = files
+            
+            if files:
+                self.print_success(f"{category}: {len(files)} file(s)")
+                for f in files[:3]:  # Show first 3 files
+                    print(f"    - {f.name}")
+                if len(files) > 3:
+                    print(f"    ... and {len(files) - 3} more")
+            else:
+                self.print_info(f"{category}: No files found")
+        
+        self.results['output_validation'] = {k: len(v) for k, v in found_files.items()}
+        
+        return True
 
 
 def main():
     """Main entry point"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(
+        description='MKrep Module Verification Script',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python verify_all_modules.py                    # Basic verification only
+  python verify_all_modules.py --run-integration  # Run integration tests
+  python verify_all_modules.py --validate-outputs # Validate output files
+  python verify_all_modules.py --all              # Run all checks
+        """
+    )
+    
+    parser.add_argument(
+        '--run-integration', '-i',
+        action='store_true',
+        help='Run integration tests with pytest for all modules'
+    )
+    
+    parser.add_argument(
+        '--validate-outputs', '-o',
+        action='store_true',
+        help='Validate expected output files (HTML, Excel, PNG)'
+    )
+    
+    parser.add_argument(
+        '--all', '-a',
+        action='store_true',
+        help='Run all verification steps including integration tests and output validation'
+    )
+    
+    args = parser.parse_args()
+    
     print(f"{BOLD}{BLUE}MKrep Module Verification Script{RESET}")
-    print(f"Version: 1.0.0")
+    print(f"Version: 1.1.0")
     print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
     
     verifier = ModuleVerifier()
+    
+    # Always run basic verification
     success = verifier.run_verification()
+    
+    # Optionally run integration tests
+    if args.run_integration or args.all:
+        integration_success = verifier.run_integration_tests()
+        success = success and integration_success
+    
+    # Optionally validate outputs
+    if args.validate_outputs or args.all:
+        verifier.validate_outputs()
+    
+    # Save updated results
+    report_file = verifier.base_dir / 'module_verification_report.json'
+    with open(report_file, 'w') as f:
+        json.dump(verifier.results, f, indent=2)
     
     return 0 if success else 1
 

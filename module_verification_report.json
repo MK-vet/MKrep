@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-28T14:28:33.047587",
+  "timestamp": "2025-11-28T14:39:20.861119",
   "modules": {
     "Cluster Analysis": {
       "name": "Cluster Analysis",
@@ -77,5 +77,37 @@
       }
     }
   },
-  "overall_status": "ALL_PASSED"
+  "overall_status": "ALL_PASSED",
+  "integration_tests": {
+    "Cluster Analysis": {
+      "status": "PASSED",
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0
+    },
+    "MDR Analysis": {
+      "status": "PASSED",
+      "passed": 32,
+      "failed": 0,
+      "skipped": 0
+    },
+    "Network Analysis": {
+      "status": "PASSED",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    "Phylogenetic Clustering": {
+      "status": "PASSED",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 1
+    },
+    "StrepSuis Analysis": {
+      "status": "PASSED",
+      "passed": 21,
+      "failed": 0,
+      "skipped": 1
+    }
+  }
 }
