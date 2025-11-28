@@ -96,13 +96,58 @@ def test_bootstrap_ci_coverage():
 **Gold Standard**: `statsmodels.stats.multitest.multipletests`
 
 **Validation Tests**:
-- Corrected p-values are monotonically non-decreasing
-- All corrected p-values >= original p-values
+- Corrected p-values are monotonically non-decreasing when sorted by raw p-values
+- All corrected p-values >= original p-values (within numerical tolerance 1e-10)
 - Matches statsmodels FDR-BH procedure
+
+**Monotonicity Requirement (Critical)**:
+After sorting by raw p-values (ascending), the corrected p-values MUST be non-decreasing:
+```python
+corrected = result_sorted["Corrected_p"].to_numpy()
+for i in range(len(corrected) - 1):
+    assert corrected[i] <= corrected[i + 1] + 1e-10
+```
 
 **Test Location**: `tests/test_statistical_validation.py::TestMultipleTestingCorrection`
 
-### 6. Information Theory Metrics
+### 6. Bootstrap Confidence Intervals
+
+**Implementation**: Non-parametric percentile bootstrap
+
+**Method Details**:
+- Default iterations: **5,000** (production minimum)
+- Confidence level: 95% (α = 0.05)
+- CI bounds: empirical quantiles at α/2 and 1-α/2 percentiles
+
+**Convergence Criterion**:
+- Width difference between n=5,000 and n=10,000 iterations should be < 5%
+- This ensures stable estimates for publication-grade results
+
+**Test Location**: `tests/test_statistical_validation.py::TestNumericalStabilityAdvanced::test_bootstrap_convergence_5000_vs_10000`
+
+### 7. Contingency Table Analysis (Fisher vs Chi-Square)
+
+**Implementation**: `safe_contingency()` function
+
+**Selection Rule (Cochran's Rule)**:
+- Use **Fisher's exact test** when:
+  - Minimum expected cell count < 1, OR
+  - Less than 80% of cells have expected count >= 5
+- Use **Chi-square test** otherwise
+
+**Chi-Square Derivation**:
+- When Fisher's exact test is used, chi² is derived as φ² × N for consistency
+- This ensures all outputs are comparable regardless of which test was used
+
+**Phi Coefficient**:
+- Formula: φ = (ad - bc) / √(r₁r₂c₁c₂)
+- Bounded in [-1, 1] for all valid 2×2 tables
+- Phi = 1.0 indicates perfect positive association
+- Phi = 0.0 indicates independence
+
+**Test Location**: `tests/test_statistical_validation.py::TestChiSquareValidation`
+
+### 8. Information Theory Metrics
 
 **Implementation**: Entropy, Mutual Information, Cramér's V
 
@@ -115,7 +160,7 @@ def test_bootstrap_ci_coverage():
 
 **Test Location**: Module-specific statistical validation tests
 
-### 7. Clustering Metrics
+### 9. Clustering Metrics
 
 **Implementation**: Silhouette score, Calinski-Harabasz, Davies-Bouldin indices
 
@@ -127,6 +172,37 @@ def test_bootstrap_ci_coverage():
 - K-modes implementation correctness
 
 **Test Location**: `tests/test_statistical_validation.py` (per module)
+
+## Numerical Stability Validation
+
+### Correlation Matrix Condition Number
+
+For correlation matrices derived from binary data:
+- Condition number < 100 indicates well-conditioned data
+- Higher values suggest multicollinearity and may require feature selection
+
+**Test Location**: `TestNumericalStabilityAdvanced::test_correlation_matrix_condition_number`
+
+### Collinear Features
+
+- Perfectly collinear features (identical columns) produce phi = 1.0
+- The code handles degenerate contingency tables gracefully
+
+**Test Location**: `TestNumericalStabilityAdvanced::test_collinear_feature_handling`
+
+### Phi Coefficient Bounds
+
+- Phi is always bounded in [-1, 1] for valid 2×2 tables
+- Verified on 100+ randomly generated positive tables
+
+**Test Location**: `TestNumericalStabilityAdvanced::test_phi_bounds_random_tables`
+
+### Severely Imbalanced Data
+
+- Features with 1% prevalence are handled correctly
+- Bootstrap CIs are valid even for rare events
+
+**Test Location**: `TestNumericalStabilityAdvanced::test_severely_imbalanced_data`
 
 ## Edge Case Handling
 
@@ -145,6 +221,9 @@ All statistical functions are tested for robustness with edge cases:
 | Extreme proportions (near 0 or 1) | Valid CI without NaN | `TestNumericalStability::test_extreme_proportions` |
 | Perfect association (phi = 1) | Correctly identifies | `TestNumericalStability::test_perfect_association` |
 | Independence (phi = 0) | Correctly identifies | `TestNumericalStability::test_independence` |
+| All-zeros column | Mean = 0%, CI tight around 0% | `TestNumericalStabilityAdvanced::test_all_zeros_and_all_ones_columns` |
+| All-ones column | Mean = 100%, CI tight around 100% | `TestNumericalStabilityAdvanced::test_all_zeros_and_all_ones_columns` |
+| Zero-variance in co-occurrence | Handles gracefully | `TestNumericalStabilityAdvanced::test_zero_variance_column_in_cooccurrence` |
 
 ## Reproducibility Validation
 
