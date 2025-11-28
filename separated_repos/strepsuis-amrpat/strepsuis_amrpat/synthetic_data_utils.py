@@ -9,6 +9,9 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
+# Import validation utilities at module level for better testing and import handling
+from .validation_utils import validate_input_data, get_data_summary
+
 
 def generate_synthetic_amr_data(
     n_strains: int = 50,
@@ -260,7 +263,7 @@ def run_synthetic_smoke_test(
             - 'analysis_ran': True if analysis completed
             - 'errors': list of error messages
     """
-    from .validation_utils import validate_input_data, get_data_summary
+    # Use module-level imports (already imported at top of file)
     
     results = {
         'success': True,
@@ -325,8 +328,7 @@ def run_synthetic_smoke_test(
             identify_mdr_isolates,
         )
         
-        # Test safe_contingency
-        import pandas as pd
+        # Test safe_contingency (pd already imported at module level)
         test_table = pd.DataFrame([[10, 5], [5, 10]])
         chi2, p, phi = safe_contingency(test_table)
         assert not pd.isna(chi2), "Chi2 should not be NaN"

@@ -139,5 +139,65 @@ if PYDANTIC_AVAILABLE:
                 dpi=self.dpi,
             )
 else:
-    # Fallback: use dataclass if Pydantic is not available
-    AnalysisConfig = Config  # type: ignore
+    # Fallback: Create a wrapper class that mimics AnalysisConfig behavior
+    # when Pydantic is not available. This provides a consistent API.
+    class AnalysisConfig:  # type: ignore
+        """
+        Fallback configuration class when Pydantic is not available.
+        
+        Provides the same interface as the Pydantic version but with
+        simpler validation.
+        """
+        
+        def __init__(
+            self,
+            n_bootstrap: int = 5000,
+            confidence_level: float = 0.95,
+            fdr_alpha: float = 0.05,
+            max_missing_pct: float = 0.2,
+            random_seed: int = 42,
+            min_support: float = 0.1,
+            lift_threshold: float = 1.0,
+            output_dir: str = "./output",
+            generate_html: bool = True,
+            generate_excel: bool = True,
+            save_png_charts: bool = True,
+            dpi: int = 150,
+        ):
+            # Basic validation
+            if not 1000 <= n_bootstrap <= 100000:
+                raise ValueError("n_bootstrap must be between 1000 and 100000")
+            if not 0 < confidence_level < 1:
+                raise ValueError("confidence_level must be between 0 and 1")
+            if not 0 < fdr_alpha < 1:
+                raise ValueError("fdr_alpha must be between 0 and 1")
+            
+            self.n_bootstrap = n_bootstrap
+            self.confidence_level = confidence_level
+            self.fdr_alpha = fdr_alpha
+            self.max_missing_pct = max_missing_pct
+            self.random_seed = random_seed
+            self.min_support = min_support
+            self.lift_threshold = lift_threshold
+            self.output_dir = output_dir
+            self.generate_html = generate_html
+            self.generate_excel = generate_excel
+            self.save_png_charts = save_png_charts
+            self.dpi = dpi
+            
+            # Ensure output directory exists
+            import os
+            os.makedirs(output_dir, exist_ok=True)
+        
+        def to_config(self) -> Config:
+            """Convert to legacy Config dataclass."""
+            return Config(
+                output_dir=self.output_dir,
+                bootstrap_iterations=self.n_bootstrap,
+                fdr_alpha=self.fdr_alpha,
+                random_seed=self.random_seed,
+                generate_html=self.generate_html,
+                generate_excel=self.generate_excel,
+                save_png_charts=self.save_png_charts,
+                dpi=self.dpi,
+            )
