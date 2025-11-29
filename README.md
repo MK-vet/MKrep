@@ -207,9 +207,18 @@ All scripts generate **professional, consistent reports** with:
 
 ### 🧪 Module Verification and Testing
 
-**NEW!** Comprehensive verification tools ensure all modules work correctly:
+**Comprehensive test suite with 180+ tests** ensures all modules work correctly:
+
+#### Test Coverage
+- **Mathematical validation tests** (24 tests): Entropy bounds, mutual information symmetry, phi coefficient and Cramér's V properties
+- **CLI integration tests** (20 tests): Syntax validation, argument parsing, configuration loading
+- **Docker smoke tests** (24 tests): Dockerfile and docker-compose.yml structure verification
+- **Module-specific tests**: Statistical routines, clustering, network analysis, phylogenetic metrics
 
 ```bash
+# Run all tests
+python -m pytest
+
 # Verify all modules are functional
 python verify_all_modules.py
 
@@ -231,7 +240,7 @@ Features:
 - Automated dependency checking
 - Data file validation
 - Syntax verification for all scripts
-- Quick import testing
+- Mathematical validation of statistical routines
 - Comprehensive result generation
 - JSON report of verification status
 
@@ -439,6 +448,16 @@ output/
 - **Network community detection** (Louvain algorithm)
 - **Phylogenetic diversity metrics** (Faith's PD, UniFrac)
 - **Clustering metrics** (Silhouette, Calinski-Harabasz, Davies-Bouldin)
+- **Information theory metrics** (entropy, mutual information, Cramér's V)
+
+### Mathematical Validation
+
+All statistical routines are validated through automated tests that verify:
+- **Entropy bounds**: Non-negativity and upper bounds (H ≤ log₂(n))
+- **Mutual information symmetry**: MI(X,Y) = MI(Y,X)
+- **Cramér's V properties**: Range [0,1] and perfect association detection
+- **Phi coefficient**: Consistency with chi-square statistics
+- **Bootstrap stability**: Confidence interval convergence
 
 ## Configuration
 
