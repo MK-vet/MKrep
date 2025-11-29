@@ -100,15 +100,16 @@ class TestDockerComposeStructure:
         assert 'services' in config, "docker-compose.yml must have services"
     
     def test_compose_has_analysis_services(self, compose_path):
-        """Verify docker-compose.yml has analysis services."""
+        """Verify docker-compose.yml has expected analysis services."""
         content = compose_path.read_text()
         config = yaml.safe_load(content)
         services = config.get('services', {})
         
-        # Check for expected services
+        # Check for expected services - these match the CLI commands
+        # documented in the README and python_package/pyproject.toml
         expected_services = ['mkrep-cluster', 'mkrep-mdr', 'mkrep-network', 'mkrep-phylo']
-        for service in expected_services:
-            assert service in services, f"docker-compose.yml should have {service} service"
+        missing = [s for s in expected_services if s not in services]
+        assert not missing, f"docker-compose.yml missing expected services: {missing}"
     
     def test_compose_services_have_build(self, compose_path):
         """Verify services have build configuration."""
