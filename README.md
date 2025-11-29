@@ -288,26 +288,27 @@ pip install -r requirements.txt
 
 ## Documentation
 
-**Essential Guides:**
-- **[MODULE_VERIFICATION_SUMMARY.md](MODULE_VERIFICATION_SUMMARY.md)** - ⭐ NEW! Complete verification status and summary
+**Core Guides:**
 - **[README.md](README.md)** - Start here! Overview and quick start
+- **[QUICK_START.md](QUICK_START.md)** - Get started in 5 minutes
 - **[USER_GUIDE.md](USER_GUIDE.md)** - Complete user guide with step-by-step instructions
 - **[INTERPRETATION_GUIDE.md](INTERPRETATION_GUIDE.md)** - How to interpret analysis results
 - **[INSTALLATION.md](INSTALLATION.md)** - Detailed installation instructions
-- **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** - Docker deployment guide
-- **[BINARY_DATA_GUIDE.md](BINARY_DATA_GUIDE.md)** - Binary data handling (crucial!)
-- **[APPLICATION_VARIANTS_GUIDE.md](APPLICATION_VARIANTS_GUIDE.md)** - Complete guide to all analysis modules (NEW!)
-- **[COMPLETE_WORKFLOW_GUIDE.md](COMPLETE_WORKFLOW_GUIDE.md)** - Workflow and integration guide (NEW!)
-- **[EXAMPLE_RESULTS.md](EXAMPLE_RESULTS.md)** - Example outputs and verification status (NEW!)
 
-**Technical Documentation:**
-- **[STANDARDIZATION_GUIDE.md](STANDARDIZATION_GUIDE.md)** - Script standardization guidelines
+**Deployment Guides:**
+- **[DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md)** - Docker deployment guide
+- **[GITHUB_ACTIONS.md](GITHUB_ACTIONS.md)** - CI/CD and GitHub Actions usage
+
+**Reference:**
+- **[BINARY_DATA_GUIDE.md](BINARY_DATA_GUIDE.md)** - Binary data handling (crucial for data format)
 - **[FEATURES.md](FEATURES.md)** - Complete feature list
-- **[EXCEL_REPORTS_README.md](EXCEL_REPORTS_README.md)** - Excel report structure
+- **[EXAMPLE_RESULTS.md](EXAMPLE_RESULTS.md)** - Example outputs and verification status
 
 **Specialized Guides:**
 - **[colab_notebooks/README.md](colab_notebooks/README.md)** - Google Colab usage
 - **[python_package/README.md](python_package/README.md)** - Package documentation
+
+*Note: Historical implementation summaries are archived in `docs/archive/`*
 
 ## Usage
 
@@ -508,7 +509,7 @@ This tool was developed for the microbial genomics research community. We thank 
 - 📚 **Enhanced Documentation**
   - Complete Docker deployment guide (DOCKER_DEPLOYMENT.md)
   - Interactive notebook guide (INTERACTIVE_NOTEBOOK_GUIDE.md)
-  - Quick start guide for new features (QUICK_START_NEW_FEATURES.md)
+  - Consolidated quick start guide (QUICK_START.md)
   - Validation script to verify deployment readiness
 - 🔄 **Google Colab Updates**
   - All existing notebooks verified and validated
