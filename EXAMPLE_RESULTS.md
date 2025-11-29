@@ -32,7 +32,7 @@ All 5 analysis modules have been comprehensively verified:
 
 ### ✅ Phylogenetic Clustering Module
 - **Status:** VERIFIED - Production Ready
-- **Script:** `Phylgenetic_clustering_2025_03_21.py`
+- **Script:** `Phylogenetic_clustering_2025_03_21.py`
 - **Verification:** Syntax valid, structure complete, imports working
 - **Output Capability:** Full HTML, Excel, and PNG chart generation
 
@@ -492,7 +492,7 @@ python run_all_analyses.py --module strepsuis
 python Cluster_MIC_AMR_Viruelnce.py
 python MDR_2025_04_15.py
 python Network_Analysis_2025_06_26.py
-python Phylgenetic_clustering_2025_03_21.py
+python Phylogenetic_clustering_2025_03_21.py
 python StrepSuisPhyloCluster_2025_08_11.py
 ```
 

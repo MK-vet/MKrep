@@ -40,7 +40,7 @@ All 5 Python analysis scripts now generate both HTML and Excel reports:
 - **PNG Charts**: Phylogenetic tree with color-coded clusters
 - **Methodology**: Tree-aware clustering, Ensemble fallback, Evolutionary metrics, Trait profiling, Association rules, MCA
 
-#### Phylgenetic_clustering_2025_03_21.py
+#### Phylogenetic_clustering_2025_03_21.py
 - **Excel Sheets**: All CSV files from analysis (clusters, outliers, PD, pairwise distances, traits, etc.)
 - **PNG Charts**: Phylogenetic tree, UMAP embedding
 - **Methodology**: Phylogenetic clustering, Outlier detection, Ensemble clustering, Evolutionary metrics, Binary trait analysis, Association rules, MCA, Statistical corrections

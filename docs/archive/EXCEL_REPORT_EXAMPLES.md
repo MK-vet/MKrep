@@ -253,7 +253,7 @@ List of all generated PNG files:
 
 ---
 
-### Phylgenetic_clustering_2025_03_21.py
+### Phylogenetic_clustering_2025_03_21.py
 
 **Excel File Name:** `Phylogenetic_Clustering_Report_<timestamp>.xlsx`
 

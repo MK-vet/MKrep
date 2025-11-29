@@ -78,7 +78,7 @@ class AnalysisRunner:
         },
         'phylo': {
             'name': 'Phylogenetic Clustering',
-            'script': 'Phylgenetic_clustering_2025_03_21.py',
+            'script': 'Phylogenetic_clustering_2025_03_21.py',
             'description': 'Complete phylogenetic clustering and binary trait analysis',
             'required_files': ['Snp_tree.newick', 'AMR_genes.csv', 'Virulence.csv'],
             'optional_files': ['MIC.csv', 'MLST.csv', 'Serotype.csv'],

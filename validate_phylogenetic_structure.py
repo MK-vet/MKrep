@@ -18,10 +18,10 @@ def validate_structure():
     
     # Check main script exists
     print("1. Checking main script file...")
-    if os.path.exists("Phylgenetic_clustering_2025_03_21.py"):
-        print("   ✓ Phylgenetic_clustering_2025_03_21.py found")
+    if os.path.exists("Phylogenetic_clustering_2025_03_21.py"):
+        print("   ✓ Phylogenetic_clustering_2025_03_21.py found")
     else:
-        print("   ✗ Phylgenetic_clustering_2025_03_21.py not found")
+        print("   ✗ Phylogenetic_clustering_2025_03_21.py not found")
         issues.append("Main script not found")
     
     # Check runner script exists
@@ -67,8 +67,8 @@ def validate_structure():
     print("6. Checking Python syntax...")
     try:
         import py_compile
-        py_compile.compile("Phylgenetic_clustering_2025_03_21.py", doraise=True)
-        print("   ✓ Phylgenetic_clustering_2025_03_21.py syntax valid")
+        py_compile.compile("Phylogenetic_clustering_2025_03_21.py", doraise=True)
+        print("   ✓ Phylogenetic_clustering_2025_03_21.py syntax valid")
         
         py_compile.compile("run_phylogenetic_analysis.py", doraise=True)
         print("   ✓ run_phylogenetic_analysis.py syntax valid")

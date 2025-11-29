@@ -55,7 +55,7 @@ MODULES = {
         "description": "Complete phylogenetic and binary trait analysis with tree-aware clustering",
         "cli_command": "strepsuis-phylotrait",
         "package_name": "strepsuis_phylotrait",
-        "original_script": "Phylgenetic_clustering_2025_03_21.py",
+        "original_script": "Phylogenetic_clustering_2025_03_21.py",
         "notebook_name": "PhyloTrait_Analysis.ipynb",
         "features": [
             "Tree-aware clustering with evolutionary metrics",

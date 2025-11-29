@@ -54,7 +54,7 @@ All documentation is professionally written in English, and all tools are produc
 ### 4. StrepSuis-PhyloTrait
 **Integrated Phylogenetic and Binary Trait Analysis**
 
-- **Original Script**: `Phylgenetic_clustering_2025_03_21.py`
+- **Original Script**: `Phylogenetic_clustering_2025_03_21.py`
 - **Package Name**: `strepsuis-phylotrait`
 - **CLI Command**: `strepsuis-phylotrait`
 - **Key Features**:

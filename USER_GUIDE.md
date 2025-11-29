@@ -127,7 +127,7 @@ StrepSuis_Suite provides **5 fully functional analysis modules**, each designed 
 
 ---
 
-### 4. StrepSuis-PhyloTrait (`Phylgenetic_clustering_2025_03_21.py`)
+### 4. StrepSuis-PhyloTrait (`Phylogenetic_clustering_2025_03_21.py`)
 **Purpose:** Integrated Phylogenetic and Binary Trait Analysis
 
 **Best for:**

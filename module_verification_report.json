@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-28T14:42:35.530859",
+  "timestamp": "2025-11-29T09:35:35.193898",
   "modules": {
     "Cluster Analysis": {
       "name": "Cluster Analysis",
@@ -49,7 +49,7 @@
     "Phylogenetic Clustering": {
       "name": "Phylogenetic Clustering",
       "description": "Complete phylogenetic clustering and binary trait analysis",
-      "script": "Phylgenetic_clustering_2025_03_21.py",
+      "script": "Phylogenetic_clustering_2025_03_21.py",
       "status": "VERIFIED",
       "execution_time": 0,
       "outputs_generated": [],
@@ -77,37 +77,5 @@
       }
     }
   },
-  "overall_status": "ALL_PASSED",
-  "integration_tests": {
-    "Cluster Analysis": {
-      "status": "PASSED",
-      "passed": 23,
-      "failed": 0,
-      "skipped": 0
-    },
-    "MDR Analysis": {
-      "status": "PASSED",
-      "passed": 32,
-      "failed": 0,
-      "skipped": 0
-    },
-    "Network Analysis": {
-      "status": "PASSED",
-      "passed": 10,
-      "failed": 0,
-      "skipped": 0
-    },
-    "Phylogenetic Clustering": {
-      "status": "PASSED",
-      "passed": 16,
-      "failed": 0,
-      "skipped": 1
-    },
-    "StrepSuis Analysis": {
-      "status": "PASSED",
-      "passed": 21,
-      "failed": 0,
-      "skipped": 1
-    }
-  }
+  "overall_status": "ALL_PASSED"
 }

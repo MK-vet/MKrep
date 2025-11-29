@@ -35,7 +35,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Import analysis components
-from Phylgenetic_clustering_2025_03_21 import (
+from Phylogenetic_clustering_2025_03_21 import (
     PhylogeneticAnalysis,
     HTMLReportGenerator,
     Config,

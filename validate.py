@@ -176,7 +176,7 @@ def check_scripts():
         "Cluster_MIC_AMR_Viruelnce.py",
         "MDR_2025_04_15.py",
         "Network_Analysis_2025_06_26.py",
-        "Phylgenetic_clustering_2025_03_21.py",
+        "Phylogenetic_clustering_2025_03_21.py",
         "StrepSuisPhyloCluster_2025_08_11.py"
     ]
     

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit and integration tests for Phylogenetic Clustering module (Phylgenetic_clustering_2025_03_21.py).
+Unit and integration tests for Phylogenetic Clustering module (Phylogenetic_clustering_2025_03_21.py).
 
 Tests cover:
 - Phylogenetic tree handling
@@ -81,8 +81,8 @@ sys.modules['weasyprint'] = MockWeasyPrint()
 
 from Bio import Phylo
 
-# Import functions from Phylgenetic_clustering_2025_03_21.py
-from Phylgenetic_clustering_2025_03_21 import (
+# Import functions from Phylogenetic_clustering_2025_03_21.py
+from Phylogenetic_clustering_2025_03_21 import (
     PhylogeneticCore,
     TreeAwareClusteringModule,
     ParallelProcessor,
@@ -285,7 +285,7 @@ class TestParallelProcessor:
             return d.mean().values
         
         # Patch the multiprocessing Pool with MockPool for deterministic testing
-        with patch('Phylgenetic_clustering_2025_03_21.Pool', MockPool):
+        with patch('Phylogenetic_clustering_2025_03_21.Pool', MockPool):
             results = ParallelProcessor.parallel_bootstrap(
                 data, mean_func, n_bootstrap=10, n_jobs=1
             )
