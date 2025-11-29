@@ -18,6 +18,34 @@ import numpy as np
 import pandas as pd
 import pytest
 from io import StringIO
+from unittest.mock import patch
+
+
+class MockPool:
+    """Mock multiprocessing Pool for deterministic testing.
+    
+    Executes map operations synchronously to avoid pickling issues with
+    local functions while preserving the expected interface.
+    """
+    def __init__(self, processes=None):
+        self.processes = processes
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *args):
+        pass
+    
+    def map(self, func, iterable):
+        """Execute func on each item synchronously."""
+        return [func(item) for item in iterable]
+    
+    def close(self):
+        pass
+    
+    def join(self):
+        pass
+
 
 # Suppress warnings in tests
 warnings.filterwarnings('ignore', category=FutureWarning)
@@ -312,20 +340,31 @@ class TestEvolutionEdgeCases:
 class TestParallelProcessorStrep:
     """Tests for ParallelProcessor in StrepSuis module."""
     
-    @pytest.mark.skip(reason="parallel_tree_distance_matrix uses local function that can't be pickled")
     def test_parallel_tree_distance_matrix(self, sample_newick_tree):
-        """Test parallel distance matrix computation."""
+        """Test parallel distance matrix computation using MockPool.
+        
+        Uses MockPool to execute distance calculations synchronously,
+        avoiding pickling issues with local functions.
+        """
         terminals = sample_newick_tree.get_terminals()
         
-        dm = ParallelProcessor.parallel_tree_distance_matrix(
-            sample_newick_tree, terminals, n_jobs=1
-        )
+        # Patch the multiprocessing Pool with MockPool for deterministic testing
+        with patch('StrepSuisPhyloCluster_2025_08_11.Pool', MockPool):
+            dm = ParallelProcessor.parallel_tree_distance_matrix(
+                sample_newick_tree, terminals, n_jobs=1
+            )
         
         n = len(terminals)
         assert dm.shape == (n, n)
         
         # Should be symmetric
         assert np.allclose(dm, dm.T)
+        
+        # Diagonal should be zero
+        assert np.allclose(np.diag(dm), 0)
+        
+        # All distances should be non-negative
+        assert np.all(dm >= 0)
 
 
 class TestIntegrationStrep:
