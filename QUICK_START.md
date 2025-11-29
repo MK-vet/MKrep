@@ -4,20 +4,58 @@
 
 ## 🎯 Choose Your Path
 
-### Path 1: Google Colab (Easiest - No Installation)
-**Perfect for**: Beginners, quick analysis, no local setup
+### Option 1: Interactive Colab (No Coding Required) ⭐ **RECOMMENDED FOR BEGINNERS**
+**Perfect for**: Non-programmers, quick analysis, demonstrations
 
-1. Click here: [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
+1. Click: [Interactive Analysis Colab](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Interactive_Analysis_Colab.ipynb)
+2. Run the first 2 cells (installation, ~2 minutes)
+3. Upload your CSV files with the upload button
+4. Select analysis type from dropdown
+5. Adjust parameters with sliders
+6. Click "Run Analysis"
+7. Download results
+
+**No programming knowledge required!**
+
+---
+
+### Option 2: Google Colab Notebooks (Code-Based)
+**Perfect for**: Beginners who want to understand the code
+
+1. Click: [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Cluster_Analysis_Colab.ipynb)
 2. Click **Runtime → Run all**
 3. Upload your CSV files when prompted
 4. Wait 5-10 minutes
 5. Download results.zip
 
-**Done!** You have HTML and Excel reports.
+---
+
+### Option 3: Docker Container 🐳 **RECOMMENDED FOR TEAMS**
+**Perfect for**: Consistent environments, team collaboration, production use
+
+```bash
+# Clone repository
+git clone https://github.com/MK-vet/MKrep.git
+cd MKrep
+
+# Prepare data
+mkdir -p data output
+cp your_data/*.csv data/
+
+# Build and run
+docker build -t mkrep:latest .
+docker run -v $(pwd)/data:/data -v $(pwd)/output:/output \
+    mkrep:latest mkrep-cluster --data-dir /data --output /output
+
+# OR use Docker Compose
+docker-compose up mkrep-cluster
+```
+
+See [Docker Deployment Guide](DOCKER_DEPLOYMENT.md) for details.
 
 ---
 
-### Path 2: Command Line (Best for Automation)
+### Option 4: Command Line (Best for Automation)
 **Perfect for**: Batch processing, HPC clusters, reproducible workflows
 
 ```bash
@@ -33,7 +71,7 @@ mkrep-cluster --data-dir ./data --output ./results
 
 ---
 
-### Path 3: Interactive Dashboard (Most User-Friendly)
+### Option 5: Interactive Dashboard
 **Perfect for**: Exploration, parameter tuning, visualization
 
 ```bash
