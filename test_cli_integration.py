@@ -17,8 +17,6 @@ import os
 import pytest
 import tempfile
 import subprocess
-from pathlib import Path
-from unittest.mock import patch, MagicMock
 
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -59,13 +57,7 @@ class TestCLIConfigLoading:
     
     def test_load_json_config(self):
         """Test loading JSON configuration file."""
-        # Direct test of load_config function from cli.py source
-        cli_path = os.path.join(
-            os.path.dirname(__file__),
-            'python_package', 'mkrep', 'cli.py'
-        )
-        
-        # Read and exec just the load_config function
+        # Test load_config function logic
         import json
         from pathlib import Path
         

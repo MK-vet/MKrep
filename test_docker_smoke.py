@@ -12,10 +12,7 @@ not being available in all environments. These tests verify
 the Docker configuration files are valid.
 """
 
-import sys
-import os
 import pytest
-import subprocess
 from pathlib import Path
 import yaml
 
