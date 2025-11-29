@@ -16,7 +16,7 @@ Modules tested:
 1. Cluster Analysis (Cluster_MIC_AMR_Viruelnce.py)
 2. MDR Analysis (MDR_2025_04_15.py)
 3. Network Analysis (Network_Analysis_2025_06_26.py)
-4. Phylogenetic Clustering (Phylgenetic_clustering_2025_03_21.py)
+4. Phylogenetic Clustering (Phylogenetic_clustering_2025_03_21.py)
 5. StrepSuis Analysis (StrepSuisPhyloCluster_2025_08_11.py)
 """
 
@@ -295,7 +295,7 @@ print("IMPORT_SUCCESS")
             },
             {
                 'name': 'Phylogenetic Clustering',
-                'script': 'Phylgenetic_clustering_2025_03_21.py',
+                'script': 'Phylogenetic_clustering_2025_03_21.py',
                 'description': 'Complete phylogenetic clustering and binary trait analysis'
             },
             {

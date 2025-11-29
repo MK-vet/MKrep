@@ -104,7 +104,7 @@
 
 ---
 
-### 4. Phylgenetic_clustering_2025_03_21.py
+### 4. Phylogenetic_clustering_2025_03_21.py
 **Purpose**: Complete phylogenetic clustering and binary trait analysis
 
 **Features**:

@@ -45,7 +45,7 @@ jobs:
         ls -la Cluster_MIC_AMR_Viruelnce.py
         ls -la MDR_2025_04_15.py
         ls -la Network_Analysis_2025_06_26.py
-        ls -la Phylgenetic_clustering_2025_03_21.py
+        ls -la Phylogenetic_clustering_2025_03_21.py
         ls -la StrepSuisPhyloCluster_2025_08_11.py
     
     - name: Check script syntax
@@ -53,7 +53,7 @@ jobs:
         python -m py_compile Cluster_MIC_AMR_Viruelnce.py
         python -m py_compile MDR_2025_04_15.py
         python -m py_compile Network_Analysis_2025_06_26.py
-        python -m py_compile Phylgenetic_clustering_2025_03_21.py
+        python -m py_compile Phylogenetic_clustering_2025_03_21.py
         python -m py_compile StrepSuisPhyloCluster_2025_08_11.py
         python -m py_compile excel_report_utils.py
         python -m py_compile validate.py
@@ -210,7 +210,7 @@ jobs:
         python --version
         echo ""
         echo "=== Standalone Scripts ==="
-        ls -1 *.py | grep -E "(Cluster_|MDR_|Network_|Phylgenetic_|StrepSuis)" || true
+        ls -1 *.py | grep -E "(Cluster_|MDR_|Network_|Phylogenetic_|StrepSuis)" || true
         echo ""
         echo "=== CLI Commands ==="
         mkrep --help | head -5 || echo "CLI help available"

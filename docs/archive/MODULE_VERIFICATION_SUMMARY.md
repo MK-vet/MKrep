@@ -39,7 +39,7 @@ All MKrep analysis modules have been comprehensively verified and documented as 
 
 ### ✅ 4. Phylogenetic Clustering
 - **Status:** VERIFIED - Production Ready
-- **Script:** `Phylgenetic_clustering_2025_03_21.py`
+- **Script:** `Phylogenetic_clustering_2025_03_21.py`
 - **Functionality:** Tree-aware clustering, phylogenetic diversity, trait evolution
 - **Output:** HTML report, Excel workbook, PNG charts (150+ DPI)
 - **Execution Time:** 7-12 minutes

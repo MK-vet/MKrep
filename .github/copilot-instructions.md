@@ -18,7 +18,7 @@ This repository contains a comprehensive bioinformatics analysis suite for *Stre
 
 ## Repository Structure
 
-- **Main analysis scripts**: `Cluster_MIC_AMR_Viruelnce.py`, `MDR_2025_04_15.py`, `Network_Analysis_2025_06_26.py`, `Phylgenetic_clustering_2025_03_21.py`, `StrepSuisPhyloCluster_2025_08_11.py`
+- **Main analysis scripts**: `Cluster_MIC_AMR_Viruelnce.py`, `MDR_2025_04_15.py`, `Network_Analysis_2025_06_26.py`, `Phylogenetic_clustering_2025_03_21.py`, `StrepSuisPhyloCluster_2025_08_11.py`
 - **Utilities**: `excel_report_utils.py`, `report_templates.py`, `merge_data.py`
 - **CLI package**: `python_package/`
 - **Jupyter notebooks**: `colab_notebooks/`

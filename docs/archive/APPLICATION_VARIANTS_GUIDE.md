@@ -150,7 +150,7 @@ python run_all_analyses.py --module network
 ---
 
 ### 4. StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis
-**Script:** `Phylgenetic_clustering_2025_03_21.py`  
+**Script:** `Phylogenetic_clustering_2025_03_21.py`  
 **Purpose:** Integrated phylogenetic clustering and binary trait analysis for *Streptococcus suis* with evolutionary context  
 **Status:** ✅ **Production Ready** - Full functionality with complete results
 
@@ -178,7 +178,7 @@ python run_all_analyses.py --module network
 #### Usage:
 ```bash
 # Direct execution
-python Phylgenetic_clustering_2025_03_21.py
+python Phylogenetic_clustering_2025_03_21.py
 
 # Using runner script
 python run_all_analyses.py --module phylo

@@ -2,11 +2,11 @@
 
 ## Overview
 
-Successfully implemented comprehensive reporting and execution pipeline for `Phylgenetic_clustering_2025_03_21.py` analysis script.
+Successfully implemented comprehensive reporting and execution pipeline for `Phylogenetic_clustering_2025_03_21.py` analysis script.
 
 ## Changes Made
 
-### 1. Enhanced Main Script (`Phylgenetic_clustering_2025_03_21.py`)
+### 1. Enhanced Main Script (`Phylogenetic_clustering_2025_03_21.py`)
 
 #### Added Logging Infrastructure
 - **New imports**: `sys`, `logging`, `time`, `datetime`, `psutil`
@@ -187,7 +187,7 @@ Created validation utility to verify:
 
 This implementation follows the same pattern as `Cluster_MIC_AMR_Viruelnce.py`:
 
-| Feature | Cluster_MIC_AMR_Viruelnce.py | Phylgenetic_clustering_2025_03_21.py (New) |
+| Feature | Cluster_MIC_AMR_Viruelnce.py | Phylogenetic_clustering_2025_03_21.py (New) |
 |---------|------------------------------|---------------------------------------------|
 | Logging to file | ✓ | ✓ |
 | Progress tracking | ✓ | ✓ |
@@ -204,7 +204,7 @@ This implementation follows the same pattern as `Cluster_MIC_AMR_Viruelnce.py`:
 ## Files Modified/Created
 
 ### Modified
-1. `Phylgenetic_clustering_2025_03_21.py` - Added comprehensive logging and reporting
+1. `Phylogenetic_clustering_2025_03_21.py` - Added comprehensive logging and reporting
 
 ### Created
 1. `run_phylogenetic_analysis.py` - CLI runner script

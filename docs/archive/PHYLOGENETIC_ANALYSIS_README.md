@@ -150,7 +150,7 @@ python run_phylogenetic_analysis.py \
 You can also run the analysis directly:
 
 ```bash
-python Phylgenetic_clustering_2025_03_21.py
+python Phylogenetic_clustering_2025_03_21.py
 ```
 
 ## Output Files

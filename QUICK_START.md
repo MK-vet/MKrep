@@ -196,7 +196,7 @@ Open the generated HTML file in your browser!
 ### 4. Phylogenetic Clustering
 **What**: Tree-based strain grouping
 **When**: You have a phylogenetic tree
-**File**: `Phylgenetic_clustering_2025_03_21.py`
+**File**: `Phylogenetic_clustering_2025_03_21.py`
 **Colab**: [Phylogenetic_Clustering_Colab.ipynb](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb)
 
 ### 5. StrepSuis Analysis

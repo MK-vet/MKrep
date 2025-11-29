@@ -28,7 +28,7 @@ The repository has been successfully rebranded from "MKrep" to "StrepSuis_Suite"
 
 ### 4. StrepSuis-PhyloTrait
 **Full Name:** Integrated Phylogenetic and Binary Trait Analysis of Antimicrobial Resistance and Virulence in *Streptococcus suis*
-- **Script:** `Phylgenetic_clustering_2025_03_21.py`
+- **Script:** `Phylogenetic_clustering_2025_03_21.py`
 - **Previous Name:** Phylogenetic Clustering
 - **Purpose:** Phylogenetic analysis integrated with binary trait profiling
 
@@ -66,7 +66,7 @@ The repository has been successfully rebranded from "MKrep" to "StrepSuis_Suite"
 - ✅ `Cluster_MIC_AMR_Viruelnce.py` - StrepSuis-AMRVirKM
 - ✅ `MDR_2025_04_15.py` - StrepSuis-AMRPat
 - ✅ `Network_Analysis_2025_06_26.py` - StrepSuis-GenPhenNet
-- ✅ `Phylgenetic_clustering_2025_03_21.py` - StrepSuis-PhyloTrait
+- ✅ `Phylogenetic_clustering_2025_03_21.py` - StrepSuis-PhyloTrait
 - ✅ `StrepSuisPhyloCluster_2025_08_11.py` - StrepSuis-GenPhen
 
 ### Deployment Documentation
@@ -84,7 +84,7 @@ All 5 Python analysis scripts validated successfully:
 - ✓ Cluster_MIC_AMR_Viruelnce.py
 - ✓ MDR_2025_04_15.py
 - ✓ Network_Analysis_2025_06_26.py
-- ✓ Phylgenetic_clustering_2025_03_21.py
+- ✓ Phylogenetic_clustering_2025_03_21.py
 - ✓ StrepSuisPhyloCluster_2025_08_11.py
 
 ### Content Quality
