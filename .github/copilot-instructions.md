@@ -1,79 +1,65 @@
-# Copilot Instructions for StrepSuis_Suite
+Copilot instructions for working in MK-vet/MKrep/separated_repos
+Use the following as persistent instructions whenever you work in this repository.
 
-This repository contains a comprehensive bioinformatics analysis suite for *Streptococcus suis* genomics, focusing on antimicrobial resistance (AMR), virulence factors, and phylogenetic relationships.
+### 1. Repository Structure & Context
+This directory contains five distinct sub-projects. Treat them as individual packages sharing a common rigorous standard:
+- `strepsuis-amrpat` (Likely the reference implementation; check this first for patterns)
+- `strepsuis-amrvirkm`
+- `strepsuis-genphen`
+- `strepsuis-genphennet`
+- `strepsuis-phylotrait`
 
-## Project Overview
+**Global Standards:**
+- Consult `MATHEMATICAL_VALIDATION.md` and `SYNTHETIC_DATA_VALIDATION.md` before modifying any numerical logic.
+- Usage of `replicate_tests.py` and `run_tests.sh` is standard for verification.
+- `COVERAGE_RESULTS.md` tracks the current test status; updates must be reflected there.
 
-- **Language**: Python 3.8+
-- **Domain**: Bioinformatics, genomics, statistical analysis
-- **Key dependencies**: pandas, numpy, scipy, scikit-learn, matplotlib, plotly, biopython, networkx
+### 2. Development Guidelines
+**Preserve Production Behavior:**
+- Consider all code in `strepsuis-*/` packages as production-grade.
+- Do not break downstream dependencies: CLIs, Dockerfiles, and Notebooks (under `notebooks/` in each sub-repo) rely on the current API.
+- If a change is required, prioritize backwards compatibility or explicitly update all 3 execution contexts:
+    1. **Library** (Python package)
+    2. **CLI** (Command line entry points)
+    3. **Docker** (Dockerfile & docker-compose.yml)
 
-## Code Style and Conventions
+**Refactoring & Cleanup:**
+- **Do not rewrite from scratch.** Assume existing modules have been refactored for a reason.
+- Focus on increasing test coverage and mathematical correctness.
+- Merge over-fragmented files only if they result in a coherent logical unit.
+- Remove dead code only after verifying it is not used in `notebooks/` or external scripts.
 
-- Follow PEP 8 style guidelines for Python code
-- Use descriptive variable names that reflect biological/scientific terminology
-- Include docstrings for all functions and classes
-- Use type hints where appropriate
-- Maintain consistent indentation (4 spaces)
+### 3. Testing & Coverage Targets
+For each sub-repository (e.g., `strepsuis-amrpat`):
+- **Goal:** 100% coverage for core algorithms.
+- **Tools:** Use `pytest` with the configuration in `pytest.ini`.
+- **Process:**
+    1. Convert any ad-hoc scripts (e.g., `test_functionality.py`) into formal `pytest` suites in `tests/`.
+    2. Ensure tests run successfully via `run_tests.sh`.
+    3. If coverage improves, run `generate_coverage_badge.py` and `add_coverage_badges.py` to update badges and reports.
+- **Smoke Tests:** Every Docker image and CLI command must have at least one end-to-end "smoke test" verifying basic execution.
 
-## Repository Structure
+### 4. Mathematical & Statistical Validation
+When touching code involved in clustering, network metrics, AMR analysis, or phylogenetics:
+- **Mandatory:** Validate against `MATHEMATICAL_VALIDATION.md` guidelines.
+- Create synthetic datasets (small, known ground-truth) to verify logic.
+- Compare results against `scikit-learn`, `scipy`, or `numpy` baselines where applicable.
+- Add tests for invariants (e.g., symmetry of distance matrices, probability sums = 1.0).
 
-- **Main analysis scripts**: `Cluster_MIC_AMR_Viruelnce.py`, `MDR_2025_04_15.py`, `Network_Analysis_2025_06_26.py`, `Phylogenetic_clustering_2025_03_21.py`, `StrepSuisPhyloCluster_2025_08_11.py`
-- **Utilities**: `excel_report_utils.py`, `report_templates.py`, `merge_data.py`
-- **CLI package**: `python_package/`
-- **Jupyter notebooks**: `colab_notebooks/`
-- **Documentation**: Various `.md` files in root directory
-- **Tests**: `test_*.py`, `validate*.py`, `verify*.py`
+### 5. Documentation & Outputs
+**Do not silently change outputs.**
+- Existing CSVs, HTML reports, and Plots in `examples/` or `results/` are sources of truth.
+- If a bug fix changes an output:
+    1. Recompute the example output.
+    2. Update the corresponding documentation (e.g., `ANALYSIS_EXAMPLES.md`).
+    3. Explain the deviation in the PR/Commit message.
 
-## Building and Testing
+**User Guides:**
+- Keep `USER_GUIDE.md` and `DEPLOYMENT_GUIDE.md` in sync with code changes.
+- Ensure `WORKFLOW_USAGE_GUIDE.md` accurately reflects the CLI arguments.
 
-### Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### Check Script Syntax
-```bash
-python -m py_compile <script_name>.py
-```
-
-### Run Validation
-```bash
-python validate.py
-python verify_all_modules.py
-```
-
-### Test CLI Package
-```bash
-cd python_package
-pip install -e .
-mkrep --help
-```
-
-## Data Format Conventions
-
-- **Input files**: CSV format with `Strain_ID` column
-- **Binary data**: `0 = Absence`, `1 = Presence` (both are biologically significant)
-- **Tree files**: Newick format (`.newick` or `.nwk`)
-
-## Report Generation
-
-All analysis scripts generate:
-- Interactive HTML reports with Bootstrap 5 styling
-- Excel workbooks with multiple sheets
-- PNG charts (150+ DPI) in `png_charts/` subfolder
-
-## Important Guidelines
-
-- When modifying analysis scripts, maintain consistency with existing report templates
-- Keep statistical methods well-documented with references
-- Ensure all visualizations are publication-quality (high DPI, proper labels)
-- Preserve reproducibility by using fixed random seeds
-- Update documentation when adding new features
-- Test changes across Python 3.8-3.12
-
-## File Naming
-
-- Analysis scripts: `<Name>_<date_YYYY_MM_DD>.py`
-- Reports: `<analysis>_Report_<timestamp>.xlsx` and `<analysis>_report.html`
-- Documentation: Use descriptive names with `_` separators in CAPS for guides (e.g., `USER_GUIDE.md`)
+### 6. Code Style
+- **Python 3.11+**: Use strict type hints (`mypy` compatible).
+- **Determinism**: All stochastic functions MUST accept a `random_state` or seed.
+- **Safety**: No `eval()`, `exec()`, or unvalidated path handling.
+- **Libraries**: Rely on `pyproject.toml` dependencies; do not add new heavy dependencies without justification.
