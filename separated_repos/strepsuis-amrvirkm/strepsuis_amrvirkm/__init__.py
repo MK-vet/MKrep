@@ -16,4 +16,30 @@ __license__ = "MIT"
 from .analyzer import ClusterAnalyzer
 from .config import Config
 
-__all__ = ["ClusterAnalyzer", "Config", "__version__"]
+# Core clustering functions from cluster_analysis_core
+from .cluster_analysis_core import (
+    perform_kmodes,
+    bootstrap_confidence_interval,
+    chi_square_analysis,
+    log_odds_ratio_analysis,
+    phi_correlation_matrix,
+    association_rule_mining,
+    multiple_correspondence_analysis,
+    analyze_cluster_importance,
+)
+
+__all__ = [
+    # Existing exports
+    "ClusterAnalyzer",
+    "Config",
+    "__version__",
+    # Core clustering functions
+    "perform_kmodes",
+    "bootstrap_confidence_interval",
+    "chi_square_analysis",
+    "log_odds_ratio_analysis",
+    "phi_correlation_matrix",
+    "association_rule_mining",
+    "multiple_correspondence_analysis",
+    "analyze_cluster_importance",
+]
