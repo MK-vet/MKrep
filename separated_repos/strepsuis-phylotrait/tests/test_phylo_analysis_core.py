@@ -17,9 +17,6 @@ Target: 95%+ coverage for phylo_analysis_core.py
 import numpy as np
 import pandas as pd
 import pytest
-import tempfile
-import os
-from unittest.mock import Mock, patch
 
 
 # ============================================================================
@@ -163,7 +160,6 @@ class TestClustering:
         from sklearn.metrics import silhouette_score
         
         np.random.seed(42)
-        n = 50
         
         # Create data with clear clusters
         cluster1 = np.random.randn(25, 2) + [5, 5]
@@ -182,7 +178,6 @@ class TestClustering:
         from sklearn.mixture import GaussianMixture
         
         np.random.seed(42)
-        n = 50
         
         # Create data
         cluster1 = np.random.randn(25, 2) + [5, 5]
@@ -199,7 +194,6 @@ class TestClustering:
         from sklearn.cluster import DBSCAN
         
         np.random.seed(42)
-        n = 50
         
         # Create data with clear clusters
         cluster1 = np.random.randn(25, 2) + [5, 5]
@@ -327,7 +321,6 @@ class TestEvolutionaryMetrics:
     def test_pairwise_distance_within_cluster(self):
         """Test pairwise distance within cluster."""
         # Create distance matrix
-        n = 4
         dist = np.array([
             [0, 1, 2, 3],
             [1, 0, 1, 2],
@@ -392,7 +385,6 @@ class TestFDRCorrection:
         assert all(pval_corrected >= pvalues)
         
         # Monotonicity check
-        sorted_pvals = np.sort(pvalues)
         sorted_corrected = pval_corrected[np.argsort(pvalues)]
         for i in range(1, len(sorted_corrected)):
             assert sorted_corrected[i] >= sorted_corrected[i-1] or np.isclose(sorted_corrected[i], sorted_corrected[i-1])

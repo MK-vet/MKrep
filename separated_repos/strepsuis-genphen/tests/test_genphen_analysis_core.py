@@ -18,7 +18,6 @@ Target: 95%+ coverage for genphen_analysis_core.py
 import numpy as np
 import pandas as pd
 import pytest
-import tempfile
 import os
 
 
@@ -187,7 +186,6 @@ class TestEvolution:
     def test_beta_diversity_calculation(self):
         """Test beta diversity calculation."""
         labels = np.array([1, 1, 1, 2, 2, 2])
-        names = ['A', 'B', 'C', 'D', 'E', 'F']
         
         # Create simple distance data
         n = 6

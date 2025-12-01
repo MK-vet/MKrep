@@ -19,8 +19,6 @@ Target: 95%+ coverage for cluster_analysis_core.py
 import numpy as np
 import pandas as pd
 import pytest
-from scipy.stats import chi2_contingency, fisher_exact
-from statsmodels.stats.multitest import multipletests
 
 
 # ============================================================================
@@ -709,6 +707,7 @@ class TestIntegration:
         ch_score, db_score = validate_clusters(data, clusters)
         # Scores may be nan for small datasets
         assert isinstance(ch_score, (float, np.floating)) or np.isnan(ch_score)
+        assert db_score is not None
 
 
 if __name__ == "__main__":

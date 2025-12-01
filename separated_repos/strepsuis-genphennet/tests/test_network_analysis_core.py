@@ -17,8 +17,6 @@ import numpy as np
 import pandas as pd
 import pytest
 import networkx as nx
-from scipy.stats import chi2_contingency, fisher_exact
-from scipy.stats import entropy as scipy_entropy
 
 
 # ============================================================================
@@ -398,6 +396,9 @@ class TestNetworkConstruction:
         
         # B should have highest centrality (most connected)
         assert degree['B'] == max(degree.values())
+        # Verify all centrality measures were computed
+        assert len(betweenness) == G.number_of_nodes()
+        assert len(closeness) == G.number_of_nodes()
 
     def test_community_detection(self):
         """Test Louvain community detection."""

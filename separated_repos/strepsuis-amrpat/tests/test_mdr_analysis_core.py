@@ -18,8 +18,7 @@ Target: 95%+ coverage for mdr_analysis_core.py
 import numpy as np
 import pandas as pd
 import pytest
-from scipy.stats import chi2_contingency, fisher_exact
-from statsmodels.stats.multitest import multipletests
+from scipy.stats import fisher_exact
 
 
 # ============================================================================
@@ -556,7 +555,6 @@ class TestAssociationRules:
         
         # Create data where some classes co-occur frequently
         np.random.seed(42)
-        n = 50
         df = pd.DataFrame({
             'Tetracyclines': [1] * 40 + [0] * 10,
             'Macrolides': [1] * 35 + [0] * 15,
