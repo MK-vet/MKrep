@@ -1,0 +1,1261 @@
+Cluster,Feature,Log_Odds_Ratio
+1,Amoxicillin_Clavulanic_acid,-2.83
+2,Amoxicillin_Clavulanic_acid,-3.5
+3,Amoxicillin_Clavulanic_acid,-1.61
+4,Amoxicillin_Clavulanic_acid,-3.14
+5,Amoxicillin_Clavulanic_acid,-2.94
+6,Amoxicillin_Clavulanic_acid,-3.43
+7,Amoxicillin_Clavulanic_acid,-3.56
+8,Amoxicillin_Clavulanic_acid,-2.2
+9,Amoxicillin_Clavulanic_acid,-2.94
+1,Ampicillin,-2.83
+2,Ampicillin,-3.5
+3,Ampicillin,-1.61
+4,Ampicillin,-3.14
+5,Ampicillin,-2.94
+6,Ampicillin,-3.43
+7,Ampicillin,-2.4
+8,Ampicillin,-2.2
+9,Ampicillin,-2.94
+1,Ceftiofur,-1.61
+2,Ceftiofur,-3.5
+3,Ceftiofur,-1.61
+4,Ceftiofur,-3.14
+5,Ceftiofur,-2.94
+6,Ceftiofur,-3.43
+7,Ceftiofur,-2.4
+8,Ceftiofur,-2.2
+9,Ceftiofur,-2.94
+1,Doxycycline,0.96
+2,Doxycycline,0.74
+3,Doxycycline,0.0
+4,Doxycycline,0.51
+5,Doxycycline,-0.2
+6,Doxycycline,0.13
+7,Doxycycline,1.1
+8,Doxycycline,2.2
+9,Doxycycline,1.73
+1,Enrofloxacin,-1.61
+2,Enrofloxacin,-3.5
+3,Enrofloxacin,-1.61
+4,Enrofloxacin,-1.95
+5,Enrofloxacin,-2.94
+6,Enrofloxacin,-3.43
+7,Enrofloxacin,-2.4
+8,Enrofloxacin,-2.2
+9,Enrofloxacin,-2.94
+1,Florfenicol,-2.83
+2,Florfenicol,-3.5
+3,Florfenicol,-1.61
+4,Florfenicol,-3.14
+5,Florfenicol,-2.94
+6,Florfenicol,-3.43
+7,Florfenicol,-2.4
+8,Florfenicol,-2.2
+9,Florfenicol,-2.94
+1,Gentamicin,-2.83
+2,Gentamicin,-3.5
+3,Gentamicin,-1.61
+4,Gentamicin,-3.14
+5,Gentamicin,-2.94
+6,Gentamicin,-2.27
+7,Gentamicin,-3.56
+8,Gentamicin,-2.2
+9,Gentamicin,-2.94
+1,Oxytetracycline,2.83
+2,Oxytetracycline,1.02
+3,Oxytetracycline,0.0
+4,Oxytetracycline,0.51
+5,Oxytetracycline,1.1
+6,Oxytetracycline,0.13
+7,Oxytetracycline,1.42
+8,Oxytetracycline,2.2
+9,Oxytetracycline,1.73
+1,Penicillin,-0.96
+2,Penicillin,-3.5
+3,Penicillin,-1.61
+4,Penicillin,-3.14
+5,Penicillin,-2.94
+6,Penicillin,-3.43
+7,Penicillin,-2.4
+8,Penicillin,-2.2
+9,Penicillin,-2.94
+1,Spectinomycin,-2.83
+2,Spectinomycin,1.02
+3,Spectinomycin,-1.61
+4,Spectinomycin,-1.34
+5,Spectinomycin,-0.62
+6,Spectinomycin,-0.94
+7,Spectinomycin,-0.57
+8,Spectinomycin,-2.2
+9,Spectinomycin,-1.1
+1,Tiamulin,-0.45
+2,Tiamulin,-2.34
+3,Tiamulin,-1.61
+4,Tiamulin,-1.34
+5,Tiamulin,-1.1
+6,Tiamulin,-2.27
+7,Tiamulin,-0.34
+8,Tiamulin,-2.2
+9,Tiamulin,-1.1
+1,Trimethoprim_Sulphamethoxazole,0.0
+2,Trimethoprim_Sulphamethoxazole,-3.5
+3,Trimethoprim_Sulphamethoxazole,-1.61
+4,Trimethoprim_Sulphamethoxazole,-3.14
+5,Trimethoprim_Sulphamethoxazole,-2.94
+6,Trimethoprim_Sulphamethoxazole,-2.27
+7,Trimethoprim_Sulphamethoxazole,-2.4
+8,Trimethoprim_Sulphamethoxazole,-2.2
+9,Trimethoprim_Sulphamethoxazole,-2.94
+1,Tulathromycin,0.45
+2,Tulathromycin,1.02
+3,Tulathromycin,0.0
+4,Tulathromycin,-1.34
+5,Tulathromycin,-0.2
+6,Tulathromycin,0.65
+7,Tulathromycin,0.11
+8,Tulathromycin,-0.85
+9,Tulathromycin,-0.62
+1,SAT-4,-2.83
+2,SAT-4,-3.5
+3,SAT-4,-1.61
+4,SAT-4,-3.14
+5,SAT-4,-1.1
+6,SAT-4,-1.27
+7,SAT-4,-2.4
+8,SAT-4,-2.2
+9,SAT-4,-2.94
+1,aad9,-2.83
+2,aad9,-3.5
+3,aad9,-1.61
+4,aad9,-3.14
+5,aad9,-2.94
+6,aad9,-1.69
+7,aad9,-3.56
+8,aad9,-2.2
+9,aad9,-2.94
+1,ant(6)-Ia,-0.45
+2,ant(6)-Ia,-3.5
+3,ant(6)-Ia,-1.61
+4,ant(6)-Ia,-0.89
+5,ant(6)-Ia,-0.2
+6,ant(6)-Ia,-0.13
+7,ant(6)-Ia,-0.11
+8,ant(6)-Ia,-2.2
+9,ant(6)-Ia,-1.1
+1,ant(6)-Ib,-0.96
+2,ant(6)-Ib,-3.5
+3,ant(6)-Ib,-1.61
+4,ant(6)-Ib,-3.14
+5,ant(6)-Ib,-2.94
+6,ant(6)-Ib,-3.43
+7,ant(6)-Ib,-3.56
+8,ant(6)-Ib,-2.2
+9,ant(6)-Ib,-2.94
+1,aph(3')-III,-2.83
+2,aph(3')-III,-3.5
+3,aph(3')-III,-1.61
+4,aph(3')-III,-3.14
+5,aph(3')-III,-1.1
+6,aph(3')-III,-3.43
+7,aph(3')-III,-2.4
+8,aph(3')-III,-2.2
+9,aph(3')-III,-2.94
+1,erm(47),-1.61
+2,erm(47),-3.5
+3,erm(47),-1.61
+4,erm(47),-3.14
+5,erm(47),-1.1
+6,erm(47),-1.27
+7,erm(47),-1.82
+8,erm(47),-2.2
+9,erm(47),-2.94
+1,erm(B),1.61
+2,erm(B),1.02
+3,erm(B),1.61
+4,erm(B),-1.34
+5,erm(B),0.62
+6,erm(B),0.65
+7,erm(B),0.57
+8,erm(B),-0.85
+9,erm(B),-0.2
+1,lnu(B),-2.83
+2,lnu(B),-2.34
+3,lnu(B),-1.61
+4,lnu(B),-1.34
+5,lnu(B),0.2
+6,lnu(B),-2.27
+7,lnu(B),-1.42
+8,lnu(B),-2.2
+9,lnu(B),-1.1
+1,lnu(C),-2.83
+2,lnu(C),-3.5
+3,lnu(C),-1.61
+4,lnu(C),-3.14
+5,lnu(C),-1.73
+6,lnu(C),-3.43
+7,lnu(C),-3.56
+8,lnu(C),-2.2
+9,lnu(C),-2.94
+1,lsa(E),-2.83
+2,lsa(E),-2.34
+3,lsa(E),-1.61
+4,lsa(E),-1.34
+5,lsa(E),0.2
+6,lsa(E),-2.27
+7,lsa(E),-1.42
+8,lsa(E),-2.2
+9,lsa(E),-1.1
+1,optrA,-1.61
+2,optrA,-3.5
+3,optrA,-1.61
+4,optrA,-3.14
+5,optrA,-2.94
+6,optrA,-3.43
+7,optrA,-3.56
+8,optrA,-2.2
+9,optrA,-2.94
+1,spw,-1.61
+2,spw,-3.5
+3,spw,-1.61
+4,spw,-1.34
+5,spw,-1.1
+6,spw,-1.69
+7,spw,-1.82
+8,spw,-2.2
+9,spw,-1.1
+1,tet(40),-1.61
+2,tet(40),-3.5
+3,tet(40),-1.61
+4,tet(40),-3.14
+5,tet(40),-2.94
+6,tet(40),-3.43
+7,tet(40),-3.56
+8,tet(40),-2.2
+9,tet(40),-2.94
+1,tet(44),-1.61
+2,tet(44),-3.5
+3,tet(44),-1.61
+4,tet(44),-3.14
+5,tet(44),-2.94
+6,tet(44),-3.43
+7,tet(44),-3.56
+8,tet(44),-2.2
+9,tet(44),-2.94
+1,tet(L),-1.61
+2,tet(L),-3.5
+3,tet(L),-1.61
+4,tet(L),-3.14
+5,tet(L),-2.94
+6,tet(L),-3.43
+7,tet(L),-3.56
+8,tet(L),-2.2
+9,tet(L),-2.94
+1,tet(M),-0.96
+2,tet(M),-3.5
+3,tet(M),-1.61
+4,tet(M),-0.17
+5,tet(M),-0.62
+6,tet(M),-2.27
+7,tet(M),0.34
+8,tet(M),-2.2
+9,tet(M),-2.94
+1,tet(O),0.96
+2,tet(O),-3.5
+3,tet(O),1.61
+4,tet(O),-0.89
+5,tet(O),-0.62
+6,tet(O),-0.38
+7,tet(O),-0.34
+8,tet(O),2.2
+9,tet(O),2.94
+1,tet(O/W/32/O),-1.61
+2,tet(O/W/32/O),-3.5
+3,tet(O/W/32/O),-1.61
+4,tet(O/W/32/O),-3.14
+5,tet(O/W/32/O),-2.94
+6,tet(O/W/32/O),-3.43
+7,tet(O/W/32/O),-2.4
+8,tet(O/W/32/O),-2.2
+9,tet(O/W/32/O),-2.94
+1,tet(T),-2.83
+2,tet(T),-3.5
+3,tet(T),-1.61
+4,tet(T),-3.14
+5,tet(T),-1.1
+6,tet(T),-3.43
+7,tet(T),-2.4
+8,tet(T),-2.2
+9,tet(T),-2.94
+1,tet(W),-2.83
+2,tet(W),1.02
+3,tet(W),-1.61
+4,tet(W),-3.14
+5,tet(W),-2.94
+6,tet(W),-1.69
+7,tet(W),-2.4
+8,tet(W),-2.2
+9,tet(W),-2.94
+1,vga(F),-0.96
+2,vga(F),-3.5
+3,vga(F),-1.61
+4,vga(F),-3.14
+5,vga(F),-2.94
+6,vga(F),-3.43
+7,vga(F),-2.4
+8,vga(F),-2.2
+9,vga(F),-2.94
+1, LDH,2.83
+2, LDH,3.5
+3, LDH,1.61
+4, LDH,3.14
+5, LDH,2.94
+6, LDH,3.43
+7, LDH,3.56
+8, LDH,2.2
+9, LDH,2.94
+1, Cps2E,-2.83
+2, Cps2E,-2.34
+3, Cps2E,1.61
+4, Cps2E,-3.14
+5, Cps2E,-0.62
+6, Cps2E,-3.43
+7, Cps2E,-3.56
+8, Cps2E,2.2
+9, Cps2E,2.94
+1, Cps2F,-2.83
+2, Cps2F,-3.5
+3, Cps2F,1.61
+4, Cps2F,-3.14
+5, Cps2F,-1.73
+6, Cps2F,-3.43
+7, Cps2F,-3.56
+8, Cps2F,0.85
+9, Cps2F,2.94
+1, Cps9E,1.61
+2, Cps9E,2.34
+3, Cps9E,-1.61
+4, Cps9E,3.14
+5, Cps9E,1.1
+6, Cps9E,2.27
+7, Cps9E,-0.82
+8, Cps9E,-2.2
+9, Cps9E,-2.94
+1, manN,2.83
+2, manN,3.5
+3, manN,1.61
+4, manN,3.14
+5, manN,2.94
+6, manN,3.43
+7, manN,3.56
+8, manN,2.2
+9, manN,2.94
+1, ArcD,2.83
+2, ArcD,3.5
+3, ArcD,1.61
+4, ArcD,3.14
+5, ArcD,2.94
+6, ArcD,3.43
+7, ArcD,3.56
+8, ArcD,2.2
+9, ArcD,2.94
+1, SsPep,-0.96
+2, SsPep,2.34
+3, SsPep,1.61
+4, SsPep,3.14
+5, SsPep,2.94
+6, SsPep,3.43
+7, SsPep,2.4
+8, SsPep,2.2
+9, SsPep,2.94
+1, Fhb_1,-2.83
+2, Fhb_1,-3.5
+3, Fhb_1,-1.61
+4, Fhb_1,-3.14
+5, Fhb_1,-2.94
+6, Fhb_1,0.65
+7, Fhb_1,-0.82
+8, Fhb_1,-2.2
+9, Fhb_1,-2.94
+1, agaR2,2.83
+2, agaR2,3.5
+3, agaR2,1.61
+4, agaR2,3.14
+5, agaR2,2.94
+6, agaR2,3.43
+7, agaR2,3.56
+8, agaR2,2.2
+9, agaR2,2.94
+1, Cps2B,2.83
+2, Cps2B,3.5
+3, Cps2B,1.61
+4, Cps2B,3.14
+5, Cps2B,2.94
+6, Cps2B,3.43
+7, Cps2B,3.56
+8, Cps2B,2.2
+9, Cps2B,2.94
+1, cps2G,-2.83
+2, cps2G,-3.5
+3, cps2G,1.61
+4, cps2G,-3.14
+5, cps2G,-1.73
+6, cps2G,-3.43
+7, cps2G,-3.56
+8, cps2G,0.85
+9, cps2G,2.94
+1, Cps2J,-2.83
+2, Cps2J,-3.5
+3, Cps2J,1.61
+4, Cps2J,-3.14
+5, Cps2J,-1.73
+6, Cps2J,-3.43
+7, Cps2J,-3.56
+8, Cps2J,0.85
+9, Cps2J,2.94
+1, cps2L,-2.83
+2, cps2L,-2.34
+3, cps2L,1.61
+4, cps2L,-3.14
+5, cps2L,-0.62
+6, cps2L,-3.43
+7, cps2L,-3.56
+8, cps2L,2.2
+9, cps2L,2.94
+1, NeuB,-1.61
+2, NeuB,-2.34
+3, NeuB,1.61
+4, NeuB,-3.14
+5, NeuB,-0.2
+6, NeuB,-3.43
+7, NeuB,-2.4
+8, NeuB,2.2
+9, NeuB,2.94
+1, MRP,-2.83
+2, MRP,3.5
+3, MRP,1.61
+4, MRP,3.14
+5, MRP,2.94
+6, MRP,1.69
+7, MRP,2.4
+8, MRP,2.2
+9, MRP,2.94
+1, SP1,0.0
+2, SP1,-3.5
+3, SP1,0.0
+4, SP1,0.89
+5, SP1,2.94
+6, SP1,3.43
+7, SP1,3.56
+8, SP1,-0.85
+9, SP1,-0.62
+1, ciaH,2.83
+2, ciaH,3.5
+3, ciaH,1.61
+4, ciaH,3.14
+5, ciaH,2.94
+6, ciaH,3.43
+7, ciaH,3.56
+8, ciaH,2.2
+9, ciaH,2.94
+1, prsA,2.83
+2, prsA,3.5
+3, prsA,1.61
+4, prsA,3.14
+5, prsA,2.94
+6, prsA,3.43
+7, prsA,3.56
+8, prsA,2.2
+9, prsA,2.94
+1, Ssa,1.61
+2, Ssa,2.34
+3, Ssa,1.61
+4, Ssa,3.14
+5, Ssa,2.94
+6, Ssa,3.43
+7, Ssa,2.4
+8, Ssa,2.2
+9, Ssa,2.94
+1, abpb,-0.96
+2, abpb,2.34
+3, abpb,1.61
+4, abpb,3.14
+5, abpb,1.73
+6, abpb,3.43
+7, abpb,2.4
+8, abpb,2.2
+9, abpb,2.94
+1, sly,-2.83
+2, sly,3.5
+3, sly,-1.61
+4, sly,-3.14
+5, sly,2.94
+6, sly,3.43
+7, sly,2.4
+8, sly,-0.85
+9, sly,-2.94
+1, HtpsC,-1.61
+2, HtpsC,3.5
+3, HtpsC,1.61
+4, HtpsC,3.14
+5, HtpsC,2.94
+6, HtpsC,3.43
+7, HtpsC,2.4
+8, HtpsC,2.2
+9, HtpsC,2.94
+1, lhk,2.83
+2, lhk,3.5
+3, lhk,1.61
+4, lhk,3.14
+5, lhk,2.94
+6, lhk,3.43
+7, lhk,2.4
+8, lhk,2.2
+9, lhk,2.94
+1, lhr,2.83
+2, lhr,3.5
+3, lhr,1.61
+4, lhr,3.14
+5, lhr,2.94
+6, lhr,3.43
+7, lhr,2.4
+8, lhr,2.2
+9, lhr,2.94
+1, 1910HR,-0.96
+2, 1910HR,3.5
+3, 1910HR,-1.61
+4, 1910HR,-3.14
+5, 1910HR,2.94
+6, 1910HR,3.43
+7, 1910HR,1.82
+8, 1910HR,-0.85
+9, 1910HR,-2.94
+1, 1910HK,-0.96
+2, 1910HK,3.5
+3, 1910HK,-1.61
+4, 1910HK,-3.14
+5, 1910HK,2.94
+6, 1910HK,3.43
+7, 1910HK,1.82
+8, 1910HK,-0.85
+9, 1910HK,-2.94
+1, ssnA,1.61
+2, ssnA,3.5
+3, ssnA,1.61
+4, ssnA,3.14
+5, ssnA,2.94
+6, ssnA,3.43
+7, ssnA,2.4
+8, ssnA,2.2
+9, ssnA,2.94
+1, RggTR,0.96
+2, RggTR,-3.5
+3, RggTR,-1.61
+4, RggTR,3.14
+5, RggTR,-2.94
+6, RggTR,0.65
+7, RggTR,-3.56
+8, RggTR,-0.85
+9, RggTR,-2.94
+1, SntA,0.96
+2, SntA,3.5
+3, SntA,1.61
+4, SntA,3.14
+5, SntA,2.94
+6, SntA,3.43
+7, SntA,3.56
+8, SntA,2.2
+9, SntA,2.94
+1, Sbp2,-2.83
+2, Sbp2,1.02
+3, Sbp2,-1.61
+4, Sbp2,-3.14
+5, Sbp2,2.94
+6, Sbp2,-1.69
+7, Sbp2,-3.56
+8, Sbp2,-0.85
+9, Sbp2,-2.94
+1, TraG,1.61
+2, TraG,-3.5
+3, TraG,1.61
+4, TraG,1.34
+5, TraG,2.94
+6, TraG,3.43
+7, TraG,3.56
+8, TraG,2.2
+9, TraG,2.94
+1, hylA,-2.83
+2, hylA,-3.5
+3, hylA,-1.61
+4, hylA,-3.14
+5, hylA,-2.94
+6, hylA,-3.43
+7, hylA,-3.56
+8, hylA,-0.85
+9, hylA,-2.94
+1, rfeA,-1.61
+2, rfeA,-3.5
+3, rfeA,-1.61
+4, rfeA,-3.14
+5, rfeA,-2.94
+6, rfeA,-3.43
+7, rfeA,-3.56
+8, rfeA,-0.85
+9, rfeA,-2.94
+1, Tran,-2.83
+2, Tran,-3.5
+3, Tran,-1.61
+4, Tran,-3.14
+5, Tran,1.73
+6, Tran,1.69
+7, Tran,-1.1
+8, Tran,-0.85
+9, Tran,-2.94
+1, Hhly3,-0.96
+2, Hhly3,-3.5
+3, Hhly3,-1.61
+4, Hhly3,-0.17
+5, Hhly3,-0.62
+6, Hhly3,-1.69
+7, Hhly3,0.34
+8, Hhly3,-2.2
+9, Hhly3,-2.94
+1, yzpA,-1.61
+2, yzpA,3.5
+3, yzpA,1.61
+4, yzpA,3.14
+5, yzpA,2.94
+6, yzpA,2.27
+7, yzpA,2.4
+8, yzpA,2.2
+9, yzpA,2.94
+1, gh92,-0.96
+2, gh92,3.5
+3, gh92,-1.61
+4, gh92,-3.14
+5, gh92,2.94
+6, gh92,3.43
+7, gh92,1.82
+8, gh92,-0.85
+9, gh92,-2.94
+1, PnuC,-2.83
+2, PnuC,-3.5
+3, PnuC,-1.61
+4, PnuC,-3.14
+5, PnuC,-2.94
+6, PnuC,-3.43
+7, PnuC,-3.56
+8, PnuC,-0.85
+9, PnuC,-2.94
+1, cbp40omp40,-2.83
+2, cbp40omp40,-3.5
+3, cbp40omp40,-1.61
+4, cbp40omp40,-3.14
+5, cbp40omp40,-2.94
+6, cbp40omp40,-2.27
+7, cbp40omp40,-3.56
+8, cbp40omp40,-0.85
+9, cbp40omp40,-2.94
+1, HP1717,2.83
+2, HP1717,3.5
+3, HP1717,1.61
+4, HP1717,3.14
+5, HP1717,2.94
+6, HP1717,3.43
+7, HP1717,3.56
+8, HP1717,2.2
+9, HP1717,2.94
+1, AtlAss,-2.83
+2, AtlAss,-3.5
+3, AtlAss,-1.61
+4, AtlAss,-3.14
+5, AtlAss,-2.94
+6, AtlAss,-3.43
+7, AtlAss,-3.56
+8, AtlAss,-2.2
+9, AtlAss,-2.94
+1, Fhbp,-2.83
+2, Fhbp,-3.5
+3, Fhbp,-1.61
+4, Fhbp,-3.14
+5, Fhbp,-2.94
+6, Fhbp,-3.43
+7, Fhbp,-3.56
+8, Fhbp,-0.85
+9, Fhbp,-2.94
+1, Fhb_2,-2.83
+2, Fhb_2,-3.5
+3, Fhb_2,-1.61
+4, Fhb_2,-3.14
+5, Fhb_2,-2.94
+6, Fhb_2,-1.69
+7, Fhb_2,-3.56
+8, Fhb_2,-0.85
+9, Fhb_2,-2.94
+1, ldeS,-1.61
+2, ldeS,3.5
+3, ldeS,1.61
+4, ldeS,3.14
+5, ldeS,2.94
+6, ldeS,1.27
+7, ldeS,2.4
+8, ldeS,2.2
+9, ldeS,2.94
+1, dltA,-0.45
+2, dltA,3.5
+3, dltA,1.61
+4, dltA,3.14
+5, dltA,2.94
+6, dltA,3.43
+7, dltA,2.4
+8, dltA,2.2
+9, dltA,2.94
+1, SspA,2.83
+2, SspA,3.5
+3, SspA,1.61
+4, SspA,3.14
+5, SspA,2.94
+6, SspA,3.43
+7, SspA,3.56
+8, SspA,2.2
+9, SspA,2.94
+1, Zmp,1.61
+2, Zmp,3.5
+3, Zmp,1.61
+4, Zmp,3.14
+5, Zmp,2.94
+6, Zmp,3.43
+7, Zmp,3.56
+8, Zmp,0.85
+9, Zmp,2.94
+1, atl_2,-0.45
+2, atl_2,1.35
+3, atl_2,1.61
+4, atl_2,-1.95
+5, atl_2,2.94
+6, atl_2,0.13
+7, atl_2,1.1
+8, atl_2,-2.2
+9, atl_2,2.94
+1, NisK,-2.83
+2, NisK,-3.5
+3, NisK,-1.61
+4, NisK,-3.14
+5, NisK,-2.94
+6, NisK,-3.43
+7, NisK,-3.56
+8, NisK,-2.2
+9, NisK,-2.94
+1, NisR,-2.83
+2, NisR,-3.5
+3, NisR,-1.61
+4, NisR,-3.14
+5, NisR,-2.94
+6, NisR,-3.43
+7, NisR,-3.56
+8, NisR,-2.2
+9, NisR,-2.94
+1, ABC_2,-0.96
+2, ABC_2,3.5
+3, ABC_2,1.61
+4, ABC_2,3.14
+5, ABC_2,2.94
+6, ABC_2,3.43
+7, ABC_2,3.56
+8, ABC_2,2.2
+9, ABC_2,2.94
+1, Sbp1,-0.96
+2, Sbp1,2.34
+3, Sbp1,-1.61
+4, Sbp1,-3.14
+5, Sbp1,2.94
+6, Sbp1,3.43
+7, Sbp1,-3.56
+8, Sbp1,-0.85
+9, Sbp1,-2.94
+1, OppA,2.83
+2, OppA,3.5
+3, OppA,1.61
+4, OppA,3.14
+5, OppA,2.94
+6, OppA,3.43
+7, OppA,3.56
+8, OppA,2.2
+9, OppA,2.94
+1, endoSS,-0.96
+2, endoSS,3.5
+3, endoSS,-1.61
+4, endoSS,-3.14
+5, endoSS,2.94
+6, endoSS,3.43
+7, endoSS,1.82
+8, endoSS,-0.85
+9, endoSS,-2.94
+1, PK,2.83
+2, PK,3.5
+3, PK,1.61
+4, PK,3.14
+5, PK,2.94
+6, PK,3.43
+7, PK,3.56
+8, PK,2.2
+9, PK,2.94
+1, KAR,2.83
+2, KAR,3.5
+3, KAR,1.61
+4, KAR,3.14
+5, KAR,2.94
+6, KAR,3.43
+7, KAR,3.56
+8, KAR,2.2
+9, KAR,2.94
+1, IMPDH_2,2.83
+2, IMPDH_2,3.5
+3, IMPDH_2,1.61
+4, IMPDH_2,3.14
+5, IMPDH_2,2.94
+6, IMPDH_2,3.43
+7, IMPDH_2,3.56
+8, IMPDH_2,2.2
+9, IMPDH_2,2.94
+1, GlnA,2.83
+2, GlnA,3.5
+3, GlnA,1.61
+4, GlnA,3.14
+5, GlnA,2.94
+6, GlnA,3.43
+7, GlnA,3.56
+8, GlnA,2.2
+9, GlnA,2.94
+1, HtpsA,2.83
+2, HtpsA,3.5
+3, HtpsA,1.61
+4, HtpsA,3.14
+5, HtpsA,2.94
+6, HtpsA,3.43
+7, HtpsA,3.56
+8, HtpsA,2.2
+9, HtpsA,2.94
+1, LuxS,2.83
+2, LuxS,3.5
+3, LuxS,1.61
+4, LuxS,3.14
+5, LuxS,2.94
+6, LuxS,3.43
+7, LuxS,3.56
+8, LuxS,2.2
+9, LuxS,2.94
+1, Ssads,0.45
+2, Ssads,-3.5
+3, Ssads,-1.61
+4, Ssads,-3.14
+5, Ssads,-2.94
+6, Ssads,0.13
+7, Ssads,0.34
+8, Ssads,-2.2
+9, Ssads,-2.94
+1, RelQ,2.83
+2, RelQ,3.5
+3, RelQ,1.61
+4, RelQ,3.14
+5, RelQ,2.94
+6, RelQ,3.43
+7, RelQ,3.56
+8, RelQ,2.2
+9, RelQ,2.94
+1, srtA,2.83
+2, srtA,3.5
+3, srtA,1.61
+4, srtA,3.14
+5, srtA,2.94
+6, srtA,3.43
+7, srtA,2.4
+8, srtA,2.2
+9, srtA,2.94
+1, HP1083,2.83
+2, HP1083,3.5
+3, HP1083,1.61
+4, HP1083,3.14
+5, HP1083,2.94
+6, HP1083,3.43
+7, HP1083,3.56
+8, HP1083,2.2
+9, HP1083,2.94
+1, ciaR,2.83
+2, ciaR,3.5
+3, ciaR,1.61
+4, ciaR,3.14
+5, ciaR,2.94
+6, ciaR,3.43
+7, ciaR,3.56
+8, ciaR,2.2
+9, ciaR,2.94
+1, mnmE,2.83
+2, mnmE,3.5
+3, mnmE,1.61
+4, mnmE,3.14
+5, mnmE,2.94
+6, mnmE,3.43
+7, mnmE,3.56
+8, mnmE,2.2
+9, mnmE,2.94
+1, HP1538,2.83
+2, HP1538,3.5
+3, HP1538,1.61
+4, HP1538,3.14
+5, HP1538,2.94
+6, HP1538,3.43
+7, HP1538,2.4
+8, HP1538,2.2
+9, HP1538,2.94
+1, CovR,2.83
+2, CovR,3.5
+3, CovR,1.61
+4, CovR,3.14
+5, CovR,2.94
+6, CovR,3.43
+7, CovR,3.56
+8, CovR,2.2
+9, CovR,2.94
+1, lytR,2.83
+2, lytR,3.5
+3, lytR,1.61
+4, lytR,3.14
+5, lytR,2.94
+6, lytR,3.43
+7, lytR,3.56
+8, lytR,2.2
+9, lytR,2.94
+1, RelA,2.83
+2, RelA,3.5
+3, RelA,1.61
+4, RelA,3.14
+5, RelA,2.94
+6, RelA,3.43
+7, RelA,3.56
+8, RelA,2.2
+9, RelA,2.94
+1, GidA,2.83
+2, GidA,3.5
+3, GidA,1.61
+4, GidA,3.14
+5, GidA,2.94
+6, GidA,3.43
+7, GidA,3.56
+8, GidA,2.2
+9, GidA,2.94
+1, GdpP,2.83
+2, GdpP,3.5
+3, GdpP,1.61
+4, GdpP,3.14
+5, GdpP,2.94
+6, GdpP,3.43
+7, GdpP,3.56
+8, GdpP,2.2
+9, GdpP,2.94
+1, Stp,2.83
+2, Stp,3.5
+3, Stp,1.61
+4, Stp,3.14
+5, Stp,2.94
+6, Stp,3.43
+7, Stp,2.4
+8, Stp,2.2
+9, Stp,2.94
+1, GAPDH,2.83
+2, GAPDH,3.5
+3, GAPDH,1.61
+4, GAPDH,3.14
+5, GAPDH,2.94
+6, GAPDH,3.43
+7, GAPDH,3.56
+8, GAPDH,2.2
+9, GAPDH,2.94
+1, adhE,2.83
+2, adhE,3.5
+3, adhE,1.61
+4, adhE,3.14
+5, adhE,2.94
+6, adhE,3.43
+7, adhE,3.56
+8, adhE,2.2
+9, adhE,2.94
+1, Stk,2.83
+2, Stk,3.5
+3, Stk,1.61
+4, Stk,3.14
+5, Stk,2.94
+6, Stk,3.43
+7, Stk,3.56
+8, Stk,2.2
+9, Stk,2.94
+1, ClpX,2.83
+2, ClpX,3.5
+3, ClpX,1.61
+4, ClpX,3.14
+5, ClpX,2.94
+6, ClpX,3.43
+7, ClpX,3.56
+8, ClpX,2.2
+9, ClpX,2.94
+1, pepT,2.83
+2, pepT,3.5
+3, pepT,1.61
+4, pepT,3.14
+5, pepT,2.94
+6, pepT,3.43
+7, pepT,3.56
+8, pepT,2.2
+9, pepT,2.94
+1, ClpP,2.83
+2, ClpP,3.5
+3, ClpP,1.61
+4, ClpP,3.14
+5, ClpP,2.94
+6, ClpP,3.43
+7, ClpP,3.56
+8, ClpP,2.2
+9, ClpP,2.94
+1, SspB,1.61
+2, SspB,3.5
+3, SspB,1.61
+4, SspB,3.14
+5, SspB,2.94
+6, SspB,3.43
+7, SspB,2.4
+8, SspB,2.2
+9, SspB,2.94
+1, DnaK,2.83
+2, DnaK,3.5
+3, DnaK,1.61
+4, DnaK,3.14
+5, DnaK,2.94
+6, DnaK,3.43
+7, DnaK,3.56
+8, DnaK,2.2
+9, DnaK,2.94
+1, CodY,2.83
+2, CodY,3.5
+3, CodY,1.61
+4, CodY,3.14
+5, CodY,2.94
+6, CodY,3.43
+7, CodY,3.56
+8, CodY,2.2
+9, CodY,2.94
+1, PepF,2.83
+2, PepF,3.5
+3, PepF,1.61
+4, PepF,3.14
+5, PepF,2.94
+6, PepF,3.43
+7, PepF,3.56
+8, PepF,2.2
+9, PepF,2.94
+1, Eno,2.83
+2, Eno,3.5
+3, Eno,1.61
+4, Eno,3.14
+5, Eno,2.94
+6, Eno,3.43
+7, Eno,3.56
+8, Eno,2.2
+9, Eno,2.94
+1, HAM1,2.83
+2, HAM1,3.5
+3, HAM1,1.61
+4, HAM1,3.14
+5, HAM1,2.94
+6, HAM1,3.43
+7, HAM1,3.56
+8, HAM1,2.2
+9, HAM1,2.94
+1, Rex,2.83
+2, Rex,3.5
+3, Rex,1.61
+4, Rex,3.14
+5, Rex,2.94
+6, Rex,3.43
+7, Rex,3.56
+8, Rex,2.2
+9, Rex,2.94
+1, HrcA,2.83
+2, HrcA,3.5
+3, HrcA,1.61
+4, HrcA,3.14
+5, HrcA,2.94
+6, HrcA,3.43
+7, HrcA,3.56
+8, HrcA,2.2
+9, HrcA,2.94
+1, GrpE,1.61
+2, GrpE,3.5
+3, GrpE,1.61
+4, GrpE,3.14
+5, GrpE,2.94
+6, GrpE,3.43
+7, GrpE,3.56
+8, GrpE,2.2
+9, GrpE,2.94
+1, DnaJ,2.83
+2, DnaJ,3.5
+3, DnaJ,1.61
+4, DnaJ,3.14
+5, DnaJ,2.94
+6, DnaJ,3.43
+7, DnaJ,3.56
+8, DnaJ,2.2
+9, DnaJ,2.94
+1, GntR,2.83
+2, GntR,3.5
+3, GntR,1.61
+4, GntR,3.14
+5, GntR,2.94
+6, GntR,3.43
+7, GntR,3.56
+8, GntR,2.2
+9, GntR,2.94
+1, FlpS,2.83
+2, FlpS,3.5
+3, FlpS,1.61
+4, FlpS,3.14
+5, FlpS,2.94
+6, FlpS,3.43
+7, FlpS,3.56
+8, FlpS,2.2
+9, FlpS,2.94
+1, pgdA,2.83
+2, pgdA,3.5
+3, pgdA,1.61
+4, pgdA,3.14
+5, pgdA,2.94
+6, pgdA,3.43
+7, pgdA,2.4
+8, pgdA,2.2
+9, pgdA,2.94
+1, VraSR,2.83
+2, VraSR,3.5
+3, VraSR,1.61
+4, VraSR,3.14
+5, VraSR,2.94
+6, VraSR,3.43
+7, VraSR,3.56
+8, VraSR,2.2
+9, VraSR,2.94
+1, MsmK,2.83
+2, MsmK,3.5
+3, MsmK,1.61
+4, MsmK,3.14
+5, MsmK,2.94
+6, MsmK,3.43
+7, MsmK,3.56
+8, MsmK,2.2
+9, MsmK,2.94
+1, OTC,2.83
+2, OTC,3.5
+3, OTC,1.61
+4, OTC,3.14
+5, OTC,2.94
+6, OTC,3.43
+7, OTC,3.56
+8, OTC,2.2
+9, OTC,2.94
+1, argR,2.83
+2, argR,3.5
+3, argR,1.61
+4, argR,3.14
+5, argR,2.94
+6, argR,3.43
+7, argR,3.56
+8, argR,2.2
+9, argR,2.94
+1, PGK,2.83
+2, PGK,3.5
+3, PGK,1.61
+4, PGK,3.14
+5, PGK,2.94
+6, PGK,3.43
+7, PGK,3.56
+8, PGK,2.2
+9, PGK,2.94
+1, BgaC,2.83
+2, BgaC,3.5
+3, BgaC,1.61
+4, BgaC,3.14
+5, BgaC,2.94
+6, BgaC,3.43
+7, BgaC,3.56
+8, BgaC,2.2
+9, BgaC,2.94
+1, DivIVA,2.83
+2, DivIVA,3.5
+3, DivIVA,1.61
+4, DivIVA,3.14
+5, DivIVA,2.94
+6, DivIVA,3.43
+7, DivIVA,3.56
+8, DivIVA,2.2
+9, DivIVA,2.94
+1, FBPS,2.83
+2, FBPS,3.5
+3, FBPS,1.61
+4, FBPS,3.14
+5, FBPS,2.94
+6, FBPS,3.43
+7, FBPS,3.56
+8, FBPS,2.2
+9, FBPS,2.94
+1, GroEL,2.83
+2, GroEL,3.5
+3, GroEL,1.61
+4, GroEL,3.14
+5, GroEL,2.94
+6, GroEL,3.43
+7, GroEL,3.56
+8, GroEL,2.2
+9, GroEL,2.94
+1, EF-Tu,2.83
+2, EF-Tu,3.5
+3, EF-Tu,1.61
+4, EF-Tu,3.14
+5, EF-Tu,2.94
+6, EF-Tu,3.43
+7, EF-Tu,3.56
+8, EF-Tu,2.2
+9, EF-Tu,2.94
+1, ABC_1,2.83
+2, ABC_1,3.5
+3, ABC_1,1.61
+4, ABC_1,3.14
+5, ABC_1,2.94
+6, ABC_1,3.43
+7, ABC_1,3.56
+8, ABC_1,2.2
+9, ABC_1,2.94
+1, PDH,2.83
+2, PDH,3.5
+3, PDH,1.61
+4, PDH,3.14
+5, PDH,2.94
+6, PDH,3.43
+7, PDH,3.56
+8, PDH,2.2
+9, PDH,2.94
+1, IMPDH_1,2.83
+2, IMPDH_1,3.5
+3, IMPDH_1,1.61
+4, IMPDH_1,3.14
+5, IMPDH_1,2.94
+6, IMPDH_1,3.43
+7, IMPDH_1,3.56
+8, IMPDH_1,2.2
+9, IMPDH_1,2.94
+1, FBA,2.83
+2, FBA,3.5
+3, FBA,1.61
+4, FBA,3.14
+5, FBA,2.94
+6, FBA,3.43
+7, FBA,3.56
+8, FBA,2.2
+9, FBA,2.94

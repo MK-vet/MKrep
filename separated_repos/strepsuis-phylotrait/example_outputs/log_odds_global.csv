@@ -1,0 +1,141 @@
+Feature,Log_Odds_Ratio
+Amoxicillin_Clavulanic_acid,-5.21
+Ampicillin,-4.1
+Ceftiofur,-3.58
+Doxycycline,0.75
+Enrofloxacin,-3.23
+Florfenicol,-4.1
+Gentamicin,-4.1
+Oxytetracycline,1.13
+Penicillin,-3.23
+Spectinomycin,-0.75
+Tiamulin,-1.38
+Trimethoprim_Sulphamethoxazole,-2.58
+Tulathromycin,0.07
+SAT-4,-2.58
+aad9,-3.58
+ant(6)-Ia,-0.85
+ant(6)-Ib,-3.58
+aph(3')-III,-3.23
+erm(47),-2.28
+erm(B),0.42
+lnu(B),-1.68
+lnu(C),-4.1
+lsa(E),-1.68
+optrA,-4.1
+spw,-1.95
+tet(40),-4.1
+tet(44),-4.1
+tet(L),-4.1
+tet(M),-1.19
+tet(O),-0.24
+tet(O/W/32/O),-3.58
+tet(T),-3.23
+tet(W),-1.6
+vga(F),-3.23
+ LDH,5.21
+ Cps2E,-1.31
+ Cps2F,-1.6
+ Cps9E,0.6
+ manN,5.21
+ ArcD,5.21
+ SsPep,2.28
+ Fhb_1,-1.6
+ agaR2,5.21
+ Cps2B,5.21
+ cps2G,-1.6
+ Cps2J,-1.6
+ cps2L,-1.31
+ NeuB,-1.13
+ MRP,1.95
+ SP1,0.56
+ ciaH,5.21
+ prsA,5.21
+ Ssa,3.23
+ abpb,2.16
+ sly,0.51
+ HtpsC,2.28
+ lhk,4.1
+ lhr,4.1
+ 1910HR,0.56
+ 1910HK,0.56
+ ssnA,3.58
+ RggTR,-0.8
+ SntA,3.58
+ Sbp2,-1.01
+ TraG,1.31
+ hylA,-4.1
+ rfeA,-3.58
+ Tran,-0.9
+ Hhly3,-1.13
+ yzpA,2.16
+ gh92,0.56
+ PnuC,-4.1
+ cbp40omp40,-3.58
+ HP1717,5.21
+ AtlAss,-5.21
+ Fhbp,-4.1
+ Fhb_2,-3.23
+ ldeS,1.95
+ dltA,2.58
+ SspA,5.21
+ Zmp,3.58
+ atl_2,0.56
+ NisK,-5.21
+ NisR,-5.21
+ ABC_2,2.58
+ Sbp1,-0.15
+ OppA,5.21
+ endoSS,0.56
+ PK,5.21
+ KAR,5.21
+ IMPDH_2,5.21
+ GlnA,5.21
+ HtpsA,5.21
+ LuxS,5.21
+ Ssads,-1.07
+ RelQ,5.21
+ srtA,4.1
+ HP1083,5.21
+ ciaR,5.21
+ mnmE,5.21
+ HP1538,4.1
+ CovR,5.21
+ lytR,5.21
+ RelA,5.21
+ GidA,5.21
+ GdpP,5.21
+ Stp,4.1
+ GAPDH,5.21
+ adhE,5.21
+ Stk,5.21
+ ClpX,5.21
+ pepT,5.21
+ ClpP,5.21
+ SspB,3.58
+ DnaK,5.21
+ CodY,5.21
+ PepF,5.21
+ Eno,5.21
+ HAM1,5.21
+ Rex,5.21
+ HrcA,5.21
+ GrpE,4.1
+ DnaJ,5.21
+ GntR,5.21
+ FlpS,5.21
+ pgdA,4.1
+ VraSR,5.21
+ MsmK,5.21
+ OTC,5.21
+ argR,5.21
+ PGK,5.21
+ BgaC,5.21
+ DivIVA,5.21
+ FBPS,5.21
+ GroEL,5.21
+ EF-Tu,5.21
+ ABC_1,5.21
+ PDH,5.21
+ IMPDH_1,5.21
+ FBA,5.21

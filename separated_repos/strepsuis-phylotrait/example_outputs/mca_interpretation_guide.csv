@@ -1,0 +1,8 @@
+Aspect,Interpretation
+Column Points,"Column points represent binary features (MIC, AMR, Virulence genes). Their position shows correlation with other features."
+Row Points,Row points represent strains. Proximity between points indicates similar trait profiles.
+Proximity (Columns),Features close together tend to co-occur in the same strains.
+Proximity (Rows),Strains close together share similar genetic trait profiles.
+Row-Column Relationship,Strains positioned near certain features are more likely to possess those features.
+Component 1,Explains 58.82% of variation in the data.
+Component 2,Explains 41.18% of variation in the data.

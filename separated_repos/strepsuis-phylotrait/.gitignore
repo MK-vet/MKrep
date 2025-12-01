@@ -80,18 +80,36 @@ Thumbs.db
 # Output files
 output/
 results/
-*.xlsx
-*.html
 png_charts/
+
+# Template files generated at runtime
+templates/
 
 # Data files (keep examples and documentation)
 data/*
 !data/examples/
 !data/results/
 !data/*/README.md
+
+# CSV files - ignore all except specific patterns
 *.csv
 !data/examples/*.csv
 !examples/*.csv
+!examples/**/*.csv
 
 # Logs
 *.log
+
+# Example outputs - include small CSVs and PNGs, exclude large files
+# First, unignore the example_outputs CSVs (overrides *.csv above)
+!example_outputs/*.csv
+!example_outputs/README.md
+!example_outputs/*.png
+
+# Then explicitly ignore specific large files (these override the above)
+example_outputs/*.xlsx
+example_outputs/*.html
+example_outputs/*.log
+example_outputs/png_charts/
+example_outputs/association_rules.csv
+example_outputs/trait_analysis_summary.html

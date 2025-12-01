@@ -1,0 +1,1635 @@
+Feature,ClusterA,ClusterB,p_value_raw,p_value_adj,significant
+ SP1,2,7,0.0,0.0,True
+ TraG,2,7,0.0,0.0,True
+ Sbp1,6,7,0.0,0.0,True
+ SP1,2,6,0.0,0.0,True
+ TraG,2,6,0.0,0.0,True
+ Sbp1,2,7,0.0,0.0,True
+ 1910HK,2,4,0.0,0.0,True
+ 1910HR,2,4,0.0,0.0,True
+ RggTR,2,4,0.0,0.0,True
+ RggTR,4,7,0.0,0.0,True
+ endoSS,2,4,0.0,0.0,True
+ gh92,2,4,0.0,0.0,True
+ sly,2,4,0.0,0.0,True
+ 1910HK,4,6,0.0,0.0,True
+ 1910HR,4,6,0.0,0.0,True
+ Sbp1,4,6,0.0,0.0,True
+ endoSS,4,6,0.0,0.0,True
+ gh92,4,6,0.0,0.0,True
+ sly,4,6,0.0,0.0,True
+ Cps2E,7,9,0.0,0.0,True
+ Cps2F,7,9,0.0,0.0,True
+ Cps2J,7,9,0.0,0.0,True
+ Sbp1,5,7,0.0,0.0,True
+ Sbp2,5,7,0.0,0.0,True
+ cps2G,7,9,0.0,0.0,True
+ cps2L,7,9,0.0,0.0,True
+ 1910HK,2,9,0.0,0.0,True
+ 1910HR,2,9,0.0,0.0,True
+ Cps2F,2,9,0.0,0.0,True
+ Cps2J,2,9,0.0,0.0,True
+ SP1,2,5,0.0,0.0,True
+ TraG,2,5,0.0,0.0,True
+ TraG,2,9,0.0,0.0,True
+ cps2G,2,9,0.0,0.0,True
+ endoSS,2,9,0.0,0.0,True
+ gh92,2,9,0.0,0.0,True
+ sly,2,9,0.0,0.0,True
+tet(O),2,9,0.0,0.0,True
+ Tran,2,6,0.0,0.0,True
+ sly,4,7,0.0,0.0,True
+ 1910HK,6,9,0.0,0.0,True
+ 1910HR,6,9,0.0,0.0,True
+ Cps2E,6,9,0.0,0.0,True
+ Cps2F,6,9,0.0,0.0,True
+ Cps2J,6,9,0.0,0.0,True
+ NeuB,6,9,0.0,0.0,True
+ Sbp1,6,9,0.0,0.0,True
+ cps2G,6,9,0.0,0.0,True
+ cps2L,6,9,0.0,0.0,True
+ endoSS,6,9,0.0,0.0,True
+ gh92,6,9,0.0,0.0,True
+ sly,6,9,0.0,0.0,True
+ Sbp1,2,4,0.0,0.0,True
+ MRP,1,2,0.0,0.0,True
+ sly,1,2,0.0,0.0,True
+ sly,1,6,0.0,0.0001,True
+ NeuB,7,9,0.0,0.0001,True
+ sly,7,9,0.0,0.0001,True
+ 1910HK,4,7,0.0,0.0001,True
+ 1910HR,4,7,0.0,0.0001,True
+ endoSS,4,7,0.0,0.0001,True
+ gh92,4,7,0.0,0.0001,True
+ 1910HK,4,5,0.0,0.0001,True
+ 1910HR,4,5,0.0,0.0001,True
+ Cps2E,2,9,0.0,0.0001,True
+ Cps2E,4,9,0.0,0.0001,True
+ Cps2F,4,9,0.0,0.0001,True
+ Cps2J,4,9,0.0,0.0001,True
+ Cps9E,2,9,0.0,0.0001,True
+ Cps9E,4,9,0.0,0.0001,True
+ NeuB,2,9,0.0,0.0001,True
+ NeuB,4,9,0.0,0.0001,True
+ RggTR,4,5,0.0,0.0001,True
+ RggTR,4,9,0.0,0.0001,True
+ Sbp1,2,9,0.0,0.0001,True
+ Sbp1,4,5,0.0,0.0001,True
+ Sbp2,2,7,0.0,0.0001,True
+ Sbp2,4,5,0.0,0.0001,True
+ cps2G,4,9,0.0,0.0001,True
+ cps2L,2,9,0.0,0.0001,True
+ cps2L,4,9,0.0,0.0001,True
+ endoSS,4,5,0.0,0.0001,True
+ gh92,4,5,0.0,0.0001,True
+ sly,4,5,0.0,0.0001,True
+ Cps9E,6,9,0.0,0.0001,True
+ MRP,1,7,0.0,0.0002,True
+ Tran,2,5,0.0,0.0002,True
+ sly,1,7,0.0,0.0002,True
+ TraG,2,4,0.0,0.0002,True
+ MRP,1,4,0.0,0.0002,True
+ 1910HK,7,9,0.0,0.0003,True
+ 1910HR,7,9,0.0,0.0003,True
+ endoSS,7,9,0.0,0.0003,True
+ gh92,7,9,0.0,0.0003,True
+ Tran,4,6,0.0,0.0003,True
+ HtpsC,1,2,0.0,0.0004,True
+ TraG,1,2,0.0,0.0004,True
+ ldeS,1,2,0.0,0.0004,True
+ yzpA,1,2,0.0,0.0004,True
+ HtpsC,1,6,0.0,0.0005,True
+ 1910HK,5,9,0.0,0.0006,True
+ 1910HR,5,9,0.0,0.0006,True
+ Cps2E,1,9,0.0,0.0006,True
+ Cps2F,1,9,0.0,0.0006,True
+ Cps2J,1,9,0.0,0.0006,True
+ MRP,1,5,0.0,0.0006,True
+ MRP,1,9,0.0,0.0006,True
+ Sbp1,5,9,0.0,0.0006,True
+ Sbp2,1,5,0.0,0.0006,True
+ Sbp2,5,9,0.0,0.0006,True
+ cps2G,1,9,0.0,0.0006,True
+ cps2L,1,9,0.0,0.0006,True
+ endoSS,5,9,0.0,0.0006,True
+ gh92,5,9,0.0,0.0006,True
+ sly,1,5,0.0,0.0006,True
+ sly,5,9,0.0,0.0006,True
+ Sbp2,5,6,0.0,0.0006,True
+ Tran,6,9,0.0,0.0006,True
+ RggTR,6,7,0.0,0.0006,True
+tet(W),2,7,0.0001,0.0008,True
+ Fhb_1,2,6,0.0001,0.0009,True
+ RggTR,2,6,0.0001,0.0009,True
+ Tran,4,5,0.0001,0.0009,True
+ SP1,2,4,0.0001,0.001,True
+ MRP,1,6,0.0001,0.0012,True
+ Tran,1,6,0.0001,0.0012,True
+ atl_2,4,5,0.0001,0.0015,True
+ atl_2,4,9,0.0001,0.0015,True
+ HtpsC,1,7,0.0001,0.0016,True
+ ldeS,1,7,0.0001,0.0016,True
+ yzpA,1,7,0.0001,0.0016,True
+ ABC_2,1,7,0.0002,0.0019,True
+ HtpsC,1,4,0.0002,0.0019,True
+ RggTR,1,7,0.0002,0.0019,True
+ ldeS,1,4,0.0002,0.0019,True
+ yzpA,1,4,0.0002,0.0019,True
+ Cps2E,7,8,0.0002,0.002,True
+ cps2L,7,8,0.0002,0.002,True
+ Sbp2,2,4,0.0002,0.0021,True
+tet(W),2,4,0.0002,0.0021,True
+ 1910HK,1,2,0.0002,0.0023,True
+ 1910HR,1,2,0.0002,0.0023,True
+ ABC_2,1,2,0.0002,0.0023,True
+ RggTR,1,2,0.0002,0.0023,True
+ TraG,2,8,0.0002,0.0023,True
+ endoSS,1,2,0.0002,0.0023,True
+ gh92,1,2,0.0002,0.0023,True
+tet(O),1,2,0.0002,0.0023,True
+tet(O),2,8,0.0002,0.0023,True
+ Cps9E,2,7,0.0002,0.0025,True
+ yzpA,1,6,0.0002,0.0027,True
+ Cps2E,6,8,0.0003,0.0027,True
+ Cps9E,4,7,0.0003,0.0027,True
+ NeuB,6,8,0.0003,0.0027,True
+ cps2L,6,8,0.0003,0.0027,True
+ 1910HK,1,6,0.0003,0.0028,True
+ 1910HR,1,6,0.0003,0.0028,True
+ ABC_2,1,6,0.0003,0.0028,True
+ Sbp1,1,6,0.0003,0.0028,True
+ SsPep,1,6,0.0003,0.0028,True
+ abpb,1,6,0.0003,0.0028,True
+ endoSS,1,6,0.0003,0.0028,True
+ gh92,1,6,0.0003,0.0028,True
+ Cps9E,6,7,0.0003,0.0029,True
+ Hhly3,2,7,0.0003,0.0029,True
+ Ssads,2,7,0.0003,0.0029,True
+tet(M),2,7,0.0003,0.0029,True
+ atl_2,2,4,0.0003,0.0033,True
+ SP1,7,9,0.0004,0.0035,True
+ Cps2F,5,9,0.0004,0.0037,True
+ Cps2J,5,9,0.0004,0.0037,True
+ Cps9E,1,9,0.0004,0.0037,True
+ HtpsC,1,5,0.0004,0.0037,True
+ HtpsC,1,9,0.0004,0.0037,True
+ NeuB,1,9,0.0004,0.0037,True
+ Tran,1,5,0.0004,0.0037,True
+ Tran,5,9,0.0004,0.0037,True
+ cps2G,5,9,0.0004,0.0037,True
+ ldeS,1,5,0.0004,0.0037,True
+ ldeS,1,9,0.0004,0.0037,True
+ yzpA,1,5,0.0004,0.0037,True
+ yzpA,1,9,0.0004,0.0037,True
+ Sbp2,2,9,0.0005,0.004,True
+tet(W),2,5,0.0005,0.004,True
+tet(W),2,9,0.0005,0.004,True
+ Tran,6,7,0.0005,0.0043,True
+ SP1,6,9,0.0006,0.0055,True
+ Cps2E,4,8,0.0007,0.0062,True
+ Cps9E,4,8,0.0007,0.0062,True
+ Fhb_1,4,6,0.0007,0.0062,True
+ NeuB,4,8,0.0007,0.0062,True
+ cps2L,4,8,0.0007,0.0062,True
+ Ssads,2,6,0.0008,0.0069,True
+ NeuB,7,8,0.0008,0.007,True
+ Sbp2,2,6,0.001,0.008,True
+tet(W),2,6,0.001,0.008,True
+ ABC_2,1,4,0.001,0.0082,True
+ Cps2E,2,8,0.001,0.0082,True
+ Cps9E,2,8,0.001,0.0082,True
+ NeuB,2,8,0.001,0.0082,True
+ SsPep,1,4,0.001,0.0082,True
+ SsPep,1,7,0.001,0.0082,True
+ abpb,1,4,0.001,0.0082,True
+ abpb,1,7,0.001,0.0082,True
+ cps2L,2,8,0.001,0.0082,True
+ Cps9E,6,8,0.0013,0.0102,True
+ Sbp1,1,2,0.0013,0.0102,True
+ SsPep,1,2,0.0013,0.0102,True
+ Ssads,1,2,0.0013,0.0102,True
+ abpb,1,2,0.0013,0.0102,True
+ dltA,1,2,0.0013,0.0102,True
+ Sbp2,1,2,0.0013,0.0102,True
+ atl_2,4,7,0.0013,0.0102,True
+Spectinomycin,1,2,0.0013,0.0102,True
+tet(W),1,2,0.0013,0.0102,True
+tet(O),4,9,0.0014,0.0104,True
+ atl_2,5,8,0.0014,0.0105,True
+ atl_2,8,9,0.0014,0.0105,True
+ Ssads,4,7,0.0016,0.0116,True
+ dltA,1,6,0.0017,0.0124,True
+ Cps2E,1,8,0.002,0.0145,True
+ Fhb_1,5,6,0.002,0.0145,True
+ Fhb_1,6,9,0.002,0.0145,True
+ MRP,1,8,0.002,0.0145,True
+ RggTR,5,6,0.002,0.0145,True
+ RggTR,6,9,0.002,0.0145,True
+ cps2L,1,8,0.002,0.0145,True
+ 1910HK,1,5,0.0023,0.0154,True
+ 1910HR,1,5,0.0023,0.0154,True
+ ABC_2,1,5,0.0023,0.0154,True
+ ABC_2,1,9,0.0023,0.0154,True
+ Cps9E,5,9,0.0023,0.0154,True
+ RggTR,1,5,0.0023,0.0154,True
+ RggTR,1,9,0.0023,0.0154,True
+ Sbp1,1,5,0.0023,0.0154,True
+ SsPep,1,5,0.0023,0.0154,True
+ SsPep,1,9,0.0023,0.0154,True
+ abpb,1,9,0.0023,0.0154,True
+ endoSS,1,5,0.0023,0.0154,True
+ gh92,1,5,0.0023,0.0154,True
+ant(6)-Ia,2,6,0.0024,0.0166,True
+ant(6)-Ia,2,7,0.0027,0.0181,True
+ Fhb_1,1,6,0.0027,0.0183,True
+tet(M),6,7,0.0028,0.0185,True
+ Tran,5,7,0.0029,0.0195,True
+ Cps2F,7,8,0.003,0.0197,True
+ Cps2J,7,8,0.003,0.0197,True
+ SP1,7,8,0.003,0.0197,True
+ cps2G,7,8,0.003,0.0197,True
+ 1910HK,2,8,0.0035,0.0223,True
+ 1910HR,2,8,0.0035,0.0223,True
+ Cps2F,2,8,0.0035,0.0223,True
+ Cps2J,2,8,0.0035,0.0223,True
+ cps2G,2,8,0.0035,0.0223,True
+ endoSS,2,8,0.0035,0.0223,True
+ gh92,2,8,0.0035,0.0223,True
+ sly,2,8,0.0035,0.0223,True
+ 1910HK,1,7,0.0036,0.0228,True
+ 1910HR,1,7,0.0036,0.0228,True
+ endoSS,1,7,0.0036,0.0228,True
+ gh92,1,7,0.0036,0.0228,True
+ Hhly3,7,9,0.0039,0.0239,True
+ Ssads,5,7,0.0039,0.0239,True
+ Ssads,7,9,0.0039,0.0239,True
+tet(M),7,9,0.0039,0.0239,True
+tet(O),7,9,0.0039,0.0239,True
+ 1910HK,6,8,0.0041,0.0244,True
+ 1910HR,6,8,0.0041,0.0244,True
+ Cps2F,6,8,0.0041,0.0244,True
+ Cps2J,6,8,0.0041,0.0244,True
+ SP1,6,8,0.0041,0.0244,True
+ Sbp1,6,8,0.0041,0.0244,True
+ cps2G,6,8,0.0041,0.0244,True
+ endoSS,6,8,0.0041,0.0244,True
+ gh92,6,8,0.0041,0.0244,True
+ sly,6,8,0.0041,0.0244,True
+ Ssads,1,4,0.0048,0.0283,True
+ dltA,1,4,0.0048,0.0283,True
+erm(B),1,4,0.0055,0.0321,True
+ SP1,1,7,0.0055,0.0322,True
+ dltA,1,7,0.0055,0.0322,True
+ Hhly3,2,4,0.0057,0.033,True
+tet(M),2,4,0.0057,0.033,True
+ Cps2E,3,7,0.0058,0.0332,True
+ Cps2F,3,7,0.0058,0.0332,True
+ Cps2J,3,7,0.0058,0.0332,True
+ cps2G,3,7,0.0058,0.0332,True
+ cps2L,3,7,0.0058,0.0332,True
+ ldeS,1,6,0.0059,0.0333,True
+ 1910HK,2,3,0.0065,0.0354,True
+ 1910HR,2,3,0.0065,0.0354,True
+ Cps2F,2,3,0.0065,0.0354,True
+ Cps2J,2,3,0.0065,0.0354,True
+ TraG,2,3,0.0065,0.0354,True
+ cps2G,2,3,0.0065,0.0354,True
+ endoSS,2,3,0.0065,0.0354,True
+ gh92,2,3,0.0065,0.0354,True
+ sly,2,3,0.0065,0.0354,True
+Spectinomycin,2,4,0.0063,0.0354,True
+Tulathromycin,2,4,0.0063,0.0354,True
+erm(B),2,4,0.0063,0.0354,True
+tet(O),2,3,0.0065,0.0354,True
+ SP1,1,2,0.0066,0.0354,True
+Trimethoprim_Sulphamethoxazole,1,2,0.0066,0.0354,True
+tet(O),2,6,0.0068,0.0364,True
+tet(O),6,9,0.0068,0.0364,True
+ 1910HK,3,6,0.0074,0.0375,True
+ 1910HR,3,6,0.0074,0.0375,True
+ Cps2E,3,6,0.0074,0.0375,True
+ Cps2F,3,6,0.0074,0.0375,True
+ Cps2J,3,6,0.0074,0.0375,True
+ NeuB,3,6,0.0074,0.0375,True
+ Sbp1,3,6,0.0074,0.0375,True
+ atl_2,2,8,0.0072,0.0375,True
+ cps2G,3,6,0.0074,0.0375,True
+ cps2L,3,6,0.0074,0.0375,True
+ endoSS,3,6,0.0074,0.0375,True
+ gh92,3,6,0.0074,0.0375,True
+ sly,3,6,0.0074,0.0375,True
+tet(O),2,7,0.0072,0.0375,True
+ Ssads,4,6,0.0074,0.0376,True
+ SP1,1,6,0.0079,0.0401,True
+ Cps2E,5,9,0.009,0.044,True
+ Cps2F,4,8,0.0088,0.044,True
+ Cps2J,4,8,0.0088,0.044,True
+ RggTR,4,8,0.0088,0.044,True
+ SP1,5,9,0.009,0.044,True
+ Ssads,1,5,0.009,0.044,True
+ Ssads,1,9,0.009,0.044,True
+ atl_2,1,5,0.009,0.044,True
+ atl_2,1,9,0.009,0.044,True
+ cps2G,4,8,0.0088,0.044,True
+ cps2L,5,9,0.009,0.044,True
+ dltA,1,5,0.009,0.044,True
+ dltA,1,9,0.009,0.044,True
+tet(O),5,9,0.009,0.044,True
+ Ssads,5,6,0.0095,0.0459,True
+ Ssads,6,9,0.0095,0.0459,True
+ Cps9E,1,8,0.0101,0.048,True
+ HtpsC,1,8,0.0101,0.048,True
+ NeuB,1,8,0.0101,0.048,True
+ ldeS,1,8,0.0101,0.048,True
+ yzpA,1,8,0.0101,0.048,True
+ant(6)-Ia,2,5,0.01,0.048,True
+ Cps9E,1,7,0.0112,0.0529,False
+ sly,7,8,0.0115,0.0544,False
+ atl_2,7,8,0.0117,0.0551,False
+ Hhly3,6,7,0.0118,0.0552,False
+ NeuB,5,6,0.0119,0.0552,False
+lnu(B),2,5,0.0119,0.0552,False
+lsa(E),2,5,0.0119,0.0552,False
+Spectinomycin,2,6,0.0121,0.0562,False
+ Cps2E,3,4,0.0128,0.0582,False
+ Cps2F,3,4,0.0128,0.0582,False
+ Cps2J,3,4,0.0128,0.0582,False
+ Cps9E,3,4,0.0128,0.0582,False
+ NeuB,3,4,0.0128,0.0582,False
+ RggTR,3,4,0.0128,0.0582,False
+ cps2G,3,4,0.0128,0.0582,False
+ cps2L,3,4,0.0128,0.0582,False
+ Sbp1,2,8,0.0134,0.0607,False
+ 1910HK,5,8,0.014,0.0619,False
+ 1910HR,5,8,0.014,0.0619,False
+ SP1,5,8,0.014,0.0619,False
+ Sbp1,5,8,0.014,0.0619,False
+ Sbp2,5,8,0.014,0.0619,False
+ endoSS,5,8,0.014,0.0619,False
+ gh92,5,8,0.014,0.0619,False
+ sly,5,8,0.014,0.0619,False
+Spectinomycin,2,8,0.0144,0.0636,False
+tet(W),2,8,0.0144,0.0636,False
+lnu(B),5,6,0.0147,0.0642,False
+lsa(E),5,6,0.0147,0.0642,False
+ abpb,1,5,0.0152,0.0665,False
+Spectinomycin,2,9,0.0168,0.0734,False
+ NeuB,3,7,0.0175,0.076,False
+ sly,3,7,0.0175,0.076,False
+ 1910HK,3,5,0.0182,0.0766,False
+ 1910HR,3,5,0.0182,0.0766,False
+ Cps2F,1,8,0.0182,0.0766,False
+ Cps2J,1,8,0.0182,0.0766,False
+ Sbp1,3,5,0.0182,0.0766,False
+ Sbp2,3,5,0.0182,0.0766,False
+ cps2G,1,8,0.0182,0.0766,False
+ endoSS,3,5,0.0182,0.0766,False
+ gh92,3,5,0.0182,0.0766,False
+ sly,3,5,0.0182,0.0766,False
+Trimethoprim_Sulphamethoxazole,1,4,0.0181,0.0766,False
+ Cps2E,2,3,0.0196,0.0815,False
+ Cps9E,2,3,0.0196,0.0815,False
+ NeuB,2,3,0.0196,0.0815,False
+ Sbp1,2,3,0.0196,0.0815,False
+ cps2L,2,3,0.0196,0.0815,False
+ Cps9E,5,8,0.021,0.087,False
+Tulathromycin,4,6,0.0214,0.0884,False
+erm(B),4,6,0.0214,0.0884,False
+ Cps2E,1,3,0.0222,0.0901,False
+ Cps2F,1,3,0.0222,0.0901,False
+ Cps2J,1,3,0.0222,0.0901,False
+ Cps9E,3,6,0.0221,0.0901,False
+ MRP,1,3,0.0222,0.0901,False
+ cps2G,1,3,0.0222,0.0901,False
+ cps2L,1,3,0.0222,0.0901,False
+ atl_2,5,6,0.0223,0.0901,False
+ atl_2,6,9,0.0223,0.0901,False
+Trimethoprim_Sulphamethoxazole,1,7,0.0235,0.0944,False
+erm(B),4,7,0.0238,0.0954,False
+tet(O),4,8,0.0256,0.1027,False
+ NeuB,4,5,0.026,0.1039,False
+ 1910HK,7,8,0.0276,0.1091,False
+ 1910HR,7,8,0.0276,0.1091,False
+ endoSS,7,8,0.0276,0.1091,False
+ gh92,7,8,0.0276,0.1091,False
+ant(6)-Ia,1,2,0.0277,0.1092,False
+ NeuB,5,9,0.0294,0.1144,False
+ SP1,1,5,0.0294,0.1144,False
+Trimethoprim_Sulphamethoxazole,1,5,0.0294,0.1144,False
+Trimethoprim_Sulphamethoxazole,1,9,0.0294,0.1144,False
+lnu(B),1,5,0.0294,0.1144,False
+lsa(E),1,5,0.0294,0.1144,False
+ Cps2E,5,7,0.0323,0.1251,False
+ cps2L,5,7,0.0323,0.1251,False
+ Fhb_1,6,8,0.0325,0.1256,False
+Trimethoprim_Sulphamethoxazole,1,6,0.0329,0.1267,False
+ NeuB,5,7,0.0345,0.1326,False
+ 1910HK,3,7,0.0351,0.1336,False
+ 1910HR,3,7,0.0351,0.1336,False
+ endoSS,3,7,0.0351,0.1336,False
+ gh92,3,7,0.0351,0.1336,False
+ atl_2,4,6,0.0362,0.1374,False
+ Hhly3,2,5,0.0365,0.1375,False
+ SP1,2,9,0.0365,0.1375,False
+tet(M),2,5,0.0365,0.1375,False
+tet(O),2,5,0.0365,0.1375,False
+Spectinomycin,2,7,0.0366,0.1376,False
+ Tran,6,8,0.0374,0.1402,False
+ Cps9E,5,7,0.0375,0.1403,False
+ Hhly3,4,9,0.0379,0.1412,False
+tet(M),4,9,0.0379,0.1412,False
+ atl_2,3,4,0.0385,0.1428,False
+Tiamulin,2,7,0.0391,0.1449,False
+ NeuB,2,5,0.0403,0.149,False
+Tiamulin,6,7,0.0411,0.1514,False
+ Cps2E,5,6,0.0415,0.1524,False
+ cps2L,5,6,0.0415,0.1524,False
+ Tran,3,6,0.0441,0.1616,False
+ Fhb_1,2,7,0.0445,0.1626,False
+ SP1,4,7,0.0504,0.1837,False
+ Cps2F,5,8,0.0517,0.1871,False
+ Cps2J,5,8,0.0517,0.1871,False
+ Tran,5,8,0.0517,0.1871,False
+ cps2G,5,8,0.0517,0.1871,False
+Oxytetracycline,1,6,0.052,0.1875,False
+ RggTR,4,6,0.0527,0.1896,False
+tet(M),4,6,0.0538,0.1934,False
+ Cps2F,3,5,0.0545,0.1942,False
+ Cps2J,3,5,0.0545,0.1942,False
+ Tran,3,5,0.0545,0.1942,False
+ cps2G,3,5,0.0545,0.1942,False
+ant(6)-Ia,2,4,0.0564,0.1999,False
+tet(O),2,4,0.0564,0.1999,False
+ ABC_2,1,8,0.0606,0.2134,False
+ SsPep,1,8,0.0606,0.2134,False
+ abpb,1,8,0.0606,0.2134,False
+ SP1,4,6,0.0635,0.223,False
+ atl_2,1,2,0.0649,0.227,False
+erm(B),4,5,0.0648,0.227,False
+ Cps9E,1,3,0.0667,0.2298,False
+ HtpsC,1,3,0.0667,0.2298,False
+ NeuB,1,3,0.0667,0.2298,False
+ atl_2,3,8,0.0667,0.2298,False
+ ldeS,1,3,0.0667,0.2298,False
+ yzpA,1,3,0.0667,0.2298,False
+erm(B),1,8,0.0667,0.2298,False
+ Cps2E,5,8,0.0699,0.239,False
+ cps2L,5,8,0.0699,0.239,False
+tet(O),1,4,0.0698,0.239,False
+tet(O),5,8,0.0699,0.239,False
+ Cps2E,4,5,0.0737,0.2508,False
+ cps2L,4,5,0.0737,0.2508,False
+Tulathromycin,1,4,0.0739,0.2512,False
+ Fhb_1,6,7,0.0745,0.2524,False
+erm(B),3,4,0.0769,0.2602,False
+lnu(B),5,7,0.0781,0.2632,False
+lsa(E),5,7,0.0781,0.2632,False
+ Ssads,1,8,0.0808,0.2711,False
+ dltA,1,8,0.0808,0.2711,False
+tet(O),6,8,0.0867,0.2903,False
+ atl_2,1,7,0.087,0.2903,False
+Spectinomycin,2,5,0.0872,0.2903,False
+Tulathromycin,2,9,0.0872,0.2903,False
+ Hhly3,7,8,0.0902,0.2978,False
+ Ssads,7,8,0.0902,0.2978,False
+tet(M),7,8,0.0902,0.2978,False
+tet(O),7,8,0.0902,0.2978,False
+Tiamulin,1,2,0.0909,0.2995,False
+ Sbp1,1,7,0.0933,0.3056,False
+ SntA,1,7,0.0933,0.3056,False
+ant(6)-Ib,1,7,0.0933,0.3056,False
+ Hhly3,4,6,0.0946,0.309,False
+ Sbp2,2,3,0.098,0.3185,False
+Spectinomycin,2,3,0.098,0.3185,False
+tet(W),2,3,0.098,0.3185,False
+ Hhly3,1,2,0.1014,0.3219,False
+ Sbp2,2,8,0.1011,0.3219,False
+ SntA,1,2,0.1014,0.3219,False
+ ldeS,2,6,0.1012,0.3219,False
+Penicillin,1,2,0.1014,0.3219,False
+SAT-4,2,6,0.1012,0.3219,False
+Tulathromycin,2,8,0.1011,0.3219,False
+ant(6)-Ib,1,2,0.1014,0.3219,False
+erm(47),2,6,0.1012,0.3219,False
+erm(B),2,8,0.1011,0.3219,False
+tet(M),1,2,0.1014,0.3219,False
+vga(F),1,2,0.1014,0.3219,False
+ Ssads,6,8,0.1032,0.3243,False
+ Tran,2,7,0.1026,0.3243,False
+ atl_2,6,8,0.1032,0.3243,False
+Oxytetracycline,1,4,0.1032,0.3243,False
+Tiamulin,1,6,0.1028,0.3243,False
+ NeuB,5,8,0.1049,0.3271,False
+Doxycycline,5,8,0.1049,0.3271,False
+lnu(B),5,8,0.1049,0.3271,False
+lsa(E),5,8,0.1049,0.3271,False
+ SP1,3,7,0.1053,0.3276,False
+ Cps9E,3,5,0.1091,0.3389,False
+ SntA,1,6,0.1107,0.3412,False
+Penicillin,1,6,0.1107,0.3412,False
+ant(6)-Ib,1,6,0.1107,0.3412,False
+vga(F),1,6,0.1107,0.3412,False
+ SP1,2,3,0.1111,0.3419,False
+Tulathromycin,4,7,0.115,0.3531,False
+ Cps2E,2,5,0.1162,0.3556,False
+ cps2L,2,5,0.1162,0.3556,False
+ SP1,3,6,0.1176,0.3593,False
+SAT-4,2,5,0.12,0.3618,False
+ant(6)-Ia,2,9,0.12,0.3618,False
+aph(3')-III,2,5,0.12,0.3618,False
+erm(47),2,5,0.12,0.3618,False
+spw,2,5,0.12,0.3618,False
+spw,2,9,0.12,0.3618,False
+tet(T),2,5,0.12,0.3618,False
+ Fhb_1,4,7,0.1247,0.3754,False
+ Cps9E,7,9,0.1285,0.3833,False
+ Fhb_1,5,7,0.1285,0.3833,False
+ Fhb_1,7,9,0.1285,0.3833,False
+Oxytetracycline,6,7,0.1283,0.3833,False
+tet(O),3,4,0.1282,0.3833,False
+Spectinomycin,1,7,0.1292,0.3845,False
+aph(3')-III,5,6,0.1304,0.3861,False
+tet(M),5,6,0.1304,0.3861,False
+tet(T),5,6,0.1304,0.3861,False
+Doxycycline,5,9,0.1312,0.3863,False
+ant(6)-Ia,7,8,0.1312,0.3863,False
+erm(B),1,9,0.1312,0.3863,False
+ Tran,4,7,0.1324,0.389,False
+ ABC_2,1,3,0.1333,0.389,False
+ RggTR,1,3,0.1333,0.389,False
+ SsPep,1,3,0.1333,0.389,False
+ abpb,1,3,0.1333,0.389,False
+ atl_2,2,6,0.1351,0.3934,False
+ Fhb_1,1,7,0.1399,0.4068,False
+ TraG,4,7,0.1455,0.4223,False
+tet(O),1,5,0.1534,0.4445,False
+ Fhb_1,3,6,0.1544,0.4458,False
+ RggTR,3,6,0.1544,0.4458,False
+spw,2,4,0.1567,0.4516,False
+lnu(B),4,5,0.1597,0.4585,False
+lsa(E),4,5,0.1597,0.4585,False
+ 1910HK,1,4,0.1637,0.4621,False
+ 1910HR,1,4,0.1637,0.4621,False
+ RggTR,1,4,0.1637,0.4621,False
+ Sbp1,1,4,0.1637,0.4621,False
+ SntA,1,4,0.1637,0.4621,False
+ endoSS,1,4,0.1637,0.4621,False
+ gh92,1,4,0.1637,0.4621,False
+Penicillin,1,4,0.1637,0.4621,False
+ant(6)-Ib,1,4,0.1637,0.4621,False
+vga(F),1,4,0.1637,0.4621,False
+ TraG,4,6,0.1692,0.4768,False
+ SP1,4,9,0.1748,0.4916,False
+Doxycycline,6,9,0.1782,0.4994,False
+Oxytetracycline,6,9,0.1782,0.4994,False
+ Cps2E,3,5,0.1818,0.5061,False
+ SP1,3,5,0.1818,0.5061,False
+ cps2L,3,5,0.1818,0.5061,False
+tet(O),3,5,0.1818,0.5061,False
+ Cps9E,4,5,0.1895,0.517,False
+ Fhb_2,7,8,0.1905,0.517,False
+ Fhbp,7,8,0.1905,0.517,False
+ PnuC,7,8,0.1905,0.517,False
+ RggTR,7,8,0.1905,0.517,False
+ Sbp1,7,8,0.1905,0.517,False
+ Sbp2,7,8,0.1905,0.517,False
+ Zmp,7,8,0.1905,0.517,False
+ cbp40omp40,7,8,0.1905,0.517,False
+ hylA,7,8,0.1905,0.517,False
+ rfeA,7,8,0.1905,0.517,False
+SAT-4,4,5,0.1895,0.517,False
+aph(3')-III,4,5,0.1895,0.517,False
+erm(47),4,5,0.1895,0.517,False
+tet(T),4,5,0.1895,0.517,False
+tet(O),1,6,0.193,0.5231,False
+ 1910HK,1,9,0.2059,0.5234,False
+ 1910HR,1,9,0.2059,0.5234,False
+ Cps2E,1,5,0.2059,0.5234,False
+ Fhb_2,2,8,0.2,0.5234,False
+ Fhbp,2,8,0.2,0.5234,False
+ Hhly3,1,7,0.2016,0.5234,False
+ Hhly3,1,9,0.2059,0.5234,False
+ Hhly3,5,9,0.2059,0.5234,False
+ PnuC,2,8,0.2,0.5234,False
+ RggTR,2,8,0.2,0.5234,False
+ SP1,2,8,0.2,0.5234,False
+ Sbp1,1,9,0.2059,0.5234,False
+ SntA,1,5,0.2059,0.5234,False
+ SntA,1,9,0.2059,0.5234,False
+ Tran,2,8,0.2,0.5234,False
+ Zmp,2,8,0.2,0.5234,False
+ cbp40omp40,2,8,0.2,0.5234,False
+ cps2L,1,5,0.2059,0.5234,False
+ endoSS,1,9,0.2059,0.5234,False
+ gh92,1,9,0.2059,0.5234,False
+ hylA,2,8,0.2,0.5234,False
+ rfeA,2,8,0.2,0.5234,False
+Doxycycline,5,7,0.1937,0.5234,False
+Oxytetracycline,1,3,0.2,0.5234,False
+Penicillin,1,5,0.2059,0.5234,False
+Penicillin,1,9,0.2059,0.5234,False
+Spectinomycin,1,5,0.2059,0.5234,False
+Tulathromycin,2,5,0.1998,0.5234,False
+Tulathromycin,6,9,0.206,0.5234,False
+ant(6)-Ib,1,5,0.2059,0.5234,False
+ant(6)-Ib,1,9,0.2059,0.5234,False
+erm(B),2,9,0.1998,0.5234,False
+tet(M),1,7,0.2016,0.5234,False
+tet(M),1,9,0.2059,0.5234,False
+tet(M),5,9,0.2059,0.5234,False
+tet(O),1,7,0.2016,0.5234,False
+tet(O),1,9,0.2059,0.5234,False
+tet(O),3,6,0.2059,0.5234,False
+vga(F),1,5,0.2059,0.5234,False
+vga(F),1,9,0.2059,0.5234,False
+ Fhbp,6,8,0.2105,0.5268,False
+ Hhly3,3,7,0.2105,0.5268,False
+ PnuC,6,8,0.2105,0.5268,False
+ Ssads,3,7,0.2105,0.5268,False
+ Zmp,6,8,0.2105,0.5268,False
+ hylA,6,8,0.2105,0.5268,False
+ rfeA,6,8,0.2105,0.5268,False
+Trimethoprim_Sulphamethoxazole,1,8,0.2081,0.5268,False
+tet(M),3,7,0.2105,0.5268,False
+tet(O),3,7,0.2105,0.5268,False
+ Fhb_2,6,7,0.2117,0.5273,False
+ Sbp2,6,7,0.2117,0.5273,False
+aad9,6,7,0.2117,0.5273,False
+ SP1,4,5,0.2184,0.5432,False
+ RggTR,1,8,0.2222,0.5518,False
+ Fhb_2,2,6,0.2258,0.5565,False
+ Hhly3,2,6,0.2258,0.5565,False
+ MRP,2,6,0.2258,0.5565,False
+aad9,2,6,0.2258,0.5565,False
+spw,2,6,0.2258,0.5565,False
+ant(6)-Ia,5,8,0.228,0.561,False
+ Hhly3,4,8,0.2308,0.5658,False
+Penicillin,1,7,0.2313,0.5658,False
+tet(M),4,8,0.2308,0.5658,False
+vga(F),1,7,0.2313,0.5658,False
+ SP1,4,8,0.2352,0.5744,False
+ ldeS,4,6,0.2385,0.5798,False
+SAT-4,4,6,0.2385,0.5798,False
+erm(47),4,6,0.2385,0.5798,False
+Doxycycline,6,8,0.2451,0.5933,False
+Oxytetracycline,6,8,0.2451,0.5933,False
+ant(6)-Ia,6,8,0.2451,0.5933,False
+Tiamulin,4,7,0.2495,0.6031,False
+ 1910HK,4,8,0.2667,0.6143,False
+ 1910HR,4,8,0.2667,0.6143,False
+ Fhb_2,4,8,0.2667,0.6143,False
+ Fhbp,4,8,0.2667,0.6143,False
+ PnuC,4,8,0.2667,0.6143,False
+ RggTR,6,8,0.2621,0.6143,False
+ Sbp1,4,8,0.2667,0.6143,False
+ Sbp2,2,5,0.2601,0.6143,False
+ Sbp2,4,8,0.2667,0.6143,False
+ Tran,4,8,0.2667,0.6143,False
+ Tran,7,9,0.2631,0.6143,False
+ Zmp,4,8,0.2667,0.6143,False
+ atl_2,1,4,0.2621,0.6143,False
+ atl_2,5,7,0.2631,0.6143,False
+ atl_2,6,7,0.2662,0.6143,False
+ atl_2,7,9,0.2631,0.6143,False
+ cbp40omp40,4,8,0.2667,0.6143,False
+ endoSS,4,8,0.2667,0.6143,False
+ gh92,4,8,0.2667,0.6143,False
+ hylA,4,8,0.2667,0.6143,False
+ ldeS,5,6,0.2663,0.6143,False
+ ldeS,6,9,0.2663,0.6143,False
+ rfeA,4,8,0.2667,0.6143,False
+ sly,4,8,0.2667,0.6143,False
+Doxycycline,6,7,0.2662,0.6143,False
+Oxytetracycline,1,2,0.2622,0.6143,False
+SAT-4,5,7,0.2677,0.6143,False
+SAT-4,6,9,0.2663,0.6143,False
+Spectinomycin,1,6,0.2569,0.6143,False
+Tiamulin,7,8,0.255,0.6143,False
+Tulathromycin,6,8,0.2621,0.6143,False
+aph(3')-III,5,7,0.2677,0.6143,False
+erm(47),6,9,0.2663,0.6143,False
+erm(B),5,8,0.2657,0.6143,False
+erm(B),6,8,0.2621,0.6143,False
+tet(T),5,7,0.2677,0.6143,False
+ Tran,1,7,0.2689,0.6155,False
+tet(M),1,6,0.2688,0.6155,False
+erm(B),7,8,0.2722,0.622,False
+Oxytetracycline,2,6,0.2734,0.6239,False
+ atl_2,2,5,0.28,0.6372,False
+ atl_2,2,9,0.28,0.6372,False
+Spectinomycin,7,8,0.2807,0.6379,False
+Tulathromycin,2,7,0.2818,0.6394,False
+ NeuB,1,5,0.2941,0.6666,False
+ 1910HK,8,9,0.3077,0.6722,False
+ 1910HR,8,9,0.3077,0.6722,False
+ Cps2F,8,9,0.3077,0.6722,False
+ Cps2J,8,9,0.3077,0.6722,False
+ Fhb_2,5,8,0.3077,0.6722,False
+ Fhb_2,8,9,0.3077,0.6722,False
+ Fhbp,5,8,0.3077,0.6722,False
+ Fhbp,8,9,0.3077,0.6722,False
+ PnuC,5,8,0.3077,0.6722,False
+ PnuC,8,9,0.3077,0.6722,False
+ RggTR,5,8,0.3077,0.6722,False
+ RggTR,8,9,0.3077,0.6722,False
+ Sbp1,8,9,0.3077,0.6722,False
+ Sbp2,8,9,0.3077,0.6722,False
+ Tran,8,9,0.3077,0.6722,False
+ Zmp,5,8,0.3077,0.6722,False
+ Zmp,8,9,0.3077,0.6722,False
+ cbp40omp40,5,8,0.3077,0.6722,False
+ cbp40omp40,8,9,0.3077,0.6722,False
+ cps2G,8,9,0.3077,0.6722,False
+ endoSS,8,9,0.3077,0.6722,False
+ gh92,8,9,0.3077,0.6722,False
+ hylA,5,8,0.3077,0.6722,False
+ hylA,8,9,0.3077,0.6722,False
+ rfeA,5,8,0.3077,0.6722,False
+ rfeA,8,9,0.3077,0.6722,False
+ sly,8,9,0.3077,0.6722,False
+ GrpE,1,7,0.32,0.688,False
+ TraG,1,7,0.32,0.688,False
+ Zmp,1,7,0.32,0.688,False
+ ldeS,6,7,0.3192,0.688,False
+ rfeA,1,7,0.32,0.688,False
+Doxycycline,4,9,0.3189,0.688,False
+Oxytetracycline,4,9,0.3189,0.688,False
+SAT-4,6,7,0.3192,0.688,False
+optrA,1,7,0.32,0.688,False
+tet(40),1,7,0.32,0.688,False
+tet(44),1,7,0.32,0.688,False
+tet(L),1,7,0.32,0.688,False
+ Fhb_2,1,8,0.3333,0.6938,False
+ Fhbp,1,8,0.3333,0.6938,False
+ GrpE,1,2,0.3333,0.6938,False
+ Hhly3,5,6,0.3256,0.6938,False
+ PnuC,1,8,0.3333,0.6938,False
+ Sbp2,1,8,0.3333,0.6938,False
+ SspB,1,2,0.3333,0.6938,False
+ Tran,1,8,0.3333,0.6938,False
+ Zmp,1,2,0.3333,0.6938,False
+ cbp40omp40,1,8,0.3333,0.6938,False
+ hylA,1,8,0.3333,0.6938,False
+ rfeA,1,2,0.3333,0.6938,False
+ sly,1,8,0.3333,0.6938,False
+ ssnA,1,2,0.3333,0.6938,False
+Ceftiofur,1,2,0.3333,0.6938,False
+Doxycycline,3,8,0.3333,0.6938,False
+Enrofloxacin,1,2,0.3333,0.6938,False
+Oxytetracycline,3,8,0.3333,0.6938,False
+erm(47),1,2,0.3333,0.6938,False
+optrA,1,2,0.3333,0.6938,False
+spw,1,2,0.3333,0.6938,False
+tet(40),1,2,0.3333,0.6938,False
+tet(44),1,2,0.3333,0.6938,False
+tet(L),1,2,0.3333,0.6938,False
+tet(O/W/32/O),1,2,0.3333,0.6938,False
+Doxycycline,1,5,0.3348,0.6943,False
+lnu(B),5,9,0.3348,0.6943,False
+lsa(E),5,9,0.3348,0.6943,False
+Tulathromycin,4,5,0.3359,0.6948,False
+erm(B),4,9,0.3359,0.6948,False
+ Cps2F,5,7,0.3462,0.6999,False
+ Cps2J,5,7,0.3462,0.6999,False
+ GrpE,1,6,0.3478,0.6999,False
+ NeuB,1,6,0.3478,0.6999,False
+ Ssa,1,6,0.3478,0.6999,False
+ SspB,1,6,0.3478,0.6999,False
+ TraG,1,6,0.3478,0.6999,False
+ Zmp,1,6,0.3478,0.6999,False
+ cps2G,5,7,0.3462,0.6999,False
+ rfeA,1,6,0.3478,0.6999,False
+ ssnA,1,6,0.3478,0.6999,False
+Ceftiofur,1,6,0.3478,0.6999,False
+Doxycycline,3,9,0.3455,0.6999,False
+Enrofloxacin,1,6,0.3478,0.6999,False
+Oxytetracycline,3,9,0.3455,0.6999,False
+Tulathromycin,1,9,0.3469,0.6999,False
+lnu(C),5,7,0.3462,0.6999,False
+optrA,1,6,0.3478,0.6999,False
+tet(40),1,6,0.3478,0.6999,False
+tet(44),1,6,0.3478,0.6999,False
+tet(L),1,6,0.3478,0.6999,False
+tet(O/W/32/O),1,6,0.3478,0.6999,False
+ Cps2F,2,5,0.36,0.7209,False
+ Cps2J,2,5,0.36,0.7209,False
+ cps2G,2,5,0.36,0.7209,False
+lnu(C),2,5,0.36,0.7209,False
+erm(B),1,7,0.3623,0.7246,False
+Doxycycline,2,9,0.3644,0.728,False
+erm(B),1,6,0.369,0.7361,False
+ Cps2F,5,6,0.375,0.7436,False
+ Cps2J,5,6,0.375,0.7436,False
+ abpb,5,6,0.375,0.7436,False
+ cps2G,5,6,0.375,0.7436,False
+lnu(C),5,6,0.375,0.7436,False
+ SP1,1,4,0.3765,0.7457,False
+Oxytetracycline,4,7,0.3809,0.7535,False
+ cbp40omp40,6,8,0.386,0.7617,False
+Oxytetracycline,3,7,0.386,0.7617,False
+Oxytetracycline,5,6,0.3891,0.7659,False
+ant(6)-Ia,6,9,0.3891,0.7659,False
+Doxycycline,2,5,0.3973,0.7813,False
+ant(6)-Ia,7,9,0.3989,0.7834,False
+Doxycycline,1,6,0.3998,0.7837,False
+erm(B),3,8,0.4,0.7837,False
+Tulathromycin,5,6,0.4028,0.7874,False
+erm(B),6,9,0.4028,0.7874,False
+Enrofloxacin,2,4,0.4074,0.7953,False
+ Hhly3,5,7,0.411,0.8004,False
+tet(M),5,7,0.411,0.8004,False
+ Cps9E,1,4,0.4211,0.8019,False
+ GrpE,1,4,0.4211,0.8019,False
+ NeuB,1,4,0.4211,0.8019,False
+ Ssa,1,4,0.4211,0.8019,False
+ SspB,1,4,0.4211,0.8019,False
+ Zmp,1,4,0.4211,0.8019,False
+ rfeA,1,4,0.4211,0.8019,False
+ ssnA,1,4,0.4211,0.8019,False
+Ceftiofur,1,4,0.4211,0.8019,False
+Spectinomycin,4,7,0.4188,0.8019,False
+Tiamulin,5,7,0.4177,0.8019,False
+Tiamulin,7,9,0.4177,0.8019,False
+erm(47),1,4,0.4211,0.8019,False
+erm(B),7,9,0.4185,0.8019,False
+optrA,1,4,0.4211,0.8019,False
+tet(40),1,4,0.4211,0.8019,False
+tet(44),1,4,0.4211,0.8019,False
+tet(L),1,4,0.4211,0.8019,False
+tet(O/W/32/O),1,4,0.4211,0.8019,False
+Enrofloxacin,4,6,0.4231,0.8038,False
+Tulathromycin,3,4,0.4231,0.8038,False
+ant(6)-Ia,4,6,0.4279,0.812,False
+Tulathromycin,7,9,0.4291,0.8134,False
+ant(6)-Ia,4,7,0.4349,0.8234,False
+ Cps2F,4,5,0.45,0.8358,False
+ Cps2J,4,5,0.45,0.8358,False
+ GrpE,1,5,0.4706,0.8358,False
+ GrpE,1,9,0.4706,0.8358,False
+ NeuB,3,5,0.4545,0.8358,False
+ Ssa,1,5,0.4706,0.8358,False
+ Ssa,1,9,0.4706,0.8358,False
+ Ssads,1,3,0.4444,0.8358,False
+ Ssads,3,6,0.4706,0.8358,False
+ SspB,1,5,0.4706,0.8358,False
+ SspB,1,9,0.4706,0.8358,False
+ TraG,1,5,0.4706,0.8358,False
+ TraG,1,9,0.4706,0.8358,False
+ Zmp,1,5,0.4706,0.8358,False
+ Zmp,1,9,0.4706,0.8358,False
+ abpb,4,5,0.45,0.8358,False
+ atl_2,1,3,0.4444,0.8358,False
+ cbp40omp40,6,7,0.4687,0.8358,False
+ cps2G,4,5,0.45,0.8358,False
+ dltA,1,3,0.4444,0.8358,False
+ rfeA,1,5,0.4706,0.8358,False
+ rfeA,1,9,0.4706,0.8358,False
+ ssnA,1,5,0.4706,0.8358,False
+ ssnA,1,9,0.4706,0.8358,False
+Ceftiofur,1,5,0.4706,0.8358,False
+Ceftiofur,1,9,0.4706,0.8358,False
+Doxycycline,3,7,0.4678,0.8358,False
+Enrofloxacin,1,5,0.4706,0.8358,False
+Enrofloxacin,1,9,0.4706,0.8358,False
+Gentamicin,6,7,0.4687,0.8358,False
+Oxytetracycline,1,5,0.4706,0.8358,False
+SAT-4,1,5,0.4706,0.8358,False
+SAT-4,5,9,0.4706,0.8358,False
+Spectinomycin,1,9,0.4706,0.8358,False
+Trimethoprim_Sulphamethoxazole,1,3,0.4667,0.8358,False
+aph(3')-III,1,5,0.4706,0.8358,False
+aph(3')-III,5,9,0.4706,0.8358,False
+erm(47),1,9,0.4706,0.8358,False
+erm(47),5,9,0.4706,0.8358,False
+erm(B),3,9,0.4545,0.8358,False
+lnu(B),1,9,0.4706,0.8358,False
+lnu(B),3,5,0.4545,0.8358,False
+lnu(C),4,5,0.45,0.8358,False
+lsa(E),1,9,0.4706,0.8358,False
+lsa(E),3,5,0.4545,0.8358,False
+optrA,1,5,0.4706,0.8358,False
+optrA,1,9,0.4706,0.8358,False
+tet(40),1,5,0.4706,0.8358,False
+tet(40),1,9,0.4706,0.8358,False
+tet(44),1,5,0.4706,0.8358,False
+tet(44),1,9,0.4706,0.8358,False
+tet(L),1,5,0.4706,0.8358,False
+tet(L),1,9,0.4706,0.8358,False
+tet(O/W/32/O),1,5,0.4706,0.8358,False
+tet(O/W/32/O),1,9,0.4706,0.8358,False
+tet(T),1,5,0.4706,0.8358,False
+tet(T),5,9,0.4706,0.8358,False
+ 1910HK,2,7,0.4848,0.8371,False
+ 1910HK,6,7,0.4859,0.8371,False
+ 1910HR,2,7,0.4848,0.8371,False
+ 1910HR,6,7,0.4859,0.8371,False
+ Cps2E,2,7,0.4848,0.8371,False
+ Fhb_2,4,6,0.4923,0.8371,False
+ Hhly3,3,4,0.4872,0.8371,False
+ MRP,4,6,0.4923,0.8371,False
+ Sbp2,4,6,0.4923,0.8371,False
+ TraG,4,5,0.4789,0.8371,False
+ TraG,4,9,0.4789,0.8371,False
+ atl_2,1,8,0.4909,0.8371,False
+ atl_2,3,6,0.4853,0.8371,False
+ cbp40omp40,2,6,0.4839,0.8371,False
+ cps2L,2,7,0.4848,0.8371,False
+ endoSS,2,7,0.4848,0.8371,False
+ endoSS,6,7,0.4859,0.8371,False
+ gh92,2,7,0.4848,0.8371,False
+ gh92,6,7,0.4859,0.8371,False
+ yzpA,2,6,0.4839,0.8371,False
+Doxycycline,2,6,0.4725,0.8371,False
+Gentamicin,2,6,0.4839,0.8371,False
+Oxytetracycline,2,3,0.4902,0.8371,False
+Oxytetracycline,3,5,0.4909,0.8371,False
+Spectinomycin,1,4,0.4854,0.8371,False
+Tiamulin,1,8,0.4909,0.8371,False
+Trimethoprim_Sulphamethoxazole,2,6,0.4839,0.8371,False
+Tulathromycin,2,3,0.4902,0.8371,False
+Tulathromycin,6,7,0.4905,0.8371,False
+aad9,4,6,0.4923,0.8371,False
+ant(6)-Ia,1,8,0.4909,0.8371,False
+ant(6)-Ia,3,5,0.4909,0.8371,False
+ant(6)-Ia,3,6,0.4853,0.8371,False
+ant(6)-Ia,3,7,0.4854,0.8371,False
+erm(47),2,7,0.4848,0.8371,False
+lnu(B),1,4,0.4854,0.8371,False
+lsa(E),1,4,0.4854,0.8371,False
+spw,2,7,0.4848,0.8371,False
+tet(M),2,6,0.4839,0.8371,False
+tet(M),3,4,0.4872,0.8371,False
+tet(W),4,6,0.4923,0.8371,False
+ Hhly3,5,8,0.4965,0.8416,False
+Spectinomycin,5,8,0.4965,0.8416,False
+tet(M),5,8,0.4965,0.8416,False
+ Fhb_2,5,6,0.5109,0.855,False
+ Fhb_2,6,9,0.5109,0.855,False
+ Hhly3,1,8,0.5152,0.855,False
+ Hhly3,6,9,0.5109,0.855,False
+ MRP,5,6,0.5109,0.855,False
+ MRP,6,9,0.5109,0.855,False
+ Sbp2,6,9,0.5109,0.855,False
+ SntA,1,8,0.5152,0.855,False
+Doxycycline,1,8,0.5152,0.855,False
+Doxycycline,4,8,0.5165,0.855,False
+Oxytetracycline,4,8,0.5165,0.855,False
+Penicillin,1,8,0.5152,0.855,False
+Tiamulin,3,7,0.5088,0.855,False
+aad9,5,6,0.5109,0.855,False
+aad9,6,9,0.5109,0.855,False
+ant(6)-Ia,4,8,0.5165,0.855,False
+ant(6)-Ib,1,8,0.5152,0.855,False
+erm(47),4,7,0.5053,0.855,False
+tet(M),1,8,0.5152,0.855,False
+tet(O),1,8,0.5152,0.855,False
+tet(W),5,6,0.5109,0.855,False
+tet(W),6,9,0.5109,0.855,False
+vga(F),1,8,0.5152,0.855,False
+ 1910HK,5,7,0.5292,0.8574,False
+ 1910HR,5,7,0.5292,0.8574,False
+ Cps9E,2,5,0.5304,0.8574,False
+ Cps9E,5,6,0.5331,0.8574,False
+ Cps9E,7,8,0.5322,0.8574,False
+ Fhb_1,7,8,0.5322,0.8574,False
+ Fhb_2,1,6,0.5257,0.8574,False
+ Fhb_2,6,8,0.5304,0.8574,False
+ Sbp2,1,6,0.5257,0.8574,False
+ Sbp2,6,8,0.5304,0.8574,False
+ endoSS,5,7,0.5292,0.8574,False
+ gh92,5,7,0.5292,0.8574,False
+Doxycycline,2,8,0.5304,0.8574,False
+Oxytetracycline,1,7,0.527,0.8574,False
+SAT-4,1,6,0.5257,0.8574,False
+Spectinomycin,6,8,0.5304,0.8574,False
+Tiamulin,2,5,0.5304,0.8574,False
+Tiamulin,2,9,0.5304,0.8574,False
+Tiamulin,5,6,0.5331,0.8574,False
+Tiamulin,6,9,0.5331,0.8574,False
+aad9,1,6,0.5257,0.8574,False
+erm(47),7,9,0.5292,0.8574,False
+lnu(B),1,7,0.527,0.8574,False
+lnu(B),2,9,0.5304,0.8574,False
+lnu(B),6,9,0.5331,0.8574,False
+lsa(E),1,7,0.527,0.8574,False
+lsa(E),2,9,0.5304,0.8574,False
+lsa(E),6,9,0.5331,0.8574,False
+tet(W),1,6,0.5257,0.8574,False
+Oxytetracycline,2,8,0.5377,0.8639,False
+Doxycycline,7,8,0.5455,0.8748,False
+Tulathromycin,1,8,0.5455,0.8748,False
+Tiamulin,2,4,0.5487,0.8773,False
+lnu(B),2,4,0.5487,0.8773,False
+lsa(E),2,4,0.5487,0.8773,False
+Tiamulin,4,6,0.5558,0.886,False
+lnu(B),4,6,0.5558,0.886,False
+lsa(E),4,6,0.5558,0.886,False
+ SP1,1,8,0.5758,0.9163,False
+Doxycycline,1,9,0.5765,0.9163,False
+erm(B),1,5,0.5765,0.9163,False
+Tulathromycin,7,8,0.5865,0.9313,False
+ Hhly3,1,6,0.5889,0.9325,False
+ MRP,6,7,0.5887,0.9325,False
+erm(47),5,7,0.5906,0.9325,False
+spw,5,7,0.5906,0.9325,False
+spw,7,9,0.5906,0.9325,False
+tet(W),6,7,0.5887,0.9325,False
+Tiamulin,1,4,0.6027,0.9472,False
+lnu(B),2,7,0.6012,0.9472,False
+lnu(B),6,7,0.6029,0.9472,False
+lsa(E),2,7,0.6012,0.9472,False
+lsa(E),6,7,0.6029,0.9472,False
+spw,5,6,0.6146,0.9638,False
+spw,6,9,0.6146,0.9638,False
+Spectinomycin,4,5,0.6169,0.9655,False
+Tulathromycin,4,9,0.6169,0.9655,False
+Tiamulin,1,5,0.6199,0.9665,False
+Tiamulin,1,9,0.6199,0.9665,False
+ant(6)-Ia,1,9,0.6199,0.9665,False
+ant(6)-Ia,5,9,0.6199,0.9665,False
+Oxytetracycline,2,9,0.6206,0.9666,False
+Doxycycline,7,9,0.6279,0.9771,False
+erm(B),1,2,0.6311,0.9812,False
+ Hhly3,1,4,0.6332,0.9826,False
+tet(M),1,4,0.6332,0.9826,False
+ SP1,1,9,0.6372,0.9859,False
+Tulathromycin,1,5,0.6372,0.9859,False
+erm(B),5,9,0.6372,0.9859,False
+Oxytetracycline,4,5,0.6424,0.9922,False
+ant(6)-Ia,4,5,0.6424,0.9922,False
+erm(47),6,7,0.6454,0.9959,False
+Tulathromycin,1,2,0.6466,0.9968,False
+ 1910HK,1,3,1.0,1.0,False
+ 1910HK,1,8,1.0,1.0,False
+ 1910HK,3,8,1.0,1.0,False
+ 1910HR,1,3,1.0,1.0,False
+ 1910HR,1,8,1.0,1.0,False
+ 1910HR,3,8,1.0,1.0,False
+ Cps2E,1,2,1.0,1.0,False
+ Cps2E,2,4,1.0,1.0,False
+ Cps2E,2,6,1.0,1.0,False
+ Cps2F,1,5,1.0,1.0,False
+ Cps2F,3,8,1.0,1.0,False
+ Cps2J,1,5,1.0,1.0,False
+ Cps2J,3,8,1.0,1.0,False
+ Cps9E,1,2,1.0,1.0,False
+ Cps9E,1,5,1.0,1.0,False
+ Cps9E,1,6,1.0,1.0,False
+ Cps9E,2,4,1.0,1.0,False
+ Cps9E,2,6,1.0,1.0,False
+ Cps9E,3,7,1.0,1.0,False
+ Cps9E,4,6,1.0,1.0,False
+ Fhb_1,3,7,1.0,1.0,False
+ Fhb_2,3,6,1.0,1.0,False
+ Fhb_2,3,8,1.0,1.0,False
+ Fhbp,3,8,1.0,1.0,False
+ GrpE,1,3,1.0,1.0,False
+ GrpE,1,8,1.0,1.0,False
+ HP1538,1,7,1.0,1.0,False
+ HP1538,2,7,1.0,1.0,False
+ HP1538,3,7,1.0,1.0,False
+ HP1538,4,7,1.0,1.0,False
+ HP1538,5,7,1.0,1.0,False
+ HP1538,6,7,1.0,1.0,False
+ HP1538,7,8,1.0,1.0,False
+ HP1538,7,9,1.0,1.0,False
+ Hhly3,1,3,1.0,1.0,False
+ Hhly3,1,5,1.0,1.0,False
+ Hhly3,3,5,1.0,1.0,False
+ Hhly3,3,6,1.0,1.0,False
+ Hhly3,4,5,0.6699,1.0,False
+ Hhly3,4,7,0.7,1.0,False
+ Hhly3,6,8,1.0,1.0,False
+ HtpsC,2,7,1.0,1.0,False
+ HtpsC,3,7,1.0,1.0,False
+ HtpsC,4,7,1.0,1.0,False
+ HtpsC,5,7,1.0,1.0,False
+ HtpsC,6,7,1.0,1.0,False
+ HtpsC,7,8,1.0,1.0,False
+ HtpsC,7,9,1.0,1.0,False
+ MRP,2,7,1.0,1.0,False
+ MRP,3,6,1.0,1.0,False
+ MRP,3,7,1.0,1.0,False
+ MRP,4,7,1.0,1.0,False
+ MRP,5,7,1.0,1.0,False
+ MRP,6,8,1.0,1.0,False
+ MRP,7,8,1.0,1.0,False
+ MRP,7,9,1.0,1.0,False
+ NeuB,1,2,1.0,1.0,False
+ NeuB,1,7,1.0,1.0,False
+ NeuB,2,4,1.0,1.0,False
+ NeuB,2,6,1.0,1.0,False
+ NeuB,2,7,1.0,1.0,False
+ NeuB,4,7,1.0,1.0,False
+ NeuB,6,7,1.0,1.0,False
+ PnuC,3,8,1.0,1.0,False
+ RggTR,1,6,1.0,1.0,False
+ RggTR,3,8,1.0,1.0,False
+ SP1,1,3,1.0,1.0,False
+ SP1,3,4,1.0,1.0,False
+ SP1,3,8,1.0,1.0,False
+ SP1,3,9,1.0,1.0,False
+ SP1,8,9,1.0,1.0,False
+ Sbp1,1,3,1.0,1.0,False
+ Sbp1,1,8,1.0,1.0,False
+ Sbp1,2,5,1.0,1.0,False
+ Sbp1,2,6,1.0,1.0,False
+ Sbp1,3,8,1.0,1.0,False
+ Sbp2,3,6,1.0,1.0,False
+ Sbp2,3,8,1.0,1.0,False
+ SntA,1,3,1.0,1.0,False
+ SsPep,2,3,1.0,1.0,False
+ SsPep,2,4,1.0,1.0,False
+ SsPep,2,5,1.0,1.0,False
+ SsPep,2,6,1.0,1.0,False
+ SsPep,2,7,1.0,1.0,False
+ SsPep,2,8,1.0,1.0,False
+ SsPep,2,9,1.0,1.0,False
+ SsPep,3,7,1.0,1.0,False
+ SsPep,4,7,1.0,1.0,False
+ SsPep,5,7,1.0,1.0,False
+ SsPep,6,7,1.0,1.0,False
+ SsPep,7,8,1.0,1.0,False
+ SsPep,7,9,1.0,1.0,False
+ Ssa,1,2,1.0,1.0,False
+ Ssa,1,3,1.0,1.0,False
+ Ssa,1,7,1.0,1.0,False
+ Ssa,1,8,1.0,1.0,False
+ Ssa,2,3,1.0,1.0,False
+ Ssa,2,4,1.0,1.0,False
+ Ssa,2,5,1.0,1.0,False
+ Ssa,2,6,1.0,1.0,False
+ Ssa,2,7,1.0,1.0,False
+ Ssa,2,8,1.0,1.0,False
+ Ssa,2,9,1.0,1.0,False
+ Ssa,3,7,1.0,1.0,False
+ Ssa,4,7,1.0,1.0,False
+ Ssa,5,7,1.0,1.0,False
+ Ssa,6,7,1.0,1.0,False
+ Ssa,7,8,1.0,1.0,False
+ Ssa,7,9,1.0,1.0,False
+ Ssads,1,6,1.0,1.0,False
+ Ssads,1,7,1.0,1.0,False
+ Ssads,6,7,1.0,1.0,False
+ SspB,1,3,1.0,1.0,False
+ SspB,1,7,1.0,1.0,False
+ SspB,1,8,1.0,1.0,False
+ SspB,2,7,1.0,1.0,False
+ SspB,3,7,1.0,1.0,False
+ SspB,4,7,1.0,1.0,False
+ SspB,5,7,1.0,1.0,False
+ SspB,6,7,1.0,1.0,False
+ SspB,7,8,1.0,1.0,False
+ SspB,7,9,1.0,1.0,False
+ Stp,1,7,1.0,1.0,False
+ Stp,2,7,1.0,1.0,False
+ Stp,3,7,1.0,1.0,False
+ Stp,4,7,1.0,1.0,False
+ Stp,5,7,1.0,1.0,False
+ Stp,6,7,1.0,1.0,False
+ Stp,7,8,1.0,1.0,False
+ Stp,7,9,1.0,1.0,False
+ TraG,1,3,1.0,1.0,False
+ TraG,1,4,1.0,1.0,False
+ TraG,1,8,1.0,1.0,False
+ TraG,3,4,1.0,1.0,False
+ TraG,4,8,1.0,1.0,False
+ Tran,3,7,1.0,1.0,False
+ Tran,3,8,1.0,1.0,False
+ Tran,5,6,1.0,1.0,False
+ Tran,7,8,1.0,1.0,False
+ Zmp,1,3,1.0,1.0,False
+ Zmp,1,8,1.0,1.0,False
+ Zmp,3,8,1.0,1.0,False
+ abpb,2,3,1.0,1.0,False
+ abpb,2,4,1.0,1.0,False
+ abpb,2,5,1.0,1.0,False
+ abpb,2,6,1.0,1.0,False
+ abpb,2,7,1.0,1.0,False
+ abpb,2,8,1.0,1.0,False
+ abpb,2,9,1.0,1.0,False
+ abpb,3,5,1.0,1.0,False
+ abpb,3,7,1.0,1.0,False
+ abpb,4,7,1.0,1.0,False
+ abpb,5,7,1.0,1.0,False
+ abpb,5,8,1.0,1.0,False
+ abpb,5,9,1.0,1.0,False
+ abpb,6,7,1.0,1.0,False
+ abpb,7,8,1.0,1.0,False
+ abpb,7,9,1.0,1.0,False
+ atl_2,1,6,0.6668,1.0,False
+ atl_2,2,3,1.0,1.0,False
+ atl_2,2,7,1.0,1.0,False
+ atl_2,3,7,1.0,1.0,False
+ atl_2,4,8,1.0,1.0,False
+ cbp40omp40,1,6,1.0,1.0,False
+ cbp40omp40,3,6,1.0,1.0,False
+ cbp40omp40,3,8,1.0,1.0,False
+ cbp40omp40,4,6,1.0,1.0,False
+ cbp40omp40,5,6,1.0,1.0,False
+ cbp40omp40,6,9,1.0,1.0,False
+ cps2G,1,5,1.0,1.0,False
+ cps2G,3,8,1.0,1.0,False
+ cps2L,1,2,1.0,1.0,False
+ cps2L,2,4,1.0,1.0,False
+ cps2L,2,6,1.0,1.0,False
+ dltA,2,7,1.0,1.0,False
+ dltA,3,7,1.0,1.0,False
+ dltA,4,7,1.0,1.0,False
+ dltA,5,7,1.0,1.0,False
+ dltA,6,7,1.0,1.0,False
+ dltA,7,8,1.0,1.0,False
+ dltA,7,9,1.0,1.0,False
+ endoSS,1,3,1.0,1.0,False
+ endoSS,1,8,1.0,1.0,False
+ endoSS,3,8,1.0,1.0,False
+ gh92,1,3,1.0,1.0,False
+ gh92,1,8,1.0,1.0,False
+ gh92,3,8,1.0,1.0,False
+ hylA,3,8,1.0,1.0,False
+ ldeS,2,7,1.0,1.0,False
+ ldeS,3,6,1.0,1.0,False
+ ldeS,3,7,1.0,1.0,False
+ ldeS,4,7,1.0,1.0,False
+ ldeS,5,7,1.0,1.0,False
+ ldeS,6,8,1.0,1.0,False
+ ldeS,7,8,1.0,1.0,False
+ ldeS,7,9,1.0,1.0,False
+ lhk,1,7,1.0,1.0,False
+ lhk,2,7,1.0,1.0,False
+ lhk,3,7,1.0,1.0,False
+ lhk,4,7,1.0,1.0,False
+ lhk,5,7,1.0,1.0,False
+ lhk,6,7,1.0,1.0,False
+ lhk,7,8,1.0,1.0,False
+ lhk,7,9,1.0,1.0,False
+ lhr,1,7,1.0,1.0,False
+ lhr,2,7,1.0,1.0,False
+ lhr,3,7,1.0,1.0,False
+ lhr,4,7,1.0,1.0,False
+ lhr,5,7,1.0,1.0,False
+ lhr,6,7,1.0,1.0,False
+ lhr,7,8,1.0,1.0,False
+ lhr,7,9,1.0,1.0,False
+ pgdA,1,7,1.0,1.0,False
+ pgdA,2,7,1.0,1.0,False
+ pgdA,3,7,1.0,1.0,False
+ pgdA,4,7,1.0,1.0,False
+ pgdA,5,7,1.0,1.0,False
+ pgdA,6,7,1.0,1.0,False
+ pgdA,7,8,1.0,1.0,False
+ pgdA,7,9,1.0,1.0,False
+ rfeA,1,3,1.0,1.0,False
+ rfeA,1,8,1.0,1.0,False
+ rfeA,3,8,1.0,1.0,False
+ sly,2,7,1.0,1.0,False
+ sly,3,8,1.0,1.0,False
+ sly,5,7,1.0,1.0,False
+ sly,6,7,1.0,1.0,False
+ srtA,1,7,1.0,1.0,False
+ srtA,2,7,1.0,1.0,False
+ srtA,3,7,1.0,1.0,False
+ srtA,4,7,1.0,1.0,False
+ srtA,5,7,1.0,1.0,False
+ srtA,6,7,1.0,1.0,False
+ srtA,7,8,1.0,1.0,False
+ srtA,7,9,1.0,1.0,False
+ ssnA,1,3,1.0,1.0,False
+ ssnA,1,7,1.0,1.0,False
+ ssnA,1,8,1.0,1.0,False
+ ssnA,2,7,1.0,1.0,False
+ ssnA,3,7,1.0,1.0,False
+ ssnA,4,7,1.0,1.0,False
+ ssnA,5,7,1.0,1.0,False
+ ssnA,6,7,1.0,1.0,False
+ ssnA,7,8,1.0,1.0,False
+ ssnA,7,9,1.0,1.0,False
+ yzpA,2,7,1.0,1.0,False
+ yzpA,3,6,1.0,1.0,False
+ yzpA,3,7,1.0,1.0,False
+ yzpA,4,6,1.0,1.0,False
+ yzpA,4,7,1.0,1.0,False
+ yzpA,5,6,1.0,1.0,False
+ yzpA,5,7,1.0,1.0,False
+ yzpA,6,7,1.0,1.0,False
+ yzpA,6,8,1.0,1.0,False
+ yzpA,6,9,1.0,1.0,False
+ yzpA,7,8,1.0,1.0,False
+ yzpA,7,9,1.0,1.0,False
+Ampicillin,1,7,1.0,1.0,False
+Ampicillin,2,7,1.0,1.0,False
+Ampicillin,3,7,1.0,1.0,False
+Ampicillin,4,7,1.0,1.0,False
+Ampicillin,5,7,1.0,1.0,False
+Ampicillin,6,7,1.0,1.0,False
+Ampicillin,7,8,1.0,1.0,False
+Ampicillin,7,9,1.0,1.0,False
+Ceftiofur,1,3,1.0,1.0,False
+Ceftiofur,1,7,1.0,1.0,False
+Ceftiofur,1,8,1.0,1.0,False
+Ceftiofur,2,7,1.0,1.0,False
+Ceftiofur,3,7,1.0,1.0,False
+Ceftiofur,4,7,1.0,1.0,False
+Ceftiofur,5,7,1.0,1.0,False
+Ceftiofur,6,7,1.0,1.0,False
+Ceftiofur,7,8,1.0,1.0,False
+Ceftiofur,7,9,1.0,1.0,False
+Doxycycline,1,2,1.0,1.0,False
+Doxycycline,1,3,1.0,1.0,False
+Doxycycline,1,4,1.0,1.0,False
+Doxycycline,1,7,1.0,1.0,False
+Doxycycline,2,3,1.0,1.0,False
+Doxycycline,2,4,1.0,1.0,False
+Doxycycline,2,7,0.708,1.0,False
+Doxycycline,3,4,1.0,1.0,False
+Doxycycline,3,5,1.0,1.0,False
+Doxycycline,3,6,1.0,1.0,False
+Doxycycline,4,5,0.6534,1.0,False
+Doxycycline,4,6,0.7007,1.0,False
+Doxycycline,4,7,0.6715,1.0,False
+Doxycycline,5,6,1.0,1.0,False
+Doxycycline,8,9,1.0,1.0,False
+Enrofloxacin,1,3,1.0,1.0,False
+Enrofloxacin,1,4,1.0,1.0,False
+Enrofloxacin,1,7,1.0,1.0,False
+Enrofloxacin,1,8,1.0,1.0,False
+Enrofloxacin,2,7,1.0,1.0,False
+Enrofloxacin,3,4,1.0,1.0,False
+Enrofloxacin,3,7,1.0,1.0,False
+Enrofloxacin,4,5,1.0,1.0,False
+Enrofloxacin,4,7,1.0,1.0,False
+Enrofloxacin,4,8,1.0,1.0,False
+Enrofloxacin,4,9,1.0,1.0,False
+Enrofloxacin,5,7,1.0,1.0,False
+Enrofloxacin,6,7,1.0,1.0,False
+Enrofloxacin,7,8,1.0,1.0,False
+Enrofloxacin,7,9,1.0,1.0,False
+Florfenicol,1,7,1.0,1.0,False
+Florfenicol,2,7,1.0,1.0,False
+Florfenicol,3,7,1.0,1.0,False
+Florfenicol,4,7,1.0,1.0,False
+Florfenicol,5,7,1.0,1.0,False
+Florfenicol,6,7,1.0,1.0,False
+Florfenicol,7,8,1.0,1.0,False
+Florfenicol,7,9,1.0,1.0,False
+Gentamicin,1,6,1.0,1.0,False
+Gentamicin,3,6,1.0,1.0,False
+Gentamicin,4,6,1.0,1.0,False
+Gentamicin,5,6,1.0,1.0,False
+Gentamicin,6,8,1.0,1.0,False
+Gentamicin,6,9,1.0,1.0,False
+Oxytetracycline,1,9,1.0,1.0,False
+Oxytetracycline,2,4,0.6754,1.0,False
+Oxytetracycline,2,5,1.0,1.0,False
+Oxytetracycline,2,7,0.688,1.0,False
+Oxytetracycline,3,4,1.0,1.0,False
+Oxytetracycline,3,6,1.0,1.0,False
+Oxytetracycline,4,6,0.7007,1.0,False
+Oxytetracycline,5,7,1.0,1.0,False
+Oxytetracycline,5,8,1.0,1.0,False
+Oxytetracycline,5,9,1.0,1.0,False
+Oxytetracycline,7,8,1.0,1.0,False
+Oxytetracycline,7,9,1.0,1.0,False
+Oxytetracycline,8,9,1.0,1.0,False
+Penicillin,1,3,1.0,1.0,False
+Penicillin,2,7,1.0,1.0,False
+Penicillin,3,7,1.0,1.0,False
+Penicillin,4,7,1.0,1.0,False
+Penicillin,5,7,1.0,1.0,False
+Penicillin,6,7,1.0,1.0,False
+Penicillin,7,8,1.0,1.0,False
+Penicillin,7,9,1.0,1.0,False
+SAT-4,1,7,1.0,1.0,False
+SAT-4,2,7,1.0,1.0,False
+SAT-4,3,5,1.0,1.0,False
+SAT-4,3,6,1.0,1.0,False
+SAT-4,3,7,1.0,1.0,False
+SAT-4,4,7,1.0,1.0,False
+SAT-4,5,6,1.0,1.0,False
+SAT-4,5,8,1.0,1.0,False
+SAT-4,6,8,1.0,1.0,False
+SAT-4,7,8,1.0,1.0,False
+SAT-4,7,9,1.0,1.0,False
+Spectinomycin,3,4,1.0,1.0,False
+Spectinomycin,3,5,1.0,1.0,False
+Spectinomycin,3,6,1.0,1.0,False
+Spectinomycin,3,7,1.0,1.0,False
+Spectinomycin,3,9,1.0,1.0,False
+Spectinomycin,4,6,1.0,1.0,False
+Spectinomycin,4,8,1.0,1.0,False
+Spectinomycin,4,9,1.0,1.0,False
+Spectinomycin,5,6,1.0,1.0,False
+Spectinomycin,5,7,1.0,1.0,False
+Spectinomycin,5,9,1.0,1.0,False
+Spectinomycin,6,7,0.712,1.0,False
+Spectinomycin,6,9,1.0,1.0,False
+Spectinomycin,7,9,0.6673,1.0,False
+Spectinomycin,8,9,1.0,1.0,False
+Tiamulin,1,3,1.0,1.0,False
+Tiamulin,1,7,1.0,1.0,False
+Tiamulin,2,3,1.0,1.0,False
+Tiamulin,2,6,1.0,1.0,False
+Tiamulin,2,8,1.0,1.0,False
+Tiamulin,3,4,1.0,1.0,False
+Tiamulin,3,5,1.0,1.0,False
+Tiamulin,3,6,1.0,1.0,False
+Tiamulin,3,9,1.0,1.0,False
+Tiamulin,4,5,1.0,1.0,False
+Tiamulin,4,8,1.0,1.0,False
+Tiamulin,4,9,1.0,1.0,False
+Tiamulin,5,8,1.0,1.0,False
+Tiamulin,5,9,1.0,1.0,False
+Tiamulin,6,8,1.0,1.0,False
+Tiamulin,8,9,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,2,7,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,3,6,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,3,7,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,4,6,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,4,7,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,5,6,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,5,7,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,6,7,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,6,8,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,6,9,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,7,8,1.0,1.0,False
+Trimethoprim_Sulphamethoxazole,7,9,1.0,1.0,False
+Tulathromycin,1,3,1.0,1.0,False
+Tulathromycin,1,6,1.0,1.0,False
+Tulathromycin,1,7,1.0,1.0,False
+Tulathromycin,2,6,0.7043,1.0,False
+Tulathromycin,3,5,1.0,1.0,False
+Tulathromycin,3,6,1.0,1.0,False
+Tulathromycin,3,7,1.0,1.0,False
+Tulathromycin,3,8,1.0,1.0,False
+Tulathromycin,3,9,1.0,1.0,False
+Tulathromycin,4,8,1.0,1.0,False
+Tulathromycin,5,7,1.0,1.0,False
+Tulathromycin,5,8,1.0,1.0,False
+Tulathromycin,5,9,1.0,1.0,False
+Tulathromycin,8,9,1.0,1.0,False
+aad9,3,6,1.0,1.0,False
+aad9,6,8,1.0,1.0,False
+ant(6)-Ia,1,3,1.0,1.0,False
+ant(6)-Ia,1,4,1.0,1.0,False
+ant(6)-Ia,1,5,1.0,1.0,False
+ant(6)-Ia,1,6,1.0,1.0,False
+ant(6)-Ia,1,7,1.0,1.0,False
+ant(6)-Ia,3,4,1.0,1.0,False
+ant(6)-Ia,3,9,1.0,1.0,False
+ant(6)-Ia,4,9,1.0,1.0,False
+ant(6)-Ia,5,6,1.0,1.0,False
+ant(6)-Ia,5,7,1.0,1.0,False
+ant(6)-Ia,6,7,1.0,1.0,False
+ant(6)-Ia,8,9,1.0,1.0,False
+ant(6)-Ib,1,3,1.0,1.0,False
+aph(3')-III,1,7,1.0,1.0,False
+aph(3')-III,2,7,1.0,1.0,False
+aph(3')-III,3,5,1.0,1.0,False
+aph(3')-III,3,7,1.0,1.0,False
+aph(3')-III,4,7,1.0,1.0,False
+aph(3')-III,5,8,1.0,1.0,False
+aph(3')-III,6,7,1.0,1.0,False
+aph(3')-III,7,8,1.0,1.0,False
+aph(3')-III,7,9,1.0,1.0,False
+erm(47),1,3,1.0,1.0,False
+erm(47),1,5,1.0,1.0,False
+erm(47),1,6,1.0,1.0,False
+erm(47),1,7,1.0,1.0,False
+erm(47),1,8,1.0,1.0,False
+erm(47),3,5,1.0,1.0,False
+erm(47),3,6,1.0,1.0,False
+erm(47),3,7,1.0,1.0,False
+erm(47),5,6,1.0,1.0,False
+erm(47),5,8,1.0,1.0,False
+erm(47),6,8,1.0,1.0,False
+erm(47),7,8,1.0,1.0,False
+erm(B),1,3,1.0,1.0,False
+erm(B),2,3,1.0,1.0,False
+erm(B),2,5,0.6729,1.0,False
+erm(B),2,6,0.7043,1.0,False
+erm(B),2,7,0.708,1.0,False
+erm(B),3,5,1.0,1.0,False
+erm(B),3,6,1.0,1.0,False
+erm(B),3,7,1.0,1.0,False
+erm(B),4,8,1.0,1.0,False
+erm(B),5,6,1.0,1.0,False
+erm(B),5,7,1.0,1.0,False
+erm(B),6,7,1.0,1.0,False
+erm(B),8,9,1.0,1.0,False
+lnu(B),1,2,1.0,1.0,False
+lnu(B),1,6,1.0,1.0,False
+lnu(B),2,3,1.0,1.0,False
+lnu(B),2,6,1.0,1.0,False
+lnu(B),2,8,1.0,1.0,False
+lnu(B),3,4,1.0,1.0,False
+lnu(B),3,6,1.0,1.0,False
+lnu(B),3,7,1.0,1.0,False
+lnu(B),3,9,1.0,1.0,False
+lnu(B),4,7,1.0,1.0,False
+lnu(B),4,8,1.0,1.0,False
+lnu(B),4,9,1.0,1.0,False
+lnu(B),6,8,1.0,1.0,False
+lnu(B),7,8,1.0,1.0,False
+lnu(B),7,9,1.0,1.0,False
+lnu(B),8,9,1.0,1.0,False
+lnu(C),1,5,1.0,1.0,False
+lnu(C),3,5,1.0,1.0,False
+lnu(C),5,8,1.0,1.0,False
+lnu(C),5,9,1.0,1.0,False
+lsa(E),1,2,1.0,1.0,False
+lsa(E),1,6,1.0,1.0,False
+lsa(E),2,3,1.0,1.0,False
+lsa(E),2,6,1.0,1.0,False
+lsa(E),2,8,1.0,1.0,False
+lsa(E),3,4,1.0,1.0,False
+lsa(E),3,6,1.0,1.0,False
+lsa(E),3,7,1.0,1.0,False
+lsa(E),3,9,1.0,1.0,False
+lsa(E),4,7,1.0,1.0,False
+lsa(E),4,8,1.0,1.0,False
+lsa(E),4,9,1.0,1.0,False
+lsa(E),6,8,1.0,1.0,False
+lsa(E),7,8,1.0,1.0,False
+lsa(E),7,9,1.0,1.0,False
+lsa(E),8,9,1.0,1.0,False
+optrA,1,3,1.0,1.0,False
+optrA,1,8,1.0,1.0,False
+spw,1,3,1.0,1.0,False
+spw,1,4,1.0,1.0,False
+spw,1,5,1.0,1.0,False
+spw,1,6,1.0,1.0,False
+spw,1,7,1.0,1.0,False
+spw,1,8,1.0,1.0,False
+spw,1,9,1.0,1.0,False
+spw,3,4,1.0,1.0,False
+spw,3,5,1.0,1.0,False
+spw,3,6,1.0,1.0,False
+spw,3,7,1.0,1.0,False
+spw,3,9,1.0,1.0,False
+spw,4,5,1.0,1.0,False
+spw,4,6,1.0,1.0,False
+spw,4,7,1.0,1.0,False
+spw,4,8,1.0,1.0,False
+spw,4,9,1.0,1.0,False
+spw,5,8,1.0,1.0,False
+spw,5,9,1.0,1.0,False
+spw,6,7,1.0,1.0,False
+spw,6,8,1.0,1.0,False
+spw,7,8,1.0,1.0,False
+spw,8,9,1.0,1.0,False
+tet(40),1,3,1.0,1.0,False
+tet(40),1,8,1.0,1.0,False
+tet(44),1,3,1.0,1.0,False
+tet(44),1,8,1.0,1.0,False
+tet(L),1,3,1.0,1.0,False
+tet(L),1,8,1.0,1.0,False
+tet(M),1,3,1.0,1.0,False
+tet(M),1,5,1.0,1.0,False
+tet(M),3,5,1.0,1.0,False
+tet(M),3,6,1.0,1.0,False
+tet(M),4,5,0.6699,1.0,False
+tet(M),4,7,0.7,1.0,False
+tet(M),6,8,1.0,1.0,False
+tet(M),6,9,1.0,1.0,False
+tet(O),1,3,1.0,1.0,False
+tet(O),4,5,1.0,1.0,False
+tet(O),4,6,0.6828,1.0,False
+tet(O),4,7,0.6888,1.0,False
+tet(O),5,6,1.0,1.0,False
+tet(O),5,7,1.0,1.0,False
+tet(O),6,7,1.0,1.0,False
+tet(O/W/32/O),1,3,1.0,1.0,False
+tet(O/W/32/O),1,7,1.0,1.0,False
+tet(O/W/32/O),1,8,1.0,1.0,False
+tet(O/W/32/O),2,7,1.0,1.0,False
+tet(O/W/32/O),3,7,1.0,1.0,False
+tet(O/W/32/O),4,7,1.0,1.0,False
+tet(O/W/32/O),5,7,1.0,1.0,False
+tet(O/W/32/O),6,7,1.0,1.0,False
+tet(O/W/32/O),7,8,1.0,1.0,False
+tet(O/W/32/O),7,9,1.0,1.0,False
+tet(T),1,7,1.0,1.0,False
+tet(T),2,7,1.0,1.0,False
+tet(T),3,5,1.0,1.0,False
+tet(T),3,7,1.0,1.0,False
+tet(T),4,7,1.0,1.0,False
+tet(T),5,8,1.0,1.0,False
+tet(T),6,7,1.0,1.0,False
+tet(T),7,8,1.0,1.0,False
+tet(T),7,9,1.0,1.0,False
+tet(W),1,7,1.0,1.0,False
+tet(W),3,6,1.0,1.0,False
+tet(W),3,7,1.0,1.0,False
+tet(W),4,7,1.0,1.0,False
+tet(W),5,7,1.0,1.0,False
+tet(W),6,8,1.0,1.0,False
+tet(W),7,8,1.0,1.0,False
+tet(W),7,9,1.0,1.0,False
+vga(F),1,3,1.0,1.0,False
+vga(F),2,7,1.0,1.0,False
+vga(F),3,7,1.0,1.0,False
+vga(F),4,7,1.0,1.0,False
+vga(F),5,7,1.0,1.0,False
+vga(F),6,7,1.0,1.0,False
+vga(F),7,8,1.0,1.0,False
+vga(F),7,9,1.0,1.0,False
