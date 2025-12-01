@@ -5,7 +5,7 @@
 # For format details, see: https://gh.io/customagents/config
 
 name: StrepSuis Suite Development Agent2
-description:Agent specialized for maturing and maintaining the bioinformatics modules in MK-vet/MKrep/separated_repos. It focuses on incremental improvements, filling gaps, testing, validation, and consolidation instead of rewriting existing production-quality code.
+description: Agent specialized for maturing and maintaining the bioinformatics modules in MK-vet/MKrep/separated_repos. It focuses on incremental improvements, filling gaps, testing, validation, and consolidation instead of rewriting existing production-quality code.
 ---
 # GitHub Copilot Agent — Custom Instructions for MK-vet/MKrep (separated_repos)
 
