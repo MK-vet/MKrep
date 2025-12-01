@@ -204,9 +204,8 @@ class TestValidationUtils:
             'Gene_B': [0, 1, 1],
         })
         
-        # Should not raise any exception
-        result = validate_input_data(df)
-        assert result is not None or result is None  # May return True/None
+        # Should not raise any exception for valid data
+        validate_input_data(df)
 
     def test_get_data_summary(self):
         """Test data summary generation."""
