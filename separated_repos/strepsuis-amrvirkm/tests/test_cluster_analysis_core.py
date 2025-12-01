@@ -708,6 +708,7 @@ class TestIntegration:
         # Step 5: Validate clusters
         ch_score, db_score = validate_clusters(data, clusters)
         # Scores may be nan for small datasets
+        assert isinstance(ch_score, (float, np.floating)) or np.isnan(ch_score)
 
 
 if __name__ == "__main__":
