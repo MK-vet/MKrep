@@ -34,11 +34,11 @@ def patched_setup_environment():
         ]
     )
     
-    # Use command-line argument or default to merged file
+    # Use command-line argument or default to merged file in data directory
     if len(sys.argv) > 1:
         csv_path = sys.argv[1]
     else:
-        csv_path = "merged_resistance_data.csv"
+        csv_path = "data/merged_resistance_data.csv"
     
     if not os.path.exists(csv_path):
         raise FileNotFoundError(f"File not found: {csv_path}")
@@ -47,9 +47,9 @@ def patched_setup_environment():
     return csv_path
 
 # Import and patch the module
-import MDR_2025_04_15
-MDR_2025_04_15.setup_environment = patched_setup_environment
+from src import mdr_analysis
+mdr_analysis.setup_environment = patched_setup_environment
 
 # Run the main function
 if __name__ == "__main__":
-    MDR_2025_04_15.main()
+    mdr_analysis.main()

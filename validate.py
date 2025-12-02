@@ -173,11 +173,11 @@ def check_scripts():
     print("=" * 80)
     
     scripts = [
-        "Cluster_MIC_AMR_Viruelnce.py",
-        "MDR_2025_04_15.py",
-        "Network_Analysis_2025_06_26.py",
-        "Phylogenetic_clustering_2025_03_21.py",
-        "StrepSuisPhyloCluster_2025_08_11.py"
+        "src/cluster_mic_amr_virulence.py",
+        "src/mdr_analysis.py",
+        "src/network_analysis.py",
+        "src/phylogenetic_clustering.py",
+        "src/strep_suis_phylo_cluster.py"
     ]
     
     all_found = True
