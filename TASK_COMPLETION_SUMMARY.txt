@@ -24,7 +24,6 @@ Location: separated_repos/
 2. strepsuis-amrvirkm    - K-Modes Clustering for AMR/Virulence
 3. strepsuis-genphennet  - Network-Based Genome-Phenome Integration
 4. strepsuis-phylotrait  - Phylogenetic and Binary Trait Analysis
-5. strepsuis-genphen     - Genomic-Phenotypic Analysis Platform
 
 Each repository is PRODUCTION-READY and contains:
 - Python package with CLI

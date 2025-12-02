@@ -309,7 +309,6 @@ open htmlcov/index.html
 |--------|------------------|----------|--------|
 | strepsuis-mdr | 110+ | 62% | ✅ |
 | strepsuis-amrvirkm | 100+ | 50% | ✅ |
-| strepsuis-genphen | 100+ | 50% | ✅ |
 | strepsuis-genphennet | 100+ | 50% | ✅ |
 | strepsuis-phylotrait | 90+ | 50% | ✅ |
 

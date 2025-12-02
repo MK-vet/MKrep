@@ -298,7 +298,6 @@ pytest tests/test_statistical_validation.py --cov --cov-report=html
 |--------|------------------|-----------|-------|
 | strepsuis-mdr | 25+ | 100% | Full statistical validation |
 | strepsuis-amrvirkm | 20+ | 100% | Clustering + MCA validation |
-| strepsuis-genphen | 20+ | 100% | Phylogenetic metrics validation |
 | strepsuis-genphennet | 15+ | 100% | Network metrics validation |
 | strepsuis-phylotrait | 18+ | 100% | Tree metrics validation |
 

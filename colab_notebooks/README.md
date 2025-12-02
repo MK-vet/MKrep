@@ -45,7 +45,6 @@ Click on these links to open notebooks directly in Colab:
 - [**StrepSuis-AMRPat** (MDR Analysis)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/MDR_Analysis_Colab.ipynb)
 - [**StrepSuis-GenPhenNet** (Network Analysis)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Network_Analysis_Colab.ipynb)
 - [**StrepSuis-PhyloTrait** (Phylogenetic Clustering)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/Phylogenetic_Clustering_Colab.ipynb)
-- [**StrepSuis-GenPhen** (StrepSuis Analysis)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb)
 
 ## Requirements:
 

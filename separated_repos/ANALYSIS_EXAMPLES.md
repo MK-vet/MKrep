@@ -293,78 +293,7 @@ results/
 **Sheet 7 - Association Rules**: Within-cluster co-occurrence patterns  
 **Sheet 8 - Bootstrap CIs**: Confidence intervals for prevalences
 
-## Module 3: strepsuis-genphen (Genotype-Phenotype Integration)
-
-### Analysis Type
-Phylogenetic tree-aware integrated genomic-phenotypic analysis
-
-### Execution Command
-```bash
-cd separated_repos/strepsuis-genphen
-strepsuis-genphen \
-  --tree examples/Snp_tree.newick \
-  --data-dir examples/ \
-  --output results/ \
-  --bootstrap 500
-```
-
-### Execution Time
-**Approximately 20-25 minutes** for full 92-strain phylogenetic analysis
-
-### Output Files Generated
-
-```
-results/
-├── GenPhen_Report_20251126_120000.html
-├── GenPhen_Report_20251126_120000.xlsx
-└── png_charts/
-    ├── phylogenetic_tree.png                 # Annotated tree with traits
-    ├── tree_clustering.png                   # Phylogenetic clusters
-    ├── pd_diversity.png                      # Faith's PD per cluster
-    ├── trait_associations.png                # Chi-square p-values heatmap
-    ├── rf_importance.png                     # Random Forest feature ranks
-    ├── mca_phylo.png                         # MCA with tree structure
-    └── trait_patterns.png                    # Phylogenetic signal in traits
-```
-
-### Expected Results Summary
-
-#### 1. Phylogenetic Clustering
-
-**Tree-aware clustering** (cophenetic correlation = 0.87):
-- **Clade A** (n=42, 45.7%): Early-diverging, lower AMR
-- **Clade B** (n=31, 33.7%): High AMR, mobile elements
-- **Clade C** (n=19, 20.7%): Mixed phenotypes
-
-**Faith's Phylogenetic Diversity**:
-- Overall PD: 12.4 substitutions/site
-- Clade A PD: 4.8 (high within-clade diversity)
-- Clade B PD: 3.2 (more homogeneous)
-- Clade C PD: 2.9 (recent radiation)
-
-#### 2. Trait-Phylogeny Associations
-
-**Traits with Strong Phylogenetic Signal** (p < 0.001, chi-square):
-- tet(O) presence: χ² = 48.3, p < 0.001 (concentrated in Clade B)
-- Serotype 2: χ² = 37.8, p < 0.001 (Clade A predominant)
-- mrp gene: χ² = 31.2, p < 0.001 (ancestral, lost in Clade B)
-
-**Traits with Weak Phylogenetic Signal** (likely horizontal transfer):
-- Plasmid replicons: χ² = 2.1, p = 0.35
-- Some AMR genes (recent acquisitions)
-
-#### 3. Random Forest Feature Importance
-
-**Top Features Predicting Phylogenetic Placement**:
-1. Serotype: 0.156
-2. tet(O): 0.142
-3. mrp: 0.128
-4. MLST: 0.115
-5. erm(B): 0.098
-
-**Interpretation**: Serotype and core genomic markers (MLST) are strong predictors of phylogenetic relationships, while some AMR genes have been acquired horizontally.
-
-## Module 4: strepsuis-genphennet (Network-Based Analysis)
+## Module 3: strepsuis-genphennet (Network-Based Analysis)
 
 ### Analysis Type
 Statistical network construction from gene-phenotype associations
@@ -447,7 +376,7 @@ results/
 **Sheet 7 - Communities**: Community assignments and modularity  
 **Sheet 8 - Hub Analysis**: Top connected nodes
 
-## Module 5: strepsuis-phylotrait (Phylogenetic + Binary Traits)
+## Module 4: strepsuis-phylotrait (Phylogenetic + Binary Traits)
 
 ### Analysis Type
 Combined phylogenetic and binary trait analysis with evolutionary metrics
@@ -522,11 +451,10 @@ results/
 |--------|-------------|----------------|-------------|
 | strepsuis-mdr | 92 strains | 25-30 min | ~19 sec |
 | strepsuis-amrvirkm | 92 strains | 15-20 min | ~11 sec |
-| strepsuis-genphen | 92 strains | 20-25 min | ~15 sec |
 | strepsuis-genphennet | 92 strains | 10-15 min | ~8 sec |
 | strepsuis-phylotrait | 92 strains | 20-25 min | ~15 sec |
 
-**Total for all modules**: ~90-115 minutes (~1.5-2 hours)
+**Total for all modules**: ~70-85 minutes (~1-1.5 hours)
 
 ### Output File Comparison
 
@@ -534,11 +462,10 @@ results/
 |--------|-------------|--------------|------------|-------------|
 | amrpat | 1 | 8 sheets | 7 charts | 9 |
 | amrvirkm | 1 | 8 sheets | 7 charts | 9 |
-| genphen | 1 | 8 sheets | 7 charts | 9 |
 | genphennet | 1 | 8 sheets | 7 charts | 9 |
 | phylotrait | 1 | 8 sheets | 6 charts | 8 |
 
-**Total outputs**: 5 HTML, 40 Excel sheets, 34 PNG charts
+**Total outputs**: 4 HTML, 32 Excel sheets, 27 PNG charts
 
 ## Using These Examples
 

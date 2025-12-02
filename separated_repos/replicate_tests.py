@@ -31,13 +31,6 @@ def get_module_info(module_path: Path) -> dict:
             "description": "K-Modes clustering",
             "has_tree": False
         },
-        "strepsuis-genphen": {
-            "class_name": "GenPhenAnalyzer",
-            "module_import": "strepsuis_genphen.analyzer",
-            "config_import": "strepsuis_genphen.config",
-            "description": "Genomic-phenotypic analysis",
-            "has_tree": True
-        },
         "strepsuis-genphennet": {
             "class_name": "NetworkAnalyzer",
             "module_import": "strepsuis_genphennet.analyzer",

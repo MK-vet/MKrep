@@ -24,7 +24,7 @@ The workflow (`generate_reports.yml`) automatically:
 2. Select **"Generate Full Reports and Coverage"** from the workflows list
 3. Click **"Run workflow"** button (top right)
 4. Optional: Specify modules to process (default: "all")
-   - Examples: `all`, `strepsuis-mdr`, `strepsuis-mdr strepsuis-genphen`
+   - Examples: `all`, `strepsuis-mdr`, `strepsuis-mdr strepsuis-amrvirkm`
 5. Click **"Run workflow"** to start
 6. Wait ~10-15 minutes for completion
 
@@ -35,7 +35,7 @@ The workflow (`generate_reports.yml`) automatically:
 gh workflow run generate_reports.yml
 
 # Run for specific modules only
-gh workflow run generate_reports.yml -f modules="strepsuis-mdr strepsuis-genphen"
+gh workflow run generate_reports.yml -f modules="strepsuis-mdr strepsuis-amrvirkm"
 ```
 
 ### Option 3: REST API
@@ -58,7 +58,6 @@ separated_repos/coverage_reports/
 ├── strepsuis-mdr_htmlcov/
 │   └── index.html          # Interactive coverage report
 ├── strepsuis-amrvirkm_htmlcov/
-├── strepsuis-genphen_htmlcov/
 ├── strepsuis-genphennet_htmlcov/
 └── strepsuis-phylotrait_htmlcov/
 ```
@@ -69,8 +68,6 @@ separated_repos/analysis_reports/
 ├── strepsuis-mdr/
 │   └── ANALYSIS_SUMMARY.md
 ├── strepsuis-amrvirkm/
-│   └── ANALYSIS_SUMMARY.md
-├── strepsuis-genphen/
 │   └── ANALYSIS_SUMMARY.md
 ├── strepsuis-genphennet/
 │   └── ANALYSIS_SUMMARY.md

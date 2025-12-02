@@ -67,25 +67,6 @@ MODULES = {
         ],
         "required_files": ["tree.newick", "MIC.csv", "AMR_genes.csv", "Virulence.csv"],
         "optional_files": ["MLST.csv", "Serotype.csv"]
-    },
-    "strepsuis-genphen": {
-        "name": "StrepSuis-GenPhen",
-        "title": "Interactive Platform for Integrated Genomic-Phenotypic Analysis",
-        "description": "Integrative genomic-phenotypic analysis platform for Streptococcus suis",
-        "cli_command": "strepsuis-genphen",
-        "package_name": "strepsuis_genphen",
-        "original_script": "StrepSuisPhyloCluster_2025_08_11.py",
-        "notebook_name": "GenPhen_Analysis.ipynb",
-        "features": [
-            "Tree-aware phylogenetic clustering with ensemble fallback",
-            "Comprehensive trait profiling (chi-square, log-odds, RF importance)",
-            "Association rules mining",
-            "Multiple Correspondence Analysis (MCA)",
-            "Interactive Bootstrap 5 UI",
-            "Full CSV export capabilities"
-        ],
-        "required_files": ["tree.newick", "MIC.csv", "AMR_genes.csv", "Virulence.csv"],
-        "optional_files": ["MLST.csv", "Serotype.csv", "Plasmid.csv", "MGE.csv"]
     }
 }
 
