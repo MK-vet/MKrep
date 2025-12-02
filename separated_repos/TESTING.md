@@ -20,7 +20,7 @@ The StrepSuis Suite implements a 3-level testing strategy across all five module
 
 | Module | Total Tests | Coverage | Critical Paths |
 |--------|-------------|----------|----------------|
-| strepsuis-amrpat | 110+ | 62% | 85-100% |
+| strepsuis-mdr | 110+ | 62% | 85-100% |
 | strepsuis-amrvirkm | 100+ | 50% | 85-100% |
 | strepsuis-genphen | 100+ | 50% | 85-100% |
 | strepsuis-genphennet | 100+ | 50% | 85-100% |
@@ -34,7 +34,7 @@ The StrepSuis Suite implements a 3-level testing strategy across all five module
 
 ```bash
 # Navigate to a module
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install development dependencies
 pip install -e .[dev]
@@ -178,7 +178,7 @@ CLI tests validate command-line interfaces:
 def test_cli_help():
     """Validate CLI help output."""
     result = subprocess.run(
-        ["strepsuis-amrpat", "--help"],
+        ["strepsuis-mdr", "--help"],
         capture_output=True
     )
     assert result.returncode == 0
@@ -386,7 +386,7 @@ These algorithms are validated through end-to-end tests using real data.
 
 ## Module-Specific Notes
 
-### strepsuis-amrpat
+### strepsuis-mdr
 - Tests MDR classification, co-occurrence analysis, network construction
 - Validates bootstrap resampling and association rules
 

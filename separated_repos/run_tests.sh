@@ -27,7 +27,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MODULES="strepsuis-amrpat strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait"
+MODULES="strepsuis-mdr strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait"
 
 echo "=========================================="
 echo "Running tests for ALL 5 modules"

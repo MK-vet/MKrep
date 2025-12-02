@@ -5,7 +5,7 @@
 set -e
 
 REPOS_DIR="/home/runner/work/MKrep/MKrep/separated_repos"
-MODULES=("strepsuis-amrpat" "strepsuis-amrvirkm" "strepsuis-genphen" "strepsuis-genphennet" "strepsuis-phylotrait")
+MODULES=("strepsuis-mdr" "strepsuis-amrvirkm" "strepsuis-genphen" "strepsuis-genphennet" "strepsuis-phylotrait")
 
 echo "========================================="
 echo "Coverage Report Generator for StrepSuis Suite"

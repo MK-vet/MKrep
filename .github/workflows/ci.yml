@@ -123,24 +123,24 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
 
-    - name: Install strepsuis-amrpat
+    - name: Install strepsuis-mdr
       run: |
-        cd separated_repos/strepsuis-amrpat
+        cd separated_repos/strepsuis-mdr
         pip install -e .[dev]
 
     - name: Run statistical validation tests
       run: |
-        cd separated_repos/strepsuis-amrpat
+        cd separated_repos/strepsuis-mdr
         pytest tests/test_statistical_validation.py -v --tb=short --no-cov
 
     - name: Run reproducibility checks with seed 42
       run: |
-        cd separated_repos/strepsuis-amrpat
+        cd separated_repos/strepsuis-mdr
         pytest tests/test_statistical_validation.py::TestReproducibility -v --no-cov
 
     - name: Run reproducibility checks with seed 123
       run: |
-        cd separated_repos/strepsuis-amrpat
+        cd separated_repos/strepsuis-mdr
         pytest tests/test_statistical_validation.py::TestReproducibility -v --no-cov
 
   test-notebooks:

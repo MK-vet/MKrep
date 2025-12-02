@@ -272,7 +272,7 @@ tests/test_statistical_validation.py
 
 ```bash
 # Navigate to module
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install with dev dependencies
 pip install -e .[dev]
@@ -307,7 +307,7 @@ open htmlcov/index.html
 
 | Module | Validation Tests | Coverage | Status |
 |--------|------------------|----------|--------|
-| strepsuis-amrpat | 110+ | 62% | ✅ |
+| strepsuis-mdr | 110+ | 62% | ✅ |
 | strepsuis-amrvirkm | 100+ | 50% | ✅ |
 | strepsuis-genphen | 100+ | 50% | ✅ |
 | strepsuis-genphennet | 100+ | 50% | ✅ |

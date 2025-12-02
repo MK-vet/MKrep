@@ -3,7 +3,7 @@
 Replicate end-to-end test structure across all modules.
 
 This script creates comprehensive end-to-end tests for each module
-based on the template from strepsuis-amrpat.
+based on the template from strepsuis-mdr.
 """
 
 import re
@@ -17,10 +17,10 @@ def get_module_info(module_path: Path) -> dict:
     
     # Module-specific mappings
     module_map = {
-        "strepsuis-amrpat": {
+        "strepsuis-mdr": {
             "class_name": "MDRAnalyzer",
-            "module_import": "strepsuis_amrpat.analyzer",
-            "config_import": "strepsuis_amrpat.config",
+            "module_import": "strepsuis_mdr.analyzer",
+            "config_import": "strepsuis_mdr.config",
             "description": "MDR pattern detection",
             "has_tree": False
         },
@@ -72,12 +72,12 @@ def customize_test_file(template_content: str, module_info: dict) -> str:
     
     # Replace import statements
     content = re.sub(
-        r'from strepsuis_amrpat\.analyzer import \w+',
+        r'from strepsuis_mdr\.analyzer import \w+',
         f"from {module_info['module_import']} import {module_info['class_name']}",
         content
     )
     content = re.sub(
-        r'from strepsuis_amrpat\.config import Config',
+        r'from strepsuis_mdr\.config import Config',
         f"from {module_info['config_import']} import Config",
         content
     )
@@ -146,8 +146,8 @@ def replicate_to_module(source_module: Path, target_module: Path):
             # Update module name in the file
             content = testing_md.read_text()
             content = content.replace("StrepSuis-AMRPat", target_module.name)
-            content = content.replace("strepsuis-amrpat", target_module.name)
-            content = content.replace("strepsuis_amrpat", target_module.name.replace("-", "_"))
+            content = content.replace("strepsuis-mdr", target_module.name)
+            content = content.replace("strepsuis_mdr", target_module.name.replace("-", "_"))
             testing_md.write_text(content)
             
             print(f"✅ Updated {testing_md}")
@@ -160,7 +160,7 @@ def main():
     separated_repos_dir = Path(__file__).parent
     
     # Source module (template)
-    source_module = separated_repos_dir / "strepsuis-amrpat"
+    source_module = separated_repos_dir / "strepsuis-mdr"
     
     if not source_module.exists():
         print(f"❌ Source module not found: {source_module}")
@@ -171,7 +171,7 @@ def main():
         d for d in separated_repos_dir.iterdir()
         if d.is_dir() 
         and d.name.startswith("strepsuis-")
-        and d.name != "strepsuis-amrpat"
+        and d.name != "strepsuis-mdr"
     ]
     
     if not target_modules:

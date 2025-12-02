@@ -18,7 +18,7 @@ description: Agent specialized for maturing and maintaining the bioinformatics m
   the starting point and avoid returning to obsolete designs that have been
   removed or replaced.
 - Main modules (adjust names to the actual directory layout; the logic remains):
-  - `strepsuis-amrpat` — AMR associations and co-occurrence networks.
+  - `strepsuis-mdr` — AMR associations and co-occurrence networks.
   - `strepsuis-amrvirkm` — K-modes / MCA clustering.
   - `strepsuis-genphennet` — mutual-information-based networks.
   - `strepsuis-phylotrait` — phylogeny–trait integration.
@@ -290,7 +290,7 @@ The agent must:
 (Adapt paths and filenames to the actual repository layout; the conceptual
 requirements remain.)
 
-- **strepsuis-amrpat**
+- **strepsuis-mdr**
   - Co-occurrence matrices:
     - must be **symmetric**, with a clearly defined diagonal
       (e.g. counts or self-co-occurrence).

@@ -11,12 +11,12 @@ from typing import Dict
 
 # Module configurations
 MODULES = {
-    "strepsuis-amrpat": {
+    "strepsuis-mdr": {
         "name": "StrepSuis-AMRPat",
         "title": "Automated Detection of Antimicrobial Resistance Patterns",
         "description": "Advanced multidrug resistance pattern detection with bootstrap resampling and network analysis",
-        "cli_command": "strepsuis-amrpat",
-        "package_name": "strepsuis_amrpat",
+        "cli_command": "strepsuis-mdr",
+        "package_name": "strepsuis_mdr",
         "original_script": "MDR_2025_04_15.py",
         "notebook_name": "AMRPat_Analysis.ipynb",
         "features": [
@@ -271,7 +271,7 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 Part of the StrepSuis Suite - comprehensive bioinformatics tools for bacterial genomics research.
 
 - [StrepSuis-AMRVirKM](https://github.com/MK-vet/strepsuis-amrvirkm): K-Modes clustering
-- [StrepSuis-AMRPat](https://github.com/MK-vet/strepsuis-amrpat): MDR pattern detection
+- [StrepSuis-AMRPat](https://github.com/MK-vet/strepsuis-mdr): MDR pattern detection
 - [StrepSuis-GenPhenNet](https://github.com/MK-vet/strepsuis-genphennet): Network analysis
 - [StrepSuis-PhyloTrait](https://github.com/MK-vet/strepsuis-phylotrait): Phylogenetic clustering
 - [StrepSuis-GenPhen](https://github.com/MK-vet/strepsuis-genphen): Genomic-phenotypic analysis

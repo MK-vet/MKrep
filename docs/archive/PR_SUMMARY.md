@@ -8,7 +8,7 @@ Added 82 unit tests + comprehensive integration/e2e tests across all 5 modules w
 
 | Module | Total | Critical Paths | Status |
 |--------|-------|----------------|--------|
-| strepsuis-amrpat | **62.1%** | **88-100%** | ✅ Production Ready |
+| strepsuis-mdr | **62.1%** | **88-100%** | ✅ Production Ready |
 | strepsuis-amrvirkm | **~55-60%** | **85-95%** | ✅ Production Ready |
 | strepsuis-genphen | **~55-60%** | **85-95%** | ✅ Production Ready |
 | strepsuis-genphennet | **~55-60%** | **85-95%** | ✅ Production Ready |

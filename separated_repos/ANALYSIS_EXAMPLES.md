@@ -34,15 +34,15 @@ examples/
 └── Snp_tree.newick      # Maximum-likelihood phylogenetic tree
 ```
 
-## Module 1: strepsuis-amrpat (MDR Pattern Analysis)
+## Module 1: strepsuis-mdr (MDR Pattern Analysis)
 
 ### Analysis Type
 Multidrug resistance pattern detection and co-resistance network construction
 
 ### Execution Command
 ```bash
-cd separated_repos/strepsuis-amrpat
-strepsuis-amrpat \
+cd separated_repos/strepsuis-mdr
+strepsuis-mdr \
   --data-dir examples/ \
   --output results/ \
   --bootstrap 500 \
@@ -520,7 +520,7 @@ results/
 
 | Module | Dataset Size | Execution Time | Time/Strain |
 |--------|-------------|----------------|-------------|
-| strepsuis-amrpat | 92 strains | 25-30 min | ~19 sec |
+| strepsuis-mdr | 92 strains | 25-30 min | ~19 sec |
 | strepsuis-amrvirkm | 92 strains | 15-20 min | ~11 sec |
 | strepsuis-genphen | 92 strains | 20-25 min | ~15 sec |
 | strepsuis-genphennet | 92 strains | 10-15 min | ~8 sec |

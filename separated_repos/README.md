@@ -10,13 +10,13 @@ The StrepSuis Suite contains **five production-ready bioinformatics tools**, eac
 
 | Module | Purpose | Key Capabilities |
 |--------|---------|------------------|
-| [strepsuis-amrpat](strepsuis-amrpat/) | AMR Pattern Detection | Bootstrap prevalence estimation, co-occurrence analysis, association rules, network visualization |
+| [strepsuis-mdr](strepsuis-mdr/) | AMR Pattern Detection | Bootstrap prevalence estimation, co-occurrence analysis, association rules, network visualization |
 | [strepsuis-amrvirkm](strepsuis-amrvirkm/) | K-Modes Clustering | Silhouette-optimized clustering, MCA, feature importance, bootstrap CIs |
 | [strepsuis-genphennet](strepsuis-genphennet/) | Network Integration | Chi-square/Fisher tests, FDR correction, information theory, 3D visualization |
 | [strepsuis-phylotrait](strepsuis-phylotrait/) | Phylogenetic Traits | Tree-aware clustering, Faith's PD, binary trait analysis, interactive reports |
 | [strepsuis-genphen](strepsuis-genphen/) | Genomic-Phenotypic | Phylogenetic clustering, trait profiling, MCA, Bootstrap 5 UI |
 
-### strepsuis-amrpat
+### strepsuis-mdr
 **StrepSuis-AMRPat** provides automated detection of antimicrobial resistance patterns through:
 - Bootstrap resampling for robust prevalence estimation
 - Co-occurrence analysis for phenotypes and resistance genes
@@ -124,7 +124,7 @@ Click the Colab badge in each module's README to run without installation.
 ## Directory Structure
 
 ```
-strepsuis-amrpat/
+strepsuis-mdr/
 ├── .github/workflows/       # CI/CD workflows
 ├── .pre-commit-config.yaml  # Code quality hooks
 ├── Dockerfile               # Multi-stage build
@@ -136,7 +136,7 @@ strepsuis-amrpat/
 ├── requirements.txt         # Dependencies
 ├── examples/                # CSV data files
 ├── notebooks/               # Colab notebooks
-├── strepsuis_amrpat/        # Python package
+├── strepsuis_mdr/        # Python package
 │   ├── __init__.py
 │   ├── analyzer.py
 │   ├── cli.py
@@ -186,7 +186,7 @@ The suite implements comprehensive test coverage with 3-level validation across 
 
 | Module | Tests | Coverage | Critical Paths |
 |--------|-------|----------|----------------|
-| strepsuis-amrpat | 110+ | 62% | 85-100% |
+| strepsuis-mdr | 110+ | 62% | 85-100% |
 | strepsuis-amrvirkm | 100+ | 50% | 85-100% |
 | strepsuis-genphen | 100+ | 50% | 85-100% |
 | strepsuis-genphennet | 100+ | 50% | 85-100% |

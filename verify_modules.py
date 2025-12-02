@@ -16,9 +16,9 @@ MODULES = {
         "notebook": "AMRVirKM_Analysis.ipynb",
         "requires_tree": False
     },
-    "strepsuis-amrpat": {
-        "package": "strepsuis_amrpat",
-        "cli": "strepsuis-amrpat",
+    "strepsuis-mdr": {
+        "package": "strepsuis_mdr",
+        "cli": "strepsuis-mdr",
         "notebook": "AMRPat_Analysis.ipynb",
         "requires_tree": False
     },
