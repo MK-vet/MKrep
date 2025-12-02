@@ -36,15 +36,6 @@ MODULES = {
         "package_name": "strepsuis_phylotrait",
         "class_name": "PhyloAnalyzer",
         "short_desc": "Phylogenetic and binary trait analysis for bacterial genomics"
-    },
-    "strepsuis-genphen": {
-        "name": "StrepSuis-GenPhen",
-        "title": "Interactive Platform for Integrated Genomic-Phenotypic Analysis",
-        "description": "Integrative genomic-phenotypic analysis platform for Streptococcus suis",
-        "cli_command": "strepsuis-genphen",
-        "package_name": "strepsuis_genphen",
-        "class_name": "GenPhenAnalyzer",
-        "short_desc": "Integrated genomic-phenotypic analysis platform for bacterial genomics"
     }
 }
 

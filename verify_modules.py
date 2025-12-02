@@ -33,12 +33,6 @@ MODULES = {
         "cli": "strepsuis-phylotrait",
         "notebook": "PhyloTrait_Analysis.ipynb",
         "requires_tree": True
-    },
-    "strepsuis-genphen": {
-        "package": "strepsuis_genphen",
-        "cli": "strepsuis-genphen",
-        "notebook": "GenPhen_Analysis.ipynb",
-        "requires_tree": True
     }
 }
 

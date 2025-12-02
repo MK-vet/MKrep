@@ -157,31 +157,6 @@ StrepSuis_Suite provides **5 fully functional analysis modules**, each designed 
 
 ---
 
-### 5. StrepSuis-GenPhen (`StrepSuisPhyloCluster_2025_08_11.py`)
-**Purpose:** An Interactive Platform for Integrated Genomic–Phenotypic Analysis
-
-**Best for:**
-- Comprehensive *Streptococcus suis* strain characterization
-- Integrative phylogenetic-trait analysis
-- Complete genomic-phenotypic profiling
-
-**Key Features:**
-- Ensemble clustering with fallback
-- Chi-square trait associations
-- Log-odds effect sizes
-- Random Forest importance
-- MCA visualization
-
-**Required Files:**
-- `tree.newick` - Phylogenetic tree
-- `MIC.csv` - Minimum inhibitory concentrations
-- `AMR_genes.csv` - Antimicrobial resistance genes
-- `Virulence.csv` - Virulence factors
-
-**Typical Runtime:** 10-20 minutes
-
----
-
 ## Using the Voilà Dashboard
 
 The Voilà dashboard provides a **user-friendly interface** for all analyses without requiring programming knowledge.
