@@ -20,7 +20,6 @@
 |--------|----------|----------|
 | [strepsuis-mdr](strepsuis-mdr/) | 62% | MDR pattern detection |
 | [strepsuis-amrvirkm](strepsuis-amrvirkm/) | 50% | K-modes clustering |
-| [strepsuis-genphen](strepsuis-genphen/) | 50% | Genotype-phenotype integration |
 | [strepsuis-genphennet](strepsuis-genphennet/) | 50% | Network-based analysis |
 | [strepsuis-phylotrait](strepsuis-phylotrait/) | 50% | Phylogenetic trait analysis |
 

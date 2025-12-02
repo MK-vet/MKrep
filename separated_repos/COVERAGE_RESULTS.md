@@ -10,13 +10,12 @@ This document provides detailed coverage analysis for all modules in the StrepSu
 |--------|-------------------|------------------|---------------------|-------|--------|
 | strepsuis-mdr | ~28% | 54%+ | 66% (mdr_analysis_core) | 60+ | ✅ Production Ready |
 | strepsuis-amrvirkm | ~15% | 29%+ | 58% (cluster_analysis_core) | 35+ | ✅ Production Ready |
-| strepsuis-genphen | ~18% | 20%+ | 27% (genphen_analysis_core) | 23+ | ✅ Production Ready |
 | strepsuis-genphennet | ~20% | 18%+ | 29% (network_analysis_core) | 28+ | ✅ Production Ready |
 | strepsuis-phylotrait | ~15% | 12%+ | 9% (phylo_analysis_core)* | 22+ | ✅ Production Ready |
 
 *Note: strepsuis-phylotrait has a large codebase (~3000 lines). The 22+ tests cover key functionality but the percentage appears lower due to module size. Coverage percentage for large modules may increase with additional tests targeting visualization and report generation code.
 
-**Total Tests Across Suite**: 170+ tests (core modules only)
+**Total Tests Across Suite**: 145+ tests (core modules only)
 
 ## Coverage by Component
 
@@ -101,24 +100,6 @@ Core statistical algorithms have comprehensive unit tests:
 - ✅ Log-odds ratio analysis tests
 - ✅ MCA analysis tests
 
-### strepsuis-genphen
-
-**Component Breakdown**:
-| Component | Coverage |
-|-----------|----------|
-| `config.py` | 68% |
-| `cli.py` | 0% |
-| `analyzer.py` | 15% |
-| `genphen_analysis_core.py` | **27%** |
-| `excel_report_utils.py` | 11% |
-
-**What's Tested**:
-- ✅ 23 unit tests for genphen_analysis_core
-- ✅ DataLoader tests
-- ✅ PhylogeneticCore tests
-- ✅ Traits analysis tests
-- ✅ MCA analysis tests
-
 ### strepsuis-genphennet
 
 **Component Breakdown**:
@@ -154,62 +135,6 @@ Core statistical algorithms have comprehensive unit tests:
 - ✅ Clustering validation tests
 - ✅ Evolutionary metrics tests
 - ✅ Association rule tests
-| `cluster_analysis_core.py` | 15% |
-
-**What's Tested**:
-- ✅ Configuration (100%)
-- ✅ CLI (85%)
-- ✅ Orchestration (86%)
-- ✅ K-modes clustering validated via E2E
-- ✅ MCA dimensionality reduction validated
-
-### strepsuis-genphen (50% Total)
-
-**Component Breakdown**:
-| Component | Coverage |
-|-----------|----------|
-| `config.py` | 100% |
-| `cli.py` | 85% |
-| `analyzer.py` | 86% |
-| `genphen_core.py` | 18% |
-
-**What's Tested**:
-- ✅ Tree file loading and parsing
-- ✅ Phylogenetic clustering algorithms
-- ✅ Trait profiling methods
-- ✅ Integration with tree data
-
-### strepsuis-genphennet (50% Total)
-
-**Component Breakdown**:
-| Component | Coverage |
-|-----------|----------|
-| `config.py` | 100% |
-| `cli.py` | 85% |
-| `analyzer.py` | 86% |
-| `network_analysis_core.py` | 20% |
-
-**What's Tested**:
-- ✅ Network construction
-- ✅ Statistical association tests
-- ✅ Community detection
-- ✅ Information theory metrics
-
-### strepsuis-phylotrait (50% Total)
-
-**Component Breakdown**:
-| Component | Coverage |
-|-----------|----------|
-| `config.py` | 100% |
-| `cli.py` | 85% |
-| `analyzer.py` | 85% |
-| `phylotrait_core.py` | 15% |
-
-**What's Tested**:
-- ✅ Tree parsing (Newick format)
-- ✅ Phylogenetic diversity calculations
-- ✅ Binary trait analysis
-- ✅ Tree-aware clustering
 
 ## Coverage Goals
 

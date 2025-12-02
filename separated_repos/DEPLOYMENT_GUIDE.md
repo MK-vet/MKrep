@@ -16,13 +16,12 @@ This guide provides comprehensive instructions for deploying the 5 separated Str
 
 ## Overview
 
-The MKrep repository has been restructured into 5 independent, publication-ready modules located in the `separated_repos/` directory:
+The MKrep repository has been restructured into 4 independent, publication-ready modules located in the `separated_repos/` directory:
 
 1. **strepsuis-mdr** - Automated Detection of Antimicrobial Resistance Patterns
 2. **strepsuis-amrvirkm** - K-Modes Clustering of AMR and Virulence Profiles
 3. **strepsuis-genphennet** - Network-Based Integration of Genome-Phenome Data
 4. **strepsuis-phylotrait** - Integrated Phylogenetic and Binary Trait Analysis
-5. **strepsuis-genphen** - Interactive Platform for Integrated Genomic-Phenotypic Analysis
 
 Each repository is **production-ready** with:
 - Professional Python package structure
@@ -91,7 +90,6 @@ repository-name/
 | strepsuis-amrvirkm | strepsuis_amrvirkm | strepsuis-amrvirkm | ghcr.io/mk-vet/strepsuis-amrvirkm | AMRVirKM_Analysis.ipynb |
 | strepsuis-genphennet | strepsuis_genphennet | strepsuis-genphennet | ghcr.io/mk-vet/strepsuis-genphennet | GenPhenNet_Analysis.ipynb |
 | strepsuis-phylotrait | strepsuis_phylotrait | strepsuis-phylotrait | ghcr.io/mk-vet/strepsuis-phylotrait | PhyloTrait_Analysis.ipynb |
-| strepsuis-genphen | strepsuis_genphen | strepsuis-genphen | ghcr.io/mk-vet/strepsuis-genphen | GenPhen_Analysis.ipynb |
 
 ## Detailed Deployment Instructions
 

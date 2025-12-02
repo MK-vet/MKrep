@@ -121,8 +121,8 @@ NOTEBOOK
 
 # Create notebooks for each module
 create_notebook "strepsuis-mdr" "strepsuis_mdr" "StrepSuis-AMRPat: MDR Analysis" "AMRPat_Analysis.ipynb"
+create_notebook "strepsuis-amrvirkm" "strepsuis_amrvirkm" "StrepSuis-AMRVirKM: Clustering Analysis" "AMRVirKM_Analysis.ipynb"
 create_notebook "strepsuis-genphennet" "strepsuis_genphennet" "StrepSuis-GenPhenNet: Network Analysis" "GenPhenNet_Analysis.ipynb"
 create_notebook "strepsuis-phylotrait" "strepsuis_phylotrait" "StrepSuis-PhyloTrait: Phylogenetic Analysis" "PhyloTrait_Analysis.ipynb"
-create_notebook "strepsuis-genphen" "strepsuis_genphen" "StrepSuis-GenPhen: Genomic-Phenotypic Analysis" "GenPhen_Analysis.ipynb"
 
 echo "All Colab notebooks created!"

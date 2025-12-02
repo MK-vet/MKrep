@@ -2,10 +2,9 @@ Copilot instructions for working in MK-vet/MKrep/separated_repos
 Use the following as persistent instructions whenever you work in this repository.
 
 ### 1. Repository Structure & Context
-This directory contains five distinct sub-projects. Treat them as individual packages sharing a common rigorous standard:
+This directory contains four distinct sub-projects. Treat them as individual packages sharing a common rigorous standard:
 - `strepsuis-mdr` (Likely the reference implementation; check this first for patterns)
 - `strepsuis-amrvirkm`
-- `strepsuis-genphen`
 - `strepsuis-genphennet`
 - `strepsuis-phylotrait`
 

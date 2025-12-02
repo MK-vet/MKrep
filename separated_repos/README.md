@@ -1,10 +1,10 @@
 # StrepSuis Suite - Separated Repositories
 
-This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of five independent, publication-ready modules for antimicrobial resistance and genomic analysis.
+This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of four independent, publication-ready modules for antimicrobial resistance and genomic analysis.
 
 ## Overview
 
-The StrepSuis Suite contains **five production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed for independent deployment as a GitHub repository.
+The StrepSuis Suite contains **four production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed for independent deployment as a GitHub repository.
 
 ## Module Overview
 
@@ -14,7 +14,6 @@ The StrepSuis Suite contains **five production-ready bioinformatics tools**, eac
 | [strepsuis-amrvirkm](strepsuis-amrvirkm/) | K-Modes Clustering | Silhouette-optimized clustering, MCA, feature importance, bootstrap CIs |
 | [strepsuis-genphennet](strepsuis-genphennet/) | Network Integration | Chi-square/Fisher tests, FDR correction, information theory, 3D visualization |
 | [strepsuis-phylotrait](strepsuis-phylotrait/) | Phylogenetic Traits | Tree-aware clustering, Faith's PD, binary trait analysis, interactive reports |
-| [strepsuis-genphen](strepsuis-genphen/) | Genomic-Phenotypic | Phylogenetic clustering, trait profiling, MCA, Bootstrap 5 UI |
 
 ### strepsuis-mdr
 **StrepSuis-AMRPat** provides automated detection of antimicrobial resistance patterns through:
@@ -43,13 +42,6 @@ The StrepSuis Suite contains **five production-ready bioinformatics tools**, eac
 - Faith's Phylogenetic Diversity calculations
 - Binary trait analysis for AMR and virulence factors
 - Interactive HTML reports with DataTables and Plotly
-
-### strepsuis-genphen
-**StrepSuis-GenPhen** offers an interactive platform for integrated genomic-phenotypic analysis:
-- Tree-aware phylogenetic clustering with ensemble fallback
-- Comprehensive trait profiling (chi-square, log-odds, RF importance)
-- Association rules mining and Multiple Correspondence Analysis
-- Interactive Bootstrap 5 UI with full CSV export capabilities
 
 ## Repository Contents
 
@@ -188,7 +180,6 @@ The suite implements comprehensive test coverage with 3-level validation across 
 |--------|-------|----------|----------------|
 | strepsuis-mdr | 110+ | 62% | 85-100% |
 | strepsuis-amrvirkm | 100+ | 50% | 85-100% |
-| strepsuis-genphen | 100+ | 50% | 85-100% |
 | strepsuis-genphennet | 100+ | 50% | 85-100% |
 | strepsuis-phylotrait | 90+ | 50% | 85-100% |
 
