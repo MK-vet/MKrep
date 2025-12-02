@@ -32,9 +32,9 @@ sys.modules['google'] = type(sys)('google')
 sys.modules['google.colab'] = MockColab()
 
 # Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from Network_Analysis_2025_06_26 import (
+from src.network_analysis import (
     generate_report_with_cluster_stats,
     generate_excel_report_with_cluster_stats,
     setup_logging

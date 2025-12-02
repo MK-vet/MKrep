@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit and integration tests for MDR Analysis module (MDR_2025_04_15.py).
+Unit and integration tests for MDR Analysis module (src/mdr_analysis.py).
 
 Tests cover:
 - MDR identification functions
@@ -22,8 +22,8 @@ import pytest
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=UserWarning)
 
-# Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path to import from src
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Mock google.colab module for testing
 class MockFiles:
@@ -38,8 +38,8 @@ class MockColab:
 sys.modules['google'] = type(sys)('google')
 sys.modules['google.colab'] = MockColab()
 
-# Import functions from MDR_2025_04_15.py
-from MDR_2025_04_15 import (
+# Import functions from src/mdr_analysis.py
+from src.mdr_analysis import (
     safe_contingency,
     add_significance_stars,
     build_class_resistance,

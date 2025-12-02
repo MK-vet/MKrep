@@ -61,6 +61,12 @@ Thumbs.db
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Analysis output files
+ANALYSIS_RESULTS.txt
+IMPLEMENTATION_VERIFICATION.txt
+TASK_COMPLETION_SUMMARY.txt
+module_verification_report.json
+
 # Data files (optional - comment out if you want to track them)
 # *.csv
 # *.newick

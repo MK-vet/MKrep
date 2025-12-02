@@ -765,9 +765,9 @@ def run_pipeline():
     print_memory_usage()
 
     # Load data from CSV
-    mic_df = pd.read_csv("MIC.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("MIC.csv",nrows=0).columns if c!="Strain_ID"])
-    amr_df = pd.read_csv("AMR_genes.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("AMR_genes.csv",nrows=0).columns if c!="Strain_ID"])
-    vir_df = pd.read_csv("Virulence.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("Virulence.csv",nrows=0).columns if c!="Strain_ID"])
+    mic_df = pd.read_csv("data/MIC.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("data/MIC.csv",nrows=0).columns if c!="Strain_ID"])
+    amr_df = pd.read_csv("data/AMR_genes.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("data/AMR_genes.csv",nrows=0).columns if c!="Strain_ID"])
+    vir_df = pd.read_csv("data/Virulence.csv", usecols=["Strain_ID"]+[c for c in pd.read_csv("data/Virulence.csv",nrows=0).columns if c!="Strain_ID"])
 
     print_memory_usage()
 

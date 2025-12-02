@@ -56,8 +56,8 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 import optuna
 optuna.logging.set_verbosity(optuna.logging.WARNING)
 
-# Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path to import from src
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Mock google.colab module for testing
 class MockFiles:
@@ -74,8 +74,8 @@ sys.modules['google.colab'] = MockColab()
 
 from Bio import Phylo
 
-# Import functions from StrepSuisPhyloCluster_2025_08_11.py
-from StrepSuisPhyloCluster_2025_08_11 import (
+# Import functions from src/strep_suis_phylo_cluster.py
+from src.strep_suis_phylo_cluster import (
     PhylogeneticCore,
     TreeAwareClustering,
     EnsembleClustering,
@@ -349,7 +349,7 @@ class TestParallelProcessorStrep:
         terminals = sample_newick_tree.get_terminals()
         
         # Patch the multiprocessing Pool with MockPool for deterministic testing
-        with patch('StrepSuisPhyloCluster_2025_08_11.Pool', MockPool):
+        with patch('src.strep_suis_phylo_cluster.Pool', MockPool):
             dm = ParallelProcessor.parallel_tree_distance_matrix(
                 sample_newick_tree, terminals, n_jobs=1
             )

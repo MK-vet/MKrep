@@ -1051,7 +1051,7 @@ class DataLoader:
         try:
             mic_path = os.path.join(self.base_dir, "MIC.csv")
             amr_path = os.path.join(self.base_dir, "AMR_genes.csv")
-            vir_path = os.path.join(self.base_dir, "Virulence3.csv")
+            vir_path = os.path.join(self.base_dir, "Virulence.csv")
 
             clusters_df = pd.read_csv(clusters_path)
             mic_df = pd.read_csv(mic_path)
@@ -2948,7 +2948,7 @@ Author: MK-vet (with tree-aware clustering improvements)
     
     # Configuration
     config = Config(
-        base_dir=".",
+        base_dir="data",  # Updated to use data directory
         output_folder="phylogenetic_clustering_results_advanced17xY",
         tree_file="Snp_tree.newick",  # Fixed: use actual tree file
         mic_file="MIC.csv",
