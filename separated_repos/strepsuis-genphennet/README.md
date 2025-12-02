@@ -319,4 +319,3 @@ Part of the StrepSuis Suite - comprehensive bioinformatics tools for bacterial g
 - [StrepSuisMDR](https://github.com/MK-vet/strepsuis-mdr): MDR pattern detection
 - [StrepSuis-GenPhenNet](https://github.com/MK-vet/strepsuis-genphennet): Network analysis
 - [StrepSuis-PhyloTrait](https://github.com/MK-vet/strepsuis-phylotrait): Phylogenetic clustering
-- [StrepSuis-GenPhen](https://github.com/MK-vet/strepsuis-genphen): Genomic-phenotypic analysis

@@ -94,26 +94,7 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 
 **Coverage Focus**: K-modes clustering, MCA, feature importance, association rules
 
-### 3. strepsuis-genphen (Genotype-Phenotype Integration)
-
-**Location**: `strepsuis-genphen/tests/test_end_to_end.py`  
-**Test Count**: 11 comprehensive E2E tests  
-**Sample Data**: Phylogenetic tree + binary trait data
-
-#### Unique Features Tested
-
-- Phylogenetic tree parsing (Newick format)
-- Tree-aware clustering (patristic distances)
-- Faith's Phylogenetic Diversity calculations
-- Chi-square tests for trait associations
-- Random Forest feature importance
-- Interactive HTML reports with DataTables
-- Bootstrap confidence intervals (500 iterations)
-
-**Tree Data**: `Snp_tree.newick` with 92 taxa  
-**Binary Traits**: AMR genes, virulence factors, serotypes
-
-### 4. strepsuis-genphennet (Network-Based Analysis)
+### 3. strepsuis-genphennet (Network-Based Analysis)
 
 **Location**: `strepsuis-genphennet/tests/test_end_to_end.py`  
 **Test Count**: 10 comprehensive E2E tests  
@@ -134,7 +115,7 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 - Edge filtering: p < 0.05 (FDR corrected)
 - Community optimization: Modularity maximization
 
-### 5. strepsuis-phylotrait (Phylogenetic + Traits)
+### 4. strepsuis-phylotrait (Phylogenetic + Traits)
 
 **Location**: `strepsuis-phylotrait/tests/test_end_to_end.py`  
 **Test Count**: 10 comprehensive E2E tests  
@@ -253,7 +234,6 @@ E2E tests significantly improve coverage of:
 |--------|---------------|------------|-------|
 | strepsuis-mdr | ~50% | +12% | **62%** |
 | strepsuis-amrvirkm | ~25% | +9% | **34%** |
-| strepsuis-genphen | ~24% | +8% | **32%** |
 | strepsuis-genphennet | ~28% | +8% | **36%** |
 | strepsuis-phylotrait | ~15% | +7% | **22%** |
 

@@ -22,7 +22,6 @@ The StrepSuis Suite implements a 3-level testing strategy across all five module
 |--------|-------------|----------|----------------|
 | strepsuis-mdr | 110+ | 62% | 85-100% |
 | strepsuis-amrvirkm | 100+ | 50% | 85-100% |
-| strepsuis-genphen | 100+ | 50% | 85-100% |
 | strepsuis-genphennet | 100+ | 50% | 85-100% |
 | strepsuis-phylotrait | 90+ | 50% | 85-100% |
 
@@ -393,10 +392,6 @@ These algorithms are validated through end-to-end tests using real data.
 ### strepsuis-amrvirkm
 - Tests K-modes clustering, silhouette optimization
 - Validates MCA dimensionality reduction
-
-### strepsuis-genphen
-- Requires tree file (Snp_tree.newick) for phylogenetic tests
-- Tests tree-aware clustering and trait profiling
 
 ### strepsuis-genphennet
 - Tests network construction and community detection

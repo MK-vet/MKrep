@@ -62,9 +62,6 @@ cd separated_repos/strepsuis-mdr && pytest -v
 # strepsuis-amrvirkm
 cd separated_repos/strepsuis-amrvirkm && pytest -v
 
-# strepsuis-genphen
-cd separated_repos/strepsuis-genphen && pytest -v
-
 # strepsuis-genphennet
 cd separated_repos/strepsuis-genphennet && pytest -v
 
