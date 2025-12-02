@@ -62,7 +62,7 @@ jobs:
         echo "" >> VERSION_INFO.md
         echo "Available analysis scripts:" >> VERSION_INFO.md
         echo '```' >> VERSION_INFO.md
-        ls -1 *.py | grep -E "(Cluster_|MDR_|Network_|Phylgenetic_|StrepSuis)" >> VERSION_INFO.md
+        ls -1 src/*.py | grep -v __init__ >> VERSION_INFO.md
         echo '```' >> VERSION_INFO.md
         echo "" >> VERSION_INFO.md
         
@@ -189,8 +189,8 @@ jobs:
         test -d colab_notebooks && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
         echo ""
         echo "2. 💻 Python Standalone Scripts"
-        echo "   - Location: Root directory"
-        test -f Cluster_MIC_AMR_Viruelnce.py && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
+        echo "   - Location: src/"
+        test -f src/cluster_mic_amr_virulence.py && echo "   - Status: ✅ Available" || echo "   - Status: ❌ Missing"
         echo ""
         echo "3. 📦 CLI Package (mkrep)"
         echo "   - Location: python_package/"

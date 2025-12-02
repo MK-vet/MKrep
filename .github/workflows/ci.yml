@@ -42,19 +42,19 @@ jobs:
       run: |
         ls -la *.py
         echo "Main analysis scripts:"
-        ls -la Cluster_MIC_AMR_Viruelnce.py
-        ls -la MDR_2025_04_15.py
-        ls -la Network_Analysis_2025_06_26.py
-        ls -la Phylogenetic_clustering_2025_03_21.py
-        ls -la StrepSuisPhyloCluster_2025_08_11.py
+        ls -la src/cluster_mic_amr_virulence.py
+        ls -la src/mdr_analysis.py
+        ls -la src/network_analysis.py
+        ls -la src/phylogenetic_clustering.py
+        ls -la src/strep_suis_phylo_cluster.py
     
     - name: Check script syntax
       run: |
-        python -m py_compile Cluster_MIC_AMR_Viruelnce.py
-        python -m py_compile MDR_2025_04_15.py
-        python -m py_compile Network_Analysis_2025_06_26.py
-        python -m py_compile Phylogenetic_clustering_2025_03_21.py
-        python -m py_compile StrepSuisPhyloCluster_2025_08_11.py
+        python -m py_compile src/cluster_mic_amr_virulence.py
+        python -m py_compile src/mdr_analysis.py
+        python -m py_compile src/network_analysis.py
+        python -m py_compile src/phylogenetic_clustering.py
+        python -m py_compile src/strep_suis_phylo_cluster.py
         python -m py_compile excel_report_utils.py
         python -m py_compile validate.py
     
@@ -210,7 +210,7 @@ jobs:
         python --version
         echo ""
         echo "=== Standalone Scripts ==="
-        ls -1 *.py | grep -E "(Cluster_|MDR_|Network_|Phylogenetic_|StrepSuis)" || true
+        ls -1 src/*.py | grep -v __init__ || true
         echo ""
         echo "=== CLI Commands ==="
         mkrep --help | head -5 || echo "CLI help available"

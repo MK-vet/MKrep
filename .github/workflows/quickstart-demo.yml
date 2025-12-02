@@ -41,15 +41,15 @@ jobs:
         echo "==================================="
         echo ""
         echo "Available analysis scripts:"
-        ls -lh Cluster_MIC_AMR_Viruelnce.py
-        ls -lh MDR_2025_04_15.py
-        ls -lh Network_Analysis_2025_06_26.py
-        ls -lh Phylgenetic_clustering_2025_03_21.py
-        ls -lh StrepSuisPhyloCluster_2025_08_11.py
+        ls -lh src/cluster_mic_amr_virulence.py
+        ls -lh src/mdr_analysis.py
+        ls -lh src/network_analysis.py
+        ls -lh src/phylogenetic_clustering.py
+        ls -lh src/strep_suis_phylo_cluster.py
         echo ""
         echo "Usage example:"
-        echo "  python Cluster_MIC_AMR_Viruelnce.py"
-        echo "  python MDR_2025_04_15.py"
+        echo "  python src/cluster_mic_amr_virulence.py"
+        echo "  python src/mdr_analysis.py"
         echo ""
         echo "These scripts can be run directly with Python!"
 
