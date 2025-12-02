@@ -80,7 +80,7 @@ To reproduce results:
 
 Example:
 ```bash
-strepsuis-amrpat \
+strepsuis-mdr \
   --data-dir examples/ \
   --output results/ \
   --random-seed 42 \
@@ -92,4 +92,4 @@ strepsuis-amrpat \
 For questions about results or interpretation:
 - See [USER_GUIDE.md](../USER_GUIDE.md)
 - See main [README.md](../README.md)
-- Open an issue on [GitHub](https://github.com/MK-vet/strepsuis-amrpat/issues)
+- Open an issue on [GitHub](https://github.com/MK-vet/strepsuis-mdr/issues)

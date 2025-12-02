@@ -38,7 +38,7 @@ class TestCLI:
         """Test that main() fails without required arguments."""
         from strepsuis_mdr.cli import main
         
-        with patch('sys.argv', ['strepsuis-amrpat']):
+        with patch('sys.argv', ['strepsuis-mdr']):
             with pytest.raises(SystemExit) as exc_info:
                 main()
             assert exc_info.value.code == 2  # argparse exit code
@@ -47,7 +47,7 @@ class TestCLI:
         """Test main() with non-existent data directory."""
         from strepsuis_mdr.cli import main
         
-        with patch('sys.argv', ['strepsuis-amrpat', '--data-dir', '/nonexistent/path']):
+        with patch('sys.argv', ['strepsuis-mdr', '--data-dir', '/nonexistent/path']):
             result = main()
             assert result == 1  # Should fail
 
@@ -56,7 +56,7 @@ class TestCLI:
         from strepsuis_mdr.cli import main
         
         # Create a temp directory as data-dir
-        with patch('sys.argv', ['strepsuis-amrpat', '--data-dir', str(tmp_path)]):
+        with patch('sys.argv', ['strepsuis-mdr', '--data-dir', str(tmp_path)]):
             result = main()
             # Should fail because MIC.csv and AMR_genes.csv are missing
             assert result == 1

@@ -1,5 +1,5 @@
 """
-Statistical Validation Tests for strepsuis-amrpat
+Statistical Validation Tests for strepsuis-mdr
 
 These tests validate the statistical routines against gold-standard libraries
 as specified in the Elite Custom Instructions for StrepSuis Bioinformatics Suite.

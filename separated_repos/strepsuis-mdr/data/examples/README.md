@@ -62,13 +62,13 @@ Strain003,1,1,0
 
 ```bash
 # Run analysis with example data
-strepsuis-amrpat --data-dir examples/ --output results/
+strepsuis-mdr --data-dir examples/ --output results/
 ```
 
 ### Python API
 
 ```python
-from strepsuis_amrpat import MDRAnalyzer
+from strepsuis_mdr import MDRAnalyzer
 
 analyzer = MDRAnalyzer(
     data_dir="examples/",
@@ -83,7 +83,7 @@ results = analyzer.run()
 ```bash
 # Run with example data
 docker run -v $(pwd)/examples:/data -v $(pwd)/results:/output \
-    strepsuis-amrpat:latest --data-dir /data --output /output
+    strepsuis-mdr:latest --data-dir /data --output /output
 ```
 
 ## Data Sources
@@ -104,4 +104,4 @@ If you publish results using modified versions of this example data, please cite
 For questions about data format or requirements:
 - See main [README.md](../README.md)
 - See [USER_GUIDE.md](../USER_GUIDE.md)
-- Open an issue on [GitHub](https://github.com/MK-vet/strepsuis-amrpat/issues)
+- Open an issue on [GitHub](https://github.com/MK-vet/strepsuis-mdr/issues)

@@ -53,7 +53,7 @@ from statsmodels.stats.multitest import multipletests
 try:
     from .excel_report_utils import ExcelReportGenerator
 except ImportError:
-    from strepsuis_amrpat.excel_report_utils import ExcelReportGenerator
+    from strepsuis_mdr.excel_report_utils import ExcelReportGenerator
 
 warnings.filterwarnings("ignore")  # for cleaner console output
 
