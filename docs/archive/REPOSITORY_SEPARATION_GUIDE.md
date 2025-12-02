@@ -28,7 +28,7 @@ All separated modules are located in: `/separated_repos/`
 ```
 separated_repos/
 ├── strepsuis-amrvirkm/      # Module 1: Cluster Analysis
-├── strepsuis-amrpat/         # Module 2: MDR Analysis
+├── strepsuis-mdr/         # Module 2: MDR Analysis
 ├── strepsuis-genphennet/     # Module 3: Network Analysis
 ├── strepsuis-phylotrait/     # Module 4: Phylogenetic Clustering
 └── strepsuis-genphen/        # Module 5: Genomic-Phenotypic Analysis
@@ -110,7 +110,7 @@ git push -u origin main
 
 Repeat for all 5 modules:
 - `strepsuis-amrvirkm`
-- `strepsuis-amrpat`
+- `strepsuis-mdr`
 - `strepsuis-genphennet`
 - `strepsuis-phylotrait`
 - `strepsuis-genphen`
@@ -235,9 +235,9 @@ python -m twine upload dist/*
 - **Required Files**: MIC.csv, AMR_genes.csv, Virulence.csv
 
 ### StrepSuis-AMRPat
-- **Repository**: `strepsuis-amrpat`
-- **PyPI Package**: `strepsuis-amrpat`
-- **Docker Image**: `mkvet/strepsuis-amrpat`
+- **Repository**: `strepsuis-mdr`
+- **PyPI Package**: `strepsuis-mdr`
+- **Docker Image**: `mkvet/strepsuis-mdr`
 - **Required Files**: MIC.csv, AMR_genes.csv
 
 ### StrepSuis-GenPhenNet

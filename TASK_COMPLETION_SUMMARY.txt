@@ -20,7 +20,7 @@ REPOSITORIES CREATED
 
 Location: separated_repos/
 
-1. strepsuis-amrpat      - Antimicrobial Resistance Pattern Detection
+1. strepsuis-mdr      - Antimicrobial Resistance Pattern Detection
 2. strepsuis-amrvirkm    - K-Modes Clustering for AMR/Virulence
 3. strepsuis-genphennet  - Network-Based Genome-Phenome Integration
 4. strepsuis-phylotrait  - Phylogenetic and Binary Trait Analysis
@@ -222,7 +222,7 @@ The repositories are now READY FOR DEPLOYMENT. To deploy:
    - IMPLEMENTATION_VERIFICATION.md (verification details)
 
 2. Test Locally (recommended):
-   cd separated_repos/strepsuis-amrpat
+   cd separated_repos/strepsuis-mdr
    pip install -e .[dev]
    pytest
    pre-commit run --all-files
@@ -231,14 +231,14 @@ The repositories are now READY FOR DEPLOYMENT. To deploy:
 3. Create GitHub Repositories:
    - Create 5 new repositories on GitHub
    - One for each tool in separated_repos/
-   - Use names: strepsuis-amrpat, strepsuis-amrvirkm, etc.
+   - Use names: strepsuis-mdr, strepsuis-amrvirkm, etc.
 
 4. Push Code:
-   cd separated_repos/strepsuis-amrpat
+   cd separated_repos/strepsuis-mdr
    git init
    git add .
    git commit -m "Initial release v1.0.0"
-   git remote add origin https://github.com/USERNAME/strepsuis-amrpat.git
+   git remote add origin https://github.com/USERNAME/strepsuis-mdr.git
    git push -u origin main
 
 5. Create Releases:

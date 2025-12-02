@@ -24,7 +24,7 @@ The workflow (`generate_reports.yml`) automatically:
 2. Select **"Generate Full Reports and Coverage"** from the workflows list
 3. Click **"Run workflow"** button (top right)
 4. Optional: Specify modules to process (default: "all")
-   - Examples: `all`, `strepsuis-amrpat`, `strepsuis-amrpat strepsuis-genphen`
+   - Examples: `all`, `strepsuis-mdr`, `strepsuis-mdr strepsuis-genphen`
 5. Click **"Run workflow"** to start
 6. Wait ~10-15 minutes for completion
 
@@ -35,7 +35,7 @@ The workflow (`generate_reports.yml`) automatically:
 gh workflow run generate_reports.yml
 
 # Run for specific modules only
-gh workflow run generate_reports.yml -f modules="strepsuis-amrpat strepsuis-genphen"
+gh workflow run generate_reports.yml -f modules="strepsuis-mdr strepsuis-genphen"
 ```
 
 ### Option 3: REST API
@@ -55,7 +55,7 @@ After workflow completes, the following will be committed to the repository:
 ### Coverage Reports
 ```
 separated_repos/coverage_reports/
-├── strepsuis-amrpat_htmlcov/
+├── strepsuis-mdr_htmlcov/
 │   └── index.html          # Interactive coverage report
 ├── strepsuis-amrvirkm_htmlcov/
 ├── strepsuis-genphen_htmlcov/
@@ -66,7 +66,7 @@ separated_repos/coverage_reports/
 ### Analysis Reports
 ```
 separated_repos/analysis_reports/
-├── strepsuis-amrpat/
+├── strepsuis-mdr/
 │   └── ANALYSIS_SUMMARY.md
 ├── strepsuis-amrvirkm/
 │   └── ANALYSIS_SUMMARY.md
@@ -97,7 +97,7 @@ separated_repos/analysis_reports/
 3. **View Coverage Locally**:
    ```bash
    git pull
-   cd separated_repos/coverage_reports/strepsuis-amrpat_htmlcov
+   cd separated_repos/coverage_reports/strepsuis-mdr_htmlcov
    open index.html  # or python -m http.server
    ```
 
@@ -171,14 +171,14 @@ Each module has a new `tests/test_unit_analysis.py` file with:
 To run the same process locally:
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install dependencies
 pip install -e .[dev]
 
 # Run tests with coverage
 pytest -m "not slow" \
-       --cov=strepsuis_amrpat \
+       --cov=strepsuis_mdr \
        --cov-report=html \
        --cov-report=term
 

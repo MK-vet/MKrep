@@ -16,7 +16,7 @@ def add_coverage_badge(readme_path: Path, module_name: str) -> bool:
     
     Args:
         readme_path: Path to README.md file
-        module_name: Name of the module (e.g., strepsuis-amrpat)
+        module_name: Name of the module (e.g., strepsuis-mdr)
     
     Returns:
         True if badge was added or already exists, False otherwise

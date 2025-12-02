@@ -12,10 +12,10 @@ Successfully created comprehensive infrastructure for 5 independent, publication
 
 ## Repositories Implemented
 
-### 1. strepsuis-amrpat ✅
-- **Location:** `separated_repos/strepsuis-amrpat/`
-- **Package:** strepsuis_amrpat
-- **CLI:** strepsuis-amrpat
+### 1. strepsuis-mdr ✅
+- **Location:** `separated_repos/strepsuis-mdr/`
+- **Package:** strepsuis_mdr
+- **CLI:** strepsuis-mdr
 - **Status:** Production Ready
 
 ### 2. strepsuis-amrvirkm ✅
@@ -417,7 +417,7 @@ See `separated_repos/DEPLOYMENT_GUIDE.md` for:
 
 1. **Test locally:**
    ```bash
-   cd separated_repos/strepsuis-amrpat
+   cd separated_repos/strepsuis-mdr
    pip install -e .[dev]
    pytest
    pre-commit run --all-files

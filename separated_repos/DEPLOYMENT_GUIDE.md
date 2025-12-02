@@ -18,7 +18,7 @@ This guide provides comprehensive instructions for deploying the 5 separated Str
 
 The MKrep repository has been restructured into 5 independent, publication-ready modules located in the `separated_repos/` directory:
 
-1. **strepsuis-amrpat** - Automated Detection of Antimicrobial Resistance Patterns
+1. **strepsuis-mdr** - Automated Detection of Antimicrobial Resistance Patterns
 2. **strepsuis-amrvirkm** - K-Modes Clustering of AMR and Virulence Profiles
 3. **strepsuis-genphennet** - Network-Based Integration of Genome-Phenome Data
 4. **strepsuis-phylotrait** - Integrated Phylogenetic and Binary Trait Analysis
@@ -87,7 +87,7 @@ repository-name/
 
 | Repository | Package Name | CLI Command | Docker Image | Colab Notebook |
 |------------|--------------|-------------|--------------|----------------|
-| strepsuis-amrpat | strepsuis_amrpat | strepsuis-amrpat | ghcr.io/mk-vet/strepsuis-amrpat | AMRPat_Analysis.ipynb |
+| strepsuis-mdr | strepsuis_mdr | strepsuis-mdr | ghcr.io/mk-vet/strepsuis-mdr | AMRPat_Analysis.ipynb |
 | strepsuis-amrvirkm | strepsuis_amrvirkm | strepsuis-amrvirkm | ghcr.io/mk-vet/strepsuis-amrvirkm | AMRVirKM_Analysis.ipynb |
 | strepsuis-genphennet | strepsuis_genphennet | strepsuis-genphennet | ghcr.io/mk-vet/strepsuis-genphennet | GenPhenNet_Analysis.ipynb |
 | strepsuis-phylotrait | strepsuis_phylotrait | strepsuis-phylotrait | ghcr.io/mk-vet/strepsuis-phylotrait | PhyloTrait_Analysis.ipynb |
@@ -120,7 +120,7 @@ For each of the 5 modules, create a new GitHub repository:
 For each module in `separated_repos/`:
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Initialize git repository
 git init
@@ -145,7 +145,7 @@ Version: 1.0.0
 License: MIT"
 
 # Add remote (replace USERNAME with your GitHub username)
-git remote add origin https://github.com/USERNAME/strepsuis-amrpat.git
+git remote add origin https://github.com/USERNAME/strepsuis-mdr.git
 
 # Push to main branch
 git branch -M main
@@ -159,7 +159,7 @@ Repeat for all 5 repositories.
 For developers working on the code:
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install pre-commit hooks
 pre-commit install
@@ -257,14 +257,14 @@ python -m venv test-env
 source test-env/bin/activate  # On Windows: test-env\Scripts\activate
 
 # Install package from GitHub
-pip install git+https://github.com/USERNAME/strepsuis-amrpat.git@v1.0.0
+pip install git+https://github.com/USERNAME/strepsuis-mdr.git@v1.0.0
 
 # Test CLI
-strepsuis-amrpat --version
-strepsuis-amrpat --help
+strepsuis-mdr --version
+strepsuis-mdr --help
 
 # Test analysis (requires example data)
-strepsuis-amrpat --data-dir examples/ --output test-output/
+strepsuis-mdr --data-dir examples/ --output test-output/
 
 # Cleanup
 deactivate
@@ -274,33 +274,33 @@ rm -rf test-env test-output
 ### Test 2: Docker Container
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Build Docker image
-docker build -t strepsuis-amrpat:test .
+docker build -t strepsuis-mdr:test .
 
 # Test help
-docker run --rm strepsuis-amrpat:test --help
+docker run --rm strepsuis-mdr:test --help
 
 # Test version
-docker run --rm strepsuis-amrpat:test --version
+docker run --rm strepsuis-mdr:test --version
 
 # Test with example data
 docker run --rm \
   -v $(pwd)/examples:/data \
   -v $(pwd)/test-output:/output \
-  strepsuis-amrpat:test \
+  strepsuis-mdr:test \
   --data-dir /data --output /output
 
 # Cleanup
-docker rmi strepsuis-amrpat:test
+docker rmi strepsuis-mdr:test
 rm -rf test-output
 ```
 
 ### Test 3: Pre-commit Hooks
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install hooks
 pre-commit install
@@ -314,7 +314,7 @@ pre-commit run --all-files
 ### Test 4: Test Suite
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install in development mode
 pip install -e .[dev]
@@ -352,7 +352,7 @@ pytest --cov --cov-report=term-missing
 ### Steps
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install build tools
 pip install build twine
@@ -367,13 +367,13 @@ twine check dist/*
 twine upload --repository testpypi dist/*
 
 # Verify installation from TestPyPI
-pip install --index-url https://test.pypi.org/simple/ strepsuis-amrpat
+pip install --index-url https://test.pypi.org/simple/ strepsuis-mdr
 
 # If successful, upload to PyPI
 twine upload dist/*
 
 # Verify
-pip install strepsuis-amrpat
+pip install strepsuis-mdr
 ```
 
 ## Publishing to Docker Hub
@@ -385,15 +385,15 @@ pip install strepsuis-amrpat
 docker login
 
 # Build image
-docker build -t strepsuis-amrpat:1.0.0 .
+docker build -t strepsuis-mdr:1.0.0 .
 
 # Tag for Docker Hub
-docker tag strepsuis-amrpat:1.0.0 USERNAME/strepsuis-amrpat:1.0.0
-docker tag strepsuis-amrpat:1.0.0 USERNAME/strepsuis-amrpat:latest
+docker tag strepsuis-mdr:1.0.0 USERNAME/strepsuis-mdr:1.0.0
+docker tag strepsuis-mdr:1.0.0 USERNAME/strepsuis-mdr:latest
 
 # Push to Docker Hub
-docker push USERNAME/strepsuis-amrpat:1.0.0
-docker push USERNAME/strepsuis-amrpat:latest
+docker push USERNAME/strepsuis-mdr:1.0.0
+docker push USERNAME/strepsuis-mdr:latest
 ```
 
 ## Automation Strategy

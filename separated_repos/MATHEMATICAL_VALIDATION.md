@@ -275,7 +275,7 @@ def test_mdr_identification_accuracy():
 ### Full Validation Suite
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 pip install -e .[dev]
 pytest tests/test_statistical_validation.py -v
 ```
@@ -296,7 +296,7 @@ pytest tests/test_statistical_validation.py --cov --cov-report=html
 
 | Module | Validation Tests | Pass Rate | Notes |
 |--------|------------------|-----------|-------|
-| strepsuis-amrpat | 25+ | 100% | Full statistical validation |
+| strepsuis-mdr | 25+ | 100% | Full statistical validation |
 | strepsuis-amrvirkm | 20+ | 100% | Clustering + MCA validation |
 | strepsuis-genphen | 20+ | 100% | Phylogenetic metrics validation |
 | strepsuis-genphennet | 15+ | 100% | Network metrics validation |

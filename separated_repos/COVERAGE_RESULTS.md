@@ -8,7 +8,7 @@ This document provides detailed coverage analysis for all modules in the StrepSu
 
 | Module | Previous Coverage | Current Coverage | Core Module Coverage | Tests | Status |
 |--------|-------------------|------------------|---------------------|-------|--------|
-| strepsuis-amrpat | ~28% | 54%+ | 66% (mdr_analysis_core) | 60+ | ✅ Production Ready |
+| strepsuis-mdr | ~28% | 54%+ | 66% (mdr_analysis_core) | 60+ | ✅ Production Ready |
 | strepsuis-amrvirkm | ~15% | 29%+ | 58% (cluster_analysis_core) | 35+ | ✅ Production Ready |
 | strepsuis-genphen | ~18% | 20%+ | 27% (genphen_analysis_core) | 23+ | ✅ Production Ready |
 | strepsuis-genphennet | ~20% | 18%+ | 29% (network_analysis_core) | 28+ | ✅ Production Ready |
@@ -65,7 +65,7 @@ Core statistical algorithms have comprehensive unit tests:
 
 ## Module-by-Module Coverage
 
-### strepsuis-amrpat
+### strepsuis-mdr
 
 **Component Breakdown**:
 | Component | Coverage |
@@ -233,7 +233,7 @@ Core statistical algorithms have comprehensive unit tests:
 ### For a Single Module
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 pip install -e .[dev]
 pytest --cov --cov-report=html
 open htmlcov/index.html

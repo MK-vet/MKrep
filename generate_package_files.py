@@ -10,12 +10,12 @@ from typing import Dict
 
 # Module configurations (from previous script)
 MODULES = {
-    "strepsuis-amrpat": {
+    "strepsuis-mdr": {
         "name": "StrepSuis-AMRPat",
         "title": "Automated Detection of Antimicrobial Resistance Patterns",
         "description": "Advanced multidrug resistance pattern detection with bootstrap resampling and network analysis",
-        "cli_command": "strepsuis-amrpat",
-        "package_name": "strepsuis_amrpat",
+        "cli_command": "strepsuis-mdr",
+        "package_name": "strepsuis_mdr",
         "class_name": "MDRAnalyzer",
         "short_desc": "MDR pattern detection and co-resistance network analysis for bacterial genomics"
     },

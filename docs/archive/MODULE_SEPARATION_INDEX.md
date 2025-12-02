@@ -38,7 +38,7 @@ All modules are in the `separated_repos/` directory:
 | Module | Directory | Purpose |
 |--------|-----------|---------|
 | **StrepSuis-AMRVirKM** | [separated_repos/strepsuis-amrvirkm](separated_repos/strepsuis-amrvirkm) | K-Modes Clustering |
-| **StrepSuis-AMRPat** | [separated_repos/strepsuis-amrpat](separated_repos/strepsuis-amrpat) | MDR Pattern Detection |
+| **StrepSuis-AMRPat** | [separated_repos/strepsuis-mdr](separated_repos/strepsuis-mdr) | MDR Pattern Detection |
 | **StrepSuis-GenPhenNet** | [separated_repos/strepsuis-genphennet](separated_repos/strepsuis-genphennet) | Network Analysis |
 | **StrepSuis-PhyloTrait** | [separated_repos/strepsuis-phylotrait](separated_repos/strepsuis-phylotrait) | Phylogenetic Clustering |
 | **StrepSuis-GenPhen** | [separated_repos/strepsuis-genphen](separated_repos/strepsuis-genphen) | Integrated Analysis |
@@ -74,7 +74,7 @@ Current status: **All 5 modules verified ✅**
 MKrep/
 ├── separated_repos/                    # ← All 5 separated modules
 │   ├── strepsuis-amrvirkm/            # ← Complete standalone repo
-│   ├── strepsuis-amrpat/              # ← Complete standalone repo
+│   ├── strepsuis-mdr/              # ← Complete standalone repo
 │   ├── strepsuis-genphennet/          # ← Complete standalone repo
 │   ├── strepsuis-phylotrait/          # ← Complete standalone repo
 │   └── strepsuis-genphen/             # ← Complete standalone repo

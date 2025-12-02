@@ -3,7 +3,7 @@ Use the following as persistent instructions whenever you work in this repositor
 
 ### 1. Repository Structure & Context
 This directory contains five distinct sub-projects. Treat them as individual packages sharing a common rigorous standard:
-- `strepsuis-amrpat` (Likely the reference implementation; check this first for patterns)
+- `strepsuis-mdr` (Likely the reference implementation; check this first for patterns)
 - `strepsuis-amrvirkm`
 - `strepsuis-genphen`
 - `strepsuis-genphennet`
@@ -30,7 +30,7 @@ This directory contains five distinct sub-projects. Treat them as individual pac
 - Remove dead code only after verifying it is not used in `notebooks/` or external scripts.
 
 ### 3. Testing & Coverage Targets
-For each sub-repository (e.g., `strepsuis-amrpat`):
+For each sub-repository (e.g., `strepsuis-mdr`):
 - **Goal:** 100% coverage for core algorithms.
 - **Tools:** Use `pytest` with the configuration in `pytest.ini`.
 - **Process:**

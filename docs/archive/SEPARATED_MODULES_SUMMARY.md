@@ -29,8 +29,8 @@ All documentation is professionally written in English, and all tools are produc
 **Automated Detection of Antimicrobial Resistance Patterns**
 
 - **Original Script**: `MDR_2025_04_15.py`
-- **Package Name**: `strepsuis-amrpat`
-- **CLI Command**: `strepsuis-amrpat`
+- **Package Name**: `strepsuis-mdr`
+- **CLI Command**: `strepsuis-mdr`
 - **Key Features**:
   - Multi-drug resistance (MDR) pattern detection
   - Bootstrap resampling for prevalence estimation

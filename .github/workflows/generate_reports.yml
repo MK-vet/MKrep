@@ -41,7 +41,7 @@ jobs:
         id: modules
         run: |
           if [ "${{ github.event.inputs.modules }}" == "all" ] || [ -z "${{ github.event.inputs.modules }}" ]; then
-            echo "modules=strepsuis-amrpat strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait" >> $GITHUB_OUTPUT
+            echo "modules=strepsuis-mdr strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait" >> $GITHUB_OUTPUT
           else
             echo "modules=${{ github.event.inputs.modules }}" >> $GITHUB_OUTPUT
           fi
@@ -167,7 +167,7 @@ jobs:
             echo ""
             echo "| Module | Coverage | Status | Target |"
             echo "|--------|----------|--------|--------|"
-            echo "| strepsuis-amrpat | \${COVERAGE_strepsuis_amrpat:-pending}% | \${COVERAGE_strepsuis_amrpat:+✅ PASS}\${COVERAGE_strepsuis_amrpat:-⏳ Pending} | 50-65% |"
+            echo "| strepsuis-mdr | \${COVERAGE_strepsuis_mdr:-pending}% | \${COVERAGE_strepsuis_mdr:+✅ PASS}\${COVERAGE_strepsuis_mdr:-⏳ Pending} | 50-65% |"
             echo "| strepsuis-amrvirkm | \${COVERAGE_strepsuis_amrvirkm:-pending}% | \${COVERAGE_strepsuis_amrvirkm:+✅ PASS}\${COVERAGE_strepsuis_amrvirkm:-⏳ Pending} | 50-65% |"
             echo "| strepsuis-genphen | \${COVERAGE_strepsuis_genphen:-pending}% | \${COVERAGE_strepsuis_genphen:+✅ PASS}\${COVERAGE_strepsuis_genphen:-⏳ Pending} | 50-65% |"
             echo "| strepsuis-genphennet | \${COVERAGE_strepsuis_genphennet:-pending}% | \${COVERAGE_strepsuis_genphennet:+✅ PASS}\${COVERAGE_strepsuis_genphennet:-⏳ Pending} | 50-65% |"
@@ -185,7 +185,7 @@ jobs:
             echo ""
           } > separated_repos/COVERAGE_REPORT_COMPLETE.md
           
-          for module in strepsuis-amrpat strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
+          for module in strepsuis-mdr strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
             if [ -d "separated_repos/coverage_reports/${module}_htmlcov" ]; then
               echo "- [$module coverage report](coverage_reports/${module}_htmlcov/index.html)" >> separated_repos/COVERAGE_REPORT_COMPLETE.md
             fi
@@ -199,7 +199,7 @@ jobs:
             echo ""
           } >> separated_repos/COVERAGE_REPORT_COMPLETE.md
           
-          for module in strepsuis-amrpat strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
+          for module in strepsuis-mdr strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
             if [ -d "separated_repos/analysis_reports/$module" ]; then
               echo "- [$module analysis summary](analysis_reports/$module/ANALYSIS_SUMMARY.md)" >> separated_repos/COVERAGE_REPORT_COMPLETE.md
             fi
@@ -229,7 +229,7 @@ jobs:
       - name: Update coverage badges
         run: |
           cd separated_repos
-          for module in strepsuis-amrpat strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
+          for module in strepsuis-mdr strepsuis-amrvirkm strepsuis-genphen strepsuis-genphennet strepsuis-phylotrait; do
             if [ -f "$module/coverage.json" ]; then
               coverage_pct=$(python -c "import json; data=json.load(open('$module/coverage.json')); print(f\"{data['totals']['percent_covered']:.0f}\")" 2>/dev/null || echo "0")
               
@@ -262,12 +262,12 @@ jobs:
             echo ""
             echo "## 📊 Modules Analyzed"
             echo ""
-            echo "### 1. strepsuis-amrpat - MDR Pattern Analysis"
+            echo "### 1. strepsuis-mdr - MDR Pattern Analysis"
             echo "**Focus**: Multidrug resistance pattern detection and co-resistance network analysis"
             echo ""
-            echo "- **Coverage**: ${COVERAGE_strepsuis_amrpat:-pending}%"
-            echo "- [Analysis Report](analysis_reports/strepsuis-amrpat/ANALYSIS_SUMMARY.md)"
-            echo "- [Coverage Report](coverage_reports/strepsuis-amrpat_htmlcov/index.html)"
+            echo "- **Coverage**: ${COVERAGE_strepsuis_mdr:-pending}%"
+            echo "- [Analysis Report](analysis_reports/strepsuis-mdr/ANALYSIS_SUMMARY.md)"
+            echo "- [Coverage Report](coverage_reports/strepsuis-mdr_htmlcov/index.html)"
             echo ""
             echo "### 2. strepsuis-amrvirkm - K-Modes Clustering"
             echo "**Focus**: K-modes clustering of AMR and virulence profiles"
@@ -334,7 +334,7 @@ jobs:
             echo "### View Reports Locally"
             echo ""
             echo "\\\`\\\`\\\`bash"
-            echo "cd separated_repos/strepsuis-amrpat"
+            echo "cd separated_repos/strepsuis-mdr"
             echo "pip install -e .[dev]"
             echo "pytest --cov --cov-report=html"
             echo "open htmlcov/index.html  # View coverage report"
@@ -343,10 +343,10 @@ jobs:
             echo "### Run Full Analysis (92 strains)"
             echo ""
             echo "\\\`\\\`\\\`bash"
-            echo "cd separated_repos/strepsuis-amrpat"
+            echo "cd separated_repos/strepsuis-mdr"
             echo "python -c \""
-            echo "from strepsuis_amrpat.analyzer import MDRAnalyzer"
-            echo "from strepsuis_amrpat.config import Config"
+            echo "from strepsuis_mdr.analyzer import MDRAnalyzer"
+            echo "from strepsuis_mdr.config import Config"
             echo ""
             echo "config = Config(data_dir='../../', output_dir='./results')"
             echo "analyzer = MDRAnalyzer(config)"
@@ -358,7 +358,7 @@ jobs:
             echo ""
             echo "\\\`\\\`\\\`bash"
             echo "# Run fast tests (for CI)"
-            echo "cd separated_repos/strepsuis-amrpat"
+            echo "cd separated_repos/strepsuis-mdr"
             echo "pytest -m \"not slow\" -v"
             echo ""
             echo "# Run all tests including slow ones"
@@ -435,7 +435,7 @@ jobs:
           echo "### 📊 Coverage Results" >> $GITHUB_STEP_SUMMARY
           echo "| Module | Coverage | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|----------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| strepsuis-amrpat | ${COVERAGE_strepsuis_amrpat:-pending}% | ${COVERAGE_strepsuis_amrpat:+✅}${COVERAGE_strepsuis_amrpat:-⏳} |" >> $GITHUB_STEP_SUMMARY
+          echo "| strepsuis-mdr | ${COVERAGE_strepsuis_mdr:-pending}% | ${COVERAGE_strepsuis_mdr:+✅}${COVERAGE_strepsuis_mdr:-⏳} |" >> $GITHUB_STEP_SUMMARY
           echo "| strepsuis-amrvirkm | ${COVERAGE_strepsuis_amrvirkm:-pending}% | ${COVERAGE_strepsuis_amrvirkm:+✅}${COVERAGE_strepsuis_amrvirkm:-⏳} |" >> $GITHUB_STEP_SUMMARY
           echo "| strepsuis-genphen | ${COVERAGE_strepsuis_genphen:-pending}% | ${COVERAGE_strepsuis_genphen:+✅}${COVERAGE_strepsuis_genphen:-⏳} |" >> $GITHUB_STEP_SUMMARY
           echo "| strepsuis-genphennet | ${COVERAGE_strepsuis_genphennet:-pending}% | ${COVERAGE_strepsuis_genphennet:+✅}${COVERAGE_strepsuis_genphennet:-⏳} |" >> $GITHUB_STEP_SUMMARY

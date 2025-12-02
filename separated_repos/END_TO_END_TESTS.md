@@ -24,9 +24,9 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 
 ## Module-Specific E2E Tests
 
-### 1. strepsuis-amrpat (MDR Pattern Analysis)
+### 1. strepsuis-mdr (MDR Pattern Analysis)
 
-**Location**: `strepsuis-amrpat/tests/test_end_to_end.py`  
+**Location**: `strepsuis-mdr/tests/test_end_to_end.py`  
 **Test Count**: 10 comprehensive E2E tests  
 **Sample Data**: Mini dataset (10 strains) and full dataset (92 strains)
 
@@ -156,7 +156,7 @@ All modules follow a consistent E2E testing pattern with 10-12 comprehensive tes
 ### Individual Module
 
 ```bash
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 pip install -e .[dev]
 
 # Run all E2E tests
@@ -251,7 +251,7 @@ E2E tests significantly improve coverage of:
 
 | Module | Base Coverage | +E2E Tests | Total |
 |--------|---------------|------------|-------|
-| strepsuis-amrpat | ~50% | +12% | **62%** |
+| strepsuis-mdr | ~50% | +12% | **62%** |
 | strepsuis-amrvirkm | ~25% | +9% | **34%** |
 | strepsuis-genphen | ~24% | +8% | **32%** |
 | strepsuis-genphennet | ~28% | +8% | **36%** |

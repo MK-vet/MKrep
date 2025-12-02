@@ -6,7 +6,7 @@ Quick reference for running tests in the StrepSuis Suite.
 
 ```bash
 # Navigate to module
-cd separated_repos/strepsuis-amrpat
+cd separated_repos/strepsuis-mdr
 
 # Install dev dependencies
 pip install -e .[dev]
@@ -56,8 +56,8 @@ pytest -s             # Show prints
 ## Module Commands
 
 ```bash
-# strepsuis-amrpat
-cd separated_repos/strepsuis-amrpat && pytest -v
+# strepsuis-mdr
+cd separated_repos/strepsuis-mdr && pytest -v
 
 # strepsuis-amrvirkm
 cd separated_repos/strepsuis-amrvirkm && pytest -v

@@ -21,18 +21,18 @@ strepsuis-amrvirkm --data-dir ./data --output ./results
 
 ---
 
-### 2. [StrepSuis-AMRPat](separated_repos/strepsuis-amrpat)
+### 2. [StrepSuis-AMRPat](separated_repos/strepsuis-mdr)
 **Automated Detection of Antimicrobial Resistance Patterns**
 
 ```bash
 # Install
-pip install git+https://github.com/MK-vet/strepsuis-amrpat.git
+pip install git+https://github.com/MK-vet/strepsuis-mdr.git
 
 # Use
-strepsuis-amrpat --data-dir ./data --output ./results
+strepsuis-mdr --data-dir ./data --output ./results
 ```
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/strepsuis-amrpat/blob/main/notebooks/AMRPat_Analysis.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/strepsuis-mdr/blob/main/notebooks/AMRPat_Analysis.ipynb)
 
 ---
 
@@ -125,7 +125,7 @@ All separated modules are in the `separated_repos/` directory:
 MKrep/
 ├── separated_repos/
 │   ├── strepsuis-amrvirkm/     ← Complete standalone repository
-│   ├── strepsuis-amrpat/       ← Complete standalone repository
+│   ├── strepsuis-mdr/       ← Complete standalone repository
 │   ├── strepsuis-genphennet/   ← Complete standalone repository
 │   ├── strepsuis-phylotrait/   ← Complete standalone repository
 │   └── strepsuis-genphen/      ← Complete standalone repository
@@ -245,7 +245,7 @@ strepsuis-amrvirkm \
 ```bash
 # Using Docker
 docker run -v $(pwd)/data:/data -v $(pwd)/output:/output \
-  mkvet/strepsuis-amrpat:latest \
+  mkvet/strepsuis-mdr:latest \
   --data-dir /data --output /output --mdr-threshold 3
 ```
 
