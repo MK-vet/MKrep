@@ -22,11 +22,11 @@ class MockColab:
 sys.modules['google'] = type(sys)('google')
 sys.modules['google.colab'] = MockColab()
 
-# Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path to import from src
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import functions from Network_Analysis_2025_06_26.py
-from Network_Analysis_2025_06_26 import (
+# Import functions from src/network_analysis.py
+from src.network_analysis import (
     expand_categories,
     chi2_phi,
     calculate_entropy,

@@ -51,46 +51,46 @@ class AnalysisRunner:
     MODULES = {
         'cluster': {
             'name': 'Cluster Analysis',
-            'script': 'Cluster_MIC_AMR_Viruelnce.py',
+            'script': 'src/cluster_mic_amr_virulence.py',
             'description': 'Comprehensive clustering analysis for MIC, AMR, and virulence data',
-            'required_files': ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv'],
-            'optional_files': ['MLST.csv', 'Serotype.csv', 'Plasmid.csv', 'MGE.csv'],
+            'required_files': ['data/MIC.csv', 'data/AMR_genes.csv', 'data/Virulence.csv'],
+            'optional_files': ['data/MLST.csv', 'data/Serotype.csv', 'data/Plasmid.csv', 'data/MGE.csv'],
             'output_folder': 'clustering_analysis_results',
             'estimated_time': '5-10 minutes'
         },
         'mdr': {
             'name': 'MDR Analysis',
-            'script': 'MDR_2025_04_15.py',
+            'script': 'src/mdr_analysis.py',
             'description': 'Enhanced MDR analysis with hybrid network approach',
-            'required_files': ['MIC.csv', 'AMR_genes.csv'],
-            'optional_files': ['Virulence.csv', 'MLST.csv'],
+            'required_files': ['data/MIC.csv', 'data/AMR_genes.csv'],
+            'optional_files': ['data/Virulence.csv', 'data/MLST.csv'],
             'output_folder': 'mdr_analysis_results',
             'estimated_time': '5-10 minutes'
         },
         'network': {
             'name': 'Network Analysis',
-            'script': 'Network_Analysis_2025_06_26.py',
+            'script': 'src/network_analysis.py',
             'description': 'Statistical network analysis for feature associations',
-            'required_files': ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv'],
-            'optional_files': ['MLST.csv', 'Serotype.csv', 'MGE.csv'],
+            'required_files': ['data/MIC.csv', 'data/AMR_genes.csv', 'data/Virulence.csv'],
+            'optional_files': ['data/MLST.csv', 'data/Serotype.csv', 'data/MGE.csv'],
             'output_folder': 'network_analysis_results',
             'estimated_time': '3-5 minutes'
         },
         'phylo': {
             'name': 'Phylogenetic Clustering',
-            'script': 'Phylogenetic_clustering_2025_03_21.py',
+            'script': 'src/phylogenetic_clustering.py',
             'description': 'Complete phylogenetic clustering and binary trait analysis',
-            'required_files': ['Snp_tree.newick', 'AMR_genes.csv', 'Virulence.csv'],
-            'optional_files': ['MIC.csv', 'MLST.csv', 'Serotype.csv'],
+            'required_files': ['data/Snp_tree.newick', 'data/AMR_genes.csv', 'data/Virulence.csv'],
+            'optional_files': ['data/MIC.csv', 'data/MLST.csv', 'data/Serotype.csv'],
             'output_folder': 'phylo_clustering_results',
             'estimated_time': '7-12 minutes'
         },
         'strepsuis': {
             'name': 'StrepSuis Analysis',
-            'script': 'StrepSuisPhyloCluster_2025_08_11.py',
+            'script': 'src/strep_suis_phylo_cluster.py',
             'description': 'Integrative phylogenetic clustering for Streptococcus suis',
-            'required_files': ['Snp_tree.newick', 'AMR_genes.csv', 'Virulence.csv'],
-            'optional_files': ['MIC.csv', 'MLST.csv', 'Serotype.csv', 'Plasmid.csv'],
+            'required_files': ['data/Snp_tree.newick', 'data/AMR_genes.csv', 'data/Virulence.csv'],
+            'optional_files': ['data/MIC.csv', 'data/MLST.csv', 'data/Serotype.csv', 'data/Plasmid.csv'],
             'output_folder': 'strepsuis_analysis_results',
             'estimated_time': '7-12 minutes'
         }

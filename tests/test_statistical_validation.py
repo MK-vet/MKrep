@@ -14,7 +14,7 @@ import pytest
 from scipy import stats
 
 # Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Mock google.colab module for testing
 class MockFiles:
@@ -30,7 +30,7 @@ sys.modules['google'] = type(sys)('google')
 sys.modules['google.colab'] = MockColab()
 
 # Import statistical functions from Network Analysis
-from Network_Analysis_2025_06_26 import (
+from src.network_analysis import (
     chi2_phi,
     calculate_entropy,
     cramers_v,

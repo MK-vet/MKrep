@@ -51,8 +51,8 @@ class MockPool:
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=UserWarning)
 
-# Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path to import from src
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Mock google.colab module for testing
 class MockFiles:
@@ -81,8 +81,8 @@ sys.modules['weasyprint'] = MockWeasyPrint()
 
 from Bio import Phylo
 
-# Import functions from Phylogenetic_clustering_2025_03_21.py
-from Phylogenetic_clustering_2025_03_21 import (
+# Import functions from src/phylogenetic_clustering.py
+from src.phylogenetic_clustering import (
     PhylogeneticCore,
     TreeAwareClusteringModule,
     ParallelProcessor,
@@ -285,7 +285,7 @@ class TestParallelProcessor:
             return d.mean().values
         
         # Patch the multiprocessing Pool with MockPool for deterministic testing
-        with patch('Phylogenetic_clustering_2025_03_21.Pool', MockPool):
+        with patch('src.phylogenetic_clustering.Pool', MockPool):
             results = ParallelProcessor.parallel_bootstrap(
                 data, mean_func, n_bootstrap=10, n_jobs=1
             )

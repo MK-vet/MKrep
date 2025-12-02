@@ -74,7 +74,7 @@ def check_dependencies():
 def check_data_files():
     """Check if required data files exist"""
     print_color("\n📄 Checking data files...", BLUE)
-    required_files = ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv']
+    required_files = ['data/MIC.csv', 'data/AMR_genes.csv', 'data/Virulence.csv']
     
     all_present = True
     for filename in required_files:
@@ -133,17 +133,17 @@ def main():
     if not check_data_files():
         print_color("\n❌ Required data files are missing!", RED)
         print_color("\nRequired files:", YELLOW)
-        print_color("  - MIC.csv", YELLOW)
-        print_color("  - AMR_genes.csv", YELLOW)
-        print_color("  - Virulence.csv", YELLOW)
-        print_color("\nSee BINARY_DATA_GUIDE.md for format requirements.", YELLOW)
+        print_color("  - data/MIC.csv", YELLOW)
+        print_color("  - data/AMR_genes.csv", YELLOW)
+        print_color("  - data/Virulence.csv", YELLOW)
+        print_color("\nSee docs/BINARY_DATA_GUIDE.md for format requirements.", YELLOW)
         sys.exit(1)
     
     print_color("\n✓ All data files present!", GREEN)
     
     # Step 3: Validate CSV format
     print_color("\n🔍 Validating CSV format...", BLUE)
-    for filename in ['MIC.csv', 'AMR_genes.csv', 'Virulence.csv']:
+    for filename in ['data/MIC.csv', 'data/AMR_genes.csv', 'data/Virulence.csv']:
         print_color(f"\n  Checking {filename}:", BLUE)
         validate_csv_format(filename)
     
@@ -162,11 +162,20 @@ def main():
     start_time = time.time()
     
     try:
-        # Import and run the main analysis
-        # Note: The filename has a spelling variation (Viruelnce instead of Virulence)
-        # This is the actual filename in the repository
-        import Cluster_MIC_AMR_Viruelnce as cluster_analysis
-        cluster_analysis.main()
+        # Import and run the main analysis from src directory
+        from src import cluster_mic_amr_virulence as cluster_analysis
+        
+        # The main script expects to run in interactive mode or as a script
+        # We'll just execute it directly
+        import subprocess
+        result = subprocess.run(
+            [sys.executable, 'src/cluster_mic_amr_virulence.py'],
+            capture_output=False,
+            text=True
+        )
+        
+        if result.returncode != 0:
+            raise RuntimeError("Analysis script failed")
         
         elapsed_time = time.time() - start_time
         
@@ -176,7 +185,7 @@ def main():
         print_color(f"\n⏱  Time elapsed: {elapsed_time:.1f} seconds", BLUE)
         
         # Show output information
-        output_folder = cluster_analysis.output_folder
+        output_folder = "clustering_analysis_results"
         print_color(f"\n📁 Output folder: {output_folder}/", BLUE)
         print_color("\n📊 Generated files:", BLUE)
         print_color(f"  - HTML report: comprehensive_cluster_analysis_report.html", GREEN)
@@ -190,7 +199,8 @@ def main():
         
         # Count CSV files
         csv_files = glob.glob(os.path.join(output_folder, "*.csv"))
-        print_color(f"  - {len(csv_files)} CSV files with detailed results", GREEN)
+        if csv_files:
+            print_color(f"  - {len(csv_files)} CSV files with detailed results", GREEN)
         
         print_color("\n🎉 Success! Check the HTML report for interactive results.", GREEN)
         

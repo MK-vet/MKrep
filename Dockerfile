@@ -33,12 +33,13 @@ WORKDIR /app/python_package
 RUN pip install -e .
 
 # Create directories for data and output
-RUN mkdir -p /data /output
+RUN mkdir -p /app/data /app/output
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV MKREP_DATA_DIR=/data
-ENV MKREP_OUTPUT_DIR=/output
+ENV PYTHONPATH=/app:${PYTHONPATH}
+ENV MKREP_DATA_DIR=/app/data
+ENV MKREP_OUTPUT_DIR=/app/output
 
 # Go back to app directory
 WORKDIR /app
@@ -48,6 +49,8 @@ CMD ["mkrep", "--help"]
 
 # Usage examples:
 # Build: docker build -t mkrep:latest .
-# Run cluster analysis: docker run -v $(pwd)/data:/data -v $(pwd)/output:/output mkrep:latest mkrep-cluster --data-dir /data --output /output
-# Run MDR analysis: docker run -v $(pwd)/data:/data -v $(pwd)/output:/output mkrep:latest mkrep-mdr --data-dir /data --output /output
-# Interactive shell: docker run -it -v $(pwd)/data:/data -v $(pwd)/output:/output mkrep:latest /bin/bash
+# Run cluster analysis: docker run -v $(pwd)/data:/app/data -v $(pwd)/output:/app/output mkrep:latest python src/cluster_mic_amr_virulence.py
+# Run MDR analysis: docker run -v $(pwd)/data:/app/data -v $(pwd)/output:/app/output mkrep:latest python src/mdr_analysis.py
+# Run network analysis: docker run -v $(pwd)/data:/app/data -v $(pwd)/output:/app/output mkrep:latest python src/network_analysis.py
+# Run phylogenetic analysis: docker run -v $(pwd)/data:/app/data -v $(pwd)/output:/app/output mkrep:latest python src/phylogenetic_clustering.py
+# Interactive shell: docker run -it -v $(pwd)/data:/app/data -v $(pwd)/output:/app/output mkrep:latest /bin/bash

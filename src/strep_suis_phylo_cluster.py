@@ -657,14 +657,14 @@ class DataLoader:
 
             mic = self._load_and_prefix(os.path.join(self.base_dir,"MIC.csv"), "mic_")
             amr = self._load_and_prefix(os.path.join(self.base_dir,"AMR_genes.csv"), "amr_")
-            vir = self._load_and_prefix(os.path.join(self.base_dir,"Virulence3.csv"), "vir_")
+            vir = self._load_and_prefix(os.path.join(self.base_dir,"Virulence.csv"), "vir_")
 
             df = c.merge(mic, on="Strain_ID", how="left").merge(amr, on="Strain_ID", how="left").merge(vir, on="Strain_ID", how="left")
             feat_cols = [x for x in df.columns if x not in ("Strain_ID","Cluster")]
             df[feat_cols] = df[feat_cols].fillna(0).astype(int)
             return df
         except Exception as e:
-            raise RuntimeError(f"Data load error: {e}. Expect MIC.csv, AMR_genes.csv, Virulence3.csv in {self.base_dir}")
+            raise RuntimeError(f"Data load error: {e}. Expect MIC.csv, AMR_genes.csv, Virulence.csv in {self.base_dir}")
 
 
 # =====================================================
@@ -1355,9 +1355,9 @@ class Pipeline:
 # =====================================================
 if __name__ == "__main__":
     cfg=Config(
-        base_dir=".",                      # CSVs + tree file live here
+        base_dir="data",                   # Updated: CSVs + tree file live in data directory
         output_folder="phylogenetic_clustering_results_fixed-001",
-        tree_file="tree.nwk",              # auto-tries common alternatives if missing
+        tree_file="Snp_tree.newick",       # Updated: use actual tree filename
         umap_components=2,
         umap_neighbors=15,
         umap_min_dist=0.1,

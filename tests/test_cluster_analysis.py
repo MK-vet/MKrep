@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit and integration tests for Cluster Analysis module (Cluster_MIC_AMR_Viruelnce.py).
-
-Note: The module filename contains a typo ("Viruelnce" instead of "Virulence")
-which is preserved for compatibility with the existing codebase.
+Unit and integration tests for Cluster Analysis module (src/cluster_mic_amr_virulence.py).
 
 Tests cover:
 - K-Modes clustering functions
@@ -25,8 +22,8 @@ import pytest
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings('ignore', category=UserWarning)
 
-# Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path to import from src
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Mock google.colab module for testing
 class MockFiles:
@@ -41,8 +38,8 @@ class MockColab:
 sys.modules['google'] = type(sys)('google')
 sys.modules['google.colab'] = MockColab()
 
-# Import functions from Cluster_MIC_AMR_Viruelnce.py
-from Cluster_MIC_AMR_Viruelnce import (
+# Import functions from src/cluster_mic_amr_virulence.py
+from src.cluster_mic_amr_virulence import (
     validate_binary_data,
     determine_optimal_clusters_sqrt,
     perform_kmodes,

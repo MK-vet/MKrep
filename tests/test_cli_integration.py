@@ -19,7 +19,7 @@ import tempfile
 import subprocess
 
 # Add project root to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class TestCLIModuleStructure:
@@ -243,14 +243,15 @@ class TestAnalysisScriptSyntax:
     """Tests for main analysis script syntax validation."""
     
     @pytest.mark.parametrize("script", [
-        "Cluster_MIC_AMR_Viruelnce.py",
-        "MDR_2025_04_15.py",
-        "Network_Analysis_2025_06_26.py",
-        "StrepSuisPhyloCluster_2025_08_11.py",
+        "src/cluster_mic_amr_virulence.py",
+        "src/mdr_analysis.py",
+        "src/network_analysis.py",
+        "src/strep_suis_phylo_cluster.py",
+        "src/phylogenetic_clustering.py",
     ])
     def test_analysis_script_syntax(self, script):
         """Test that analysis scripts have valid Python syntax."""
-        script_path = os.path.join(os.path.dirname(__file__), script)
+        script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), script)
         if os.path.exists(script_path):
             result = subprocess.run(
                 [sys.executable, '-m', 'py_compile', script_path],

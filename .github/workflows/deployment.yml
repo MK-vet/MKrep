@@ -31,9 +31,9 @@ jobs:
     
     - name: Verify all analysis scripts can be imported
       run: |
-        python -c "import importlib.util; spec = importlib.util.spec_from_file_location('cluster', 'Cluster_MIC_AMR_Viruelnce.py'); module = importlib.util.module_from_spec(spec); print('Cluster script can be loaded')"
-        python -c "import importlib.util; spec = importlib.util.spec_from_file_location('mdr', 'MDR_2025_04_15.py'); module = importlib.util.module_from_spec(spec); print('MDR script can be loaded')"
-        python -c "import importlib.util; spec = importlib.util.spec_from_file_location('network', 'Network_Analysis_2025_06_26.py'); module = importlib.util.module_from_spec(spec); print('Network script can be loaded')"
+        python -c "import importlib.util; spec = importlib.util.spec_from_file_location('cluster', 'src/cluster_mic_amr_virulence.py'); module = importlib.util.module_from_spec(spec); print('Cluster script can be loaded')"
+        python -c "import importlib.util; spec = importlib.util.spec_from_file_location('mdr', 'src/mdr_analysis.py'); module = importlib.util.module_from_spec(spec); print('MDR script can be loaded')"
+        python -c "import importlib.util; spec = importlib.util.spec_from_file_location('network', 'src/network_analysis.py'); module = importlib.util.module_from_spec(spec); print('Network script can be loaded')"
 
   test-cli-full:
     name: Test CLI Full Installation

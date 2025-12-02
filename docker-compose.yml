@@ -9,13 +9,14 @@ services:
     container_name: mkrep-analysis
     volumes:
       # Mount local data directory to container
-      - ./data:/data
+      - ./data:/app/data
       # Mount local output directory to container
-      - ./output:/output
+      - ./output:/app/output
     environment:
       - PYTHONUNBUFFERED=1
-      - MKREP_DATA_DIR=/data
-      - MKREP_OUTPUT_DIR=/output
+      - PYTHONPATH=/app
+      - MKREP_DATA_DIR=/app/data
+      - MKREP_OUTPUT_DIR=/app/output
     command: mkrep --help
     
   # Service for cluster analysis
@@ -26,11 +27,12 @@ services:
     image: mkrep:latest
     container_name: mkrep-cluster-analysis
     volumes:
-      - ./data:/data
-      - ./output:/output
+      - ./data:/app/data
+      - ./output:/app/output
     environment:
       - PYTHONUNBUFFERED=1
-    command: mkrep-cluster --data-dir /data --output /output --bootstrap 500 --max-clusters 8
+      - PYTHONPATH=/app
+    command: python src/cluster_mic_amr_virulence.py
     
   # Service for MDR analysis
   mkrep-mdr:
@@ -40,11 +42,12 @@ services:
     image: mkrep:latest
     container_name: mkrep-mdr-analysis
     volumes:
-      - ./data:/data
-      - ./output:/output
+      - ./data:/app/data
+      - ./output:/app/output
     environment:
       - PYTHONUNBUFFERED=1
-    command: mkrep-mdr --data-dir /data --output /output --mdr-threshold 3
+      - PYTHONPATH=/app
+    command: python src/mdr_analysis.py
     
   # Service for network analysis
   mkrep-network:
@@ -54,11 +57,12 @@ services:
     image: mkrep:latest
     container_name: mkrep-network-analysis
     volumes:
-      - ./data:/data
-      - ./output:/output
+      - ./data:/app/data
+      - ./output:/app/output
     environment:
       - PYTHONUNBUFFERED=1
-    command: mkrep-network --data-dir /data --output /output
+      - PYTHONPATH=/app
+    command: python src/network_analysis.py
     
   # Service for phylogenetic analysis
   mkrep-phylo:
@@ -68,11 +72,12 @@ services:
     image: mkrep:latest
     container_name: mkrep-phylo-analysis
     volumes:
-      - ./data:/data
-      - ./output:/output
+      - ./data:/app/data
+      - ./output:/app/output
     environment:
       - PYTHONUNBUFFERED=1
-    command: mkrep-phylo --tree /data/tree.newick --data-dir /data --output /output
+      - PYTHONPATH=/app
+    command: python src/phylogenetic_clustering.py
     
   # Service for Streptococcus suis analysis
   mkrep-strepsuis:
@@ -82,11 +87,12 @@ services:
     image: mkrep:latest
     container_name: mkrep-strepsuis-analysis
     volumes:
-      - ./data:/data
-      - ./output:/output
+      - ./data:/app/data
+      - ./output:/app/output
     environment:
       - PYTHONUNBUFFERED=1
-    command: mkrep-strepsuis --tree /data/tree.newick --data-dir /data --output /output
+      - PYTHONPATH=/app
+    command: python src/strep_suis_phylo_cluster.py
 
 # Usage:
 # Build all services: docker-compose build

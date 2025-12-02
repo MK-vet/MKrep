@@ -93,7 +93,7 @@ All notebooks work with both free and Pro versions of Google Colab.
 git clone https://github.com/MK-vet/MKrep.git
 cd MKrep
 pip install -r requirements.txt
-python Cluster_MIC_AMR_Viruelnce.py
+python src/cluster_mic_amr_virulence.py
 ```
 
 ### Option 3: Docker Container (Universal Deployment)
@@ -128,13 +128,13 @@ mkrep-cluster --data-dir ./data --output ./results
 git clone https://github.com/MK-vet/MKrep.git
 cd MKrep
 pip install -r requirements.txt
-python Cluster_MIC_AMR_Viruelnce.py
+python src/cluster_mic_amr_virulence.py
 ```
 
 ## Analysis Modules
 
 ### 1. StrepSuis-AMRPat: Automated Detection of Antimicrobial Resistance Patterns
-**Script:** `MDR_2025_04_15.py`
+**Script:** `src/mdr_analysis.py`
 
 Advanced multidrug resistance pattern detection:
 - Bootstrap resampling for robust prevalence estimation
@@ -143,7 +143,7 @@ Advanced multidrug resistance pattern detection:
 - Hybrid co-resistance network construction and visualization
 
 ### 2. StrepSuis-AMRVirKM: K-Modes Clustering of Antimicrobial Resistance and Virulence Profiles
-**Script:** `Cluster_MIC_AMR_Viruelnce.py`
+**Script:** `src/cluster_mic_amr_virulence.py`
 
 Comprehensive clustering analysis for resistance and virulence:
 - K-Modes clustering with automatic silhouette optimization
@@ -152,7 +152,7 @@ Comprehensive clustering analysis for resistance and virulence:
 - Bootstrap confidence intervals for robust statistical inference
 
 ### 3. StrepSuis-PhyloTrait: Integrated Phylogenetic and Binary Trait Analysis
-**Script:** `Phylogenetic_clustering_2025_03_21.py`
+**Script:** `src/phylogenetic_clustering.py`
 
 Complete phylogenetic and binary trait analysis:
 - Tree-aware clustering with evolutionary metrics
@@ -161,7 +161,7 @@ Complete phylogenetic and binary trait analysis:
 - Interactive HTML reports with DataTables and Plotly visualizations
 
 ### 4. StrepSuis-GenPhenNet: Network-Based Integration of Genome–Phenome Data
-**Script:** `Network_Analysis_2025_06_26.py`
+**Script:** `src/network_analysis.py`
 
 Statistical network analysis for genomic-phenotypic associations:
 - Chi-square and Fisher exact tests with FDR correction
@@ -363,10 +363,10 @@ analyzer.generate_excel_report(results)
 ### Option 4: Standalone Scripts
 ```bash
 # Direct execution
-python Cluster_MIC_AMR_Viruelnce.py
-python MDR_2025_04_15.py
-python Network_Analysis_2025_06_26.py
-python Phylogenetic_clustering_2025_03_21.py
+python src/cluster_mic_amr_virulence.py
+python src/mdr_analysis.py
+python src/network_analysis.py
+python src/phylogenetic_clustering.py
 python StrepSuisPhyloCluster_2025_08_11.py
 ```
 
