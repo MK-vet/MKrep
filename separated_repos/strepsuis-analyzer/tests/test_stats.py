@@ -157,6 +157,34 @@ class TestJaccardDistance:
         assert abs(dist - expected) < 1e-6
     
     @pytest.mark.statistical
+    def test_jaccard_empty_x(self):
+        """Test Jaccard distance with empty first vector."""
+        x = np.array([])
+        y = np.array([1, 0, 1])
+        
+        dist = calculate_jaccard_distance(x, y)
+        assert dist == 1.0
+    
+    @pytest.mark.statistical
+    def test_jaccard_empty_y(self):
+        """Test Jaccard distance with empty second vector."""
+        x = np.array([1, 0, 1])
+        y = np.array([])
+        
+        dist = calculate_jaccard_distance(x, y)
+        assert dist == 1.0
+    
+    @pytest.mark.statistical
+    def test_jaccard_all_zeros(self):
+        """Test Jaccard distance when both vectors are all zeros."""
+        x = np.zeros(5)
+        y = np.zeros(5)
+        
+        dist = calculate_jaccard_distance(x, y)
+        # Union is 0, return 0 distance
+        assert dist == 0.0
+    
+    @pytest.mark.statistical
     def test_jaccard_symmetry(self):
         """Test Jaccard distance is symmetric."""
         x = np.array([1, 0, 1, 1, 0])
@@ -209,6 +237,24 @@ class TestHammingDistance:
         dist = calculate_hamming_distance(x, y)
         expected = 2.0 / 5.0
         assert abs(dist - expected) < 1e-6
+    
+    @pytest.mark.statistical
+    def test_hamming_empty_x(self):
+        """Test Hamming distance with empty first vector."""
+        x = np.array([])
+        y = np.array([1, 0])
+        
+        dist = calculate_hamming_distance(x, y)
+        assert dist == 1.0
+    
+    @pytest.mark.statistical
+    def test_hamming_empty_y(self):
+        """Test Hamming distance with empty second vector."""
+        x = np.array([1, 0])
+        y = np.array([])
+        
+        dist = calculate_hamming_distance(x, y)
+        assert dist == 1.0
     
     @pytest.mark.statistical
     def test_hamming_different_lengths(self):
