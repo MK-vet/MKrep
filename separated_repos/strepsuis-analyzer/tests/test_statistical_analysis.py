@@ -1,6 +1,7 @@
 """Tests for statistical analysis module."""
 
 import pandas as pd
+import pytest
 import numpy as np
 from strepsuis_analyzer.statistical_analysis import StatisticalAnalyzer
 
@@ -8,11 +9,13 @@ from strepsuis_analyzer.statistical_analysis import StatisticalAnalyzer
 class TestStatisticalAnalyzer:
     """Test suite for StatisticalAnalyzer class."""
 
+    @pytest.mark.unit
     def test_init(self):
         """Test analyzer initialization."""
         analyzer = StatisticalAnalyzer(random_state=42)
         assert analyzer.random_state == 42
 
+    @pytest.mark.unit
     def test_compute_correlation_pearson(self, correlation_data_perfect):
         """Test Pearson correlation with perfect correlation."""
         analyzer = StatisticalAnalyzer()
@@ -24,6 +27,7 @@ class TestStatisticalAnalyzer:
         assert abs(corr - 1.0) < 0.001
         assert pval < 0.001
 
+    @pytest.mark.unit
     def test_compute_correlation_spearman(self, sample_numeric_data):
         """Test Spearman correlation."""
         analyzer = StatisticalAnalyzer()
@@ -35,6 +39,7 @@ class TestStatisticalAnalyzer:
         assert -1 <= corr <= 1
         assert 0 <= pval <= 1
 
+    @pytest.mark.unit
     def test_compute_correlation_kendall(self, sample_numeric_data):
         """Test Kendall correlation."""
         analyzer = StatisticalAnalyzer()
@@ -46,6 +51,7 @@ class TestStatisticalAnalyzer:
         assert -1 <= corr <= 1
         assert 0 <= pval <= 1
 
+    @pytest.mark.unit
     def test_compute_phi_coefficient(self, sample_binary_data):
         """Test phi coefficient calculation."""
         analyzer = StatisticalAnalyzer()
@@ -55,6 +61,7 @@ class TestStatisticalAnalyzer:
         )
         assert 0 <= abs(phi) <= 1
 
+    @pytest.mark.unit
     def test_compute_cramers_v(self, sample_categorical_data):
         """Test Cramér's V calculation."""
         analyzer = StatisticalAnalyzer()
@@ -63,6 +70,7 @@ class TestStatisticalAnalyzer:
         v = analyzer.compute_cramers_v(sample_categorical_data, cat2)
         assert 0 <= v <= 1
 
+    @pytest.mark.unit
     def test_test_normality(self, normal_distribution_data):
         """Test normality testing."""
         analyzer = StatisticalAnalyzer()
@@ -70,6 +78,7 @@ class TestStatisticalAnalyzer:
         assert 0 <= pval <= 1
         assert isinstance(is_normal, bool)
 
+    @pytest.mark.unit
     def test_perform_ttest(self, sample_numeric_data):
         """Test t-test."""
         analyzer = StatisticalAnalyzer()
@@ -78,6 +87,7 @@ class TestStatisticalAnalyzer:
         stat, pval = analyzer.perform_ttest(group1, group2)
         assert 0 <= pval <= 1
 
+    @pytest.mark.unit
     def test_perform_mann_whitney(self, sample_numeric_data):
         """Test Mann-Whitney U test."""
         analyzer = StatisticalAnalyzer()
@@ -86,6 +96,7 @@ class TestStatisticalAnalyzer:
         stat, pval = analyzer.perform_mann_whitney(group1, group2)
         assert 0 <= pval <= 1
 
+    @pytest.mark.unit
     def test_perform_anova(self, sample_numeric_data):
         """Test ANOVA."""
         analyzer = StatisticalAnalyzer()
@@ -95,6 +106,7 @@ class TestStatisticalAnalyzer:
         stat, pval = analyzer.perform_anova(*groups)
         assert 0 <= pval <= 1
 
+    @pytest.mark.unit
     def test_perform_kruskal_wallis(self, sample_numeric_data):
         """Test Kruskal-Wallis test."""
         analyzer = StatisticalAnalyzer()
@@ -104,6 +116,7 @@ class TestStatisticalAnalyzer:
         stat, pval = analyzer.perform_kruskal_wallis(*groups)
         assert 0 <= pval <= 1
 
+    @pytest.mark.unit
     def test_apply_multiple_testing_correction(self):
         """Test multiple testing correction."""
         analyzer = StatisticalAnalyzer()
@@ -112,6 +125,7 @@ class TestStatisticalAnalyzer:
         assert len(rejected) == len(pvalues)
         assert len(corrected) == len(pvalues)
 
+    @pytest.mark.unit
     def test_compute_entropy(self, sample_categorical_data):
         """Test entropy calculation."""
         analyzer = StatisticalAnalyzer()
@@ -120,6 +134,7 @@ class TestStatisticalAnalyzer:
         # Maximum entropy for 4 categories is log2(4) = 2
         assert entropy <= 2
 
+    @pytest.mark.unit
     def test_compute_mutual_information(self, sample_binary_data):
         """Test mutual information calculation."""
         analyzer = StatisticalAnalyzer()
@@ -129,6 +144,7 @@ class TestStatisticalAnalyzer:
         )
         assert mi >= 0
 
+    @pytest.mark.unit
     def test_meta_analysis_fixed_effects(self, meta_analysis_data):
         """Test fixed-effects meta-analysis."""
         analyzer = StatisticalAnalyzer()
@@ -140,6 +156,7 @@ class TestStatisticalAnalyzer:
         assert pooled_var > 0
         assert pooled_se > 0
 
+    @pytest.mark.unit
     def test_meta_analysis_random_effects(self, meta_analysis_data):
         """Test random-effects meta-analysis."""
         analyzer = StatisticalAnalyzer()
@@ -152,6 +169,7 @@ class TestStatisticalAnalyzer:
         assert pooled_se > 0
         assert tau_sq >= 0
 
+    @pytest.mark.unit
     def test_cochrans_q_test(self, meta_analysis_data):
         """Test Cochran's Q test."""
         analyzer = StatisticalAnalyzer()

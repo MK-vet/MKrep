@@ -1,6 +1,7 @@
 """Tests for visualization module."""
 
 import numpy as np
+import pytest
 import matplotlib.pyplot as plt
 from strepsuis_analyzer.visualization import Visualizer
 
@@ -8,11 +9,13 @@ from strepsuis_analyzer.visualization import Visualizer
 class TestVisualizer:
     """Test suite for Visualizer class."""
 
+    @pytest.mark.unit
     def test_init(self):
         """Test visualizer initialization."""
         viz = Visualizer()
         assert isinstance(viz, Visualizer)
 
+    @pytest.mark.unit
     def test_create_histogram(self, sample_numeric_data):
         """Test histogram creation."""
         viz = Visualizer()
@@ -21,6 +24,7 @@ class TestVisualizer:
         assert isinstance(fig, plt.Figure)
         plt.close(fig)
 
+    @pytest.mark.unit
     def test_create_scatter_plot(self, sample_numeric_data):
         """Test scatter plot creation."""
         viz = Visualizer()
@@ -32,6 +36,7 @@ class TestVisualizer:
         assert isinstance(fig, plt.Figure)
         plt.close(fig)
 
+    @pytest.mark.unit
     def test_create_box_plot(self, sample_numeric_data):
         """Test box plot creation."""
         viz = Visualizer()
@@ -44,6 +49,7 @@ class TestVisualizer:
         assert isinstance(fig, plt.Figure)
         plt.close(fig)
 
+    @pytest.mark.unit
     def test_create_heatmap(self, sample_numeric_data):
         """Test heatmap creation."""
         viz = Visualizer()
@@ -52,6 +58,7 @@ class TestVisualizer:
         assert isinstance(fig, plt.Figure)
         plt.close(fig)
 
+    @pytest.mark.unit
     def test_close_all_figures(self):
         """Test closing all figures."""
         viz = Visualizer()

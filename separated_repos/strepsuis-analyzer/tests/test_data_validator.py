@@ -1,12 +1,14 @@
 """Tests for data validation module."""
 
 import pandas as pd
+import pytest
 from strepsuis_analyzer.data_validator import DataValidator
 
 
 class TestDataValidator:
     """Test suite for DataValidator class."""
 
+    @pytest.mark.unit
     def test_init(self):
         """Test DataValidator initialization."""
         validator = DataValidator()
@@ -14,6 +16,7 @@ class TestDataValidator:
         assert len(validator.validation_errors) == 0
         assert len(validator.validation_warnings) == 0
 
+    @pytest.mark.unit
     def test_validate_dataframe_valid(self, sample_numeric_data):
         """Test validation of valid DataFrame."""
         validator = DataValidator()
@@ -21,6 +24,7 @@ class TestDataValidator:
         assert is_valid
         assert len(errors) == 0
 
+    @pytest.mark.unit
     def test_validate_dataframe_empty(self):
         """Test validation of empty DataFrame."""
         validator = DataValidator()
@@ -29,6 +33,7 @@ class TestDataValidator:
         assert not is_valid
         assert len(errors) > 0
 
+    @pytest.mark.unit
     def test_validate_dataframe_min_rows(self, sample_numeric_data):
         """Test minimum rows validation."""
         validator = DataValidator()
@@ -38,6 +43,7 @@ class TestDataValidator:
         assert not is_valid
         assert len(errors) > 0
 
+    @pytest.mark.unit
     def test_validate_dataframe_required_columns(self, sample_numeric_data):
         """Test required columns validation."""
         validator = DataValidator()
@@ -47,6 +53,7 @@ class TestDataValidator:
         assert not is_valid
         assert any("missing_col" in str(e) for e in errors)
 
+    @pytest.mark.unit
     def test_validate_binary_matrix_valid(self, sample_binary_data):
         """Test binary matrix validation with valid data."""
         validator = DataValidator()
@@ -54,6 +61,7 @@ class TestDataValidator:
         assert is_valid
         assert len(errors) == 0
 
+    @pytest.mark.unit
     def test_validate_binary_matrix_invalid(self, sample_numeric_data):
         """Test binary matrix validation with non-binary data."""
         validator = DataValidator()
@@ -61,12 +69,14 @@ class TestDataValidator:
         assert not is_valid
         assert len(errors) > 0
 
+    @pytest.mark.unit
     def test_validate_numeric_matrix(self, sample_numeric_data):
         """Test numeric matrix validation."""
         validator = DataValidator()
         is_valid, errors, warnings = validator.validate_numeric_matrix(sample_numeric_data)
         assert is_valid
 
+    @pytest.mark.unit
     def test_validate_numeric_matrix_range(self):
         """Test numeric matrix range validation."""
         validator = DataValidator()
@@ -76,6 +86,7 @@ class TestDataValidator:
         )
         assert not is_valid
 
+    @pytest.mark.unit
     def test_validate_categorical_column(self, sample_categorical_data):
         """Test categorical column validation."""
         validator = DataValidator()
@@ -84,6 +95,7 @@ class TestDataValidator:
         )
         assert is_valid
 
+    @pytest.mark.unit
     def test_validate_categorical_column_allowed_values(self, sample_categorical_data):
         """Test categorical column with allowed values."""
         validator = DataValidator()
@@ -92,12 +104,14 @@ class TestDataValidator:
         )
         assert not is_valid
 
+    @pytest.mark.unit
     def test_validate_newick_tree_valid(self, sample_tree_newick):
         """Test Newick tree validation with valid tree."""
         validator = DataValidator()
         is_valid, errors, warnings = validator.validate_newick_tree(sample_tree_newick)
         assert is_valid
 
+    @pytest.mark.unit
     def test_validate_newick_tree_invalid(self):
         """Test Newick tree validation with invalid tree."""
         validator = DataValidator()
@@ -105,6 +119,7 @@ class TestDataValidator:
         is_valid, errors, warnings = validator.validate_newick_tree(invalid_tree)
         assert not is_valid
 
+    @pytest.mark.unit
     def test_reset(self):
         """Test reset method."""
         validator = DataValidator()

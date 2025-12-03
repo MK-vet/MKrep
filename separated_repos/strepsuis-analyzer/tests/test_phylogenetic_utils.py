@@ -1,18 +1,21 @@
 """Tests for phylogenetic utilities module."""
 
 import numpy as np
+import pytest
 from strepsuis_analyzer.phylogenetic_utils import PhylogeneticAnalyzer
 
 
 class TestPhylogeneticAnalyzer:
     """Test suite for PhylogeneticAnalyzer class."""
 
+    @pytest.mark.unit
     def test_init(self):
         """Test analyzer initialization."""
         analyzer = PhylogeneticAnalyzer()
         assert analyzer.tree is None
         assert len(analyzer.taxa) == 0
 
+    @pytest.mark.unit
     def test_load_tree_from_newick(self, sample_tree_newick):
         """Test loading tree from Newick string."""
         analyzer = PhylogeneticAnalyzer()
@@ -22,6 +25,7 @@ class TestPhylogeneticAnalyzer:
             assert analyzer.tree is not None
             assert len(analyzer.taxa) > 0
 
+    @pytest.mark.unit
     def test_get_leaf_names(self, sample_tree_newick):
         """Test getting leaf names."""
         analyzer = PhylogeneticAnalyzer()
@@ -33,6 +37,7 @@ class TestPhylogeneticAnalyzer:
             assert isinstance(leaf_names, list)
             assert all(isinstance(name, str) for name in leaf_names)
 
+    @pytest.mark.unit
     def test_validate_tree_structure(self, sample_tree_newick):
         """Test tree structure validation."""
         analyzer = PhylogeneticAnalyzer()
@@ -42,6 +47,7 @@ class TestPhylogeneticAnalyzer:
         if is_valid:
             assert len(issues) == 0
 
+    @pytest.mark.unit
     def test_validate_invalid_tree(self):
         """Test validation with invalid tree."""
         analyzer = PhylogeneticAnalyzer()
@@ -50,6 +56,7 @@ class TestPhylogeneticAnalyzer:
 
         assert not is_valid or len(issues) > 0
 
+    @pytest.mark.unit
     def test_compute_robinson_foulds_identical_trees(self, sample_tree_newick):
         """Test RF distance between identical trees."""
         analyzer = PhylogeneticAnalyzer()
@@ -60,6 +67,7 @@ class TestPhylogeneticAnalyzer:
         if not np.isnan(rf):
             assert abs(rf) < 0.001
 
+    @pytest.mark.unit
     def test_get_bipartitions(self, sample_tree_newick):
         """Test getting bipartitions from tree."""
         analyzer = PhylogeneticAnalyzer()
