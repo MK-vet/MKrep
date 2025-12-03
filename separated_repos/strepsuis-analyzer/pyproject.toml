@@ -1,0 +1,100 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "strepsuis-analyzer"
+version = "2025.8.11"
+description = "Integrated phylogenetic clustering analysis for Streptococcus suis genomic data"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "MKrep Development Team"}
+]
+keywords = [
+    "bioinformatics",
+    "genomics",
+    "phylogenetics",
+    "clustering",
+    "streptococcus",
+    "AMR",
+    "virulence"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+dependencies = [
+    "pandas>=1.5.0",
+    "numpy>=1.23.0",
+    "scipy>=1.9.0",
+    "matplotlib>=3.6.0",
+    "seaborn>=0.12.0",
+    "plotly>=5.11.0",
+    "kaleido>=0.2.1",
+    "scikit-learn>=1.2.0",
+    "umap-learn>=0.5.3",
+    "statsmodels>=0.14.0",
+    "mlxtend>=0.21.0",
+    "kmodes>=0.12.0",
+    "prince>=0.7.1",
+    "networkx>=2.8.0",
+    "python-louvain>=0.16",
+    "biopython>=1.80",
+    "openpyxl>=3.0.10",
+    "xlsxwriter>=3.0.3",
+    "jinja2>=3.1.2",
+    "tqdm>=4.64.0",
+    "joblib>=1.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "mypy>=0.990",
+]
+
+[project.urls]
+Homepage = "https://github.com/MK-vet/MKrep"
+Documentation = "https://github.com/MK-vet/MKrep/tree/main/separated_repos/strepsuis-analyzer"
+Repository = "https://github.com/MK-vet/MKrep"
+Issues = "https://github.com/MK-vet/MKrep/issues"
+
+[project.scripts]
+strepsuis-analyzer = "StrepSuisPhyloCluster_2025_08_11:main"
+
+[tool.setuptools]
+packages = ["strepsuis_analyzer"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --tb=short"
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false

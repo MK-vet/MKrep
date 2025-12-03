@@ -1,10 +1,10 @@
 # StrepSuis Suite - Separated Repositories
 
-This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of four independent, publication-ready modules for antimicrobial resistance and genomic analysis.
+This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of five independent, publication-ready modules for antimicrobial resistance and genomic analysis.
 
 ## Overview
 
-The StrepSuis Suite contains **four production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed for independent deployment as a GitHub repository.
+The StrepSuis Suite contains **five production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed for independent deployment as a GitHub repository.
 
 ## Module Overview
 
@@ -14,6 +14,7 @@ The StrepSuis Suite contains **four production-ready bioinformatics tools**, eac
 | [strepsuis-amrvirkm](strepsuis-amrvirkm/) | K-Modes Clustering | Silhouette-optimized clustering, MCA, feature importance, bootstrap CIs |
 | [strepsuis-genphennet](strepsuis-genphennet/) | Network Integration | Chi-square/Fisher tests, FDR correction, information theory, 3D visualization |
 | [strepsuis-phylotrait](strepsuis-phylotrait/) | Phylogenetic Traits | Tree-aware clustering, Faith's PD, binary trait analysis, interactive reports |
+| [strepsuis-analyzer](strepsuis-analyzer/) | Integrated Analysis | Combined phylogenetic clustering, trait profiling, association rules, MCA, interactive reports |
 
 ### strepsuis-mdr
 **StrepSuis-AMRPat** provides automated detection of antimicrobial resistance patterns through:
@@ -42,6 +43,16 @@ The StrepSuis Suite contains **four production-ready bioinformatics tools**, eac
 - Faith's Phylogenetic Diversity calculations
 - Binary trait analysis for AMR and virulence factors
 - Interactive HTML reports with DataTables and Plotly
+
+### strepsuis-analyzer
+**StrepSuis-Analyzer** provides comprehensive integrative analysis combining multiple approaches:
+- Tree-aware clustering with ensemble fallback methods
+- Binary trait profiling (chi-square, log-odds, random forest importance)
+- Association rule mining and co-occurrence patterns
+- Multiple Correspondence Analysis (MCA) for dimensionality reduction
+- Bootstrap confidence intervals for robust statistics
+- Interactive HTML reports with Bootstrap 5 UI
+- Excel workbooks and CSV exports for downstream analysis
 
 ## Repository Contents
 
