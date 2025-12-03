@@ -1,26 +1,39 @@
-# StrepSuis Analyzer: Integrated Phylogenetic Clustering Analysis
+# StrepSuis Analyzer: General-Purpose Genomic Data Analysis Tool
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb)
 
-**Comprehensive integrative analysis tool for *Streptococcus suis* genomic data**
+**A flexible, user-friendly tool for analyzing YOUR genomic data**
 
 ## Overview
 
-StrepSuis Analyzer is a production-ready, standalone Python tool for comprehensive phylogenetic clustering analysis of bacterial genomic data. Originally developed for *Streptococcus suis* but applicable to any bacterial species with binary trait data.
+**StrepSuis Analyzer is a general-purpose data analysis tool** designed to help researchers analyze their own genomic datasets without requiring programming expertise. Unlike the other specialized modules in the StrepSuis Suite (MDR, AMRVirKM, GenPhenNet, PhyloTrait), this analyzer is built for flexible, exploratory analysis of user-provided data.
 
-### Key Features
+### What Makes This Tool Different?
 
-- ✅ **Tree-aware clustering** with ensemble fallback methods
-- ✅ **Binary trait profiling** (chi-square, log-odds, random forest importance)
-- ✅ **Association rule mining** for co-occurrence patterns
-- ✅ **Multiple Correspondence Analysis (MCA)** for dimensionality reduction
-- ✅ **Bootstrap confidence intervals** for robust statistics
-- ✅ **Interactive HTML reports** with Bootstrap 5 UI
-- ✅ **Excel workbooks** with multiple analysis sheets
-- ✅ **CSV exports** for downstream analysis
-- ✅ **Reproducible results** with fixed random seeds
+✨ **Bring Your Own Data**: Designed specifically for analyzing datasets that **you** upload or provide
+✨ **General Purpose**: Not limited to specific analysis types - works with any binary trait data
+✨ **User-Focused**: Easy to use in Google Colab with drag-and-drop file upload
+✨ **Flexible & Exploratory**: Discover patterns in your data without predefined analysis workflows
+✨ **No Programming Required**: Run complete analyses through simple commands or interactive notebooks
+
+### Perfect For:
+
+- 🔬 **Researchers** who want to analyze their own genomic data
+- 📊 **Quick exploratory analysis** of binary trait datasets (AMR, virulence, etc.)
+- 🧬 **Custom datasets** not covered by specialized modules
+- 📁 **User-uploaded data** in Google Colab or local environments
+- 🔍 **Pattern discovery** in bacterial genomic data
+
+### Key Capabilities
+
+- ✅ **Upload and analyze your data files** (CSV format with binary traits)
+- ✅ **Automatic pattern detection** through clustering and statistical tests
+- ✅ **Phylogenetic tree integration** (optional, if you have a tree file)
+- ✅ **Interactive HTML reports** that open in any web browser
+- ✅ **Excel workbooks** with multiple analysis sheets for easy sharing
+- ✅ **No coding required** - simple command-line interface or Colab notebook
 
 ## Quick Start
 
@@ -61,61 +74,65 @@ Click here: [![Open in Colab](https://colab.research.google.com/assets/colab-bad
 
 #### 1. Prepare Your Data
 
-Organize your data files in the current directory:
+**This tool is designed to work with YOUR data!** Simply prepare your data files in CSV format:
 
 ```
-├── AMR_genes.csv          # Antimicrobial resistance genes (binary)
-├── Virulence.csv          # Virulence factors (binary)
-├── Snp_tree.newick        # Phylogenetic tree (optional)
+├── your_amr_data.csv       # Your antimicrobial resistance data
+├── your_virulence.csv      # Your virulence factors data
+├── your_tree.newick        # Your phylogenetic tree (optional)
 └── StrepSuisPhyloCluster_2025_08_11.py
 ```
 
 **Data Format Requirements:**
-- CSV files with binary data (0 = absence, 1 = presence)
-- First column must be `Strain_ID`
-- Other columns are feature names
+- CSV files with **binary data** (0 = absence, 1 = presence)
+- First column must be `Strain_ID` (or any identifier column)
+- Other columns are your feature names (genes, traits, etc.)
 - Missing values will be treated as 0 (absence)
 
-**Example CSV:**
+**Example - Your Data File:**
 ```csv
-Strain_ID,Gene1,Gene2,Gene3
-Strain001,1,0,1
-Strain002,0,1,1
-Strain003,1,1,0
+Strain_ID,YourGene1,YourGene2,YourGene3
+YourStrain001,1,0,1
+YourStrain002,0,1,1
+YourStrain003,1,1,0
 ```
+
+> 💡 **Tip**: You can use the included `Virulence.csv` as an example to understand the format, then replace it with your own data!
 
 #### 2. Run the Analysis
 
-**Basic analysis (auto-detect optimal clusters):**
+**Analyze your own data with simple commands:**
+
+**Basic analysis with your data:**
 ```bash
-python StrepSuisPhyloCluster_2025_08_11.py
+python StrepSuisPhyloCluster_2025_08_11.py --data your_data1.csv your_data2.csv
 ```
 
-**Custom data files:**
+**With your phylogenetic tree:**
 ```bash
-python StrepSuisPhyloCluster_2025_08_11.py --data AMR_genes.csv Virulence.csv MGE.csv
+python StrepSuisPhyloCluster_2025_08_11.py --data your_data.csv --tree your_tree.newick
 ```
 
-**Include phylogenetic tree:**
+**Using the included example data:**
 ```bash
-python StrepSuisPhyloCluster_2025_08_11.py --tree Snp_tree.newick
+python StrepSuisPhyloCluster_2025_08_11.py --data Virulence.csv
 ```
 
 **Specify number of clusters:**
 ```bash
-python StrepSuisPhyloCluster_2025_08_11.py --clusters 4
+python StrepSuisPhyloCluster_2025_08_11.py --data your_data.csv --clusters 4
 ```
 
 **Custom output directory:**
 ```bash
-python StrepSuisPhyloCluster_2025_08_11.py --output my_results
+python StrepSuisPhyloCluster_2025_08_11.py --data your_data.csv --output my_results
 ```
 
-**All options:**
+**Full example with all options:**
 ```bash
 python StrepSuisPhyloCluster_2025_08_11.py \
-  --data AMR_genes.csv Virulence.csv \
-  --tree Snp_tree.newick \
+  --data your_amr.csv your_virulence.csv \
+  --tree your_tree.newick \
   --output results \
   --clusters 5 \
   --seed 42

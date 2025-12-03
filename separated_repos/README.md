@@ -1,20 +1,23 @@
 # StrepSuis Suite - Separated Repositories
 
-This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of five independent, publication-ready modules for antimicrobial resistance and genomic analysis.
+This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of **four specialized analysis modules** plus a **general-purpose analyzer** for user-provided data.
 
 ## Overview
 
-The StrepSuis Suite contains **five production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed for independent deployment as a GitHub repository.
+The StrepSuis Suite contains **five production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`:
+
+- **Four specialized modules** for specific analysis workflows
+- **One general-purpose analyzer** for analyzing user-uploaded data
 
 ## Module Overview
 
-| Module | Purpose | Key Capabilities |
-|--------|---------|------------------|
-| [strepsuis-mdr](strepsuis-mdr/) | AMR Pattern Detection | Bootstrap prevalence estimation, co-occurrence analysis, association rules, network visualization |
-| [strepsuis-amrvirkm](strepsuis-amrvirkm/) | K-Modes Clustering | Silhouette-optimized clustering, MCA, feature importance, bootstrap CIs |
-| [strepsuis-genphennet](strepsuis-genphennet/) | Network Integration | Chi-square/Fisher tests, FDR correction, information theory, 3D visualization |
-| [strepsuis-phylotrait](strepsuis-phylotrait/) | Phylogenetic Traits | Tree-aware clustering, Faith's PD, binary trait analysis, interactive reports |
-| [strepsuis-analyzer](strepsuis-analyzer/) | Integrated Analysis | Combined phylogenetic clustering, trait profiling, association rules, MCA, interactive reports |
+| Module | Type | Purpose | Key Capabilities |
+|--------|------|---------|------------------|
+| [strepsuis-mdr](strepsuis-mdr/) | Specialized | AMR Pattern Detection | Bootstrap prevalence estimation, co-occurrence analysis, association rules, network visualization |
+| [strepsuis-amrvirkm](strepsuis-amrvirkm/) | Specialized | K-Modes Clustering | Silhouette-optimized clustering, MCA, feature importance, bootstrap CIs |
+| [strepsuis-genphennet](strepsuis-genphennet/) | Specialized | Network Integration | Chi-square/Fisher tests, FDR correction, information theory, 3D visualization |
+| [strepsuis-phylotrait](strepsuis-phylotrait/) | Specialized | Phylogenetic Traits | Tree-aware clustering, Faith's PD, binary trait analysis, interactive reports |
+| [strepsuis-analyzer](strepsuis-analyzer/) | **General-Purpose** | **User Data Analysis** | **Flexible analysis of user-uploaded datasets, exploratory data analysis, pattern discovery** |
 
 ### strepsuis-mdr
 **StrepSuis-AMRPat** provides automated detection of antimicrobial resistance patterns through:
@@ -45,14 +48,15 @@ The StrepSuis Suite contains **five production-ready bioinformatics tools**, eac
 - Interactive HTML reports with DataTables and Plotly
 
 ### strepsuis-analyzer
-**StrepSuis-Analyzer** provides comprehensive integrative analysis combining multiple approaches:
-- Tree-aware clustering with ensemble fallback methods
-- Binary trait profiling (chi-square, log-odds, random forest importance)
-- Association rule mining and co-occurrence patterns
-- Multiple Correspondence Analysis (MCA) for dimensionality reduction
-- Bootstrap confidence intervals for robust statistics
-- Interactive HTML reports with Bootstrap 5 UI
-- Excel workbooks and CSV exports for downstream analysis
+**StrepSuis-Analyzer** is a **general-purpose data analysis tool** designed for researchers to analyze **their own uploaded datasets**:
+- **Flexible and exploratory**: Works with any binary trait data you provide
+- **User-friendly**: Easy file upload in Google Colab or command-line usage
+- **No programming required**: Simple commands or interactive notebook interface
+- **Comprehensive analysis**: Automatic clustering, statistical tests, pattern discovery
+- **Custom data support**: Analyze AMR genes, virulence factors, or any binary genomic data
+- **Interactive outputs**: HTML reports and Excel workbooks for easy sharing
+
+> **Key Difference**: Unlike the four specialized modules above that implement specific analysis workflows, **strepsuis-analyzer is designed for general data exploration** and allows users to bring their own datasets for flexible, exploratory analysis.
 
 ## Repository Contents
 

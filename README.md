@@ -169,17 +169,18 @@ Statistical network analysis for genomic-phenotypic associations:
 - Mutually exclusive pattern detection algorithms
 - 3D network visualization with community detection
 
-### 5. StrepSuis-Analyzer: Integrated Phylogenetic Clustering Analysis
+### 5. StrepSuis-Analyzer: General-Purpose Data Analysis Tool
 **Script:** `StrepSuisPhyloCluster_2025_08_11.py` | **Module:** `separated_repos/strepsuis-analyzer/`
 
-Comprehensive integrative analysis combining multiple approaches:
-- Tree-aware clustering with ensemble fallback methods
-- Binary trait profiling (chi-square, log-odds, random forest importance)
-- Association rule mining and co-occurrence patterns
-- Multiple Correspondence Analysis (MCA) for dimensionality reduction
-- Bootstrap confidence intervals for robust statistics
-- Interactive HTML reports with Bootstrap 5 UI
-- Excel workbooks and CSV exports for downstream analysis
+**A flexible tool for analyzing YOUR genomic data** - unlike the four specialized modules above:
+- **User-focused design**: Upload and analyze your own binary trait datasets
+- **General-purpose**: Not limited to specific workflows - exploratory data analysis
+- **Easy to use**: Google Colab with drag-and-drop upload or simple command-line
+- **Flexible analysis**: Automatic pattern discovery in your custom datasets
+- **Comprehensive outputs**: Interactive HTML reports and Excel workbooks
+- **No programming required**: Designed for researchers without coding expertise
+
+> 💡 **Use this tool when**: You have your own genomic data (AMR, virulence, etc.) and want to explore patterns, clusters, and associations without predefined analysis workflows.
 
 ## ✨ NEW: Multiple Usage Options
 
