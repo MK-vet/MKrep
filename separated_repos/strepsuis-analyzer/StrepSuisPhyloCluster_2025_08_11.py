@@ -242,7 +242,12 @@ class StrepSuisAnalyzer:
             
             # Cramér's V (effect size)
             n = contingency.sum().sum()
-            cramers_v = np.sqrt(chi2 / (n * (min(contingency.shape) - 1)))
+            min_dim = min(contingency.shape) - 1
+            if min_dim > 0:
+                cramers_v = np.sqrt(chi2 / (n * min_dim))
+            else:
+                # Zero variance feature (constant value)
+                cramers_v = 0.0
             
             results.append({
                 'Feature': feature,
