@@ -20,20 +20,21 @@ wheels/
 .installed.cfg
 *.egg
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-coverage.xml
-*.cover
-
 # Virtual environments
 venv/
 ENV/
 env/
+.venv
 
-# IDE
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.coverage
+coverage.xml
+.tox/
+
+# IDEs
 .vscode/
 .idea/
 *.swp
@@ -43,6 +44,11 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Results
+results/
+outputs/
+*.log
 
 # Streamlit
 .streamlit/

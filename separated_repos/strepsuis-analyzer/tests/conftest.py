@@ -1,114 +1,94 @@
 """
-Test configuration and fixtures for strepsuis-analyzer tests.
+Pytest configuration and fixtures for StrepSuisAnalyzer tests.
 """
 
 import pytest
 import pandas as pd
 import numpy as np
-from pathlib import Path
 
 
 @pytest.fixture
-def data_dir():
-    """Return path to data directory."""
-    return Path(__file__).parent.parent / "data"
+def sample_binary_data():
+    """Create sample binary data for testing."""
+    np.random.seed(42)
+    data = pd.DataFrame(
+        np.random.randint(0, 2, size=(50, 10)),
+        columns=[f"gene_{i}" for i in range(10)],
+        index=[f"strain_{i}" for i in range(50)],
+    )
+    return data
 
 
 @pytest.fixture
-def sample_amr_data():
-    """Create sample AMR gene data for testing."""
-    return pd.DataFrame({
-        'Strain_ID': ['S001', 'S002', 'S003', 'S004', 'S005'],
-        'tet(M)': [1, 1, 0, 1, 0],
-        'erm(B)': [0, 1, 1, 1, 0],
-        'aph(3\')': [1, 0, 0, 0, 1],
-        'tet(O)': [1, 1, 1, 0, 0]
-    })
+def sample_numeric_data():
+    """Create sample numeric data for testing."""
+    np.random.seed(42)
+    data = pd.DataFrame(
+        np.random.randn(50, 5) * 10 + 50,
+        columns=[f"var_{i}" for i in range(5)],
+        index=[f"sample_{i}" for i in range(50)],
+    )
+    return data
 
 
 @pytest.fixture
-def sample_virulence_data():
-    """Create sample virulence data for testing."""
-    return pd.DataFrame({
-        'Strain_ID': ['S001', 'S002', 'S003', 'S004', 'S005'],
-        'MRP': [1, 1, 1, 0, 0],
-        'EF': [1, 0, 1, 1, 1],
-        'Sly': [0, 1, 1, 1, 0],
-        'CPS': [1, 1, 0, 0, 1]
-    })
+def sample_categorical_data():
+    """Create sample categorical data for testing."""
+    np.random.seed(42)
+    categories = ["A", "B", "C", "D"]
+    data = pd.Series(
+        np.random.choice(categories, size=100), name="category", index=[f"sample_{i}" for i in range(100)]
+    )
+    return data
 
 
 @pytest.fixture
-def sample_mic_data():
-    """Create sample MIC data for testing."""
-    return pd.DataFrame({
-        'Strain_ID': ['S001', 'S002', 'S003', 'S004', 'S005'],
-        'Penicillin': [0, 0, 1, 1, 0],
-        'Tetracycline': [1, 1, 1, 0, 0],
-        'Erythromycin': [0, 1, 1, 1, 0],
-        'Gentamicin': [1, 0, 0, 0, 1]
-    })
+def sample_tree_newick():
+    """Create sample Newick tree string."""
+    return "((A:0.1,B:0.2):0.3,(C:0.15,D:0.25):0.35);"
 
 
 @pytest.fixture
-def sample_mlst_data():
-    """Create sample MLST data for testing."""
-    return pd.DataFrame({
-        'Strain_ID': ['S001', 'S002', 'S003', 'S004', 'S005'],
-        'MLST': [1, 1, 28, 28, 94]
-    })
+def sample_tree_newick_large():
+    """Create larger sample Newick tree."""
+    return "((((A:0.1,B:0.2):0.15,C:0.25):0.1,(D:0.3,E:0.2):0.2):0.1,(F:0.4,((G:0.1,H:0.15):0.2,I:0.3):0.1):0.2);"
 
 
 @pytest.fixture
-def sample_serotype_data():
-    """Create sample serotype data for testing."""
-    return pd.DataFrame({
-        'Strain_ID': ['S001', 'S002', 'S003', 'S004', 'S005'],
-        'Serotype': [2, 2, 7, 9, 9]
-    })
+def correlation_data_perfect():
+    """Create perfectly correlated data for testing."""
+    np.random.seed(42)
+    x = np.linspace(0, 10, 100)
+    y = 2 * x + 1  # Perfect linear relationship
+    return pd.DataFrame({"x": x, "y": y})
 
 
 @pytest.fixture
-def binary_matrix_small():
-    """Create a small binary matrix for testing."""
-    return np.array([
-        [1, 0, 1, 0],
-        [1, 1, 0, 0],
-        [0, 1, 1, 1]
-    ])
+def correlation_data_no_correlation():
+    """Create uncorrelated data for testing."""
+    np.random.seed(42)
+    x = np.random.randn(100)
+    y = np.random.randn(100)
+    return pd.DataFrame({"x": x, "y": y})
 
 
 @pytest.fixture
-def binary_matrix_identical():
-    """Create a matrix with identical rows for testing."""
-    return np.array([
-        [1, 1, 0, 0],
-        [1, 1, 0, 0],
-        [1, 1, 0, 0]
-    ])
+def normal_distribution_data():
+    """Create normally distributed data."""
+    np.random.seed(42)
+    return pd.Series(np.random.normal(0, 1, 1000), name="normal")
 
 
 @pytest.fixture
-def binary_matrix_zeros():
-    """Create a matrix of all zeros for testing."""
-    return np.array([
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ])
+def non_normal_distribution_data():
+    """Create non-normally distributed data."""
+    np.random.seed(42)
+    return pd.Series(np.random.exponential(1, 1000), name="exponential")
 
 
 @pytest.fixture
-def binary_matrix_ones():
-    """Create a matrix of all ones for testing."""
-    return np.array([
-        [1, 1, 1, 1],
-        [1, 1, 1, 1],
-        [1, 1, 1, 1]
-    ])
-
-
-@pytest.fixture
-def sample_newick_tree():
-    """Create a sample Newick tree string."""
-    return "((A:0.1,B:0.2):0.3,(C:0.4,D:0.5):0.6);"
+def meta_analysis_data():
+    """Create sample meta-analysis data."""
+    effect_sizes = [0.5, 0.6, 0.4, 0.7, 0.55]
+    variances = [0.01, 0.02, 0.015, 0.012, 0.018]
+    return {"effect_sizes": effect_sizes, "variances": variances}

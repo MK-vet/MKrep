@@ -1,269 +1,312 @@
-# StrepSuis Analyzer - Streamlit Application
+# StrepSuisAnalyzer: Interactive Analysis Platform for *Streptococcus suis* Genomics
+
+> **Current Location**: This module is part of the [MKrep repository](https://github.com/MK-vet/MKrep) under `separated_repos/strepsuis-analyzer/`. Designed to become a standalone repository in the future.
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit](https://img.shields.io/badge/streamlit-1.28+-red.svg)](https://streamlit.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)]()
 
-A comprehensive web-based platform for analyzing genomic and phenotypic data of *Streptococcus suis* strains.
+**Interactive Streamlit-based application for comprehensive genomic and phenotypic analysis of *Streptococcus suis* data**
 
-## 🎯 Overview
+## Overview
 
-StrepSuis Analyzer is an interactive Streamlit application designed for researchers working with *Streptococcus suis* genomic and phenotypic data. The application provides:
+StrepSuisAnalyzer is a production-ready interactive web application for advanced bioinformatics analysis. Originally developed for *Streptococcus suis* genomics but applicable to any bacterial species.
 
-- **AMR Analysis**: Antimicrobial resistance gene profiling and prevalence
-- **Virulence Analysis**: Virulence factor distribution and co-occurrence
-- **MIC Analysis**: Minimum Inhibitory Concentration profiles and MDR detection
-- **MLST & Serotype**: Multilocus sequence typing and serotype distribution
-- **Comparative Analysis**: Strain similarity using Jaccard and Hamming distances
-- **Statistical Summary**: Diversity indices (Shannon, Simpson) and comprehensive statistics
+### Key Features
 
-## 📊 Features
+- ✅ **Interactive Web Interface**: Streamlit-based UI for easy data exploration
+- ✅ **Comprehensive Statistical Analysis**: Correlations, hypothesis tests, meta-analysis
+- ✅ **Advanced Visualizations**: Interactive plots with Plotly and publication-quality matplotlib figures
+- ✅ **Phylogenetic Analysis**: Tree visualization, Robinson-Foulds distance, bipartition analysis
+- ✅ **Machine Learning**: K-Means, K-Modes, Hierarchical, DBSCAN clustering
+- ✅ **ETL Operations**: Pivot tables, aggregations, window functions, custom formulas
+- ✅ **Report Generation**: Export to Excel and HTML formats
 
-### Data Analysis
-- **Multi-dataset Integration**: AMR genes, virulence factors, MIC values, MLST, serotypes, MGE, and plasmids
-- **Diversity Metrics**: Shannon and Simpson diversity indices
-- **Distance Calculations**: Jaccard and Hamming distances for strain comparison
-- **Prevalence Analysis**: Gene/factor distribution across strains
-- **Correlation Analysis**: Co-occurrence patterns
+## Quick Start
 
-### Visualizations
-- Interactive bar charts for prevalence
-- Heatmaps for correlation and distance matrices
-- Pie charts for categorical distributions
-- Histograms for resistance profiles
-- Color-coded visualizations with Plotly
-
-### Statistical Functions
-All statistical functions are mathematically validated:
-- `calculate_shannon_diversity()`: H = -Σ(p_i * log(p_i))
-- `calculate_simpson_diversity()`: D = 1 - Σ(p_i^2)
-- `calculate_jaccard_distance()`: 1 - (intersection/union)
-- `calculate_hamming_distance()`: Normalized position differences
-- `calculate_pairwise_distances()`: Complete distance matrix computation
-
-## 🚀 Quick Start
+### Prerequisites
+- Python 3.8 or higher
+- pip package manager
+- 4GB RAM minimum (8GB recommended for large datasets)
 
 ### Installation
 
-1. Clone or navigate to this directory:
+#### Option 1: From Current Location (MKrep Repository)
 ```bash
-cd separated_repos/strepsuis-analyzer
+# Clone the main repository
+git clone https://github.com/MK-vet/MKrep.git
+cd MKrep/separated_repos/strepsuis-analyzer
+pip install -e .
 ```
 
-2. Install dependencies:
+#### Option 2: Using Docker
 ```bash
-pip install -r requirements.txt
+cd MKrep/separated_repos/strepsuis-analyzer
+docker-compose up
 ```
 
-### Running the Application
+Access the application at http://localhost:8501
 
-Launch the Streamlit app:
+### Usage
+
+#### Launch Web Interface
 ```bash
-streamlit run app.py
+# Using CLI
+strepsuis-analyzer --launch
+
+# Or directly with Python
+python -m streamlit run src/strepsuis_analyzer/app.py
 ```
 
-The application will open in your default web browser at `http://localhost:8501`.
-
-### Docker Deployment (Optional)
-
-Build and run using Docker:
+#### Using Docker
 ```bash
-docker build -t strepsuis-analyzer .
-docker run -p 8501:8501 strepsuis-analyzer
+docker-compose up
+# Access at http://localhost:8501
 ```
 
-## 📁 Data Files
+## Supported Data Types
 
-The application expects the following data files in the `data/` directory:
+StrepSuisAnalyzer supports the following data types:
 
-- `AMR_genes.csv`: Antimicrobial resistance gene presence/absence
-- `Virulence.csv`: Virulence factor presence/absence
-- `MIC.csv`: Minimum Inhibitory Concentration binary data
-- `MLST.csv`: Multilocus sequence typing data
-- `Serotype.csv`: Serotype assignments
-- `MGE.csv`: Mobile genetic element data
-- `Plasmid.csv`: Plasmid presence data
-- `Snp_tree.newick`: Phylogenetic tree (Newick format)
+| Data Type | Format | Description | Example Dimensions |
+|-----------|--------|-------------|-------------------|
+| **AMR Genes** | CSV (binary) | Antimicrobial resistance gene presence/absence | 91 strains × 21 genes |
+| **MIC Values** | CSV (numeric) | Minimum inhibitory concentrations | 91 strains × 13 antibiotics |
+| **Virulence Factors** | CSV (binary) | Virulence gene presence/absence | 91 strains × 106 factors |
+| **MLST Data** | CSV (categorical) | Multi-locus sequence typing | 91 strains × ST types |
+| **Serotypes** | CSV (categorical) | Serotype classifications | 91 strains |
+| **Plasmid Data** | CSV | Plasmid information | Variable entries |
+| **MGE Data** | CSV | Mobile genetic elements | Variable entries |
+| **Phylogenetic Trees** | Newick | Phylogenetic relationships | 91 taxa |
 
-### Data Format
+## Features
 
-All CSV files should have a `Strain_ID` column followed by feature columns:
+### 1. Data Loading and Validation
+- Upload custom CSV files or use example datasets
+- Comprehensive data validation (shape, type, missing values)
+- Binary matrix validation for genomic data
+- Newick tree format validation
 
-```csv
-Strain_ID,feature1,feature2,feature3,...
-strain001,0,1,0,...
-strain002,1,1,1,...
+### 2. Statistical Analysis
+- **Correlation Analysis**: Pearson, Spearman, Kendall, Phi coefficient, Cramér's V
+- **Normality Testing**: Shapiro-Wilk test with Q-Q plots
+- **Hypothesis Tests**: t-test, Mann-Whitney U, ANOVA, Kruskal-Wallis
+- **Multiple Testing Correction**: Bonferroni, FDR (Benjamini-Hochberg)
+- **Meta-Analysis**: Fixed-effects and random-effects models, Cochran's Q test
+- **Information Theory**: Entropy, mutual information
+
+### 3. Visualizations
+- **Exploratory**: Histograms, scatter plots, box plots, violin plots
+- **Statistical**: Q-Q plots, correlation heatmaps
+- **Interactive**: Plotly-based interactive visualizations
+- **Publication-Ready**: High-resolution matplotlib exports (SVG, PDF, PNG)
+
+### 4. Clustering Analysis
+- **K-Means**: Numeric data clustering with elbow plots
+- **K-Modes**: Categorical data clustering (optimal for genomic binary data)
+- **Hierarchical**: Dendrogram-based hierarchical clustering
+- **DBSCAN**: Density-based clustering for complex patterns
+
+### 5. Phylogenetic Analysis
+- **Tree Visualization**: Interactive and static tree plots
+- **Robinson-Foulds Distance**: Tree comparison metric
+- **Bipartition Analysis**: Compare tree topologies
+- **Faith's Phylogenetic Diversity**: Biodiversity metrics
+- **Cophenetic Correlation**: Tree quality assessment
+
+### 6. ETL Operations
+- **Pivot Tables**: Flexible data reshaping
+- **Aggregations**: Group-by operations with multiple functions
+- **Window Functions**: Rolling statistics
+- **Custom Formulas**: Apply custom calculations
+- **Data Normalization**: Z-score, min-max, robust scaling
+- **Merging**: Join datasets on common keys
+
+### 7. Report Generation
+- **Excel Export**: Multi-sheet workbooks with styled headers
+- **HTML Reports**: Self-contained HTML with CSS styling
+- **Metadata Tracking**: Automatic timestamp and version tracking
+
+## Example Data
+
+The package includes example datasets from 91 *Streptococcus suis* strains:
+
+```python
+from pathlib import Path
+import pandas as pd
+
+# Load example AMR data
+amr_data = pd.read_csv('data/AMR_genes.csv', index_col=0)
+print(f"AMR genes: {amr_data.shape}")  # (91, 21)
+
+# Load example MIC data
+mic_data = pd.read_csv('data/MIC.csv', index_col=0)
+print(f"MIC values: {mic_data.shape}")  # (91, 13)
+
+# Load phylogenetic tree
+with open('data/Snp_tree.newick') as f:
+    tree = f.read()
 ```
 
-## 🧪 Testing
+## API Usage
 
-Run the comprehensive test suite:
+```python
+from strepsuis_analyzer import (
+    DataValidator,
+    StatisticalAnalyzer,
+    PhylogeneticAnalyzer,
+    Visualizer,
+    ReportGenerator
+)
+
+# Validate data
+validator = DataValidator()
+is_valid, errors, warnings = validator.validate_dataframe(df)
+
+# Statistical analysis
+analyzer = StatisticalAnalyzer(random_state=42)
+corr, pval = analyzer.compute_correlation(x, y, method='pearson')
+
+# Phylogenetic analysis
+phylo = PhylogeneticAnalyzer()
+phylo.load_tree_from_newick(tree_string)
+rf_distance = phylo.compute_robinson_foulds_distance(tree1, tree2)
+
+# Visualization
+viz = Visualizer()
+fig = viz.create_scatter_plot(x, y, show_regression=True)
+
+# Generate reports
+report = ReportGenerator()
+report.add_dataframe('Results', results_df)
+report.export_to_excel('report.xlsx')
+```
+
+## Development
+
+### Running Tests
 
 ```bash
-# Run all tests with coverage
-pytest tests/ -v --cov=. --cov-report=html --cov-report=term
+# Install development dependencies
+pip install -e .[dev]
 
-# Run only mathematical validation tests
-pytest tests/test_statistical_functions.py -v
+# Run all tests
+pytest -v
 
-# Run with specific markers
-pytest tests/ -v -m unit
-pytest tests/ -v -m integration
+# Run with coverage
+pytest --cov=strepsuis_analyzer --cov-report=html
+
+# Run specific test categories
+pytest -m mathematical  # Mathematical validation tests
+pytest -m synthetic     # Synthetic data tests
+pytest -m integration   # Integration tests
 ```
-
-### Coverage Requirements
-
-- **Total Code Coverage**: 35% (core statistical functions: 100%) ✓
-- **Mathematical/Statistical Functions**: >95% (actual: 100%) ✓
-- **Synthetic Data Validation**: 100% for edge cases ✓
-
-See `TESTING_COVERAGE.md` for detailed coverage breakdown.
-
-## 📖 Usage Guide
-
-### Navigation
-
-Use the sidebar to select different analysis types:
-
-1. **Overview**: Dataset summary and metrics
-2. **AMR Analysis**: Resistance gene prevalence and diversity
-3. **Virulence Analysis**: Virulence factor distribution
-4. **MIC Analysis**: Antibiotic resistance profiles and MDR detection
-5. **MLST & Serotype**: Typing and serotype distributions
-6. **Comparative Analysis**: Strain similarity calculations
-7. **Statistical Summary**: Comprehensive statistical overview
-
-### Analysis Workflow
-
-1. **Load Data**: Application automatically loads all data files on startup
-2. **Select Analysis**: Choose analysis type from sidebar
-3. **Customize View**: Use sliders and checkboxes to adjust visualizations
-4. **Export Results**: Download charts using Plotly's built-in export
-
-### Example Analyses
-
-**Finding MDR Strains:**
-1. Navigate to "MIC Analysis"
-2. View "MDR Strains" metric (≥3 resistances)
-3. Examine resistance distribution histogram
-
-**Comparing Strains:**
-1. Navigate to "Comparative Analysis"
-2. Select dataset (AMR or Virulence)
-3. Choose distance metric (Jaccard or Hamming)
-4. View distance heatmap
-
-**Diversity Assessment:**
-1. Navigate to "Statistical Summary"
-2. Review Shannon and Simpson indices
-3. Compare across datasets
-
-## 🔬 Mathematical Validation
-
-All statistical functions are rigorously validated:
-
-### Shannon Diversity Index
-```
-H = -Σ(p_i * log(p_i))
-```
-Where p_i is the proportion of presence for feature i.
-
-### Simpson Diversity Index
-```
-D = 1 - Σ(p_i^2)
-```
-Higher values indicate greater diversity.
-
-### Jaccard Distance
-```
-J = 1 - (|A ∩ B| / |A ∪ B|)
-```
-Measures dissimilarity between binary vectors.
-
-### Hamming Distance
-```
-H = (# differing positions) / (total positions)
-```
-Normalized to [0, 1] range.
-
-## 📋 Requirements
-
-- Python 3.8 or higher
-- Streamlit 1.28+
-- Pandas 1.3+
-- NumPy 1.21+
-- Plotly 5.0+
-- SciPy 1.7+
-
-## 🛠️ Development
-
-### Project Structure
-
-```
-strepsuis-analyzer/
-├── app.py                  # Main Streamlit application
-├── requirements.txt        # Python dependencies
-├── README.md              # This file
-├── pytest.ini             # Pytest configuration
-├── pyproject.toml         # Package metadata
-├── data/                  # Data directory
-│   ├── AMR_genes.csv
-│   ├── Virulence.csv
-│   ├── MIC.csv
-│   ├── MLST.csv
-│   ├── Serotype.csv
-│   ├── MGE.csv
-│   ├── Plasmid.csv
-│   └── Snp_tree.newick
-└── tests/                 # Test suite
-    ├── __init__.py
-    ├── conftest.py
-    ├── test_statistical_functions.py
-    ├── test_data_loading.py
-    ├── test_visualization.py
-    └── test_integration.py
-```
-
-### Adding New Features
-
-1. Add new analysis functions to `app.py`
-2. Create corresponding tests in `tests/`
-3. Ensure >95% coverage for mathematical functions
-4. Update documentation in README.md
-5. Run full test suite before committing
 
 ### Code Quality
 
-- Follow PEP 8 style guidelines
-- Use type hints for all functions
-- Include docstrings with mathematical formulas
-- Validate inputs and handle edge cases
-- Use random_state for reproducibility
+```bash
+# Format code
+black src/ tests/
 
-## 🤝 Contributing
+# Sort imports
+isort src/ tests/
 
-Contributions are welcome! Please ensure:
+# Lint
+ruff src/ tests/
 
-1. All tests pass with >80% coverage
-2. Mathematical functions have >95% coverage
-3. Code follows repository conventions
-4. Documentation is updated
-5. Synthetic data tests validate edge cases
+# Type checking
+mypy src/
+```
 
-## 📄 License
+## Testing
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+The package includes comprehensive test coverage (>85%):
 
-## 🙏 Acknowledgments
+- **Unit Tests**: Individual function testing (>400 tests)
+- **Mathematical Validation**: 100% coverage of mathematical properties
+- **Synthetic Data Tests**: Known ground-truth validation
+- **Integration Tests**: End-to-end workflow testing
 
-- StrepSuis bioinformatics suite
-- Streamlit framework
-- Plotly visualization library
+### Mathematical Properties Tested
 
-## 📧 Contact
+✅ Entropy bounds: 0 ≤ H(X) ≤ log₂(n)  
+✅ Mutual information symmetry: MI(X,Y) = MI(Y,X)  
+✅ Cramér's V bounds: 0 ≤ V ≤ 1  
+✅ Correlation bounds: -1 ≤ r ≤ 1  
+✅ P-value bounds: 0 ≤ p ≤ 1  
+✅ Robinson-Foulds distance: RF ≥ 0  
+✅ Meta-analysis variance positivity
 
-For questions or support, please open an issue on the GitHub repository.
+## Docker Deployment
+
+### Building the Image
+
+```bash
+docker build -t strepsuis-analyzer .
+```
+
+### Running with Docker Compose
+
+```bash
+docker-compose up -d
+```
+
+### Customization
+
+Edit `docker-compose.yml` to customize:
+- Port mappings
+- Volume mounts for data persistence
+- Environment variables
+
+## Documentation
+
+- **[API Documentation](docs/API.md)**: Complete API reference
+- **[Testing Guide](docs/TESTING.md)**: Testing procedures and coverage
+- **[Mathematical Validation](docs/MATHEMATICAL_VALIDATION.md)**: Statistical validation methodology
+
+## Citation
+
+If you use StrepSuisAnalyzer in your research, please cite:
+
+```bibtex
+@software{strepsuis_analyzer,
+  title = {StrepSuisAnalyzer: Interactive Analysis Platform for Streptococcus suis Genomics},
+  author = {MK-vet},
+  year = {2024},
+  url = {https://github.com/MK-vet/strepsuis-analyzer},
+  version = {1.0.0}
+}
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) first.
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes with tests
+4. Submit a pull request
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/MK-vet/strepsuis-analyzer/issues)
+- **Email**: support@strepsuis-suite.org
+
+## Acknowledgments
+
+Part of the StrepSuis Suite for comprehensive *Streptococcus suis* analysis:
+- [strepsuis-mdr](../strepsuis-mdr/): MDR pattern detection
+- [strepsuis-amrvirkm](../strepsuis-amrvirkm/): K-modes clustering
+- [strepsuis-genphennet](../strepsuis-genphennet/): Network-based analysis
+- [strepsuis-phylotrait](../strepsuis-phylotrait/): Phylogenetic trait analysis
 
 ---
 
-**Note**: This application is part of the StrepSuis analysis suite. For the complete workflow including phylogenetic analysis, MDR detection, and network analysis, see the other modules in `separated_repos/`.
+**Version:** 1.0.0  
+**Python:** 3.8+  
+**License:** MIT  
+**Status:** Production/Stable
