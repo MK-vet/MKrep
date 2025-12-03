@@ -1,0 +1,182 @@
+name: Strepsuis Analyzer Tests
+
+on:
+  push:
+    paths:
+      - 'separated_repos/strepsuis-analyzer/**'
+      - '.github/workflows/strepsuis-analyzer-tests.yml'
+  pull_request:
+    paths:
+      - 'separated_repos/strepsuis-analyzer/**'
+      - '.github/workflows/strepsuis-analyzer-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+    
+    defaults:
+      run:
+        working-directory: separated_repos/strepsuis-analyzer
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run unit tests with coverage
+        run: |
+          pytest tests/ --cov=. --cov-report=xml --cov-report=term --cov-report=html -v
+      
+      - name: Check coverage thresholds
+        run: |
+          python -c "
+          import xml.etree.ElementTree as ET
+          tree = ET.parse('coverage.xml')
+          root = tree.getroot()
+          coverage = float(root.attrib['line-rate']) * 100
+          print(f'Overall coverage: {coverage:.2f}%')
+          if coverage < 80:
+              print(f'ERROR: Coverage {coverage:.2f}% is below 80% threshold')
+              exit(1)
+          else:
+              print(f'SUCCESS: Coverage {coverage:.2f}% meets 80% threshold')
+          "
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: matrix.python-version == '3.11'
+        with:
+          file: ./separated_repos/strepsuis-analyzer/coverage.xml
+          flags: strepsuis-analyzer
+          name: strepsuis-analyzer-coverage
+          fail_ci_if_error: false
+      
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@v3
+        if: matrix.python-version == '3.11'
+        with:
+          name: coverage-report
+          path: separated_repos/strepsuis-analyzer/htmlcov/
+  
+  quality:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: separated_repos/strepsuis-analyzer
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort ruff
+      
+      - name: Check code formatting with black
+        run: black --check --line-length=100 app.py tests/
+        continue-on-error: true
+      
+      - name: Check import sorting with isort
+        run: isort --check --profile=black --line-length=100 app.py tests/
+        continue-on-error: true
+      
+      - name: Lint with ruff
+        run: ruff check app.py tests/
+        continue-on-error: true
+  
+  smoke-test:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: separated_repos/strepsuis-analyzer
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Verify data files exist
+        run: |
+          python -c "
+          import os
+          required_files = [
+              'data/AMR_genes.csv',
+              'data/MGE.csv',
+              'data/MIC.csv',
+              'data/MLST.csv',
+              'data/Plasmid.csv',
+              'data/Serotype.csv',
+              'data/Virulence.csv',
+              'data/Snp_tree.newick'
+          ]
+          missing = [f for f in required_files if not os.path.exists(f)]
+          if missing:
+              print('Missing files:', missing)
+              exit(1)
+          print('All required data files found')
+          "
+      
+      - name: Test data loading
+        run: |
+          python -c "
+          import sys
+          import pandas as pd
+          import os
+          
+          # Test loading each data file
+          data_files = {
+              'AMR_genes': 'data/AMR_genes.csv',
+              'MGE': 'data/MGE.csv',
+              'MIC': 'data/MIC.csv',
+              'MLST': 'data/MLST.csv',
+              'Plasmid': 'data/Plasmid.csv',
+              'Serotype': 'data/Serotype.csv',
+              'Virulence': 'data/Virulence.csv'
+          }
+          
+          for name, path in data_files.items():
+              try:
+                  df = pd.read_csv(path)
+                  print(f'{name}: {df.shape[0]} rows, {df.shape[1]} columns')
+                  if df.empty:
+                      print(f'ERROR: {name} is empty')
+                      sys.exit(1)
+              except Exception as e:
+                  print(f'ERROR loading {name}: {e}')
+                  sys.exit(1)
+          
+          print('All data files loaded successfully')
+          "
