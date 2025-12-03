@@ -48,15 +48,16 @@ The StrepSuis Suite contains **five production-ready bioinformatics tools**, eac
 - Interactive HTML reports with DataTables and Plotly
 
 ### strepsuis-analyzer
-**StrepSuis-Analyzer** is a **general-purpose data analysis tool** designed for researchers to analyze **their own uploaded datasets**:
+**StrepSuis-Analyzer** is a **general-purpose data analysis application** designed for researchers to analyze **their own uploaded datasets**:
+- **Standalone application**: Complete application with file upload at the application level
 - **Flexible and exploratory**: Works with any binary trait data you provide
-- **User-friendly**: Easy file upload in Google Colab or command-line usage
-- **No programming required**: Simple commands or interactive notebook interface
+- **User-friendly**: Direct file upload through the application or command-line usage
+- **No programming required**: Simple command-line interface for running analyses
 - **Comprehensive analysis**: Automatic clustering, statistical tests, pattern discovery
 - **Custom data support**: Analyze AMR genes, virulence factors, or any binary genomic data
 - **Interactive outputs**: HTML reports and Excel workbooks for easy sharing
 
-> **Key Difference**: Unlike the four specialized modules above that implement specific analysis workflows, **strepsuis-analyzer is designed for general data exploration** and allows users to bring their own datasets for flexible, exploratory analysis.
+> **Key Difference**: Unlike the four specialized modules above that implement specific analysis workflows, **strepsuis-analyzer is a standalone application** where users upload their data files directly at the application level for flexible, exploratory analysis.
 
 ## Repository Contents
 

@@ -1,29 +1,29 @@
-# StrepSuis Analyzer: General-Purpose Genomic Data Analysis Tool
+# StrepSuis Analyzer: General-Purpose Genomic Data Analysis Application
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb)
 
-**A flexible, user-friendly tool for analyzing YOUR genomic data**
+**A flexible, standalone application for analyzing YOUR genomic data**
 
 ## Overview
 
-**StrepSuis Analyzer is a general-purpose data analysis tool** designed to help researchers analyze their own genomic datasets without requiring programming expertise. Unlike the other specialized modules in the StrepSuis Suite (MDR, AMRVirKM, GenPhenNet, PhyloTrait), this analyzer is built for flexible, exploratory analysis of user-provided data.
+**StrepSuis Analyzer is a general-purpose data analysis application** designed to help researchers analyze their own genomic datasets without requiring programming expertise. Unlike the other specialized modules in the StrepSuis Suite (MDR, AMRVirKM, GenPhenNet, PhyloTrait), this is a **standalone application** where users upload their data files directly to the application for flexible, exploratory analysis.
 
-### What Makes This Tool Different?
+### What Makes This Application Different?
 
-✨ **Bring Your Own Data**: Designed specifically for analyzing datasets that **you** upload or provide
+✨ **Standalone Application**: Complete analysis application with file upload at the application level
+✨ **Bring Your Own Data**: Upload and analyze your own datasets directly through the application
 ✨ **General Purpose**: Not limited to specific analysis types - works with any binary trait data
-✨ **User-Focused**: Easy to use in Google Colab with drag-and-drop file upload
+✨ **User-Focused**: Easy-to-use interface for uploading files and running analyses
 ✨ **Flexible & Exploratory**: Discover patterns in your data without predefined analysis workflows
-✨ **No Programming Required**: Run complete analyses through simple commands or interactive notebooks
+✨ **No Programming Required**: Run complete analyses through simple commands
 
 ### Perfect For:
 
 - 🔬 **Researchers** who want to analyze their own genomic data
 - 📊 **Quick exploratory analysis** of binary trait datasets (AMR, virulence, etc.)
 - 🧬 **Custom datasets** not covered by specialized modules
-- 📁 **User-uploaded data** in Google Colab or local environments
+- 📁 **Direct file upload** at the application level
 - 🔍 **Pattern discovery** in bacterial genomic data
 
 ### Key Capabilities
@@ -33,7 +33,7 @@
 - ✅ **Phylogenetic tree integration** (optional, if you have a tree file)
 - ✅ **Interactive HTML reports** that open in any web browser
 - ✅ **Excel workbooks** with multiple analysis sheets for easy sharing
-- ✅ **No coding required** - simple command-line interface or Colab notebook
+- ✅ **No coding required** - simple command-line interface
 
 ## Quick Start
 
@@ -45,7 +45,7 @@
 
 ### Installation
 
-#### Option 1: Standalone Installation (Recommended)
+#### Option 1: Standalone Application (Recommended)
 
 ```bash
 # Clone or download this directory
@@ -53,28 +53,30 @@ cd strepsuis-analyzer
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Run the application
+python StrepSuisPhyloCluster_2025_08_11.py --data your_data.csv
 ```
 
-#### Option 2: From Main MKrep Repository
+#### Option 2: Install as Python Package
 
 ```bash
-# Clone the main repository
+# From Main MKrep Repository
 git clone https://github.com/MK-vet/MKrep.git
 cd MKrep/separated_repos/strepsuis-analyzer
 
-# Install dependencies
-pip install -r requirements.txt
+# Install the package
+pip install -e .
+
+# Use via command-line
+strepsuis-analyzer --data your_data.csv
 ```
 
-#### Option 3: Google Colab (No Installation Required)
-
-Click here: [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MK-vet/MKrep/blob/main/colab_notebooks/StrepSuis_Analysis_Colab.ipynb)
-
-### Basic Usage
+### Basic Usage - Upload Your Data Files
 
 #### 1. Prepare Your Data
 
-**This tool is designed to work with YOUR data!** Simply prepare your data files in CSV format:
+**This application works with YOUR data files!** Prepare your data in CSV format:
 
 ```
 ├── your_amr_data.csv       # Your antimicrobial resistance data
