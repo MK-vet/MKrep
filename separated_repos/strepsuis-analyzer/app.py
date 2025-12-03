@@ -29,42 +29,45 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Import statistical and data loading functions from modules
+from strepsuis_analyzer.stats import (
+    calculate_shannon_diversity,
+    calculate_simpson_diversity,
+    calculate_jaccard_distance,
+    calculate_hamming_distance,
+    calculate_pairwise_distances,
+    calculate_prevalence,
+    calculate_correlation_matrix
+)
+from strepsuis_analyzer.data import (
+    load_data as load_data_core,
+    load_phylogenetic_tree as load_phylogenetic_tree_core
+)
+
 # Constants
 DATA_DIR = Path(__file__).parent / "data"
 RANDOM_STATE = 42
 
 
-# ==================== Data Loading Functions ====================
+# ==================== Data Loading Functions (Streamlit Wrappers) ====================
 
 @st.cache_data
 def load_data() -> Dict[str, pd.DataFrame]:
     """
     Load all CSV data files from the data directory.
     
+    Wrapper around core data loading function with Streamlit caching
+    and error display.
+    
     Returns:
         Dictionary mapping data type to DataFrame
     """
-    data_files = {
-        'AMR': 'AMR_genes.csv',
-        'MIC': 'MIC.csv',
-        'Virulence': 'Virulence.csv',
-        'MLST': 'MLST.csv',
-        'Serotype': 'Serotype.csv',
-        'MGE': 'MGE.csv',
-        'Plasmid': 'Plasmid.csv'
-    }
+    data = load_data_core(DATA_DIR)
     
-    data = {}
-    for key, filename in data_files.items():
-        filepath = DATA_DIR / filename
-        try:
-            df = pd.read_csv(filepath)
-            # Clean column names
-            df.columns = df.columns.str.strip()
-            data[key] = df
-        except FileNotFoundError:
-            st.error(f"Data file not found: {filename}")
-            data[key] = pd.DataFrame()
+    # Display errors for missing files in Streamlit UI
+    for key, df in data.items():
+        if df.empty:
+            st.error(f"Data file not found for {key}")
     
     return data
 
@@ -74,205 +77,19 @@ def load_phylogenetic_tree() -> Optional[str]:
     """
     Load the phylogenetic tree in Newick format.
     
+    Wrapper around core tree loading function with Streamlit caching
+    and warning display.
+    
     Returns:
         Tree string in Newick format or None if not found
     """
     tree_file = DATA_DIR / "Snp_tree.newick"
-    try:
-        with open(tree_file, 'r') as f:
-            return f.read().strip()
-    except FileNotFoundError:
+    tree = load_phylogenetic_tree_core(tree_file)
+    
+    if tree is None:
         st.warning("Phylogenetic tree file not found")
-        return None
-
-
-# ==================== Statistical Functions ====================
-
-def calculate_shannon_diversity(data: np.ndarray, random_state: int = RANDOM_STATE) -> float:
-    """
-    Calculate Shannon diversity index for a binary presence/absence matrix.
     
-    H = -Σ(p_i * log(p_i))
-    
-    Args:
-        data: Binary numpy array (samples x features)
-        random_state: Random seed for reproducibility (reserved for API consistency)
-        
-    Returns:
-        Shannon diversity index
-        
-    Note:
-        The random_state parameter is included for API consistency with other
-        functions but is not currently used as this calculation is deterministic.
-    """
-    # Note: random_state is reserved for future extensions
-    # Current implementation is deterministic
-    _ = random_state  # Acknowledge parameter for API consistency
-    
-    if data.size == 0:
-        return 0.0
-    
-    # Calculate proportion of presence for each feature
-    proportions = np.mean(data, axis=0)
-    
-    # Filter out zero proportions to avoid log(0)
-    proportions = proportions[proportions > 0]
-    
-    if len(proportions) == 0:
-        return 0.0
-    
-    # Calculate Shannon index
-    shannon = -np.sum(proportions * np.log(proportions))
-    
-    return float(shannon)
-
-
-def calculate_simpson_diversity(data: np.ndarray, random_state: int = RANDOM_STATE) -> float:
-    """
-    Calculate Simpson diversity index (1 - D) for a binary presence/absence matrix.
-    
-    D = Σ(p_i^2)
-    Simpson = 1 - D
-    
-    Args:
-        data: Binary numpy array (samples x features)
-        random_state: Random seed for reproducibility (reserved for API consistency)
-        
-    Returns:
-        Simpson diversity index (1-D)
-        
-    Note:
-        The random_state parameter is included for API consistency with other
-        functions but is not currently used as this calculation is deterministic.
-    """
-    # Note: random_state is reserved for future extensions
-    # Current implementation is deterministic
-    _ = random_state  # Acknowledge parameter for API consistency
-    
-    if data.size == 0:
-        return 0.0
-    
-    # Calculate proportion of presence for each feature
-    proportions = np.mean(data, axis=0)
-    
-    # Calculate Simpson index (1 - D)
-    simpson = 1.0 - np.sum(proportions ** 2)
-    
-    return float(simpson)
-
-
-def calculate_jaccard_distance(x: np.ndarray, y: np.ndarray) -> float:
-    """
-    Calculate Jaccard distance between two binary vectors.
-    
-    Distance = 1 - (intersection / union)
-    
-    Args:
-        x: First binary vector
-        y: Second binary vector
-        
-    Returns:
-        Jaccard distance (0-1)
-    """
-    if len(x) == 0 or len(y) == 0:
-        return 1.0
-    
-    intersection = np.sum(np.logical_and(x, y))
-    union = np.sum(np.logical_or(x, y))
-    
-    if union == 0:
-        return 0.0
-    
-    jaccard_sim = intersection / union
-    return float(1.0 - jaccard_sim)
-
-
-def calculate_hamming_distance(x: np.ndarray, y: np.ndarray) -> float:
-    """
-    Calculate normalized Hamming distance between two binary vectors.
-    
-    Distance = (number of differing positions) / (total positions)
-    
-    Args:
-        x: First binary vector
-        y: Second binary vector
-        
-    Returns:
-        Normalized Hamming distance (0-1)
-    """
-    if len(x) == 0 or len(y) == 0:
-        return 1.0
-    
-    if len(x) != len(y):
-        raise ValueError("Vectors must have the same length")
-    
-    distance = np.sum(x != y) / len(x)
-    return float(distance)
-
-
-def calculate_pairwise_distances(data: np.ndarray, metric: str = 'jaccard') -> np.ndarray:
-    """
-    Calculate pairwise distance matrix for binary data.
-    
-    Args:
-        data: Binary numpy array (samples x features)
-        metric: Distance metric ('jaccard' or 'hamming')
-        
-    Returns:
-        Symmetric distance matrix
-    """
-    n_samples = data.shape[0]
-    distances = np.zeros((n_samples, n_samples))
-    
-    distance_func = calculate_jaccard_distance if metric == 'jaccard' else calculate_hamming_distance
-    
-    for i in range(n_samples):
-        for j in range(i + 1, n_samples):
-            dist = distance_func(data[i], data[j])
-            distances[i, j] = dist
-            distances[j, i] = dist
-    
-    return distances
-
-
-def calculate_prevalence(data: pd.DataFrame, exclude_cols: List[str] = ['Strain_ID']) -> pd.Series:
-    """
-    Calculate prevalence (%) of each feature in the dataset.
-    
-    Args:
-        data: DataFrame with binary features
-        exclude_cols: Columns to exclude from calculation
-        
-    Returns:
-        Series with prevalence percentages
-    """
-    feature_cols = [col for col in data.columns if col not in exclude_cols]
-    
-    if len(feature_cols) == 0:
-        return pd.Series(dtype=float)
-    
-    prevalence = (data[feature_cols].sum() / len(data) * 100).sort_values(ascending=False)
-    return prevalence
-
-
-def calculate_correlation_matrix(data: pd.DataFrame, exclude_cols: List[str] = ['Strain_ID']) -> pd.DataFrame:
-    """
-    Calculate correlation matrix for binary features.
-    
-    Args:
-        data: DataFrame with binary features
-        exclude_cols: Columns to exclude from calculation
-        
-    Returns:
-        Correlation matrix
-    """
-    feature_cols = [col for col in data.columns if col not in exclude_cols]
-    
-    if len(feature_cols) == 0:
-        return pd.DataFrame()
-    
-    corr_matrix = data[feature_cols].corr()
-    return corr_matrix
+    return tree
 
 
 # ==================== Visualization Functions ====================
