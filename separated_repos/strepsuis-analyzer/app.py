@@ -21,14 +21,6 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-# Page configuration
-st.set_page_config(
-    page_title="StrepSuis Analyzer",
-    page_icon="🧬",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
 # Import statistical and data loading functions from modules
 from strepsuis_analyzer.stats import (
     calculate_shannon_diversity,
@@ -243,6 +235,14 @@ def plot_pie_chart(data: pd.Series, title: str) -> go.Figure:
 
 def main():
     """Main Streamlit application"""
+    
+    # Page configuration - must be first Streamlit command
+    st.set_page_config(
+        page_title="StrepSuis Analyzer",
+        page_icon="🧬",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
     
     # Header
     st.title("🧬 Streptococcus suis Genomic and Phenotypic Data Analyzer")
