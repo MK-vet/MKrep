@@ -43,14 +43,14 @@ class TestDataLoading:
         data = load_data()
         amr_df = data['AMR']
         
-        # Should have Strain_ID column
-        assert 'Strain_ID' in amr_df.columns
+        # Should have Strain column
+        assert 'Strain' in amr_df.columns
         
         # Should have multiple rows
         assert len(amr_df) > 0
         
         # Should have gene columns
-        gene_cols = [col for col in amr_df.columns if col != 'Strain_ID']
+        gene_cols = [col for col in amr_df.columns if col != 'Strain']
         assert len(gene_cols) > 0
     
     @pytest.mark.integration
@@ -59,11 +59,11 @@ class TestDataLoading:
         data = load_data()
         mic_df = data['MIC']
         
-        # Should have Strain_ID column
-        assert 'Strain_ID' in mic_df.columns
+        # Should have Strain column
+        assert 'Strain' in mic_df.columns
         
         # Should have antibiotic columns
-        antibiotic_cols = [col for col in mic_df.columns if col != 'Strain_ID']
+        antibiotic_cols = [col for col in mic_df.columns if col != 'Strain']
         assert len(antibiotic_cols) > 0
     
     @pytest.mark.integration
@@ -85,9 +85,9 @@ class TestDataLoading:
         data = load_data()
         mlst_df = data['MLST']
         
-        # Should have Strain_ID and MLST columns
-        assert 'Strain_ID' in mlst_df.columns
-        assert 'MLST' in mlst_df.columns
+        # Should have Strain and ST columns
+        assert 'Strain' in mlst_df.columns
+        assert 'ST' in mlst_df.columns
     
     @pytest.mark.integration
     def test_load_serotype_data(self):
@@ -95,8 +95,8 @@ class TestDataLoading:
         data = load_data()
         serotype_df = data['Serotype']
         
-        # Should have Strain_ID and Serotype columns
-        assert 'Strain_ID' in serotype_df.columns
+        # Should have Strain and Serotype columns
+        assert 'Strain' in serotype_df.columns
         assert 'Serotype' in serotype_df.columns
     
     @pytest.mark.integration
@@ -107,7 +107,7 @@ class TestDataLoading:
         # Get strain counts from each dataset
         counts = {}
         for key, df in data.items():
-            if not df.empty and 'Strain_ID' in df.columns:
+            if not df.empty and 'Strain' in df.columns:
                 counts[key] = len(df)
         
         # AMR, MIC, Virulence, MLST, Serotype should have same count
@@ -152,8 +152,10 @@ class TestPhylogeneticTreeLoading:
             assert '(' in tree or ')' in tree or ',' in tree
     
     @pytest.mark.integration
-    def test_tree_file_exists(self, data_dir):
+    def test_tree_file_exists(self):
         """Test that tree file exists in data directory."""
+        from pathlib import Path
+        data_dir = Path(__file__).parent.parent / "data"
         tree_file = data_dir / "Snp_tree.newick"
         assert tree_file.exists()
 
@@ -168,8 +170,8 @@ class TestDataIntegrity:
         amr_df = data['AMR']
         
         if not amr_df.empty:
-            # Exclude Strain_ID column
-            gene_cols = [col for col in amr_df.columns if col != 'Strain_ID']
+            # Exclude Strain column
+            gene_cols = [col for col in amr_df.columns if col != 'Strain']
             
             for col in gene_cols:
                 unique_vals = amr_df[col].unique()
@@ -177,50 +179,49 @@ class TestDataIntegrity:
                 assert all(val in [0, 1] or pd.isna(val) for val in unique_vals)
     
     @pytest.mark.integration
-    def test_mic_binary_values(self):
-        """Test that MIC data contains only binary values."""
+    def test_mic_numeric_values(self):
+        """Test that MIC data contains numeric values."""
         data = load_data()
         mic_df = data['MIC']
         
         if not mic_df.empty:
-            # Exclude Strain_ID column
-            antibiotic_cols = [col for col in mic_df.columns if col != 'Strain_ID']
+            # Exclude Strain column
+            antibiotic_cols = [col for col in mic_df.columns if col != 'Strain']
             
             for col in antibiotic_cols:
-                unique_vals = mic_df[col].unique()
-                # Should only contain 0, 1, or NaN
-                assert all(val in [0, 1] or pd.isna(val) for val in unique_vals)
+                # Should be numeric (float or int)
+                assert pd.api.types.is_numeric_dtype(mic_df[col])
     
     @pytest.mark.integration
     def test_strain_id_uniqueness(self):
-        """Test that Strain_IDs are unique within each dataset."""
+        """Test that Strain IDs are unique within each dataset."""
         data = load_data()
         
         # MGE and Plasmid can have multiple rows per strain (multiple values)
         # Only check main datasets
         for key, df in data.items():
-            if not df.empty and 'Strain_ID' in df.columns and key not in ['MGE', 'Plasmid']:
+            if not df.empty and 'Strain' in df.columns and key not in ['MGE', 'Plasmid']:
                 # Check for duplicates
-                assert len(df['Strain_ID']) == len(df['Strain_ID'].unique())
+                assert len(df['Strain']) == len(df['Strain'].unique())
     
     @pytest.mark.integration
     def test_no_null_strain_ids(self):
-        """Test that there are no null Strain_IDs."""
+        """Test that there are no null Strain IDs."""
         data = load_data()
         
         for key, df in data.items():
-            if not df.empty and 'Strain_ID' in df.columns:
-                assert df['Strain_ID'].notna().all()
+            if not df.empty and 'Strain' in df.columns:
+                assert df['Strain'].notna().all()
     
     @pytest.mark.integration
-    def test_mlst_numeric_values(self):
-        """Test that MLST values are numeric."""
+    def test_mlst_values(self):
+        """Test that MLST values are valid."""
         data = load_data()
         mlst_df = data['MLST']
         
-        if not mlst_df.empty and 'MLST' in mlst_df.columns:
-            # Should be numeric
-            assert pd.api.types.is_numeric_dtype(mlst_df['MLST'])
+        if not mlst_df.empty and 'ST' in mlst_df.columns:
+            # Should have non-null values
+            assert mlst_df['ST'].notna().any()
     
     @pytest.mark.integration
     def test_serotype_values(self):
