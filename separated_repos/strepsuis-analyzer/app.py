@@ -96,12 +96,18 @@ def calculate_shannon_diversity(data: np.ndarray, random_state: int = RANDOM_STA
     
     Args:
         data: Binary numpy array (samples x features)
-        random_state: Random seed for reproducibility
+        random_state: Random seed for reproducibility (reserved for API consistency)
         
     Returns:
         Shannon diversity index
+        
+    Note:
+        The random_state parameter is included for API consistency with other
+        functions but is not currently used as this calculation is deterministic.
     """
-    np.random.seed(random_state)
+    # Note: random_state is reserved for future extensions
+    # Current implementation is deterministic
+    _ = random_state  # Acknowledge parameter for API consistency
     
     if data.size == 0:
         return 0.0
@@ -130,12 +136,18 @@ def calculate_simpson_diversity(data: np.ndarray, random_state: int = RANDOM_STA
     
     Args:
         data: Binary numpy array (samples x features)
-        random_state: Random seed for reproducibility
+        random_state: Random seed for reproducibility (reserved for API consistency)
         
     Returns:
         Simpson diversity index (1-D)
+        
+    Note:
+        The random_state parameter is included for API consistency with other
+        functions but is not currently used as this calculation is deterministic.
     """
-    np.random.seed(random_state)
+    # Note: random_state is reserved for future extensions
+    # Current implementation is deterministic
+    _ = random_state  # Acknowledge parameter for API consistency
     
     if data.size == 0:
         return 0.0
