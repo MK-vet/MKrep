@@ -4,11 +4,10 @@ Command-line interface for StrepSuis Analyzer.
 
 import argparse
 import sys
-from pathlib import Path
 
 # Import the analyzer from the standalone script
 try:
-    from StrepSuisPhyloCluster_2025_08_11 import StrepSuisAnalyzer, main as standalone_main
+    from StrepSuisPhyloCluster_2025_08_11 import main as standalone_main
 except ImportError:
     print("Error: Could not import StrepSuisAnalyzer. Please ensure the package is properly installed.")
     sys.exit(1)

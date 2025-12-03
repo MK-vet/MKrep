@@ -10,7 +10,6 @@ For standalone usage, run the script directly.
 
 # Re-export the analyzer from the standalone script for package usage
 import sys
-import os
 from pathlib import Path
 
 # Add the parent directory to path to import the standalone script

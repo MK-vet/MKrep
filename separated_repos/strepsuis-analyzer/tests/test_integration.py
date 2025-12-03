@@ -2,7 +2,6 @@
 Integration tests for StrepSuis Analyzer complete workflows.
 """
 
-import os
 import sys
 from pathlib import Path
 import pandas as pd

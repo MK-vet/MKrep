@@ -7,7 +7,6 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import pytest
-from scipy import stats
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 

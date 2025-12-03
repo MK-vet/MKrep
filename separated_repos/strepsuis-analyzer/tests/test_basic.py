@@ -44,5 +44,5 @@ def test_basic_instantiation(output_dir):
 def test_output_dir_creation(tmp_path):
     """Test that output directory is created if it doesn't exist."""
     new_dir = tmp_path / "new_output"
-    analyzer = StrepSuisAnalyzer(output_dir=new_dir, random_state=42)
+    _ = StrepSuisAnalyzer(output_dir=new_dir, random_state=42)  # analyzer unused in this test
     assert new_dir.exists()

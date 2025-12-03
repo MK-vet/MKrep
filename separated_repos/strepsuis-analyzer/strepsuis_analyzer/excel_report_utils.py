@@ -8,10 +8,6 @@ import pandas as pd
 import os
 from datetime import datetime
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-import plotly.express as px
-from io import BytesIO
-import base64
 
 
 class ExcelReportGenerator:
@@ -170,7 +166,7 @@ class ExcelReportGenerator:
                 try:
                     if len(str(cell.value)) > max_length:
                         max_length = len(str(cell.value))
-                except:
+                except:  # Ignore errors from cell value conversion
                     pass
             adjusted_width = min(max_length + 2, 100)
             worksheet.column_dimensions[column].width = adjusted_width
@@ -249,7 +245,7 @@ class ExcelReportGenerator:
                 try:
                     if cell.value and len(str(cell.value)) > max_length:
                         max_length = len(str(cell.value))
-                except:
+                except:  # Ignore errors from cell value conversion
                     pass
             adjusted_width = min(max_length + 2, 50)
             worksheet.column_dimensions[column].width = adjusted_width

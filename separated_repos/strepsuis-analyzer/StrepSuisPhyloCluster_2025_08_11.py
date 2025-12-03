@@ -23,47 +23,32 @@ Outputs:
 """
 
 import os
-import sys
 import warnings
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 import argparse
 
 import pandas as pd
 import numpy as np
 from scipy import stats
 from scipy.spatial.distance import pdist, squareform
-from scipy.cluster.hierarchy import linkage, fcluster, dendrogram
-from sklearn.decomposition import PCA
-from sklearn.ensemble import RandomForestClassifier
+from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.metrics import silhouette_score
-from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.graph_objects as go
 import plotly.express as px
-from plotly.subplots import make_subplots
 
-# Statistical and network analysis
-import networkx as nx
+# Statistical analysis
 from statsmodels.stats.multitest import multipletests
-from mlxtend.frequent_patterns import apriori, association_rules
-from mlxtend.preprocessing import TransactionEncoder
 
-# MCA and clustering
+# MCA
 try:
     import prince
     HAS_PRINCE = True
 except ImportError:
     HAS_PRINCE = False
     warnings.warn("prince not available, MCA analysis will be skipped")
-
-try:
-    from kmodes.kmodes import KModes
-    HAS_KMODES = True
-except ImportError:
-    HAS_KMODES = False
-    warnings.warn("kmodes not available, K-modes clustering will use fallback")
 
 # Phylogenetic analysis
 try:
