@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "strepsuis-analyzer"
+version = "1.0.0"
+description = "Streamlit application for Streptococcus suis genomic and phenotypic data analysis"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "MK-vet", email = "support@strepsuis-suite.org"}
+]
+keywords = [
+    "bioinformatics",
+    "genomics",
+    "streamlit",
+    "data-visualization",
+    "antimicrobial-resistance",
+    "streptococcus-suis"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Framework :: Streamlit",
+    "Operating System :: OS Independent"
+]
+
+dependencies = [
+    "streamlit>=1.28.0,<2.0.0",
+    "pandas>=1.3.0,<3.0.0",
+    "numpy>=1.21.0,<2.0.0",
+    "plotly>=5.0.0,<6.0.0",
+    "scipy>=1.7.0,<2.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0,<9.0.0",
+    "pytest-cov>=3.0.0,<6.0.0",
+    "pytest-mock>=3.10.0,<4.0.0",
+    "black>=22.0.0,<25.0.0",
+    "isort>=5.12.0,<6.0.0",
+    "ruff>=0.1.0,<1.0.0",
+    "mypy>=1.0.0,<2.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/MK-vet/MKrep"
+Repository = "https://github.com/MK-vet/MKrep.git"
+Issues = "https://github.com/MK-vet/MKrep/issues"
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "**/test_*.py",
+    "**/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
