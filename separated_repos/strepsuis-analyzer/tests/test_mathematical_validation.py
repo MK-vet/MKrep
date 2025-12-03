@@ -5,7 +5,6 @@ Tests mathematical properties and invariants of statistical functions.
 """
 
 import pytest
-import pandas as pd
 import numpy as np
 from strepsuis_analyzer.statistical_analysis import StatisticalAnalyzer
 from strepsuis_analyzer.phylogenetic_utils import PhylogeneticAnalyzer

@@ -5,13 +5,12 @@ Provides comprehensive statistical tests including correlations, hypothesis test
 meta-analysis, and multiple testing corrections.
 """
 
-from typing import Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 import pandas as pd
 import numpy as np
 from scipy import stats
 from scipy.stats import chi2_contingency, shapiro, pearsonr, spearmanr, kendalltau
 from statsmodels.stats.multitest import multipletests
-import warnings
 
 
 class StatisticalAnalyzer:

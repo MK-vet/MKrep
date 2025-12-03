@@ -13,12 +13,10 @@ import sys
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
 
-from data_validator import DataValidator
 from statistical_analysis import StatisticalAnalyzer
 from phylogenetic_utils import PhylogeneticAnalyzer
 from visualization import Visualizer
 from report_generator import ReportGenerator
-from etl_operations import ETLOperations
 
 # Page configuration
 st.set_page_config(
@@ -327,7 +325,6 @@ def show_clustering():
     st.markdown("Clustering analysis will be performed on selected dataset")
 
     dataset_name = st.selectbox("Select Dataset", list(st.session_state.dataframes.keys()))
-    df = st.session_state.dataframes[dataset_name]
 
     cluster_method = st.selectbox("Select Method", ["K-Means", "K-Modes", "Hierarchical", "DBSCAN"])
 

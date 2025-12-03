@@ -1,8 +1,6 @@
 """Tests for data validation module."""
 
-import pytest
 import pandas as pd
-import numpy as np
 from strepsuis_analyzer.data_validator import DataValidator
 
 

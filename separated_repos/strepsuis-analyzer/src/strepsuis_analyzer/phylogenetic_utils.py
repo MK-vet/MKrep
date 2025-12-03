@@ -12,7 +12,6 @@ import warnings
 
 try:
     from Bio import Phylo
-    from Bio.Phylo.TreeConstruction import DistanceTreeConstructor, DistanceMatrix
     BIOPYTHON_AVAILABLE = True
 except ImportError:
     BIOPYTHON_AVAILABLE = False

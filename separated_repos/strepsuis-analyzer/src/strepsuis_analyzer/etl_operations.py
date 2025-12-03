@@ -7,7 +7,6 @@ window functions, and custom formulas.
 
 from typing import Dict, List, Optional, Union, Callable, Any
 import pandas as pd
-import numpy as np
 
 
 class ETLOperations:

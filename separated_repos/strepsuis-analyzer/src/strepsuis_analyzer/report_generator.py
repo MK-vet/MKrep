@@ -4,13 +4,11 @@ Report generation utilities for StrepSuisAnalyzer.
 Provides functions to generate Excel and HTML reports from analysis results.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, Any
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
-import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment
-from openpyxl.utils.dataframe import dataframe_to_rows
 
 
 class ReportGenerator:
@@ -209,7 +207,9 @@ class ReportGenerator:
                 try:
                     if len(str(cell.value)) > max_length:
                         max_length = len(str(cell.value))
-                except:
+                except Exception:
+                    # Ignore errors when converting cell value to string or measuring length.
+                    # Some cell values may be None or non-stringable objects; this is not critical.
                     pass
             adjusted_width = min(max_length + 2, 50)
             worksheet.column_dimensions[column_letter].width = adjusted_width

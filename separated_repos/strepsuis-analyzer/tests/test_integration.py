@@ -1,7 +1,6 @@
 """Integration tests for StrepSuisAnalyzer."""
 
 import pytest
-import pandas as pd
 import numpy as np
 from pathlib import Path
 from strepsuis_analyzer.data_validator import DataValidator
@@ -56,8 +55,6 @@ class TestIntegration:
     def test_analysis_and_reporting_workflow(self, sample_numeric_data):
         """Test analysis followed by report generation."""
         # Perform analysis
-        analyzer = StatisticalAnalyzer(random_state=42)
-        
         stats = {
             "mean_var0": sample_numeric_data["var_0"].mean(),
             "std_var0": sample_numeric_data["var_0"].std(),

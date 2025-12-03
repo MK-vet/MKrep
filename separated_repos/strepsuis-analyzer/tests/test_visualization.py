@@ -1,6 +1,5 @@
 """Tests for visualization module."""
 
-import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 from strepsuis_analyzer.visualization import Visualizer

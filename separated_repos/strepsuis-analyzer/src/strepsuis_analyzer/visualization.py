@@ -5,15 +5,13 @@ Provides comprehensive visualization capabilities including statistical plots,
 heatmaps, phylogenetic trees, and interactive visualizations.
 """
 
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Union
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.graph_objects as go
-import plotly.express as px
 from scipy import stats
-import warnings
 
 
 class Visualizer:

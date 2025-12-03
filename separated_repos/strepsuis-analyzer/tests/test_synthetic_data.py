@@ -5,7 +5,6 @@ Tests with carefully constructed synthetic datasets with known properties.
 """
 
 import pytest
-import pandas as pd
 import numpy as np
 from strepsuis_analyzer.statistical_analysis import StatisticalAnalyzer
 from strepsuis_analyzer.phylogenetic_utils import PhylogeneticAnalyzer

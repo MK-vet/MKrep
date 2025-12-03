@@ -1,6 +1,5 @@
 """Tests for phylogenetic utilities module."""
 
-import pytest
 import numpy as np
 from strepsuis_analyzer.phylogenetic_utils import PhylogeneticAnalyzer
 
