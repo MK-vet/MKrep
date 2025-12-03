@@ -1,5 +1,5 @@
 """
-Basic tests for StrepSuis Analyzer
+Comprehensive tests for StrepSuis Analyzer core functionality.
 """
 
 import os
@@ -13,6 +13,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from StrepSuisPhyloCluster_2025_08_11 import StrepSuisAnalyzer
+
+
+pytestmark = pytest.mark.unit
 
 
 def test_analyzer_initialization():

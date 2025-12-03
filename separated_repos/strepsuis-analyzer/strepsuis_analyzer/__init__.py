@@ -9,5 +9,6 @@ __author__ = "MKrep Development Team"
 __license__ = "MIT"
 
 from .analyzer import StrepSuisAnalyzer
+from .cli import main as cli_main
 
-__all__ = ["StrepSuisAnalyzer"]
+__all__ = ["StrepSuisAnalyzer", "cli_main"]

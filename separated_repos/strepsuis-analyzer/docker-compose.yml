@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  strepsuis-analyzer:
+    image: mkvet/strepsuis-analyzer:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/data
+      - ./output:/output
+    environment:
+      - DATA_DIR=/data
+      - OUTPUT_DIR=/output
+    command: ["--data", "/data/Virulence.csv", "--output", "/output"]

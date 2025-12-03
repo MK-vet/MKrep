@@ -311,7 +311,7 @@ class StrepSuisAnalyzer:
         
         # Store explained variance
         explained_var = mca.eigenvalues_ / mca.eigenvalues_.sum()
-        print(f"Explained variance: {explained_var.values[:n_components]}")
+        print(f"Explained variance: {explained_var[:n_components]}")
         
         self.results['mca'] = {
             'model': mca,

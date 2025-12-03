@@ -74,7 +74,7 @@ Repository = "https://github.com/MK-vet/MKrep"
 Issues = "https://github.com/MK-vet/MKrep/issues"
 
 [project.scripts]
-strepsuis-analyzer = "StrepSuisPhyloCluster_2025_08_11:main"
+strepsuis-analyzer = "strepsuis_analyzer.cli:main"
 
 [tool.setuptools]
 packages = ["strepsuis_analyzer"]

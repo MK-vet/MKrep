@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "MKrep Development Team"
+    given-names: ""
+title: "StrepSuis Analyzer: General-Purpose Genomic Data Analysis Tool"
+version: 2025.8.11
+date-released: 2025-08-11
+url: "https://github.com/MK-vet/MKrep"
+repository-code: "https://github.com/MK-vet/MKrep/tree/main/separated_repos/strepsuis-analyzer"
+keywords:
+  - bioinformatics
+  - genomics
+  - phylogenetics
+  - clustering
+  - streptococcus
+  - AMR
+  - virulence
+  - bacterial genomics
+  - data analysis
+license: MIT
+abstract: >
+  StrepSuis Analyzer is a flexible, general-purpose tool for analyzing
+  genomic data, particularly binary trait data such as antimicrobial
+  resistance (AMR) genes and virulence factors. It provides hierarchical
+  clustering, statistical association analysis, dimensionality reduction
+  via Multiple Correspondence Analysis (MCA), and optional phylogenetic
+  tree integration. The tool generates interactive HTML reports and
+  Excel workbooks, making it accessible to researchers without programming
+  expertise. It is part of the StrepSuis analysis suite for Streptococcus
+  suis genomics research.
