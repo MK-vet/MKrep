@@ -22,6 +22,7 @@
 | [strepsuis-amrvirkm](strepsuis-amrvirkm/) | 50% | K-modes clustering |
 | [strepsuis-genphennet](strepsuis-genphennet/) | 50% | Network-based analysis |
 | [strepsuis-phylotrait](strepsuis-phylotrait/) | 50% | Phylogenetic trait analysis |
+| [strepsuis-analyzer](strepsuis-analyzer/) | 85% | Interactive Streamlit analysis platform |
 
 ## Testing Summary
 

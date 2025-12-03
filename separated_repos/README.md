@@ -14,6 +14,7 @@ The StrepSuis Suite contains **four production-ready bioinformatics tools**, eac
 | [strepsuis-amrvirkm](strepsuis-amrvirkm/) | K-Modes Clustering | Silhouette-optimized clustering, MCA, feature importance, bootstrap CIs |
 | [strepsuis-genphennet](strepsuis-genphennet/) | Network Integration | Chi-square/Fisher tests, FDR correction, information theory, 3D visualization |
 | [strepsuis-phylotrait](strepsuis-phylotrait/) | Phylogenetic Traits | Tree-aware clustering, Faith's PD, binary trait analysis, interactive reports |
+| [strepsuis-analyzer](strepsuis-analyzer/) | Interactive Analysis | Streamlit web app, statistical tests, phylogenetics, clustering, report generation |
 
 ### strepsuis-mdr
 **StrepSuis-AMRPat** provides automated detection of antimicrobial resistance patterns through:
@@ -42,6 +43,15 @@ The StrepSuis Suite contains **four production-ready bioinformatics tools**, eac
 - Faith's Phylogenetic Diversity calculations
 - Binary trait analysis for AMR and virulence factors
 - Interactive HTML reports with DataTables and Plotly
+
+### strepsuis-analyzer
+**StrepSuis-Analyzer** provides an interactive Streamlit-based analysis platform:
+- Interactive web interface for comprehensive data exploration
+- Statistical analysis (correlations, hypothesis tests, meta-analysis)
+- Advanced visualizations (interactive Plotly, publication-quality matplotlib)
+- Phylogenetic analysis (Robinson-Foulds, bipartitions, Faith's PD)
+- Machine learning (K-Means, K-Modes, Hierarchical, DBSCAN)
+- ETL operations and report generation (Excel, HTML)
 
 ## Repository Contents
 
