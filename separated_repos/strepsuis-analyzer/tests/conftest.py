@@ -20,6 +20,18 @@ def sample_binary_data():
 
 
 @pytest.fixture
+def sample_amr_data():
+    """Create sample AMR data for testing."""
+    return pd.DataFrame({
+        'Strain_ID': ['S1', 'S2', 'S3', 'S4', 'S5'],
+        'tet(M)': [1, 1, 1, 0, 0],
+        'erm(B)': [1, 0, 1, 1, 0],
+        'aph(3\')': [0, 1, 0, 1, 0],
+        'tet(O)': [0, 0, 1, 0, 0]
+    })
+
+
+@pytest.fixture
 def sample_numeric_data():
     """Create sample numeric data for testing."""
     np.random.seed(42)
