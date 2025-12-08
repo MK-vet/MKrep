@@ -16,7 +16,11 @@ import warnings
 import pandas as pd
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')  # Use non-interactive backend
+# Set non-interactive backend for headless operation
+try:
+    matplotlib.use('Agg')
+except:
+    pass  # Backend already set or unavailable
 import matplotlib.pyplot as plt
 
 # Add src to path
@@ -98,7 +102,7 @@ class E2EAnalysisRunner:
             ]
         )
         
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger('e2e_analysis')
         self.logger.info("="*80)
         self.logger.info("Starting E2E Analysis Run")
         self.logger.info(f"Results directory: {self.results_dir}")
