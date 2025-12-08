@@ -16,10 +16,16 @@ from strepsuis_analyzer.phylogenetic_utils import PhylogeneticAnalyzer
 from strepsuis_analyzer.visualization import Visualizer
 from strepsuis_analyzer.report_generator import ReportGenerator
 
+# Import new modules for core functionality
+from strepsuis_analyzer import stats
+from strepsuis_analyzer import data
+
 __all__ = [
     "DataValidator",
     "StatisticalAnalyzer",
     "PhylogeneticAnalyzer",
     "Visualizer",
     "ReportGenerator",
+    "stats",
+    "data",
 ]
