@@ -76,6 +76,7 @@ Issues = "https://github.com/MK-vet/strepsuis-analyzer/issues"
 
 [project.scripts]
 strepsuis-analyzer = "strepsuis_analyzer.cli:main"
+strepsuis-analyzer-e2e = "strepsuis_analyzer.e2e_cli:main"
 
 [tool.setuptools]
 packages = ["strepsuis_analyzer"]
