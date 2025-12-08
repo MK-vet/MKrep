@@ -46,8 +46,10 @@ coverage.json
 .DS_Store
 Thumbs.db
 
-# Results
-results/
+# Results (exclude large outputs but keep structure)
+results/*
+!results/SAMPLE/
+!results/SAMPLE/README.md
 outputs/
 *.log
 
