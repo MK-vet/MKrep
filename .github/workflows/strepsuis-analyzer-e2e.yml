@@ -1,0 +1,163 @@
+name: StrepSuis Analyzer E2E Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'separated_repos/strepsuis-analyzer/**'
+  workflow_dispatch:
+
+# Limit permissions for security
+permissions:
+  contents: read
+
+jobs:
+  test-and-e2e:
+    name: Test and E2E Analysis
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: Display Python version
+      run: |
+        python --version
+        pip --version
+    
+    - name: Install dependencies
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[dev]
+    
+    - name: Run unit tests with coverage
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        pytest tests/ -v --cov=strepsuis_analyzer --cov-report=term-missing --cov-report=html --cov-report=xml
+    
+    - name: Upload coverage reports
+      if: matrix.python-version == '3.11'
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports-${{ matrix.python-version }}
+        path: separated_repos/strepsuis-analyzer/htmlcov/
+        retention-days: 7
+    
+    - name: Run E2E analysis (example dataset)
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        echo "Running E2E analysis on example dataset..."
+        strepsuis-analyzer-e2e --dataset example --random-state 42
+    
+    - name: Verify example E2E outputs
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        # Find the latest results directory
+        RESULTS_DIR=$(ls -td results/strepsuis-analyzer-* | head -1)
+        echo "Checking results in: $RESULTS_DIR"
+        
+        # Verify directory structure
+        test -d "$RESULTS_DIR/example/validation" || exit 1
+        test -d "$RESULTS_DIR/example/stats" || exit 1
+        test -d "$RESULTS_DIR/example/visualizations" || exit 1
+        test -d "$RESULTS_DIR/example/clustering" || exit 1
+        test -d "$RESULTS_DIR/example/phylogenetics" || exit 1
+        test -d "$RESULTS_DIR/example/etl" || exit 1
+        test -d "$RESULTS_DIR/example/reports" || exit 1
+        test -d "$RESULTS_DIR/logs" || exit 1
+        
+        # Count output files
+        TOTAL_FILES=$(find "$RESULTS_DIR" -type f | wc -l)
+        echo "Total output files: $TOTAL_FILES"
+        test "$TOTAL_FILES" -ge 20 || exit 1
+        
+        echo "✓ Example dataset E2E validation passed"
+    
+    - name: Run E2E analysis (synthetic dataset)
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        echo "Running E2E analysis on synthetic dataset..."
+        strepsuis-analyzer-e2e --dataset synthetic --random-state 42
+    
+    - name: Verify synthetic E2E outputs
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        # Find the latest results directory
+        RESULTS_DIR=$(ls -td results/strepsuis-analyzer-* | head -1)
+        echo "Checking results in: $RESULTS_DIR"
+        
+        # Verify directory structure
+        test -d "$RESULTS_DIR/synthetic/validation" || exit 1
+        test -d "$RESULTS_DIR/synthetic/stats" || exit 1
+        test -d "$RESULTS_DIR/synthetic/visualizations" || exit 1
+        test -d "$RESULTS_DIR/synthetic/clustering" || exit 1
+        test -d "$RESULTS_DIR/synthetic/phylogenetics" || exit 1
+        test -d "$RESULTS_DIR/synthetic/etl" || exit 1
+        test -d "$RESULTS_DIR/synthetic/reports" || exit 1
+        
+        # Count output files
+        TOTAL_FILES=$(find "$RESULTS_DIR" -type f | wc -l)
+        echo "Total output files: $TOTAL_FILES"
+        test "$TOTAL_FILES" -ge 20 || exit 1
+        
+        echo "✓ Synthetic dataset E2E validation passed"
+    
+    - name: Upload E2E results as artifacts
+      if: matrix.python-version == '3.11'
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-results-${{ matrix.python-version }}
+        path: separated_repos/strepsuis-analyzer/results/
+        retention-days: 7
+    
+    - name: Generate analysis summary
+      if: matrix.python-version == '3.11'
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        RESULTS_DIR=$(ls -td results/strepsuis-analyzer-* | head -1)
+        echo "=== E2E Analysis Summary ===" > e2e_summary.txt
+        echo "Python Version: ${{ matrix.python-version }}" >> e2e_summary.txt
+        echo "Results Directory: $RESULTS_DIR" >> e2e_summary.txt
+        echo "" >> e2e_summary.txt
+        echo "File Counts by Category:" >> e2e_summary.txt
+        find "$RESULTS_DIR" -type d -name "validation" -o -name "stats" -o -name "visualizations" -o -name "clustering" -o -name "phylogenetics" -o -name "etl" -o -name "reports" | while read dir; do
+          count=$(find "$dir" -type f 2>/dev/null | wc -l)
+          echo "  $(basename $dir): $count files"
+        done >> e2e_summary.txt
+        echo "" >> e2e_summary.txt
+        echo "Total Size: $(du -sh $RESULTS_DIR | cut -f1)" >> e2e_summary.txt
+        cat e2e_summary.txt
+    
+    - name: Upload E2E summary
+      if: matrix.python-version == '3.11'
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-summary
+        path: separated_repos/strepsuis-analyzer/e2e_summary.txt
+        retention-days: 7
+    
+    - name: Test Streamlit app syntax
+      working-directory: separated_repos/strepsuis-analyzer
+      run: |
+        python -m py_compile src/strepsuis_analyzer/app.py
+        echo "✓ Streamlit app syntax is valid"
+    
+    - name: Summary
+      run: |
+        echo "=== StrepSuis Analyzer E2E CI Summary ==="
+        echo "✓ All unit tests passed"
+        echo "✓ E2E analysis completed for example dataset"
+        echo "✓ E2E analysis completed for synthetic dataset"
+        echo "✓ Coverage reports generated"
+        echo "✓ Artifacts uploaded"
+        echo "✓ Ready for deployment"

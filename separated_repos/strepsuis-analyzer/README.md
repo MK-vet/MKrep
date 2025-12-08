@@ -182,6 +182,215 @@ report.add_dataframe('Results', results_df)
 report.export_to_excel('report.xlsx')
 ```
 
+## Reproducing the Full Analysis (Headless E2E)
+
+For batch processing, automation, or reproducible research, use the headless E2E runner:
+
+### Quick Start
+
+```bash
+# Install the package
+pip install -e .
+
+# Run complete analysis on both example and synthetic datasets
+strepsuis-analyzer-e2e --dataset both
+
+# Run on specific dataset only
+strepsuis-analyzer-e2e --dataset example
+strepsuis-analyzer-e2e --dataset synthetic
+
+# Customize output directory
+strepsuis-analyzer-e2e --dataset both --results-dir custom_output/
+
+# Reproducible results (fixed random seed)
+strepsuis-analyzer-e2e --dataset both --random-state 42
+```
+
+### What Gets Analyzed
+
+The E2E runner performs comprehensive analysis across 7 categories:
+
+1. **Validation**: Data quality checks, binary matrix validation, tree parsing
+2. **Statistical Analysis**: Correlations, normality tests, hypothesis tests, meta-analysis
+3. **Visualizations**: Histograms, scatter plots, box plots, violin plots, heatmaps
+4. **Clustering**: K-Means, K-Modes, Hierarchical, DBSCAN
+5. **Phylogenetic Analysis**: Tree visualization, Robinson-Foulds distance, Faith's PD
+6. **ETL Operations**: Pivot tables, aggregations, normalization, data merging
+7. **Report Generation**: Multi-sheet Excel and self-contained HTML reports
+
+### Output Structure
+
+Results are saved in timestamped directories:
+
+```
+results/strepsuis-analyzer-YYYYMMDD-HHMM/
+├── example/                    # Results from example data
+│   ├── validation/            # Data quality reports
+│   ├── stats/                 # Statistical analysis tables & plots
+│   ├── visualizations/        # Distribution and relationship plots
+│   ├── clustering/            # Cluster assignments & dendrograms
+│   ├── phylogenetics/         # Tree metrics & visualizations
+│   ├── etl/                   # Transformed datasets
+│   └── reports/               # Excel & HTML reports
+├── synthetic/                  # Results from synthetic data
+│   └── (same structure)
+└── logs/
+    └── run.log                # Detailed execution log
+```
+
+**Typical Output**: 30 files per dataset (60 total + log), ~2-3 MB
+
+### Example Data
+
+The package includes example datasets from 91 *Streptococcus suis* strains:
+
+| File | Dimensions | Description |
+|------|------------|-------------|
+| `AMR_genes.csv` | 91 × 21 | AMR gene presence/absence (binary) |
+| `MIC.csv` | 91 × 13 | Minimum inhibitory concentrations (numeric) |
+| `Virulence.csv` | 91 × 106 | Virulence factor presence/absence (binary) |
+| `MLST.csv` | 91 × 1 | Multi-locus sequence types (categorical) |
+| `Serotype.csv` | 91 × 1 | Serotype classifications (categorical) |
+| `Snp_tree.newick` | 91 taxa | SNP-based phylogenetic tree |
+
+### Synthetic Data
+
+Synthetic datasets for testing are auto-generated in `data/synthetic/`:
+- 50 strains × 22 genes (AMR)
+- 50 strains × 14 antibiotics (MIC)
+- 50 strains × 107 factors (Virulence)
+- MLST and Serotype classifications
+- 50-taxa phylogenetic tree
+
+These have known statistical properties for validation.
+
+### CI Artifacts
+
+When the E2E analysis runs in GitHub Actions CI, complete results are uploaded as artifacts:
+- **Artifact name**: `e2e-results-{python-version}`
+- **Retention**: 7 days
+- **Location**: Actions tab → Workflow run → Artifacts section
+
+Download artifacts to review full analysis outputs.
+
+### Self-Checks
+
+The E2E runner includes automated validation to ensure output quality:
+- ✓ Minimum 1 validation report
+- ✓ Minimum 2 statistical outputs (table + plot)
+- ✓ Minimum 2 visualizations
+- ✓ Minimum 1 clustering output
+- ✓ Minimum 1 phylogenetic metric
+- ✓ Minimum 1 ETL output
+- ✓ Minimum 2 reports (Excel + HTML)
+
+Exit code: 0 on success, 1 on failure.
+
+## Troubleshooting
+
+### Port Conflicts (Streamlit)
+
+```bash
+# Error: Address already in use (port 8501)
+# Solution: Use a different port
+strepsuis-analyzer --launch --port 8502
+
+# Or use streamlit directly
+streamlit run src/strepsuis_analyzer/app.py --server.port 8502
+```
+
+### Memory Issues (Large Datasets)
+
+For datasets with >1000 strains or >500 features:
+
+```bash
+# Increase system memory limits
+ulimit -v unlimited
+
+# Or subsample data before analysis
+# Use first 100 strains for exploration
+```
+
+**Recommended System Requirements**:
+- Small datasets (<100 strains): 4GB RAM
+- Medium datasets (100-500 strains): 8GB RAM
+- Large datasets (>500 strains): 16GB+ RAM
+
+### Missing Dependencies
+
+```bash
+# Reinstall with development dependencies
+pip install -e .[dev]
+
+# Or install individual missing packages
+pip install streamlit pandas numpy scikit-learn matplotlib seaborn
+```
+
+### Phylogenetic Tree Errors
+
+Common tree parsing issues:
+
+```bash
+# Error: Mismatch in parentheses
+# Solution: Validate Newick format
+# - Ensure balanced parentheses: ( matches )
+# - Check for special characters in taxon names
+# - Verify semicolon at end of tree string
+```
+
+### E2E Analysis Fails
+
+```bash
+# Check logs for details
+cat results/*/logs/run.log
+
+# Verify input data exists
+ls -la data/AMR_genes.csv data/MIC.csv data/Snp_tree.newick
+
+# For synthetic data
+ls -la data/synthetic/
+
+# Regenerate synthetic data if needed
+python scripts/generate_synthetic_data.py
+```
+
+### Low Coverage in CI
+
+Expected behavior:
+- **Total coverage**: ~50% (Streamlit UI code not tested in headless mode)
+- **Core functions**: 100% coverage (mathematical, statistical, phylogenetic)
+- **Acceptable range**: 34-100%
+
+The low total coverage is intentional as the E2E runner uses only the public API, not the Streamlit UI components.
+
+### Docker Issues
+
+```bash
+# Permission errors with volumes
+# Solution: Fix ownership
+sudo chown -R $USER:$USER results/
+
+# Container doesn't start
+# Solution: Check logs
+docker-compose logs
+
+# Rebuild if needed
+docker-compose build --no-cache
+```
+
+### Performance Optimization Tips
+
+**Large Datasets**:
+- Use subsetting for initial exploration
+- Disable expensive visualizations
+- Run clustering on PCA-reduced data
+- Prefer DBSCAN over hierarchical clustering
+
+**High-Dimensional Data (>1000 features)**:
+- Apply feature selection first
+- Use correlation-based filtering
+- Consider dimensionality reduction (PCA, UMAP)
+
 ## Development
 
 ### Running Tests
@@ -237,6 +446,37 @@ The package includes comprehensive test coverage (>85%):
 ✅ Robinson-Foulds distance: RF ≥ 0  
 ✅ Meta-analysis variance positivity
 
+### Smoke Testing
+
+Manual verification that the Streamlit app launches correctly:
+
+```bash
+# Install package
+pip install -e .
+
+# Launch Streamlit app
+strepsuis-analyzer --launch
+
+# Or directly
+streamlit run src/strepsuis_analyzer/app.py
+
+# Expected: Browser opens to http://localhost:8501
+# Verify:
+# - App loads without errors
+# - Sidebar shows navigation menu
+# - Example data can be loaded
+# - Basic operations work (validation, plotting)
+```
+
+**What to Check**:
+1. ✓ App starts without Python errors
+2. ✓ Sidebar navigation appears
+3. ✓ Example data loads successfully
+4. ✓ At least one plot renders
+5. ✓ No browser console errors
+
+This smoke test is not automated in CI (requires browser), but should be performed manually before releases.
+
 ## Docker Deployment
 
 ### Building the Image
@@ -251,18 +491,40 @@ docker build -t strepsuis-analyzer .
 docker-compose up -d
 ```
 
+### Running E2E Analysis in Docker
+
+The `docker-compose.yml` includes a volume mount for results persistence:
+
+```bash
+# Run E2E analysis inside container
+docker-compose run strepsuis-analyzer strepsuis-analyzer-e2e --dataset both
+
+# Results are saved to the mounted ./results directory on your host
+ls -la results/
+
+# Or run interactively
+docker-compose exec strepsuis-analyzer bash
+# Inside container:
+strepsuis-analyzer-e2e --dataset example
+```
+
 ### Customization
 
 Edit `docker-compose.yml` to customize:
-- Port mappings
-- Volume mounts for data persistence
-- Environment variables
+- Port mappings (default: 8501)
+- Volume mounts for data and results persistence
+- Environment variables (Streamlit configuration)
+
+**Key volumes**:
+- `./data:/app/data` - Input data files
+- `./results:/app/results` - E2E analysis outputs (persisted)
 
 ## Documentation
 
 - **[API Documentation](docs/API.md)**: Complete API reference
 - **[Testing Guide](docs/TESTING.md)**: Testing procedures and coverage
 - **[Mathematical Validation](docs/MATHEMATICAL_VALIDATION.md)**: Statistical validation methodology
+- **[Workflow Guide](docs/WORKFLOW.md)**: End-to-end analysis workflow and integration
 
 ## Citation
 
