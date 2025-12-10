@@ -17,15 +17,10 @@ RUN apt-get update && apt-get install -y \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy package files
+# Install the package from GitHub
 WORKDIR /build
-COPY pyproject.toml ./
-COPY strepsuis_mdr ./strepsuis_mdr
-COPY README.md ./
-
-# Install the package
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir .
+    pip install --no-cache-dir git+https://github.com/MK-vet/strepsuis-mdr.git
 
 # Stage 2: Runtime - Minimal image with only runtime dependencies
 FROM python:3.11-slim

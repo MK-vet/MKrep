@@ -95,3 +95,8 @@ data/*
 
 # Logs
 *.log
+
+# Keep README files in generated directories
+!analysis_results/README.md
+!test_reports/README.md
+!assets/README.md
