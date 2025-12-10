@@ -265,6 +265,16 @@ All modules meet the following standards:
 - **Synthetic Data Validation:** [SYNTHETIC_DATA_VALIDATION.md](SYNTHETIC_DATA_VALIDATION.md)
 - **Documentation Index:** [INDEX.md](INDEX.md)
 
+## Publication-Readiness Checklist (per module)
+
+| Module | CLI & Docs | Docker | Colab Notebook | Tests & Coverage | Reports & Results | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| strepsuis-mdr | [README](strepsuis-mdr/README.md) · [CLI](strepsuis-mdr/strepsuis_mdr/cli.py) | [Dockerfile](strepsuis-mdr/Dockerfile) | [Notebook](strepsuis-mdr/notebooks/MDR_Analysis.ipynb) | [TESTING.md](strepsuis-mdr/TESTING.md) · [test_reports/](strepsuis-mdr/test_reports/README.md) | [examples/](strepsuis-mdr/examples/) · [analysis_results/](strepsuis-mdr/analysis_results/) | CLI module (pip/CLI entrypoint) |
+| strepsuis-amrvirkm | [README](strepsuis-amrvirkm/README.md) · [CLI](strepsuis-amrvirkm/strepsuis_amrvirkm/cli.py) | [Dockerfile](strepsuis-amrvirkm/Dockerfile) | [Notebook](strepsuis-amrvirkm/notebooks/AMRVirKM_Analysis.ipynb) | [TESTING.md](strepsuis-amrvirkm/TESTING.md) · [test_reports/](strepsuis-amrvirkm/test_reports/README.md) | [examples/](strepsuis-amrvirkm/examples/) · [analysis_results/](strepsuis-amrvirkm/analysis_results/) | CLI module (pip/CLI entrypoint) |
+| strepsuis-genphennet | [README](strepsuis-genphennet/README.md) · [CLI](strepsuis-genphennet/strepsuis_genphennet/cli.py) | [Dockerfile](strepsuis-genphennet/Dockerfile) | [Notebook](strepsuis-genphennet/notebooks/GenPhenNet_Analysis.ipynb) | [TESTING.md](strepsuis-genphennet/TESTING.md) · [test_reports/](strepsuis-genphennet/test_reports/README.md) | [examples/](strepsuis-genphennet/examples/) · [analysis_results/](strepsuis-genphennet/analysis_results/) | CLI module (pip/CLI entrypoint) |
+| strepsuis-phylotrait | [README](strepsuis-phylotrait/README.md) · [CLI](strepsuis-phylotrait/strepsuis_phylotrait/cli.py) | [Dockerfile](strepsuis-phylotrait/Dockerfile) | [Notebook](strepsuis-phylotrait/notebooks/PhyloTrait_Analysis.ipynb) | [TESTING.md](strepsuis-phylotrait/TESTING.md) · [test_reports/](strepsuis-phylotrait/test_reports/README.md) | [examples/](strepsuis-phylotrait/examples/) · [analysis_results/](strepsuis-phylotrait/analysis_results/) | CLI module (pip/CLI entrypoint) |
+| strepsuis-analyzer | [README](strepsuis-analyzer/README.md) · [App](strepsuis-analyzer/app.py) | [Dockerfile](strepsuis-analyzer/Dockerfile) | N/A (Streamlit app) | [TESTING_COVERAGE.md](strepsuis-analyzer/TESTING_COVERAGE.md) · [tests/](strepsuis-analyzer/tests/) | [data/](strepsuis-analyzer/data/) · [results/](strepsuis-analyzer/results/) | Streamlit app (launch via `streamlit run app.py`) |
+
 ## Support
 
 For questions or issues:
