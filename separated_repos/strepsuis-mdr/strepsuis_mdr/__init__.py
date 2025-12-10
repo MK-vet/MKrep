@@ -20,6 +20,13 @@ from .synthetic_data_utils import (
     generate_cooccurrence_data,
     run_synthetic_smoke_test,
 )
+from .generate_synthetic_data import (
+    SyntheticDataConfig,
+    SyntheticDataMetadata,
+    generate_mdr_synthetic_dataset,
+    save_synthetic_data,
+    validate_synthetic_data,
+)
 
 __all__ = [
     "MDRAnalyzer",
@@ -31,5 +38,10 @@ __all__ = [
     "generate_synthetic_amr_data",
     "generate_cooccurrence_data",
     "run_synthetic_smoke_test",
+    "SyntheticDataConfig",
+    "SyntheticDataMetadata",
+    "generate_mdr_synthetic_dataset",
+    "save_synthetic_data",
+    "validate_synthetic_data",
     "__version__",
 ]

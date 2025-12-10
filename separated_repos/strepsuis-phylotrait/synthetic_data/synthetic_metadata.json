@@ -1,0 +1,65 @@
+{
+  "config": {
+    "n_strains": 100,
+    "n_clusters": 4,
+    "n_mic_features": 10,
+    "n_amr_features": 15,
+    "n_virulence_features": 10,
+    "trait_heritability": 0.6,
+    "tree_depth": 0.5,
+    "random_state": 42
+  },
+  "true_cluster_counts": {
+    "1": 25,
+    "2": 25,
+    "3": 25,
+    "4": 25
+  },
+  "expected_pd_range": [
+    0.1,
+    1.0
+  ],
+  "mic_columns": [
+    "Oxytetracycline",
+    "Doxycycline",
+    "Tulathromycin",
+    "Spectinomycin",
+    "Gentamicin",
+    "Tiamulin",
+    "Enrofloxacin",
+    "Penicillin",
+    "Ampicillin",
+    "Florfenicol"
+  ],
+  "amr_columns": [
+    "AMR_Gene_01",
+    "AMR_Gene_02",
+    "AMR_Gene_03",
+    "AMR_Gene_04",
+    "AMR_Gene_05",
+    "AMR_Gene_06",
+    "AMR_Gene_07",
+    "AMR_Gene_08",
+    "AMR_Gene_09",
+    "AMR_Gene_10",
+    "AMR_Gene_11",
+    "AMR_Gene_12",
+    "AMR_Gene_13",
+    "AMR_Gene_14",
+    "AMR_Gene_15"
+  ],
+  "virulence_columns": [
+    "Virulence_01",
+    "Virulence_02",
+    "Virulence_03",
+    "Virulence_04",
+    "Virulence_05",
+    "Virulence_06",
+    "Virulence_07",
+    "Virulence_08",
+    "Virulence_09",
+    "Virulence_10"
+  ],
+  "generation_timestamp": "2025-12-10T14:06:52.702373",
+  "generation_method": "Clustered birth-death tree with heritable traits"
+}
