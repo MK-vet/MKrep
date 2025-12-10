@@ -62,6 +62,24 @@ def check_dependencies():
     return True
 
 
+def find_file_in_paths(filename, search_paths):
+    """
+    Search for a file in multiple directory paths.
+    
+    Args:
+        filename: Name of the file to find
+        search_paths: List of directory paths to search
+        
+    Returns:
+        Tuple of (found: bool, location: str or None)
+    """
+    for search_path in search_paths:
+        file_path = os.path.join(search_path, filename)
+        if os.path.exists(file_path):
+            return True, file_path
+    return False, None
+
+
 def check_data_files():
     """Check if example data files exist."""
     print("\n" + "=" * 80)
@@ -82,16 +100,7 @@ def check_data_files():
     search_paths = [".", "data"]
     
     for file in data_files:
-        file_found = False
-        found_location = None
-        
-        # Check in each search path
-        for search_path in search_paths:
-            file_path = os.path.join(search_path, file)
-            if os.path.exists(file_path):
-                file_found = True
-                found_location = file_path
-                break
+        file_found, found_location = find_file_in_paths(file, search_paths)
         
         if file_found:
             print(f"✓ {file} (found at {found_location})")
@@ -102,16 +111,7 @@ def check_data_files():
     
     print("\nOptional files:")
     for file in optional_files:
-        file_found = False
-        found_location = None
-        
-        # Check in each search path
-        for search_path in search_paths:
-            file_path = os.path.join(search_path, file)
-            if os.path.exists(file_path):
-                file_found = True
-                found_location = file_path
-                break
+        file_found, found_location = find_file_in_paths(file, search_paths)
         
         if file_found:
             print(f"✓ {file} (found at {found_location})")
