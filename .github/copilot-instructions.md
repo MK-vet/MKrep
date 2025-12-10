@@ -1,64 +1,95 @@
-Copilot instructions for working in MK-vet/MKrep/separated_repos
-Use the following as persistent instructions whenever you work in this repository.
+# GitHub Copilot Chat - General Instructions for StrepSuis Suite
 
-### 1. Repository Structure & Context
-This directory contains four distinct sub-projects. Treat them as individual packages sharing a common rigorous standard:
-- `strepsuis-mdr` (Likely the reference implementation; check this first for patterns)
-- `strepsuis-amrvirkm`
-- `strepsuis-genphennet`
-- `strepsuis-phylotrait`
+## Context
+You are assisting with the StrepSuis Suite - a collection of 5 bioinformatics Python modules for antimicrobial resistance analysis in Streptococcus suis. Each module will be published independently in SoftwareX journal.
 
-**Global Standards:**
-- Consult `MATHEMATICAL_VALIDATION.md` and `SYNTHETIC_DATA_VALIDATION.md` before modifying any numerical logic.
-- Usage of `replicate_tests.py` and `run_tests.sh` is standard for verification.
-- `COVERAGE_RESULTS.md` tracks the current test status; updates must be reflected there.
+## Modules Overview
+| Module | Purpose | CLI Command |
+|--------|---------|-------------|
+| strepsuis-mdr | AMR Pattern Detection | strepsuis-mdr |
+| strepsuis-amrvirkm | K-Modes Clustering | strepsuis-amrvirkm |
+| strepsuis-genphennet | Network Integration | strepsuis-genphennet |
+| strepsuis-phylotrait | Phylogenetic Traits | strepsuis-phylotrait |
+| strepsuis-analyzer | Interactive Analysis | streamlit run app.py |
 
-### 2. Development Guidelines
-**Preserve Production Behavior:**
-- Consider all code in `strepsuis-*/` packages as production-grade.
-- Do not break downstream dependencies: CLIs, Dockerfiles, and Notebooks (under `notebooks/` in each sub-repo) rely on the current API.
-- If a change is required, prioritize backwards compatibility or explicitly update all 3 execution contexts:
-    1. **Library** (Python package)
-    2. **CLI** (Command line entry points)
-    3. **Docker** (Dockerfile & docker-compose.yml)
+## Key Requirements
 
-**Refactoring & Cleanup:**
-- **Do not rewrite from scratch.** Assume existing modules have been refactored for a reason.
-- Focus on increasing test coverage and mathematical correctness.
-- Merge over-fragmented files only if they result in a coherent logical unit.
-- Remove dead code only after verifying it is not used in `notebooks/` or external scripts.
+### 1. Code Quality
+- Python 3.8+ compatible, type hints required
+- Formatted with black/isort/ruff
+- Linted with mypy, security checked with bandit
+- All functions must have docstrings with Args, Returns, Raises
 
-### 3. Testing & Coverage Targets
-For each sub-repository (e.g., `strepsuis-mdr`):
-- **Goal:** 100% coverage for core algorithms.
-- **Tools:** Use `pytest` with the configuration in `pytest.ini`.
-- **Process:**
-    1. Convert any ad-hoc scripts (e.g., `test_functionality.py`) into formal `pytest` suites in `tests/`.
-    2. Ensure tests run successfully via `run_tests.sh`.
-    3. If coverage improves, run `generate_coverage_badge.py` and `add_coverage_badges.py` to update badges and reports.
-- **Smoke Tests:** Every Docker image and CLI command must have at least one end-to-end "smoke test" verifying basic execution.
+### 2. Testing Standards
+- pytest with coverage >70% overall, 100% for critical paths
+- Unit tests: @pytest.mark.unit
+- Integration tests: @pytest.mark.integration
+- Slow tests: @pytest.mark.slow
+- Stress tests: @pytest.mark.stress
+- Performance tests: @pytest.mark.performance
 
-### 4. Mathematical & Statistical Validation
-When touching code involved in clustering, network metrics, AMR analysis, or phylogenetics:
-- **Mandatory:** Validate against `MATHEMATICAL_VALIDATION.md` guidelines.
-- Create synthetic datasets (small, known ground-truth) to verify logic.
-- Compare results against `scikit-learn`, `scipy`, or `numpy` baselines where applicable.
-- Add tests for invariants (e.g., symmetry of distance matrices, probability sums = 1.0).
+### 3. Statistical Validation
+- All methods validated against scipy/statsmodels gold standards
+- Chi-square: validate against scipy.stats.chi2_contingency
+- Fisher exact: validate against scipy.stats.fisher_exact
+- FDR correction: validate against statsmodels.stats.multitest.multipletests
+- Bootstrap CIs: verify coverage contains true parameter 95% of time
 
-### 5. Documentation & Outputs
-**Do not silently change outputs.**
-- Existing CSVs, HTML reports, and Plots in `examples/` or `results/` are sources of truth.
-- If a bug fix changes an output:
-    1. Recompute the example output.
-    2. Update the corresponding documentation (e.g., `ANALYSIS_EXAMPLES.md`).
-    3. Explain the deviation in the PR/Commit message.
+### 4. Documentation
+- English only, publication-ready, MIT licensed
+- Required per module: README.md, USER_GUIDE.md, TESTING.md, CONTRIBUTING.md, CHANGELOG.md
+- Also required: CITATION.cff, SECURITY.md, ALGORITHMS.md, BENCHMARKS.md
 
-**User Guides:**
-- Keep `USER_GUIDE.md` and `DEPLOYMENT_GUIDE.md` in sync with code changes.
-- Ensure `WORKFLOW_USAGE_GUIDE.md` accurately reflects the CLI arguments.
+### 5. Deployment Architecture
+- CLI (primary) - Click-based with subcommands
+- Docker - Install from GitHub: pip install git+https://github.com/MK-vet/REPO.git
+- Google Colab - Install from GitHub with !pip install
 
-### 6. Code Style
-- **Python 3.11+**: Use strict type hints (`mypy` compatible).
-- **Determinism**: All stochastic functions MUST accept a `random_state` or seed.
-- **Safety**: No `eval()`, `exec()`, or unvalidated path handling.
-- **Libraries**: Rely on `pyproject.toml` dependencies; do not add new heavy dependencies without justification.
+## Module Architecture Pattern
+- config.py - Configuration with dataclasses, validation
+- cli.py - Click-based CLI interface
+- analyzer.py - Main orchestration class
+- *_core.py - Core statistical algorithms
+- excel_report_utils.py - Report generation utilities
+
+## Coverage Targets
+| Component | Target |
+|-----------|--------|
+| config.py | 100% |
+| cli.py | 85%+ |
+| analyzer.py | 85%+ |
+| *_core.py | 70%+ |
+| Overall module | 70%+ |
+
+## When Writing Code
+1. Always include docstrings with Args, Returns, Raises
+2. Always include type hints
+3. Always add corresponding test cases
+4. Use numpy.random.seed(42) for reproducibility
+5. Validate mathematical outputs against reference implementations
+
+## Testing Commands
+- Fast tests: pytest -m "not slow" -v
+- Full suite: pytest -v
+- With coverage: pytest --cov --cov-report=html
+- Statistical validation: pytest tests/test_statistical_validation.py -v
+
+## Critical Files to Consult
+- separated_repos/MATHEMATICAL_VALIDATION.md
+- separated_repos/SYNTHETIC_DATA_VALIDATION.md
+- separated_repos/COVERAGE_RESULTS.md
+- separated_repos/TESTING.md
+- separated_repos/COMPREHENSIVE_FIX_PROMPT.md
+- separated_repos/AGENT_SERVER_CONFIG.md
+
+## Pre-commit Hooks
+Always run before committing: pre-commit run --all-files
+Tools: black, isort, ruff, mypy, bandit
+
+## Global Standards
+- Consult MATHEMATICAL_VALIDATION.md before modifying numerical logic
+- Do not break downstream dependencies: CLIs, Dockerfiles, Notebooks
+- Consider all code in strepsuis-*/ packages as production-grade
+- Focus on increasing test coverage and mathematical correctness
+
+Version: 2.0.0 | Updated: 2025-12-10
