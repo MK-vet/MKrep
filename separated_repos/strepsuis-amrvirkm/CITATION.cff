@@ -1,0 +1,54 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it as below."
+type: software
+title: "StrepSuis-AMRVirKM: K-Modes Clustering for AMR and Virulence Profiles"
+version: 1.0.0
+date-released: 2025-01-15
+abstract: >-
+  StrepSuis-AMRVirKM is a Python package for K-modes clustering analysis
+  of antimicrobial resistance and virulence profiles in Streptococcus suis
+  and other bacterial species. It implements Multiple Correspondence Analysis (MCA),
+  silhouette-based cluster optimization, and statistical association tests.
+keywords:
+  - antimicrobial resistance
+  - bioinformatics
+  - genomics
+  - streptococcus suis
+  - clustering
+  - k-modes
+  - virulence analysis
+license: MIT
+authors:
+  - family-names: "MK-vet"
+    affiliation: "StrepSuis Suite Development Team"
+repository-code: "https://github.com/MK-vet/strepsuis-amrvirkm"
+url: "https://github.com/MK-vet/strepsuis-amrvirkm"
+preferred-citation:
+  type: software
+  title: "StrepSuis-AMRVirKM: K-Modes Clustering for AMR and Virulence Profiles"
+  authors:
+    - family-names: "MK-vet"
+      affiliation: "StrepSuis Suite Development Team"
+  version: 1.0.0
+  date-released: 2025-01-15
+  repository-code: "https://github.com/MK-vet/strepsuis-amrvirkm"
+references:
+  - type: article
+    title: "Extensions to the k-means algorithm for clustering large data sets with categorical values"
+    authors:
+      - family-names: "Huang"
+        given-names: "Zhexue"
+    journal: "Data Mining and Knowledge Discovery"
+    volume: 2
+    issue: 3
+    pages: "283-304"
+    year: 1998
+  - type: article
+    title: "Silhouettes: A graphical aid to the interpretation and validation of cluster analysis"
+    authors:
+      - family-names: "Rousseeuw"
+        given-names: "Peter J."
+    journal: "Journal of Computational and Applied Mathematics"
+    volume: 20
+    pages: "53-65"
+    year: 1987
