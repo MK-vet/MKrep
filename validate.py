@@ -62,6 +62,24 @@ def check_dependencies():
     return True
 
 
+def find_file_in_paths(filename, search_paths):
+    """
+    Search for a file in multiple directory paths.
+    
+    Args:
+        filename: Name of the file to find
+        search_paths: List of directory paths to search
+        
+    Returns:
+        Tuple of (found: bool, location: str or None)
+    """
+    for search_path in search_paths:
+        file_path = os.path.join(search_path, filename)
+        if os.path.exists(file_path):
+            return True, file_path
+    return False, None
+
+
 def check_data_files():
     """Check if example data files exist."""
     print("\n" + "=" * 80)
@@ -78,9 +96,14 @@ def check_data_files():
     found_files = []
     missing_files = []
     
+    # Search locations: root directory and data/ subdirectory
+    search_paths = [".", "data"]
+    
     for file in data_files:
-        if os.path.exists(file):
-            print(f"✓ {file}")
+        file_found, found_location = find_file_in_paths(file, search_paths)
+        
+        if file_found:
+            print(f"✓ {file} (found at {found_location})")
             found_files.append(file)
         else:
             print(f"○ {file} (not found)")
@@ -88,8 +111,10 @@ def check_data_files():
     
     print("\nOptional files:")
     for file in optional_files:
-        if os.path.exists(file):
-            print(f"✓ {file}")
+        file_found, found_location = find_file_in_paths(file, search_paths)
+        
+        if file_found:
+            print(f"✓ {file} (found at {found_location})")
         else:
             print(f"○ {file} (not found)")
     
@@ -143,7 +168,15 @@ def check_binary_format():
     print("Validating Binary Data Format")
     print("=" * 80)
     
-    data_files = [f for f in ["MIC.csv", "AMR_genes.csv", "Virulence.csv"] if os.path.exists(f)]
+    # Search for data files in both root and data/ subdirectory
+    search_paths = [".", "data"]
+    data_file_names = ["MIC.csv", "AMR_genes.csv", "Virulence.csv"]
+    data_files = []
+    
+    for file_name in data_file_names:
+        file_found, found_location = find_file_in_paths(file_name, search_paths)
+        if file_found:
+            data_files.append(found_location)
     
     if not data_files:
         print("⚠ No data files to validate")
