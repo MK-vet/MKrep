@@ -106,11 +106,12 @@ strepsuis-mdr --help  # Test CLI works
 
 ### 3. Statistical Validation
 All statistical methods MUST be validated against gold-standard reference implementations:
-- **Chi-square**: Validate against `scipy.stats.chi2_contingency`
-- **Fisher exact**: Validate against `scipy.stats.fisher_exact`
-- **FDR correction**: Validate against `statsmodels.stats.multitest.multipletests`
+- **Chi-square**: Validate against `scipy.stats.chi2_contingency` (5 decimal places)
+- **Fisher exact**: Validate against `scipy.stats.fisher_exact` (5 decimal places)
+- **FDR correction**: Validate against `statsmodels.stats.multitest.multipletests` (tolerance 1e-10)
 - **Bootstrap CIs**: Verify coverage contains true parameter 95% of time
 - **Test Location**: `tests/test_statistical_validation.py`
+- **Standard Tolerance**: Use `decimal=5` for `np.testing.assert_almost_equal` or `1e-10` for relative error
 
 ### 4. Documentation Requirements
 - **Language**: English only, publication-ready
@@ -301,10 +302,11 @@ Always consult these files before making changes:
 ❌ **Don't**: Implement statistical methods from scratch without validation
 ✅ **Do**: Validate against scipy/statsmodels with automated tests
 ```python
-# Good
+# Good - with explicit tolerance
 def test_chi_square_matches_scipy():
     result_ours = our_chi_square(data)
     result_scipy = scipy.stats.chi2_contingency(data)
+    # Validate to 5 decimal places as per project standard
     np.testing.assert_almost_equal(result_ours, result_scipy, decimal=5)
 ```
 
