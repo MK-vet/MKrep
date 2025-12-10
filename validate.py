@@ -174,11 +174,9 @@ def check_binary_format():
     data_files = []
     
     for file_name in data_file_names:
-        for search_path in search_paths:
-            file_path = os.path.join(search_path, file_name)
-            if os.path.exists(file_path):
-                data_files.append(file_path)
-                break  # Found the file, no need to check other paths
+        file_found, found_location = find_file_in_paths(file_name, search_paths)
+        if file_found:
+            data_files.append(found_location)
     
     if not data_files:
         print("⚠ No data files to validate")
