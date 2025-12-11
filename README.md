@@ -210,21 +210,21 @@ All scripts generate **professional, consistent reports** with:
 # Run all tests
 python -m pytest
 
-# Verify all modules are functional
-python verify_all_modules.py
+# Verify all modules are functional (legacy)
+python scripts/verify_all_modules.py
 
-# Run all analyses with unified interface
-python run_all_analyses.py --all
+# Run all analyses with unified interface (legacy)
+python scripts/run_all_analyses.py --all
 
-# Run specific analysis module
-python run_all_analyses.py --module cluster
-python run_all_analyses.py --module mdr
-python run_all_analyses.py --module network
-python run_all_analyses.py --module phylo
-python run_all_analyses.py --module strepsuis
+# Run specific analysis module (legacy)
+python scripts/run_all_analyses.py --module cluster
+python scripts/run_all_analyses.py --module mdr
+python scripts/run_all_analyses.py --module network
+python scripts/run_all_analyses.py --module phylo
+python scripts/run_all_analyses.py --module strepsuis
 
 # List all available modules
-python run_all_analyses.py --list
+python scripts/run_all_analyses.py --list
 ```
 
 Features:
@@ -464,6 +464,31 @@ config = Config(
     fdr_alpha=0.05
 )
 ```
+
+## 📚 Documentation
+
+### For Users
+- **[Main README](README.md)** - This file: Overview and quick start
+- **[Interactive Tool Portal](https://mk-vet.github.io/MKrep/)** - Web-based documentation with examples
+- **[Installation Guide](docs/INSTALLATION.md)** - Detailed installation instructions
+- **[User Guide](docs/USER_GUIDE.md)** - Step-by-step usage instructions
+- **[Interpretation Guide](docs/INTERPRETATION_GUIDE.md)** - How to understand analysis results
+- **[Colab Notebooks Guide](colab_notebooks/README.md)** - Cloud-based analysis guide
+
+### For Developers
+- **[Architecture Guide](ARCHITECTURE.md)** - Repository structure and component relationships
+- **[Developer Guide](README_DEV.md)** - Development workflow and guidelines
+- **[Module Documentation](separated_repos/README.md)** - Production-ready modules overview
+- **[Testing Guide](separated_repos/TESTING.md)** - Testing methodology and standards
+- **[Mathematical Validation](separated_repos/MATHEMATICAL_VALIDATION.md)** - Statistical validation approach
+
+### Module-Specific Documentation
+Each module in `separated_repos/` has complete documentation:
+- **strepsuis-mdr** - AMR Pattern Detection ([README](separated_repos/strepsuis-mdr/README.md))
+- **strepsuis-amrvirkm** - K-Modes Clustering ([README](separated_repos/strepsuis-amrvirkm/README.md))
+- **strepsuis-genphennet** - Network Integration ([README](separated_repos/strepsuis-genphennet/README.md))
+- **strepsuis-phylotrait** - Phylogenetic Traits ([README](separated_repos/strepsuis-phylotrait/README.md))
+- **strepsuis-analyzer** - Interactive Analysis ([README](separated_repos/strepsuis-analyzer/README.md))
 
 ## Citation
 
