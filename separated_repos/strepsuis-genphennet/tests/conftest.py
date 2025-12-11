@@ -14,12 +14,17 @@ def data_dir(tmp_path):
     data = tmp_path / "data"
     data.mkdir()
 
-    # Copy example data files if they exist
+    # Copy example data files from main repository data directory
+    # Check both local data/examples (for backward compatibility) and main repo data
     example_dir = Path(__file__).parent.parent / "data" / "examples"
-    if example_dir.exists():
-        for csv_file in example_dir.glob("*.csv"):
+    main_data_dir = Path(__file__).parent.parent.parent.parent / "data"
+    
+    source_dir = example_dir if example_dir.exists() else main_data_dir
+    
+    if source_dir.exists():
+        for csv_file in source_dir.glob("*.csv"):
             shutil.copy(csv_file, data)
-        for newick_file in example_dir.glob("*.newick"):
+        for newick_file in source_dir.glob("*.newick"):
             shutil.copy(newick_file, data)
 
     return data

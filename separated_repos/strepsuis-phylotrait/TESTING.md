@@ -189,7 +189,7 @@ To minimize GitHub Actions usage:
 
 ## Test Data
 
-Example data is located in `data/examples/`:
+Example data is located in the main repository at `../../data/` (or can be referenced from `data/examples/` for backward compatibility):
 - `MIC.csv`: Minimum Inhibitory Concentration data
 - `AMR_genes.csv`: Antimicrobial resistance gene profiles
 - Additional CSV files for comprehensive testing
