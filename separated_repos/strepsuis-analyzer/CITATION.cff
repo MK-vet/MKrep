@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it as below."
+type: software
+title: "StrepSuisAnalyzer: Interactive Analysis Platform for Streptococcus suis Genomics"
+version: 1.0.0
+date-released: 2025-01-15
+abstract: >-
+  StrepSuisAnalyzer is an interactive Streamlit-based web application for
+  comprehensive genomic and phenotypic analysis of Streptococcus suis and
+  other bacterial species. It provides statistical analysis, phylogenetic
+  analysis, machine learning clustering, advanced visualizations, and
+  report generation capabilities.
+keywords:
+  - bioinformatics
+  - genomics
+  - streptococcus suis
+  - interactive analysis
+  - streamlit
+  - phylogenetics
+  - machine learning
+  - statistical analysis
+license: MIT
+authors:
+  - family-names: "MK-vet"
+    affiliation: "StrepSuis Suite Development Team"
+repository-code: "https://github.com/MK-vet/MKrep"
+url: "https://github.com/MK-vet/MKrep"
+preferred-citation:
+  type: software
+  title: "StrepSuisAnalyzer: Interactive Analysis Platform for Streptococcus suis Genomics"
+  authors:
+    - family-names: "MK-vet"
+      affiliation: "StrepSuis Suite Development Team"
+  version: 1.0.0
+  date-released: 2025-01-15
+  repository-code: "https://github.com/MK-vet/MKrep"

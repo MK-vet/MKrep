@@ -309,7 +309,7 @@ separated_repos/
 
 ### Deployment
 
-See [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions:
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions:
 - Creating GitHub repositories
 - Testing each component
 - Publishing to PyPI (optional)
@@ -378,7 +378,7 @@ pytest --cov --cov-report=html
 - Estimated CI time: 3-5 minutes per module
 - Monthly usage: approximately 30-50 minutes total
 
-For comprehensive testing documentation, see [docs/TESTING.md](docs/TESTING.md).
+For comprehensive testing documentation, see [TESTING.md](TESTING.md).
 
 
 ## Quality Standards
@@ -394,12 +394,12 @@ All modules meet the following standards:
 
 ## Resources
 
-- **Deployment Guide:** [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
-- **Testing Guide:** [docs/TESTING.md](docs/TESTING.md)
-- **Analysis Examples:** [docs/ANALYSIS_EXAMPLES.md](docs/ANALYSIS_EXAMPLES.md)
-- **Mathematical Validation:** [docs/MATHEMATICAL_VALIDATION.md](docs/MATHEMATICAL_VALIDATION.md)
-- **Synthetic Data Validation:** [docs/SYNTHETIC_DATA_VALIDATION.md](docs/SYNTHETIC_DATA_VALIDATION.md)
-- **Documentation Index:** [docs/archive/INDEX.md](docs/archive/INDEX.md)
+- **Deployment Guide:** [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+- **Testing Guide:** [TESTING.md](TESTING.md)
+- **Analysis Examples:** [ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md)
+- **Mathematical Validation:** [MATHEMATICAL_VALIDATION.md](MATHEMATICAL_VALIDATION.md)
+- **Synthetic Data Validation:** [SYNTHETIC_DATA_VALIDATION.md](SYNTHETIC_DATA_VALIDATION.md)
+- **Documentation Index:** [INDEX.md](INDEX.md)
 
 ## Publication-Readiness Checklist (per module)
 
