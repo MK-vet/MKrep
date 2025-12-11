@@ -1,4 +1,7 @@
-# Example Datasets
+# Example Usage Scripts
+
+
+**Important:** The example datasets are now located in the main repository's data directory at `../../data/`. All CSV files previously stored here have been moved to eliminate duplication.
 
 This directory contains example datasets for testing and learning StrepSuis-AMRVirKM.
 
@@ -52,10 +55,10 @@ This directory contains example datasets for testing and learning StrepSuis-AMRV
 
 ```bash
 # Basic example
-strepsuis-amrvirkm --data-dir examples/basic/ --output results_basic/
+strepsuis-amrvirkm --data-dir ../../data/ --output results_basic/
 
 # Advanced example
-strepsuis-amrvirkm --data-dir examples/advanced/ --output results_advanced/
+strepsuis-amrvirkm --data-dir ../../data/ --output results_advanced/
 ```
 
 ### Python API
@@ -65,14 +68,14 @@ from strepsuis_amrvirkm import Analyzer
 
 # Basic example
 analyzer = Analyzer(
-    data_dir='examples/basic/',
+    data_dir='../../data/',
     output_dir='results_basic/'
 )
 results = analyzer.run()
 
 # Advanced example with custom parameters
 analyzer = Analyzer(
-    data_dir='examples/advanced/',
+    data_dir='../../data/',
     output_dir='results_advanced/',
     bootstrap_iterations=1000,
     fdr_alpha=0.05

@@ -88,6 +88,7 @@ png_charts/
 data/*
 !data/examples/
 !data/results/
+!data/README.md
 !data/*/README.md
 *.csv
 !data/examples/*.csv
