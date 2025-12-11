@@ -1,6 +1,15 @@
-# Example Datasets
+# Example Usage Scripts
 
-This directory contains example datasets for testing and learning StrepSuis-AMRPat.
+This directory contains example usage scripts and expected outputs for testing and learning StrepSuis-AMRPat.
+
+## Data Location
+
+**Important:** The example datasets are now located in the main repository's data directory:
+```
+../../data/
+```
+
+All CSV files previously stored here have been moved to eliminate duplication.
 
 ## Available Examples
 
@@ -8,10 +17,10 @@ This directory contains example datasets for testing and learning StrepSuis-AMRP
 
 **Purpose:** Quick test and learning
 
-**Files included:**
-- `AMR_genes.csv`
-- `MIC.csv`
-- `Virulence.csv`
+**Files needed:**
+- `../../data/AMR_genes.csv`
+- `../../data/MIC.csv`
+- `../../data/Virulence.csv`
 
 **Dataset size:** ~91 strains, ~21 features per file
 
@@ -28,14 +37,14 @@ This directory contains example datasets for testing and learning StrepSuis-AMRP
 
 **Purpose:** Comprehensive analysis with all data types
 
-**Files included:**
-- `AMR_genes.csv`
-- `MGE.csv`
-- `MIC.csv`
-- `MLST.csv`
-- `Plasmid.csv`
-- `Serotype.csv`
-- `Virulence.csv`
+**Files needed:**
+- `../../data/AMR_genes.csv`
+- `../../data/MGE.csv`
+- `../../data/MIC.csv`
+- `../../data/MLST.csv`
+- `../../data/Plasmid.csv`
+- `../../data/Serotype.csv`
+- `../../data/Virulence.csv`
 
 **Expected runtime:** ~5-8 minutes
 
@@ -51,11 +60,11 @@ This directory contains example datasets for testing and learning StrepSuis-AMRP
 ### Command Line
 
 ```bash
-# Basic example
-strepsuis-mdr --data-dir examples/basic/ --output results_basic/
+# Basic example - use main data directory
+strepsuis-mdr --data-dir ../../data/ --output results_basic/
 
 # Advanced example
-strepsuis-mdr --data-dir examples/advanced/ --output results_advanced/
+strepsuis-mdr --data-dir ../../data/ --output results_advanced/
 ```
 
 ### Python API
@@ -65,14 +74,14 @@ from strepsuis_mdr import Analyzer
 
 # Basic example
 analyzer = Analyzer(
-    data_dir='examples/basic/',
+    data_dir='../../data/',
     output_dir='results_basic/'
 )
 results = analyzer.run()
 
 # Advanced example with custom parameters
 analyzer = Analyzer(
-    data_dir='examples/advanced/',
+    data_dir='../../data/',
     output_dir='results_advanced/',
     bootstrap_iterations=1000,
     fdr_alpha=0.05
@@ -81,7 +90,7 @@ results = analyzer.run()
 ```
 
 ### Google Colab
-Use the download buttons in the notebook to get these files, or upload them directly.
+Reference the main data directory or upload the needed CSV files from `../../data/`.
 
 ## Data Format
 
@@ -93,7 +102,7 @@ All example files follow the required format:
 
 ## Creating Your Own Data
 
-Use these examples as templates:
+Use the files in `../../data/` as templates:
 1. Keep the same column structure
 2. Replace `Strain_ID` values with your strain names
 3. Update binary values (0/1) based on your data
