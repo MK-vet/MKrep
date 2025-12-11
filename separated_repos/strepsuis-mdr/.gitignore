@@ -92,6 +92,7 @@ data/*
 *.csv
 !data/examples/*.csv
 !examples/*.csv
+!synthetic_data/*.csv
 
 # Logs
 *.log
@@ -100,3 +101,14 @@ data/*
 !analysis_results/README.md
 !test_reports/README.md
 !assets/README.md
+
+# Test reports (keep .gitkeep files)
+tests/reports/coverage/*
+!tests/reports/coverage/.gitkeep
+tests/reports/performance/*
+!tests/reports/performance/.gitkeep
+tests/reports/math_validation/*
+!tests/reports/math_validation/.gitkeep
+tests/reports/*.html
+tests/reports/*.xml
+tests/reports/*.json

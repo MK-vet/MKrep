@@ -250,6 +250,58 @@ See [USER_GUIDE.md](USER_GUIDE.md) for detailed installation instructions and us
 
 - **[Examples](examples/)**
 
+## Mathematical Validation
+
+This module includes rigorous mathematical validation against gold-standard reference implementations:
+
+### Validated Against Reference Implementations
+
+| Method | Reference Library | Tolerance | Status |
+|--------|-------------------|-----------|--------|
+| Chi-square test | scipy.stats.chi2_contingency | 5 decimal places | ✅ Validated |
+| Fisher's exact test | scipy.stats.fisher_exact | 5 decimal places | ✅ Validated |
+| FDR correction | statsmodels.stats.multitest | 1e-10 relative | ✅ Validated |
+| Bootstrap CI | Standard methodology | 95% coverage | ✅ Validated |
+
+### Synthetic Data Validation
+
+The module includes a sophisticated synthetic data generator (`generate_synthetic_data.py`) that uses:
+- **Poisson distribution**: For count-based data
+- **Gaussian distribution**: For biological trait noise
+- **Beta distribution**: For prevalence rates
+- **Binomial distribution**: For binary presence/absence
+
+```python
+from strepsuis_mdr import SyntheticDataConfig, generate_mdr_synthetic_dataset
+
+# Generate synthetic data with known ground truth
+config = SyntheticDataConfig(n_strains=100, random_state=42)
+data, metadata = generate_mdr_synthetic_dataset(config)
+
+# metadata contains ground truth values for validation
+print(f"True MDR count: {metadata.true_mdr_status.sum()}")
+print(f"Known correlations: {metadata.true_correlations}")
+```
+
+### Running Validation Tests
+
+```bash
+# Run mathematical validation tests
+pytest tests/test_statistical_validation.py tests/test_synthetic_validation.py -v
+
+# Run performance benchmarks
+pytest tests/test_performance_benchmarks.py -v -m performance
+```
+
+### Validation Reports
+
+Generated validation artifacts are stored in:
+- `tests/reports/coverage/` - HTML coverage reports
+- `tests/reports/math_validation/` - Mathematical validation proofs
+- `tests/reports/performance/` - Performance benchmarks (CSV, PNG graphs)
+
+See [../MATHEMATICAL_VALIDATION.md](../MATHEMATICAL_VALIDATION.md) for detailed validation methodology.
+
 ## Citation
 
 If you use StrepSuisMDR in your research, please cite:

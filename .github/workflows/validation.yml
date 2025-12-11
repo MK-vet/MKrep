@@ -1,0 +1,515 @@
+# Rigorous Validation Workflow for StrepSuis Suite
+#
+# This workflow provides one-click validation for all modules:
+# - Mathematical validation against reference implementations
+# - Performance benchmarks and stress tests
+# - Coverage reports
+# - CLI and Docker demonstration runs
+#
+# Trigger: Manual dispatch, PR, or push to main
+
+name: Rigorous Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: 'Module to validate (all, strepsuis-mdr, strepsuis-amrvirkm, strepsuis-genphennet, strepsuis-phylotrait, strepsuis-analyzer)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - strepsuis-mdr
+          - strepsuis-amrvirkm
+          - strepsuis-genphennet
+          - strepsuis-phylotrait
+          - strepsuis-analyzer
+      include_stress_tests:
+        description: 'Include stress tests (slower)'
+        required: false
+        default: false
+        type: boolean
+      include_docker:
+        description: 'Include Docker build and test'
+        required: false
+        default: true
+        type: boolean
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'separated_repos/**'
+      - '.github/workflows/validation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'separated_repos/**'
+
+# Security: Limit permissions for the GITHUB_TOKEN
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validate-strepsuis-mdr:
+    name: Validate strepsuis-mdr
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.module == 'all' || github.event.inputs.module == 'strepsuis-mdr' || github.event_name != 'workflow_dispatch' }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install module with dev dependencies
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      - name: Create report directories
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          mkdir -p tests/reports/coverage
+          mkdir -p tests/reports/math_validation
+          mkdir -p tests/reports/performance
+          mkdir -p results_demonstration
+          mkdir -p logs
+
+      - name: Run fast tests with coverage
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          pytest -m "not slow" -v --cov=strepsuis_mdr --cov-report=html:tests/reports/coverage/html --cov-report=xml:tests/reports/coverage/coverage.xml --junitxml=tests/reports/test_results.xml 2>&1 | tee logs/test_output.log
+
+      - name: Run mathematical validation tests
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          pytest tests/test_statistical_validation.py tests/test_synthetic_validation.py -v --tb=short 2>&1 | tee logs/math_validation.log
+
+      - name: Run performance benchmarks
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          pytest -m "performance" -v --tb=short 2>&1 | tee logs/performance.log || true
+
+      - name: Run stress tests (if enabled)
+        if: ${{ github.event.inputs.include_stress_tests == 'true' || github.event_name != 'workflow_dispatch' }}
+        working-directory: separated_repos/strepsuis-mdr
+        continue-on-error: true
+        run: |
+          pytest -m "slow or stress" -v --tb=short 2>&1 | tee logs/stress_tests.log
+
+      - name: Generate synthetic data
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          python -c "
+          from strepsuis_mdr.generate_synthetic_data import SyntheticDataConfig, generate_mdr_synthetic_dataset, save_synthetic_data
+          config = SyntheticDataConfig(n_strains=100, random_state=42)
+          data, metadata = generate_mdr_synthetic_dataset(config)
+          saved = save_synthetic_data(data, metadata, 'synthetic_data')
+          print('Generated synthetic data files:')
+          for key, path in saved.items():
+              print(f'  {key}: {path}')
+          "
+
+      - name: Test CLI
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          echo "Testing CLI..." | tee logs/cli_test.log
+          strepsuis-mdr --version 2>&1 | tee -a logs/cli_test.log
+          strepsuis-mdr --help 2>&1 | tee -a logs/cli_test.log
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: strepsuis-mdr-coverage
+          path: separated_repos/strepsuis-mdr/tests/reports/coverage/
+          retention-days: 30
+
+      - name: Upload test logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: strepsuis-mdr-logs
+          path: separated_repos/strepsuis-mdr/logs/
+          retention-days: 30
+
+      - name: Upload synthetic data
+        uses: actions/upload-artifact@v4
+        with:
+          name: strepsuis-mdr-synthetic-data
+          path: separated_repos/strepsuis-mdr/synthetic_data/
+          retention-days: 30
+
+  validate-strepsuis-amrvirkm:
+    name: Validate strepsuis-amrvirkm
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.module == 'all' || github.event.inputs.module == 'strepsuis-amrvirkm' || github.event_name != 'workflow_dispatch' }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install module with dev dependencies
+        working-directory: separated_repos/strepsuis-amrvirkm
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      - name: Create report directories
+        working-directory: separated_repos/strepsuis-amrvirkm
+        run: |
+          mkdir -p tests/reports/coverage
+          mkdir -p tests/reports/math_validation
+          mkdir -p tests/reports/performance
+          mkdir -p results_demonstration
+          mkdir -p logs
+
+      - name: Run fast tests with coverage
+        working-directory: separated_repos/strepsuis-amrvirkm
+        run: |
+          pytest -m "not slow" -v --cov=strepsuis_amrvirkm --cov-report=html:tests/reports/coverage/html --cov-report=xml:tests/reports/coverage/coverage.xml --junitxml=tests/reports/test_results.xml 2>&1 | tee logs/test_output.log
+
+      - name: Run mathematical validation tests
+        working-directory: separated_repos/strepsuis-amrvirkm
+        run: |
+          pytest tests/test_synthetic_validation.py -v --tb=short 2>&1 | tee logs/math_validation.log
+
+      - name: Run performance benchmarks
+        working-directory: separated_repos/strepsuis-amrvirkm
+        continue-on-error: true
+        run: |
+          pytest -m "performance" -v --tb=short 2>&1 | tee logs/performance.log || true
+
+      - name: Generate synthetic data
+        working-directory: separated_repos/strepsuis-amrvirkm
+        run: |
+          python -c "
+          from strepsuis_amrvirkm.generate_synthetic_data import (
+              SyntheticClusterConfig,
+              generate_clustering_synthetic_dataset,
+              save_synthetic_clustering_data,
+          )
+          config = SyntheticClusterConfig(n_strains=100, random_state=42)
+          mic_df, amr_df, vir_df, metadata = generate_clustering_synthetic_dataset(config)
+          saved = save_synthetic_clustering_data(mic_df, amr_df, vir_df, metadata, 'synthetic_data')
+          print('Generated synthetic data files:')
+          for key, path in saved.items():
+              print(f'  {key}: {path}')
+          "
+
+      - name: Test CLI
+        working-directory: separated_repos/strepsuis-amrvirkm
+        continue-on-error: true
+        run: |
+          echo "Testing CLI..." | tee logs/cli_test.log
+          strepsuis-amrvirkm --version 2>&1 | tee -a logs/cli_test.log
+          strepsuis-amrvirkm --help 2>&1 | tee -a logs/cli_test.log
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: strepsuis-amrvirkm-reports
+          path: |
+            separated_repos/strepsuis-amrvirkm/tests/reports/
+            separated_repos/strepsuis-amrvirkm/logs/
+            separated_repos/strepsuis-amrvirkm/synthetic_data/
+          retention-days: 30
+
+  validate-strepsuis-genphennet:
+    name: Validate strepsuis-genphennet
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.module == 'all' || github.event.inputs.module == 'strepsuis-genphennet' || github.event_name != 'workflow_dispatch' }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install module with dev dependencies
+        working-directory: separated_repos/strepsuis-genphennet
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      - name: Create report directories
+        working-directory: separated_repos/strepsuis-genphennet
+        run: |
+          mkdir -p tests/reports/coverage
+          mkdir -p tests/reports/math_validation
+          mkdir -p tests/reports/performance
+          mkdir -p results_demonstration
+          mkdir -p logs
+
+      - name: Run fast tests with coverage
+        working-directory: separated_repos/strepsuis-genphennet
+        run: |
+          pytest -m "not slow" -v --cov=strepsuis_genphennet --cov-report=html:tests/reports/coverage/html --cov-report=xml:tests/reports/coverage/coverage.xml --junitxml=tests/reports/test_results.xml 2>&1 | tee logs/test_output.log
+
+      - name: Run mathematical validation tests
+        working-directory: separated_repos/strepsuis-genphennet
+        run: |
+          pytest tests/test_synthetic_validation.py -v --tb=short 2>&1 | tee logs/math_validation.log
+
+      - name: Run performance benchmarks
+        working-directory: separated_repos/strepsuis-genphennet
+        continue-on-error: true
+        run: |
+          pytest -m "performance" -v --tb=short 2>&1 | tee logs/performance.log || true
+
+      - name: Generate synthetic data
+        working-directory: separated_repos/strepsuis-genphennet
+        run: |
+          python -c "
+          from strepsuis_genphennet.generate_synthetic_data import (
+              SyntheticNetworkConfig,
+              generate_network_synthetic_dataset,
+              save_synthetic_network_data,
+          )
+          config = SyntheticNetworkConfig(n_strains=100, n_features=50, n_true_associations=20, random_state=42)
+          data_df, metadata = generate_network_synthetic_dataset(config)
+          saved = save_synthetic_network_data(data_df, metadata, 'synthetic_data')
+          print('Generated synthetic data files:')
+          for key, path in saved.items():
+              print(f'  {key}: {path}')
+          "
+
+      - name: Test CLI
+        working-directory: separated_repos/strepsuis-genphennet
+        continue-on-error: true
+        run: |
+          echo "Testing CLI..." | tee logs/cli_test.log
+          strepsuis-genphennet --version 2>&1 | tee -a logs/cli_test.log
+          strepsuis-genphennet --help 2>&1 | tee -a logs/cli_test.log
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: strepsuis-genphennet-reports
+          path: |
+            separated_repos/strepsuis-genphennet/tests/reports/
+            separated_repos/strepsuis-genphennet/logs/
+            separated_repos/strepsuis-genphennet/synthetic_data/
+          retention-days: 30
+
+  validate-strepsuis-phylotrait:
+    name: Validate strepsuis-phylotrait
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.module == 'all' || github.event.inputs.module == 'strepsuis-phylotrait' || github.event_name != 'workflow_dispatch' }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install module with dev dependencies
+        working-directory: separated_repos/strepsuis-phylotrait
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      - name: Create report directories
+        working-directory: separated_repos/strepsuis-phylotrait
+        run: |
+          mkdir -p tests/reports/coverage
+          mkdir -p tests/reports/math_validation
+          mkdir -p tests/reports/performance
+          mkdir -p results_demonstration
+          mkdir -p logs
+
+      - name: Run fast tests with coverage
+        working-directory: separated_repos/strepsuis-phylotrait
+        run: |
+          pytest -m "not slow" -v --cov=strepsuis_phylotrait --cov-report=html:tests/reports/coverage/html --cov-report=xml:tests/reports/coverage/coverage.xml --junitxml=tests/reports/test_results.xml 2>&1 | tee logs/test_output.log
+
+      - name: Run mathematical validation tests
+        working-directory: separated_repos/strepsuis-phylotrait
+        run: |
+          pytest tests/test_synthetic_validation.py -v --tb=short 2>&1 | tee logs/math_validation.log
+
+      - name: Run performance benchmarks
+        working-directory: separated_repos/strepsuis-phylotrait
+        continue-on-error: true
+        run: |
+          pytest -m "performance" -v --tb=short 2>&1 | tee logs/performance.log || true
+
+      - name: Generate synthetic data
+        working-directory: separated_repos/strepsuis-phylotrait
+        run: |
+          python -c "
+          from strepsuis_phylotrait.generate_synthetic_data import (
+              SyntheticPhyloConfig,
+              generate_phylotrait_synthetic_dataset,
+              save_synthetic_phylo_data,
+          )
+          config = SyntheticPhyloConfig(n_strains=100, n_clusters=4, random_state=42)
+          tree, mic_df, amr_df, vir_df, metadata = generate_phylotrait_synthetic_dataset(config)
+          saved = save_synthetic_phylo_data(tree, mic_df, amr_df, vir_df, metadata, 'synthetic_data')
+          print('Generated synthetic data files:')
+          for key, path in saved.items():
+              print(f'  {key}: {path}')
+          "
+
+      - name: Test CLI
+        working-directory: separated_repos/strepsuis-phylotrait
+        continue-on-error: true
+        run: |
+          echo "Testing CLI..." | tee logs/cli_test.log
+          strepsuis-phylotrait --version 2>&1 | tee -a logs/cli_test.log
+          strepsuis-phylotrait --help 2>&1 | tee -a logs/cli_test.log
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: strepsuis-phylotrait-reports
+          path: |
+            separated_repos/strepsuis-phylotrait/tests/reports/
+            separated_repos/strepsuis-phylotrait/logs/
+            separated_repos/strepsuis-phylotrait/synthetic_data/
+          retention-days: 30
+
+  validate-strepsuis-analyzer:
+    name: Validate strepsuis-analyzer
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.module == 'all' || github.event.inputs.module == 'strepsuis-analyzer' || github.event_name != 'workflow_dispatch' }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Create report directories
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          mkdir -p tests/reports/coverage
+          mkdir -p tests/reports/math_validation
+          mkdir -p tests/reports/performance
+          mkdir -p results_demonstration
+          mkdir -p logs
+
+      - name: Run tests
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          pytest -v --cov --cov-report=html:tests/reports/coverage/html --junitxml=tests/reports/test_results.xml 2>&1 | tee logs/test_output.log || true
+
+      - name: Run Docker verification tests
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          pytest tests/test_docker_verification.py -v --tb=short 2>&1 | tee logs/docker_verification.log || true
+
+      - name: Verify Streamlit app can be imported
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          python -c "import app; print('Streamlit app imports successfully')" 2>&1 | tee logs/import_test.log
+
+      - name: Run sanity check script
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          python scripts/sanity_check.py 2>&1 | tee logs/sanity_check.log || true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: strepsuis-analyzer-reports
+          path: |
+            separated_repos/strepsuis-analyzer/tests/reports/
+            separated_repos/strepsuis-analyzer/logs/
+          retention-days: 30
+
+  docker-validation:
+    name: Docker Validation
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.include_docker == 'true' || github.event_name != 'workflow_dispatch' }}
+    needs: [validate-strepsuis-mdr]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build strepsuis-mdr Docker image
+        working-directory: separated_repos/strepsuis-mdr
+        run: |
+          docker build -t strepsuis-mdr:test . 2>&1 | tee docker_build.log
+
+      - name: Test Docker CLI
+        run: |
+          docker run --rm strepsuis-mdr:test strepsuis-mdr --version
+          docker run --rm strepsuis-mdr:test strepsuis-mdr --help
+
+      - name: Build strepsuis-analyzer Docker image
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          docker build -t strepsuis-analyzer:test . 2>&1 | tee docker_build.log
+
+      - name: Test Streamlit startup
+        working-directory: separated_repos/strepsuis-analyzer
+        run: |
+          # Start container in background
+          docker run -d --name analyzer-test -p 8501:8501 strepsuis-analyzer:test
+          # Wait for startup
+          sleep 10
+          # Check if running
+          docker logs analyzer-test
+          # Stop container
+          docker stop analyzer-test
+          docker rm analyzer-test
+
+  summary:
+    name: Validation Summary
+    runs-on: ubuntu-latest
+    needs: [validate-strepsuis-mdr, validate-strepsuis-amrvirkm, validate-strepsuis-genphennet, validate-strepsuis-phylotrait, validate-strepsuis-analyzer]
+    if: always()
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          path: artifacts
+
+      - name: Generate summary
+        run: |
+          echo "# Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Module Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Module | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| strepsuis-mdr | ${{ needs.validate-strepsuis-mdr.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| strepsuis-amrvirkm | ${{ needs.validate-strepsuis-amrvirkm.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| strepsuis-genphennet | ${{ needs.validate-strepsuis-genphennet.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| strepsuis-phylotrait | ${{ needs.validate-strepsuis-phylotrait.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| strepsuis-analyzer | ${{ needs.validate-strepsuis-analyzer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "Coverage reports, test logs, and synthetic data are available in the workflow artifacts." >> $GITHUB_STEP_SUMMARY

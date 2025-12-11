@@ -1,0 +1,83 @@
+{
+  "config": {
+    "n_strains": 100,
+    "n_clusters": 4,
+    "n_mic_features": 13,
+    "n_amr_features": 25,
+    "n_virulence_features": 15,
+    "cluster_separation": 0.7,
+    "noise_level": 0.05,
+    "random_state": 42
+  },
+  "true_cluster_counts": {
+    "1": 25,
+    "2": 25,
+    "3": 25,
+    "4": 25
+  },
+  "expected_silhouette_range": [
+    0.3,
+    0.8
+  ],
+  "mic_columns": [
+    "Oxytetracycline",
+    "Doxycycline",
+    "Tulathromycin",
+    "Spectinomycin",
+    "Gentamicin",
+    "Tiamulin",
+    "Trimethoprim_Sulphamethoxazole",
+    "Enrofloxacin",
+    "Penicillin",
+    "Ampicillin",
+    "Amoxicillin_Clavulanic_acid",
+    "Ceftiofur",
+    "Florfenicol"
+  ],
+  "amr_columns": [
+    "AMR_Gene_01",
+    "AMR_Gene_02",
+    "AMR_Gene_03",
+    "AMR_Gene_04",
+    "AMR_Gene_05",
+    "AMR_Gene_06",
+    "AMR_Gene_07",
+    "AMR_Gene_08",
+    "AMR_Gene_09",
+    "AMR_Gene_10",
+    "AMR_Gene_11",
+    "AMR_Gene_12",
+    "AMR_Gene_13",
+    "AMR_Gene_14",
+    "AMR_Gene_15",
+    "AMR_Gene_16",
+    "AMR_Gene_17",
+    "AMR_Gene_18",
+    "AMR_Gene_19",
+    "AMR_Gene_20",
+    "AMR_Gene_21",
+    "AMR_Gene_22",
+    "AMR_Gene_23",
+    "AMR_Gene_24",
+    "AMR_Gene_25"
+  ],
+  "virulence_columns": [
+    "Virulence_01",
+    "Virulence_02",
+    "Virulence_03",
+    "Virulence_04",
+    "Virulence_05",
+    "Virulence_06",
+    "Virulence_07",
+    "Virulence_08",
+    "Virulence_09",
+    "Virulence_10",
+    "Virulence_11",
+    "Virulence_12",
+    "Virulence_13",
+    "Virulence_14",
+    "Virulence_15"
+  ],
+  "generation_timestamp": "2025-12-10T13:58:38.737448",
+  "generation_method": "Binomial with cluster-specific centroids"
+}
