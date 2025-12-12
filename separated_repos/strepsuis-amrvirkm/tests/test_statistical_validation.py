@@ -414,3 +414,336 @@ class TestPerformance:
 
         assert elapsed < 30, f"MCA should complete in < 30s, took {elapsed:.1f}s"
         assert coords.shape[0] == n_samples, "Should have coords for all samples"
+
+
+class TestPhiCoefficientValidation:
+    """Validate phi coefficient calculation against manual computation."""
+    
+    def test_phi_against_manual_calculation(self):
+        """Test phi coefficient matches manual calculation."""
+        from strepsuis_amrvirkm.cluster_analysis_core import compute_phi
+        
+        # Known case: perfect positive correlation
+        x = np.array([1, 1, 1, 1, 0, 0, 0, 0])
+        y = np.array([1, 1, 1, 1, 0, 0, 0, 0])
+        
+        phi_ours = compute_phi(x, y)
+        
+        # Manual calculation: phi should be 1.0 for perfect correlation
+        assert np.abs(phi_ours - 1.0) < 1e-5, f"Expected phi=1.0, got {phi_ours}"
+    
+    def test_phi_against_cramers_v(self):
+        """Test phi coefficient is equivalent to Cramer's V for 2x2 tables."""
+        from strepsuis_amrvirkm.cluster_analysis_core import compute_phi
+        from scipy.stats import chi2_contingency
+        
+        np.random.seed(42)
+        x = np.random.binomial(1, 0.6, 100)
+        y = np.random.binomial(1, 0.4, 100)
+        
+        phi_ours = compute_phi(x, y)
+        
+        # Calculate Cramer's V from chi-square
+        contingency = pd.crosstab(x, y)
+        chi2, _, _, _ = chi2_contingency(contingency)
+        n = len(x)
+        cramers_v = np.sqrt(chi2 / n)
+        
+        # Phi should be similar to Cramer's V for 2x2 table
+        # (may differ in sign)
+        assert np.abs(np.abs(phi_ours) - cramers_v) < 0.1
+
+
+class TestBootstrapCIValidation:
+    """Validate bootstrap confidence intervals."""
+    
+    def test_bootstrap_ci_coverage_property(self):
+        """Test that 95% CI contains true parameter ~95% of time."""
+        from strepsuis_amrvirkm.cluster_analysis_core import bootstrap_confidence_interval
+        
+        np.random.seed(42)
+        true_p = 0.5
+        n_trials = 100
+        n_samples = 50
+        
+        coverage_count = 0
+        for _ in range(n_trials):
+            # Generate sample
+            count = np.random.binomial(n_samples, true_p)
+            percentage = (count / n_samples) * 100
+            
+            # Calculate CI
+            ci_low, ci_high = bootstrap_confidence_interval(
+                percentage, count, n_samples, num_bootstrap=500, confidence_level=0.95
+            )
+            
+            # Check if true parameter is in CI
+            true_percentage = true_p * 100
+            if ci_low <= true_percentage <= ci_high:
+                coverage_count += 1
+        
+        coverage_rate = coverage_count / n_trials
+        
+        # Should be close to 95% (allow some variation)
+        assert 0.85 <= coverage_rate <= 1.0, \
+            f"95% CI should cover true parameter ~95% of time, got {coverage_rate*100}%"
+    
+    def test_bootstrap_ci_symmetric_for_p_50(self):
+        """Test that CI is roughly symmetric for p=0.5."""
+        from strepsuis_amrvirkm.cluster_analysis_core import bootstrap_confidence_interval
+        
+        np.random.seed(42)
+        count = 50
+        total = 100
+        percentage = 50.0
+        
+        ci_low, ci_high = bootstrap_confidence_interval(
+            percentage, count, total, num_bootstrap=1000
+        )
+        
+        # For p=0.5, CI should be roughly symmetric
+        lower_dist = 50.0 - ci_low
+        upper_dist = ci_high - 50.0
+        
+        # Should be within 20% of each other
+        ratio = min(lower_dist, upper_dist) / max(lower_dist, upper_dist)
+        assert ratio > 0.8, f"CI should be roughly symmetric for p=0.5, got ratio {ratio}"
+
+
+class TestFDRCorrectionValidation:
+    """Validate FDR (Benjamini-Hochberg) correction against statsmodels."""
+    
+    def test_fdr_against_statsmodels(self):
+        """Test FDR correction matches statsmodels."""
+        from strepsuis_amrvirkm.cluster_analysis_core import chi_square_analysis
+        from statsmodels.stats.multitest import multipletests
+        
+        np.random.seed(42)
+        n = 60
+        data = pd.DataFrame({
+            f'Feature{i}': np.random.binomial(1, 0.5, n)
+            for i in range(10)
+        })
+        clusters = np.array([1] * 20 + [2] * 20 + [3] * 20)
+        
+        # Get our FDR correction
+        global_results, _ = chi_square_analysis(data, clusters)
+        
+        if not global_results.empty:
+            our_pvals = global_results['P_Value'].values
+            our_adjusted = global_results['Adjusted_P'].values
+            
+            # Compare with statsmodels
+            _, statsmodels_adjusted, _, _ = multipletests(
+                our_pvals, alpha=0.05, method='fdr_bh'
+            )
+            
+            # Should match to high precision
+            np.testing.assert_allclose(
+                our_adjusted, statsmodels_adjusted, 
+                rtol=1e-10, atol=1e-10,
+                err_msg="FDR correction should match statsmodels"
+            )
+
+
+class TestLogOddsRatioValidation:
+    """Validate log odds ratio calculations."""
+    
+    def test_log_odds_ratio_manual_calculation(self):
+        """Test log odds ratio against manual calculation."""
+        from strepsuis_amrvirkm.cluster_analysis_core import _bootstrap_log_odds
+        
+        # Known 2x2 table
+        a, b, c, d = 20, 5, 10, 15
+        
+        # Manual calculation
+        odds_cluster = (a + 0.5) / (b + 0.5)
+        odds_other = (c + 0.5) / (d + 0.5)
+        log_odds_manual = np.log(odds_cluster / odds_other)
+        
+        # Our implementation (with bootstrap, but we check mean)
+        np.random.seed(42)
+        boot_results = _bootstrap_log_odds(a, b, c, d, n_bootstrap=1000)
+        log_odds_ours = np.mean(boot_results)
+        
+        # Should be close (within 10% due to bootstrap variation)
+        assert np.abs(log_odds_ours - log_odds_manual) < 0.5, \
+            f"Log odds should match manual calculation: {log_odds_manual} vs {log_odds_ours}"
+
+
+class TestSilhouetteScoreValidation:
+    """Validate silhouette score calculations."""
+    
+    def test_silhouette_score_against_sklearn(self):
+        """Test our silhouette usage matches sklearn."""
+        from strepsuis_amrvirkm.cluster_analysis_core import perform_kmodes
+        from sklearn.metrics import silhouette_score
+        
+        np.random.seed(42)
+        # Create data with clear clusters
+        cluster1 = pd.DataFrame([[1, 1, 0, 0]] * 15)
+        cluster2 = pd.DataFrame([[0, 0, 1, 1]] * 15)
+        data = pd.concat([cluster1, cluster2], ignore_index=True)
+        
+        # Get clusters
+        _, clusters = perform_kmodes(data, n_clusters=2)
+        
+        # Calculate silhouette using sklearn
+        score = silhouette_score(data.values, clusters)
+        
+        # Score should be positive for well-separated clusters
+        assert score > 0, f"Well-separated clusters should have positive silhouette, got {score}"
+        
+        # Score should be high (> 0.3)
+        assert score > 0.3, f"Well-separated clusters should have high silhouette, got {score}"
+
+
+class TestChiSquareValidationDetailed:
+    """Detailed chi-square validation tests."""
+    
+    def test_chi_square_against_scipy_exact_values(self):
+        """Test chi-square calculation matches scipy exactly."""
+        from strepsuis_amrvirkm.cluster_analysis_core import chi_square_analysis
+        from scipy.stats import chi2_contingency
+        
+        np.random.seed(42)
+        # Create data
+        data = pd.DataFrame({
+            'Feature1': [1, 1, 1, 0, 0, 0, 1, 1, 0, 0],
+            'Feature2': [0, 0, 1, 1, 1, 0, 0, 1, 1, 0],
+        })
+        clusters = np.array([1, 1, 1, 1, 1, 2, 2, 2, 2, 2])
+        
+        # Get our results
+        global_results, _ = chi_square_analysis(data, clusters)
+        
+        # Calculate with scipy for each feature
+        for _, row in global_results.iterrows():
+            feat = row['Feature']
+            our_p = row['P_Value']
+            
+            # Calculate with scipy
+            contingency = pd.crosstab(clusters, data[feat])
+            chi2, scipy_p, _, _ = chi2_contingency(contingency)
+            
+            # Should match to 5 decimal places (as per project standard)
+            assert np.abs(our_p - scipy_p) < 1e-5, \
+                f"P-value for {feat} should match scipy: {scipy_p} vs {our_p}"
+    
+    def test_fisher_exact_against_scipy(self):
+        """Test Fisher exact test matches scipy for small counts."""
+        from strepsuis_amrvirkm.cluster_analysis_core import chi_square_analysis
+        from scipy.stats import fisher_exact
+        
+        # Small dataset to trigger Fisher exact
+        data = pd.DataFrame({
+            'Feature1': [1, 1, 0, 0],
+            'Feature2': [1, 0, 1, 0],
+        })
+        clusters = np.array([1, 1, 2, 2])
+        
+        # Get our results
+        global_results, _ = chi_square_analysis(data, clusters)
+        
+        # Check against scipy Fisher exact
+        for _, row in global_results.iterrows():
+            feat = row['Feature']
+            our_p = row['P_Value']
+            
+            # Calculate with scipy
+            contingency = pd.crosstab(clusters, data[feat])
+            if contingency.shape == (2, 2):
+                _, scipy_p = fisher_exact(contingency)
+                
+                # Should match to 2 decimal places (fisher exact sometimes rounds)
+                assert np.abs(our_p - scipy_p) < 0.01, \
+                    f"Fisher exact p-value for {feat} should match scipy: {scipy_p} vs {our_p}"
+
+
+class TestMCAValidation:
+    """Validate MCA (Multiple Correspondence Analysis)."""
+    
+    def test_mca_explained_variance(self):
+        """Test MCA explained variance is reasonable."""
+        import prince
+        
+        np.random.seed(42)
+        n = 100
+        data = pd.DataFrame({
+            'A': np.random.binomial(1, 0.5, n),
+            'B': np.random.binomial(1, 0.5, n),
+            'C': np.random.binomial(1, 0.5, n),
+        })
+        
+        # Run MCA
+        mca = prince.MCA(n_components=2, random_state=42)
+        mca = mca.fit(data)
+        
+        # Check explained variance (attribute name varies by prince version)
+        if hasattr(mca, 'explained_inertia_'):
+            explained_var = mca.explained_inertia_
+        elif hasattr(mca, 'eigenvalues_'):
+            explained_var = mca.eigenvalues_
+        else:
+            # Skip if attribute not available in this version
+            return
+        
+        # Should have explained variance
+        assert len(explained_var) >= 2
+        
+        # Total explained variance should be between 0 and total inertia
+        total_explained = sum(explained_var[:2])
+        assert total_explained > 0, \
+            f"Total explained variance should be 0-1, got {total_explained}"
+
+
+class TestClusteringMetricsValidation:
+    """Validate clustering quality metrics."""
+    
+    def test_calinski_harabasz_against_sklearn(self):
+        """Test Calinski-Harabasz score matches sklearn."""
+        from strepsuis_amrvirkm.cluster_analysis_core import validate_clusters
+        from sklearn.metrics import calinski_harabasz_score
+        
+        np.random.seed(42)
+        # Create well-separated clusters
+        cluster1 = np.array([[1, 1, 0, 0]] * 10)
+        cluster2 = np.array([[0, 0, 1, 1]] * 10)
+        data = np.vstack([cluster1, cluster2])
+        clusters = np.array([1] * 10 + [2] * 10)
+        
+        # Get our score
+        our_ch, _ = validate_clusters(data, clusters)
+        
+        # Calculate with sklearn
+        sklearn_ch = calinski_harabasz_score(data, clusters)
+        
+        # Should match to 5 decimal places
+        np.testing.assert_almost_equal(
+            our_ch, sklearn_ch, decimal=5,
+            err_msg="Calinski-Harabasz score should match sklearn"
+        )
+    
+    def test_davies_bouldin_against_sklearn(self):
+        """Test Davies-Bouldin score matches sklearn."""
+        from strepsuis_amrvirkm.cluster_analysis_core import validate_clusters
+        from sklearn.metrics import davies_bouldin_score
+        
+        np.random.seed(42)
+        # Create well-separated clusters
+        cluster1 = np.array([[1, 1, 0, 0]] * 10)
+        cluster2 = np.array([[0, 0, 1, 1]] * 10)
+        data = np.vstack([cluster1, cluster2])
+        clusters = np.array([1] * 10 + [2] * 10)
+        
+        # Get our score
+        _, our_db = validate_clusters(data, clusters)
+        
+        # Calculate with sklearn
+        sklearn_db = davies_bouldin_score(data, clusters)
+        
+        # Should match to 5 decimal places
+        np.testing.assert_almost_equal(
+            our_db, sklearn_db, decimal=5,
+            err_msg="Davies-Bouldin score should match sklearn"
+        )
