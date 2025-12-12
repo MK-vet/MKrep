@@ -123,3 +123,169 @@ def test_cli_with_invalid_data_dir(monkeypatch):
     )
     result = main()
     assert result != 0
+
+
+def test_cli_with_all_clustering_params(data_dir, monkeypatch):
+    """Test CLI with all clustering parameters."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--max-clusters",
+                "8",
+                "--min-clusters",
+                "2",
+                "--bootstrap",
+                "200",
+                "--fdr-alpha",
+                "0.05",
+            ],
+        )
+        result = main()
+        assert result == 0
+
+
+def test_cli_with_random_seed(data_dir, monkeypatch):
+    """Test CLI with custom random seed."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--random-seed",
+                "123",
+            ],
+        )
+        result = main()
+        assert result == 0
+
+
+def test_cli_with_n_jobs(data_dir, monkeypatch):
+    """Test CLI with custom number of jobs."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--n-jobs",
+                "2",
+            ],
+        )
+        result = main()
+        assert result == 0
+
+
+def test_cli_no_html_report(data_dir, monkeypatch):
+    """Test CLI with HTML report disabled."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--no-html",
+            ],
+        )
+        result = main()
+        assert result == 0
+
+
+def test_cli_no_excel_report(data_dir, monkeypatch):
+    """Test CLI with Excel report disabled."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--no-excel",
+            ],
+        )
+        result = main()
+        assert result == 0
+
+
+def test_cli_exception_handling(data_dir, monkeypatch):
+    """Test CLI handles exceptions gracefully."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Test with invalid bootstrap value
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--bootstrap",
+                "50",  # Below minimum
+            ],
+        )
+        result = main()
+        # Should handle exception and return non-zero
+        assert result != 0
+
+
+def test_cli_with_mca_components(data_dir, monkeypatch):
+    """Test CLI with custom MCA components."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--mca-components",
+                "3",
+            ],
+        )
+        result = main()
+        assert result == 0
+
+
+def test_cli_with_dpi(data_dir, monkeypatch):
+    """Test CLI with custom DPI setting."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir",
+                str(data_dir),
+                "--output",
+                str(tmpdir),
+                "--dpi",
+                "300",
+            ],
+        )
+        result = main()
+        assert result == 0

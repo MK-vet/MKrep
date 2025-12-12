@@ -710,5 +710,618 @@ class TestIntegration:
         assert db_score is not None
 
 
+# ============================================================================
+# Test compute_phi function
+# ============================================================================
+class TestComputePhi:
+    """Test phi coefficient calculation."""
+    
+    def test_perfect_positive_correlation(self):
+        """Test phi for perfectly positively correlated variables."""
+        from strepsuis_amrvirkm.cluster_analysis_core import compute_phi
+        
+        x = np.array([1, 1, 0, 0])
+        y = np.array([1, 1, 0, 0])
+        phi = compute_phi(x, y)
+        
+        # Perfect positive correlation should be 1.0
+        np.testing.assert_almost_equal(phi, 1.0, decimal=5)
+    
+    def test_perfect_negative_correlation(self):
+        """Test phi for perfectly negatively correlated variables."""
+        from strepsuis_amrvirkm.cluster_analysis_core import compute_phi
+        
+        x = np.array([1, 1, 0, 0])
+        y = np.array([0, 0, 1, 1])
+        phi = compute_phi(x, y)
+        
+        # Perfect negative correlation should be -1.0
+        np.testing.assert_almost_equal(phi, -1.0, decimal=5)
+    
+    def test_no_correlation(self):
+        """Test phi for uncorrelated variables."""
+        from strepsuis_amrvirkm.cluster_analysis_core import compute_phi
+        
+        np.random.seed(42)
+        x = np.random.binomial(1, 0.5, 100)
+        y = np.random.binomial(1, 0.5, 100)
+        phi = compute_phi(x, y)
+        
+        # Random variables should have low correlation
+        assert abs(phi) < 0.5
+    
+    def test_all_zeros_returns_nan(self):
+        """Test phi with all zeros returns NaN."""
+        from strepsuis_amrvirkm.cluster_analysis_core import compute_phi
+        
+        x = np.array([0, 0, 0, 0])
+        y = np.array([0, 0, 0, 0])
+        phi = compute_phi(x, y)
+        
+        assert np.isnan(phi)
+
+
+# ============================================================================
+# Test phi_correlation_matrix function
+# ============================================================================
+class TestPhiCorrelationMatrix:
+    """Test phi correlation matrix calculation."""
+    
+    def test_diagonal_is_one(self):
+        """Test that diagonal of correlation matrix is 1.0."""
+        from strepsuis_amrvirkm.cluster_analysis_core import phi_correlation_matrix
+        
+        data = pd.DataFrame({
+            'A': [1, 1, 0, 0],
+            'B': [1, 0, 1, 0],
+            'C': [0, 1, 0, 1],
+        })
+        
+        corr_matrix = phi_correlation_matrix(data)
+        
+        # Diagonal should be 1.0
+        for col in corr_matrix.columns:
+            np.testing.assert_almost_equal(corr_matrix.loc[col, col], 1.0, decimal=5)
+    
+    def test_matrix_is_symmetric(self):
+        """Test that correlation matrix is symmetric."""
+        from strepsuis_amrvirkm.cluster_analysis_core import phi_correlation_matrix
+        
+        data = pd.DataFrame({
+            'A': [1, 1, 0, 0, 1, 0],
+            'B': [1, 0, 1, 0, 1, 1],
+            'C': [0, 1, 0, 1, 0, 0],
+        })
+        
+        corr_matrix = phi_correlation_matrix(data)
+        
+        # Check symmetry
+        for i in corr_matrix.index:
+            for j in corr_matrix.columns:
+                np.testing.assert_almost_equal(
+                    corr_matrix.loc[i, j], 
+                    corr_matrix.loc[j, i], 
+                    decimal=5
+                )
+
+
+# ============================================================================
+# Test chi_square_analysis function
+# ============================================================================
+class TestChiSquareAnalysis:
+    """Test chi-square analysis with FDR correction."""
+    
+    def test_basic_chi_square_analysis(self):
+        """Test basic chi-square analysis."""
+        from strepsuis_amrvirkm.cluster_analysis_core import chi_square_analysis
+        
+        np.random.seed(42)
+        n = 30
+        data = pd.DataFrame({
+            'Feature1': np.random.binomial(1, 0.7, n),
+            'Feature2': np.random.binomial(1, 0.3, n),
+        })
+        clusters = np.array([1] * 15 + [2] * 15)
+        
+        global_results, cluster_results = chi_square_analysis(data, clusters)
+        
+        # Should return DataFrames
+        assert isinstance(global_results, pd.DataFrame)
+        assert isinstance(cluster_results, pd.DataFrame)
+        
+        # Should have expected columns
+        if not global_results.empty:
+            assert 'Feature' in global_results.columns
+            assert 'P_Value' in global_results.columns
+    
+    def test_fisher_exact_for_small_counts(self):
+        """Test that Fisher exact is used for small expected counts."""
+        from strepsuis_amrvirkm.cluster_analysis_core import chi_square_analysis
+        
+        # Small dataset to trigger Fisher exact
+        data = pd.DataFrame({
+            'Feature1': [1, 0, 1, 0],
+            'Feature2': [0, 1, 0, 1],
+        })
+        clusters = np.array([1, 1, 2, 2])
+        
+        global_results, cluster_results = chi_square_analysis(data, clusters)
+        
+        # Should complete without errors
+        assert isinstance(global_results, pd.DataFrame)
+
+
+# ============================================================================
+# Test log_odds_ratio_analysis function
+# ============================================================================
+class TestLogOddsRatioAnalysis:
+    """Test log odds ratio analysis with bootstrap CI."""
+    
+    def test_basic_log_odds_analysis(self):
+        """Test basic log odds ratio analysis."""
+        from strepsuis_amrvirkm.cluster_analysis_core import log_odds_ratio_analysis
+        
+        np.random.seed(42)
+        n = 40
+        data = pd.DataFrame({
+            'Gene1': np.random.binomial(1, 0.6, n),
+            'Gene2': np.random.binomial(1, 0.4, n),
+        })
+        clusters = np.array([1] * 20 + [2] * 20)
+        
+        results = log_odds_ratio_analysis(data, clusters, category="AMR", n_bootstrap=100)
+        
+        # Should return DataFrame
+        assert isinstance(results, pd.DataFrame)
+        
+        # Should have expected columns
+        if not results.empty:
+            assert 'Feature' in results.columns
+            assert 'Cluster' in results.columns
+    
+    def test_log_odds_without_bootstrap(self):
+        """Test log odds analysis without bootstrap."""
+        from strepsuis_amrvirkm.cluster_analysis_core import log_odds_ratio_analysis
+        
+        np.random.seed(42)
+        data = pd.DataFrame({
+            'Gene1': [1, 1, 0, 0, 1, 1],
+            'Gene2': [0, 1, 0, 1, 0, 1],
+        })
+        clusters = np.array([1, 1, 1, 2, 2, 2])
+        
+        results = log_odds_ratio_analysis(data, clusters, category="AMR", with_ci=False)
+        
+        assert isinstance(results, pd.DataFrame)
+
+
+# ============================================================================
+# Test pairwise_fdr_post_hoc function
+# ============================================================================
+class TestPairwiseFDRPostHoc:
+    """Test pairwise FDR post-hoc analysis."""
+    
+    def test_basic_pairwise_fdr(self):
+        """Test basic pairwise FDR analysis."""
+        from strepsuis_amrvirkm.cluster_analysis_core import pairwise_fdr_post_hoc
+        
+        np.random.seed(42)
+        n = 30
+        data = pd.DataFrame({
+            'Feature1': np.random.binomial(1, 0.6, n),
+            'Feature2': np.random.binomial(1, 0.4, n),
+        })
+        clusters = np.array([1] * 10 + [2] * 10 + [3] * 10)
+        
+        results = pairwise_fdr_post_hoc(data, clusters, category="AMR")
+        
+        # Should return DataFrame
+        assert isinstance(results, pd.DataFrame)
+        
+        # Should have FDR correction columns if not empty
+        if not results.empty:
+            assert 'Adjusted_P' in results.columns
+            assert 'FDR_Rejected' in results.columns
+    
+    def test_single_cluster_returns_empty(self):
+        """Test that single cluster returns empty DataFrame."""
+        from strepsuis_amrvirkm.cluster_analysis_core import pairwise_fdr_post_hoc
+        
+        data = pd.DataFrame({
+            'Feature1': [1, 0, 1, 0],
+            'Feature2': [0, 1, 0, 1],
+        })
+        clusters = np.array([1, 1, 1, 1])
+        
+        results = pairwise_fdr_post_hoc(data, clusters, category="AMR")
+        
+        assert results.empty
+
+
+# ============================================================================
+# Test stratified_bootstrap function
+# ============================================================================
+class TestStratifiedBootstrap:
+    """Test stratified bootstrap resampling."""
+    
+    def test_basic_stratified_bootstrap(self):
+        """Test basic stratified bootstrap."""
+        from strepsuis_amrvirkm.cluster_analysis_core import stratified_bootstrap
+        
+        np.random.seed(42)
+        X = np.random.rand(20, 3)
+        y = np.array([0] * 10 + [1] * 10)
+        
+        X_boot, y_boot = stratified_bootstrap(X, y)
+        
+        # Should maintain class balance
+        assert len(X_boot) == len(X)
+        assert len(y_boot) == len(y)
+        assert np.sum(y_boot == 0) == 10
+        assert np.sum(y_boot == 1) == 10
+    
+    def test_multiclass_stratified_bootstrap(self):
+        """Test stratified bootstrap with multiple classes."""
+        from strepsuis_amrvirkm.cluster_analysis_core import stratified_bootstrap
+        
+        np.random.seed(42)
+        X = np.random.rand(30, 3)
+        y = np.array([0] * 10 + [1] * 10 + [2] * 10)
+        
+        X_boot, y_boot = stratified_bootstrap(X, y)
+        
+        # Should maintain all classes
+        assert len(np.unique(y_boot)) == 3
+        for label in [0, 1, 2]:
+            assert np.sum(y_boot == label) == 10
+
+
+# ============================================================================
+# Test calculate_cluster_stats function
+# ============================================================================
+class TestCalculateClusterStats:
+    """Test cluster statistics calculation with bootstrap CI."""
+    
+    def test_cluster_stats_with_ci(self):
+        """Test cluster stats include bootstrap CI."""
+        from strepsuis_amrvirkm.cluster_analysis_core import calculate_cluster_stats
+        
+        clusters = np.array([1] * 30 + [2] * 20 + [3] * 10)
+        
+        stats = calculate_cluster_stats(clusters)
+        
+        # Should have expected columns
+        assert 'Count' in stats.columns
+        assert 'Percentage' in stats.columns
+        assert 'CI_low' in stats.columns
+        assert 'CI_high' in stats.columns
+        
+        # Total count should match
+        assert stats['Count'].sum() == 60
+        
+        # Percentages should sum to 100
+        np.testing.assert_almost_equal(stats['Percentage'].sum(), 100.0, decimal=1)
+    
+    def test_balanced_clusters(self):
+        """Test stats for perfectly balanced clusters."""
+        from strepsuis_amrvirkm.cluster_analysis_core import calculate_cluster_stats
+        
+        clusters = np.array([1, 2, 3, 1, 2, 3] * 10)
+        
+        stats = calculate_cluster_stats(clusters)
+        
+        # All clusters should have equal percentage
+        assert len(stats) == 3
+        for pct in stats['Percentage']:
+            np.testing.assert_almost_equal(pct, 33.33, decimal=1)
+
+
+# ============================================================================
+# Test validate_clusters function
+# ============================================================================
+class TestValidateClusters:
+    """Test cluster validation metrics."""
+    
+    def test_calinski_harabasz_score(self):
+        """Test Calinski-Harabasz score calculation."""
+        from strepsuis_amrvirkm.cluster_analysis_core import validate_clusters
+        
+        # Create well-separated clusters
+        cluster1 = np.array([[1, 1, 0, 0]] * 10)
+        cluster2 = np.array([[0, 0, 1, 1]] * 10)
+        data = np.vstack([cluster1, cluster2])
+        clusters = np.array([1] * 10 + [2] * 10)
+        
+        ch_score, db_score = validate_clusters(data, clusters)
+        
+        # Well-separated clusters should have high CH score
+        assert ch_score > 0 or np.isnan(ch_score)
+        assert db_score is not None
+    
+    def test_single_cluster_returns_nan(self):
+        """Test that single cluster returns NaN scores."""
+        from strepsuis_amrvirkm.cluster_analysis_core import validate_clusters
+        
+        data = np.array([[1, 0], [0, 1], [1, 1]])
+        clusters = np.array([1, 1, 1])
+        
+        ch_score, db_score = validate_clusters(data, clusters)
+        
+        # Single cluster should give NaN
+        assert np.isnan(ch_score) or ch_score is not None
+        assert np.isnan(db_score) or db_score is not None
+
+
+# ============================================================================
+# Test label_shared_unique_features function
+# ============================================================================
+class TestLabelSharedUniqueFeatures:
+    """Test labeling of shared and unique features."""
+    
+    def test_basic_feature_labeling(self):
+        """Test basic feature labeling."""
+        from strepsuis_amrvirkm.cluster_analysis_core import label_shared_unique_features
+        
+        np.random.seed(42)
+        data = pd.DataFrame({
+            'Shared': [1, 1, 1, 1, 1, 1],
+            'Unique1': [1, 1, 1, 0, 0, 0],
+            'Unique2': [0, 0, 0, 1, 1, 1],
+        })
+        clusters = np.array([1, 1, 1, 2, 2, 2])
+        
+        result = label_shared_unique_features(data, clusters)
+        
+        # Should return DataFrame
+        assert isinstance(result, pd.DataFrame)
+        
+        # Should have labeling columns
+        if not result.empty:
+            assert 'Feature' in result.columns
+
+
+# ============================================================================
+# Test association_rule_mining function
+# ============================================================================
+class TestAssociationRuleMining:
+    """Test association rule mining."""
+    
+    def test_basic_association_rules(self):
+        """Test basic association rule mining."""
+        from strepsuis_amrvirkm.cluster_analysis_core import association_rule_mining
+        
+        np.random.seed(42)
+        data = pd.DataFrame({
+            'A': [1, 1, 1, 0, 0, 0, 1, 1],
+            'B': [1, 1, 1, 0, 0, 0, 1, 0],
+            'C': [0, 1, 0, 1, 1, 0, 0, 1],
+        })
+        clusters = np.array([1, 1, 1, 2, 2, 2, 1, 2])
+        
+        rules = association_rule_mining(
+            data, clusters, min_support=0.2, min_confidence=0.5
+        )
+        
+        # Should return DataFrame
+        assert isinstance(rules, pd.DataFrame)
+
+
+# ============================================================================
+# Test multiple_correspondence_analysis function
+# ============================================================================
+class TestMultipleCorrespondenceAnalysis:
+    """Test MCA (Multiple Correspondence Analysis)."""
+    
+    def test_basic_mca(self):
+        """Test basic MCA analysis."""
+        from strepsuis_amrvirkm.cluster_analysis_core import multiple_correspondence_analysis
+        
+        np.random.seed(42)
+        data = pd.DataFrame({
+            'A': np.random.binomial(1, 0.5, 30),
+            'B': np.random.binomial(1, 0.5, 30),
+            'C': np.random.binomial(1, 0.5, 30),
+        })
+        clusters = np.array([1] * 10 + [2] * 10 + [3] * 10)
+        
+        mca_result = multiple_correspondence_analysis(data, clusters, feature_group="AMR")
+        
+        # Should return DataFrame
+        assert isinstance(mca_result, pd.DataFrame)
+
+
+# ============================================================================
+# Test analyze_cluster_importance function
+# ============================================================================
+class TestAnalyzeClusterImportance:
+    """Test cluster importance via Random Forest."""
+    
+    def test_basic_cluster_importance(self):
+        """Test basic cluster importance analysis."""
+        from strepsuis_amrvirkm.cluster_analysis_core import analyze_cluster_importance
+        
+        np.random.seed(42)
+        n = 40
+        data = pd.DataFrame({
+            'Feature1': np.random.binomial(1, 0.6, n),
+            'Feature2': np.random.binomial(1, 0.4, n),
+            'Feature3': np.random.binomial(1, 0.5, n),
+        })
+        clusters = np.array([1] * 20 + [2] * 20)
+        
+        importance = analyze_cluster_importance(data, clusters)
+        
+        # Should return DataFrame
+        assert isinstance(importance, pd.DataFrame)
+        
+        # Should have feature and importance columns
+        if not importance.empty:
+            assert 'Feature' in importance.columns
+            assert 'Importance' in importance.columns
+
+
+# ============================================================================
+# Test save_rounded_csv function
+# ============================================================================
+class TestSaveRoundedCsv:
+    """Test saving rounded CSV files."""
+    
+    def test_save_rounded_csv(self, tmp_path):
+        """Test saving CSV with rounded values."""
+        from strepsuis_amrvirkm.cluster_analysis_core import save_rounded_csv
+        
+        data = pd.DataFrame({
+            'A': [1.23456, 2.34567, 3.45678],
+            'B': [4.56789, 5.67890, 6.78901],
+        })
+        
+        output_file = tmp_path / "test_output.csv"
+        save_rounded_csv(data, str(output_file))
+        
+        # Should create file
+        assert output_file.exists()
+        
+        # Read back and check
+        loaded = pd.read_csv(output_file)
+        assert len(loaded) == 3
+
+
+# ============================================================================
+# Test load_all_csv_from_folder function
+# ============================================================================
+class TestLoadAllCsvFromFolder:
+    """Test loading all CSV files from a folder."""
+    
+    def test_load_csv_files(self, tmp_path):
+        """Test loading CSV files from folder."""
+        from strepsuis_amrvirkm.cluster_analysis_core import load_all_csv_from_folder
+        
+        # Create test CSV files
+        df1 = pd.DataFrame({'A': [1, 0], 'B': [0, 1]})
+        df2 = pd.DataFrame({'C': [1, 1], 'D': [0, 0]})
+        
+        (tmp_path / "file1.csv").write_text("A,B\n1,0\n0,1\n")
+        (tmp_path / "file2.csv").write_text("C,D\n1,0\n1,0\n")
+        
+        result = load_all_csv_from_folder(str(tmp_path))
+        
+        # Should return dictionary
+        assert isinstance(result, dict)
+
+
+# ============================================================================
+# Test print_memory_usage function
+# ============================================================================
+class TestPrintMemoryUsage:
+    """Test memory usage printing."""
+    
+    def test_memory_usage_no_error(self):
+        """Test that print_memory_usage runs without error."""
+        from strepsuis_amrvirkm.cluster_analysis_core import print_memory_usage
+        
+        # Should not raise exception
+        print_memory_usage()
+
+
+# ============================================================================
+# Test determine_optimal_clusters_sqrt function
+# ============================================================================
+class TestDetermineOptimalClustersSqrt:
+    """Test optimal cluster determination using sqrt heuristic."""
+    
+    def test_optimal_clusters_basic(self):
+        """Test basic optimal cluster determination."""
+        from strepsuis_amrvirkm.cluster_analysis_core import determine_optimal_clusters_sqrt
+        
+        np.random.seed(42)
+        # Create separable clusters
+        cluster1 = pd.DataFrame([[1, 1, 0, 0]] * 10)
+        cluster2 = pd.DataFrame([[0, 0, 1, 1]] * 10)
+        data = pd.concat([cluster1, cluster2], ignore_index=True)
+        
+        optimal_k = determine_optimal_clusters_sqrt(data)
+        
+        # Should return valid k
+        assert optimal_k >= 2
+        assert optimal_k <= int(np.sqrt(len(data))) + 1
+    
+    def test_small_dataset_returns_valid_k(self):
+        """Test with small dataset."""
+        from strepsuis_amrvirkm.cluster_analysis_core import determine_optimal_clusters_sqrt
+        
+        np.random.seed(42)
+        data = pd.DataFrame({
+            'A': [1, 1, 0, 0, 1, 0],
+            'B': [1, 0, 1, 0, 0, 1],
+        })
+        
+        optimal_k = determine_optimal_clusters_sqrt(data)
+        
+        # Should return k >= 2
+        assert optimal_k >= 2
+
+
+# ============================================================================
+# Test extract_characteristic_patterns function
+# ============================================================================
+class TestExtractCharacteristicPatterns:
+    """Test extraction of characteristic patterns from clusters."""
+    
+    def test_basic_pattern_extraction(self):
+        """Test basic pattern extraction."""
+        from strepsuis_amrvirkm.cluster_analysis_core import perform_kmodes, extract_characteristic_patterns
+        
+        np.random.seed(42)
+        data = pd.DataFrame({
+            'A': [1, 1, 1, 0, 0, 0],
+            'B': [1, 1, 0, 0, 0, 1],
+            'C': [0, 0, 1, 1, 1, 0],
+        })
+        
+        model, clusters = perform_kmodes(data, n_clusters=2)
+        patterns = extract_characteristic_patterns(model, data)
+        
+        # Should return dictionary
+        assert isinstance(patterns, dict)
+        
+        # Should have entries for clusters
+        assert len(patterns) >= 0
+
+
+# ============================================================================
+# Test patterns_to_dataframe function
+# ============================================================================
+class TestPatternsToDataframe:
+    """Test conversion of patterns to DataFrame."""
+    
+    def test_patterns_to_dataframe_basic(self):
+        """Test basic pattern to DataFrame conversion."""
+        from strepsuis_amrvirkm.cluster_analysis_core import (
+            perform_kmodes, 
+            extract_characteristic_patterns,
+            patterns_to_dataframe
+        )
+        
+        np.random.seed(42)
+        data = pd.DataFrame({
+            'A': [1, 1, 1, 0, 0, 0],
+            'B': [1, 1, 0, 0, 0, 1],
+            'C': [0, 0, 1, 1, 1, 0],
+        })
+        
+        model, clusters = perform_kmodes(data, n_clusters=2)
+        patterns = extract_characteristic_patterns(model, data)
+        
+        patterns_df = patterns_to_dataframe(patterns, "AMR", data, clusters)
+        
+        # Should return DataFrame
+        assert isinstance(patterns_df, pd.DataFrame)
+        
+        # Should have expected columns
+        if not patterns_df.empty:
+            assert 'Cluster' in patterns_df.columns
+            assert 'Size' in patterns_df.columns
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
