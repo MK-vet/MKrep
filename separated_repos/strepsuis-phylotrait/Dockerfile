@@ -17,10 +17,13 @@ RUN apt-get update && apt-get install -y \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install the package from GitHub
+# Copy the package source code
 WORKDIR /build
+COPY . /build/
+
+# Install the package from local source
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir git+https://github.com/MK-vet/strepsuis-phylotrait.git
+    pip install --no-cache-dir .
 
 # Stage 2: Runtime - Minimal image with only runtime dependencies
 FROM python:3.11-slim
