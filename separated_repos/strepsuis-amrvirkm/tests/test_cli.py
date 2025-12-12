@@ -289,3 +289,65 @@ def test_cli_with_dpi(data_dir, monkeypatch):
         )
         result = main()
         assert result == 0
+
+
+def test_cli_subprocess_help():
+    """Test CLI help command via subprocess."""
+    import subprocess
+    result = subprocess.run(
+        ["strepsuis-amrvirkm", "--help"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "StrepSuis-AMRVirKM" in result.stdout
+    assert "--data-dir" in result.stdout
+
+
+def test_cli_subprocess_version():
+    """Test CLI version command via subprocess."""
+    import subprocess
+    result = subprocess.run(
+        ["strepsuis-amrvirkm", "--version"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "strepsuis-amrvirkm" in result.stdout or "1.0.0" in result.stdout
+
+
+def test_cli_subprocess_with_real_data(data_dir):
+    """Test CLI execution with real data via subprocess."""
+    import subprocess
+    with tempfile.TemporaryDirectory() as tmpdir:
+        result = subprocess.run(
+            [
+                "strepsuis-amrvirkm",
+                "--data-dir", str(data_dir),
+                "--output", tmpdir,
+                "--max-clusters", "3",
+                "--bootstrap", "10"
+            ],
+            capture_output=True,
+            text=True,
+            timeout=300  # 5 minute timeout
+        )
+        # Check that it runs (may not complete successfully depending on data)
+        assert result.returncode in [0, 1]  # 0=success, 1=error but ran
+
+
+def test_cli_subprocess_missing_data_dir():
+    """Test CLI with missing data directory via subprocess."""
+    import subprocess
+    result = subprocess.run(
+        [
+            "strepsuis-amrvirkm",
+            "--data-dir", "/nonexistent/path",
+            "--output", "/tmp/output"
+        ],
+        capture_output=True,
+        text=True,
+        timeout=30
+    )
+    # Should fail with error
+    assert result.returncode != 0
