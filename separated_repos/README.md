@@ -1,10 +1,10 @@
-# StrepSuis Suite - Separated Repositories
+# StrepSuis Suite - Publication-Ready Bioinformatics Modules
 
-This document provides an overview of the StrepSuis Suite bioinformatics tools, which consist of four independent, publication-ready modules for antimicrobial resistance and genomic analysis.
+This directory contains **five independent, publication-ready bioinformatics modules** for antimicrobial resistance and genomic analysis of *Streptococcus suis* and other bacterial species. Each module is designed for standalone publication in international peer-reviewed journals.
 
 ## Overview
 
-The StrepSuis Suite contains **four production-ready bioinformatics tools**, each in its own subdirectory within `separated_repos/`. Each tool is designed for independent deployment as a GitHub repository.
+The StrepSuis Suite consists of five specialized tools, each in its own subdirectory. Each module is production-ready with comprehensive documentation, testing, and deployment infrastructure suitable for publication in software journals such as SoftwareX.
 
 ## Module Overview
 
@@ -53,97 +53,233 @@ The StrepSuis Suite contains **four production-ready bioinformatics tools**, eac
 - Machine learning (K-Means, K-Modes, Hierarchical, DBSCAN)
 - ETL operations and report generation (Excel, HTML)
 
-## Repository Contents
+## Documentation
 
-Each module is **production-ready** with the following components:
+Comprehensive documentation is organized in the `docs/` directory:
+
+### Technical Documentation
+- **[TESTING.md](docs/TESTING.md)** - Testing guide and coverage information
+- **[TESTING_QUICK_START.md](docs/TESTING_QUICK_START.md)** - Quick reference for testing
+- **[DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)** - Deployment strategies and instructions
+- **[WORKFLOW_USAGE_GUIDE.md](docs/WORKFLOW_USAGE_GUIDE.md)** - GitHub Actions workflow documentation
+
+### Scientific Documentation
+- **[MATHEMATICAL_VALIDATION.md](docs/MATHEMATICAL_VALIDATION.md)** - Statistical method validation
+- **[SYNTHETIC_DATA_VALIDATION.md](docs/SYNTHETIC_DATA_VALIDATION.md)** - Synthetic data testing methodology
+- **[ANALYSIS_EXAMPLES.md](docs/ANALYSIS_EXAMPLES.md)** - Example analyses and use cases
+- **[END_TO_END_TESTS.md](docs/END_TO_END_TESTS.md)** - End-to-end testing documentation
+- **[COVERAGE_RESULTS.md](docs/COVERAGE_RESULTS.md)** - Test coverage reports
+
+### Example Data
+- **[docs/examples/synthetic_data/](docs/examples/synthetic_data/)** - Synthetic datasets for validation
+
+## Module Structure
+
+Each module follows a consistent, publication-ready structure:
 
 ### Core Components
 - **Python Package** - Professional package structure with `pyproject.toml`
-- **Docker Container** - Multi-stage build with dynamic GitHub installation
-- **Google Colab Notebook** - User-friendly notebook for non-programmers
-- **Example Data** - Representative CSV datasets for testing
+- **Docker Container** - Multi-stage build for reproducible deployment
+- **Example Data** - Representative datasets for testing and demonstration
+- **Test Suite** - Comprehensive pytest-based tests (70-85% coverage)
 
-### Documentation
-- **README.md** - Main documentation with installation and usage
-- **USER_GUIDE.md** - Detailed step-by-step instructions
-- **CONTRIBUTING.md** - Guidelines for contributors
+### Required Documentation (All Modules)
+- **README.md** - Main documentation with installation and quick start
+- **USER_GUIDE.md** - Detailed usage instructions and examples
+- **CONTRIBUTING.md** - Contribution guidelines and code standards
 - **CHANGELOG.md** - Version history and release notes
-- **TESTING.md** - Comprehensive testing documentation
+- **TESTING.md** - Testing documentation and coverage reports
+- **CITATION.cff** - Citation metadata for research software
+- **SECURITY.md** - Security policy and vulnerability reporting
 - **LICENSE** - MIT License
 
-### Quality Assurance
-- **Pre-commit Hooks** - Automated code formatting and linting
-- **Test Suite** - pytest-based tests with comprehensive coverage
-- **GitHub Actions** - CI/CD workflows (test.yml, release.yml, docs.yml)
-- **Type Checking** - mypy configuration for type safety
-- **Security Scanning** - bandit for security checks
+### Module-Specific Documentation (CLI Modules)
+- **ALGORITHMS.md** - Algorithm descriptions and complexity analysis
+- **BENCHMARKS.md** - Performance benchmarks and scalability tests
+
+### Quality Assurance Infrastructure
+- **Pre-commit Hooks** - Automated code formatting (black, isort, ruff, mypy, bandit)
+- **Type Hints** - Full type annotation with mypy validation
+- **CI/CD Workflows** - GitHub Actions for testing and deployment
+- **Security Scanning** - Automated vulnerability detection
 
 ### Configuration Files
-- `.pre-commit-config.yaml` - Pre-commit hooks setup
+- `.pre-commit-config.yaml` - Code quality automation
 - `.dockerignore` - Docker build optimization
-- `.gitignore` - Git ignore patterns
-- `pytest.ini` - Test configuration
-- `pyproject.toml` - Package configuration with dev dependencies
-- `requirements.txt` - Core dependencies
-- `docker-compose.yml` - Docker Compose configuration
+- `.gitignore` - Version control exclusions
+- `pytest.ini` - Test configuration and markers
+- `pyproject.toml` - Package metadata and dependencies
+- `requirements.txt` - Production dependencies
+- `docker-compose.yml` - Container orchestration
 
-## Installation and Distribution
+## Publication Readiness
 
-Each module supports three distribution methods:
+All modules are designed for publication in peer-reviewed software journals such as:
 
-### Python Package
+- **SoftwareX** - Each module will be submitted as a separate publication
+- **Journal of Open Source Software (JOSS)**
+- **Bioinformatics**
+- **BMC Bioinformatics**
+
+### Publication Standards Met
+
+✅ **Comprehensive Documentation** - README, user guides, algorithm descriptions  
+✅ **Citation Metadata** - CITATION.cff files with DOI-ready format  
+✅ **Testing Infrastructure** - 70-85% test coverage with multiple test types  
+✅ **Reproducibility** - Docker containers, fixed random seeds, example data  
+✅ **Code Quality** - Type hints, linting, formatting, security scanning  
+✅ **Open Source** - MIT License, contribution guidelines  
+✅ **Scientific Validation** - Mathematical correctness verified against reference implementations
+
+## Installation and Usage
+
+Each module can be installed independently:
+
+### Installation from GitHub
+
 ```bash
-pip install git+https://github.com/MK-vet/REPO-NAME.git
+# Install a specific module
+pip install git+https://github.com/MK-vet/MKrep.git#subdirectory=separated_repos/strepsuis-mdr
+
+# Or clone and install locally
+git clone https://github.com/MK-vet/MKrep.git
+cd MKrep/separated_repos/strepsuis-mdr
+pip install -e .
 ```
 
-### Docker Container
+### Docker Deployment
+
 ```bash
-docker pull ghcr.io/mk-vet/REPO-NAME:latest
+# Navigate to module directory
+cd separated_repos/strepsuis-mdr
+
+# Build and run with docker-compose
+docker-compose up
+
+# Or build manually
+docker build -t strepsuis-mdr .
+docker run -it strepsuis-mdr
 ```
 
-### Google Colab
-Click the Colab badge in each module's README to run without installation.
+### Usage Examples
 
-## Architecture
+**CLI-based modules** (mdr, amrvirkm, genphennet, phylotrait):
+```bash
+# Install module
+pip install -e .
 
-### Code Organization
-- Docker containers install packages from GitHub dynamically
-- Colab notebooks install packages from GitHub dynamically
-- Single source of truth for each tool's code
+# Run analysis
+strepsuis-mdr analyze --input data/example.csv --output results/
+```
 
-### Automation Strategy
+**Interactive module** (analyzer):
+```bash
+# Install module
+pip install -e .
 
-**Local Automation:**
-- Pre-commit hooks execute before every commit
-- Tools: black, isort, ruff, mypy, bandit
-- Provides immediate feedback on code quality
+# Launch web interface
+streamlit run app.py
+```
 
-**Cloud Automation:**
-- GitHub Actions trigger on pull requests and releases
-- Estimated usage: 15-45 minutes/month
-- Workflows: test.yml, release.yml, docs.yml
+For detailed usage instructions, refer to each module's USER_GUIDE.md.
+
+## Development and Testing
+
+### Running Tests
+
+```bash
+# Navigate to a module
+cd strepsuis-mdr
+
+# Install development dependencies
+pip install -e .[dev]
+
+# Run tests
+pytest -v
+
+# Run with coverage
+pytest --cov --cov-report=html -v
+
+# Run fast tests only (exclude slow tests)
+pytest -m "not slow" -v
+```
+
+See [docs/TESTING.md](docs/TESTING.md) for comprehensive testing documentation.
+
+### Code Quality
+
+All modules use pre-commit hooks for automated code quality:
+
+```bash
+# Install pre-commit
+pip install pre-commit
+
+# Install hooks
+pre-commit install
+
+# Run manually
+pre-commit run --all-files
+```
+
+Tools used:
+- **black** - Code formatting (line length 100)
+- **isort** - Import sorting (black profile)
+- **ruff** - Fast linting
+- **mypy** - Type checking
+- **bandit** - Security analysis
 
 ## Directory Structure
 
 ```
-strepsuis-mdr/
-├── .github/workflows/       # CI/CD workflows
-├── .pre-commit-config.yaml  # Code quality hooks
-├── Dockerfile               # Multi-stage build
-├── LICENSE                  # MIT License
-├── README.md                # Main documentation
-├── USER_GUIDE.md            # User instructions
-├── TESTING.md               # Test documentation
-├── pyproject.toml           # Package config
-├── requirements.txt         # Dependencies
-├── examples/                # CSV data files
-├── notebooks/               # Colab notebooks
-├── strepsuis_mdr/        # Python package
-│   ├── __init__.py
-│   ├── analyzer.py
-│   ├── cli.py
-│   └── config.py
-└── tests/                   # Test suite
+separated_repos/
+├── README.md                           # This file - suite overview
+├── docs/                               # Centralized documentation
+│   ├── TESTING.md                     # Testing guide
+│   ├── TESTING_QUICK_START.md         # Quick testing reference
+│   ├── DEPLOYMENT_GUIDE.md            # Deployment instructions
+│   ├── WORKFLOW_USAGE_GUIDE.md        # GitHub Actions guide
+│   ├── MATHEMATICAL_VALIDATION.md     # Statistical validation
+│   ├── SYNTHETIC_DATA_VALIDATION.md   # Synthetic data methodology
+│   ├── ANALYSIS_EXAMPLES.md           # Example analyses
+│   ├── END_TO_END_TESTS.md           # E2E testing documentation
+│   ├── COVERAGE_RESULTS.md           # Coverage reports
+│   ├── examples/                      # Example datasets
+│   │   └── synthetic_data/           # Synthetic test data
+│   └── archive/                       # Historical implementation docs
+├── strepsuis-mdr/                     # AMR Pattern Detection module
+│   ├── strepsuis_mdr/                # Python package
+│   ├── tests/                        # Test suite
+│   ├── examples/                     # Example data
+│   ├── README.md                     # Module documentation
+│   ├── USER_GUIDE.md                 # Usage instructions
+│   ├── ALGORITHMS.md                 # Algorithm descriptions
+│   ├── BENCHMARKS.md                 # Performance benchmarks
+│   ├── TESTING.md                    # Module testing guide
+│   ├── CONTRIBUTING.md               # Contribution guidelines
+│   ├── CHANGELOG.md                  # Version history
+│   ├── CITATION.cff                  # Citation metadata
+│   ├── SECURITY.md                   # Security policy
+│   ├── pyproject.toml                # Package configuration
+│   └── Dockerfile                    # Container definition
+├── strepsuis-amrvirkm/                # K-Modes Clustering module
+│   └── [same structure as strepsuis-mdr]
+├── strepsuis-genphennet/              # Network Integration module
+│   └── [same structure as strepsuis-mdr]
+├── strepsuis-phylotrait/              # Phylogenetic Traits module
+│   └── [same structure as strepsuis-mdr]
+└── strepsuis-analyzer/                # Interactive Analysis module
+    ├── src/strepsuis_analyzer/       # Python package (Streamlit app)
+    ├── tests/                        # Test suite
+    ├── data/                         # Example data
+    ├── README.md                     # Module documentation
+    ├── USER_GUIDE.md                 # Usage instructions
+    ├── TESTING.md                    # Module testing guide
+    ├── CONTRIBUTING.md               # Contribution guidelines
+    ├── CHANGELOG.md                  # Version history
+    ├── CITATION.cff                  # Citation metadata
+    ├── SECURITY.md                   # Security policy
+    ├── pyproject.toml                # Package configuration
+    └── Dockerfile                    # Container definition
 ```
 
 ## Development
@@ -173,7 +309,7 @@ strepsuis-mdr/
 
 ### Deployment
 
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions:
+See [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions:
 - Creating GitHub repositories
 - Testing each component
 - Publishing to PyPI (optional)
@@ -242,7 +378,7 @@ pytest --cov --cov-report=html
 - Estimated CI time: 3-5 minutes per module
 - Monthly usage: approximately 30-50 minutes total
 
-For comprehensive testing documentation, see [TESTING.md](TESTING.md).
+For comprehensive testing documentation, see [docs/TESTING.md](docs/TESTING.md).
 
 
 ## Quality Standards
@@ -258,12 +394,12 @@ All modules meet the following standards:
 
 ## Resources
 
-- **Deployment Guide:** [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-- **Testing Guide:** [TESTING.md](TESTING.md)
-- **Analysis Examples:** [ANALYSIS_EXAMPLES.md](ANALYSIS_EXAMPLES.md)
-- **Mathematical Validation:** [MATHEMATICAL_VALIDATION.md](MATHEMATICAL_VALIDATION.md)
-- **Synthetic Data Validation:** [SYNTHETIC_DATA_VALIDATION.md](SYNTHETIC_DATA_VALIDATION.md)
-- **Documentation Index:** [INDEX.md](INDEX.md)
+- **Deployment Guide:** [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
+- **Testing Guide:** [docs/TESTING.md](docs/TESTING.md)
+- **Analysis Examples:** [docs/ANALYSIS_EXAMPLES.md](docs/ANALYSIS_EXAMPLES.md)
+- **Mathematical Validation:** [docs/MATHEMATICAL_VALIDATION.md](docs/MATHEMATICAL_VALIDATION.md)
+- **Synthetic Data Validation:** [docs/SYNTHETIC_DATA_VALIDATION.md](docs/SYNTHETIC_DATA_VALIDATION.md)
+- **Documentation Index:** [docs/archive/INDEX.md](docs/archive/INDEX.md)
 
 ## Publication-Readiness Checklist (per module)
 
