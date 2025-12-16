@@ -8,6 +8,7 @@ The example datasets are located in the main repository at:
 ```
 ../../data/
 ```
+A synchronized copy is also stored locally in `data/examples/` for tests and offline usage. The files mirror the shared datasets to keep fixtures self-contained.
 
 ## Available Datasets
 

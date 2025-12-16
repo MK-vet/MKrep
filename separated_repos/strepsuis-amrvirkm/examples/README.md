@@ -1,7 +1,7 @@
 # Example Usage Scripts
 
 
-**Important:** The example datasets are now located in the main repository's data directory at `../../data/`. All CSV files previously stored here have been moved to eliminate duplication.
+**Important:** The example datasets are available both in the shared data directory (`../../data/`) and in this module at `data/examples/` to keep tests self-contained. The shared `../../data/` copy is the source of truth; the local copy is synchronized from it for CI and offline testing.
 
 This directory contains example datasets for testing and learning StrepSuis-AMRVirKM.
 

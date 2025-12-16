@@ -94,6 +94,10 @@ data/*
 !data/examples/*.csv
 !examples/*.csv
 !examples/**/*.csv
+# Keep test example datasets
+!tests/data/examples/
+!tests/data/examples/*.csv
+!tests/data/examples/*.newick
 
 # Logs
 *.log
