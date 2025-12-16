@@ -1,0 +1,120 @@
+{
+  "report_timestamp": "2025-12-16T08:25:52.778831",
+  "module": "strepsuis-amrvirkm",
+  "version": "1.0.0",
+  "python_version": "3.12.3",
+  "validation_summary": {
+    "total_tests": 31,
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "pass_rate": "100%"
+  },
+  "validated_algorithms": {
+    "kmodes_clustering": {
+      "reference": "kmodes library",
+      "status": "VALIDATED",
+      "tests": [
+        "test_kmodes_basic_clustering",
+        "test_kmodes_reproducibility",
+        "test_kmodes_reproducible_across_runs"
+      ]
+    },
+    "silhouette_score": {
+      "reference": "sklearn.metrics.silhouette_score",
+      "tolerance": "1e-10",
+      "status": "VALIDATED",
+      "tests": [
+        "test_silhouette_calculation",
+        "test_silhouette_bounds",
+        "test_silhouette_score_against_sklearn"
+      ]
+    },
+    "chi_square_test": {
+      "reference": "scipy.stats.chi2_contingency",
+      "tolerance": "5 decimal places",
+      "status": "VALIDATED",
+      "tests": [
+        "test_chi_square_significant_association",
+        "test_chi_square_independent",
+        "test_chi_square_against_scipy_exact_values"
+      ]
+    },
+    "fisher_exact_test": {
+      "reference": "scipy.stats.fisher_exact",
+      "tolerance": "5 decimal places",
+      "status": "VALIDATED",
+      "tests": [
+        "test_fisher_exact_against_scipy"
+      ]
+    },
+    "fdr_correction": {
+      "reference": "statsmodels.stats.multitest.multipletests",
+      "tolerance": "1e-10",
+      "status": "VALIDATED",
+      "tests": [
+        "test_fdr_against_statsmodels"
+      ]
+    },
+    "mca": {
+      "reference": "prince MCA",
+      "status": "VALIDATED",
+      "tests": [
+        "test_mca_explained_variance",
+        "test_mca_performance"
+      ]
+    },
+    "phi_coefficient": {
+      "reference": "manual calculation from contingency table",
+      "status": "VALIDATED",
+      "tests": [
+        "test_phi_perfect_positive",
+        "test_phi_perfect_negative",
+        "test_phi_against_manual_calculation",
+        "test_phi_against_cramers_v"
+      ]
+    },
+    "bootstrap_ci": {
+      "reference": "bootstrap resampling (95% coverage verified)",
+      "status": "VALIDATED",
+      "tests": [
+        "test_bootstrap_ci_contains_true_proportion",
+        "test_bootstrap_ci_coverage_property",
+        "test_bootstrap_ci_symmetric_for_p_50"
+      ]
+    },
+    "log_odds_ratio": {
+      "reference": "manual calculation",
+      "status": "VALIDATED",
+      "tests": [
+        "test_log_odds_positive_association",
+        "test_log_odds_no_association",
+        "test_log_odds_ratio_manual_calculation"
+      ]
+    },
+    "clustering_metrics": {
+      "calinski_harabasz": {
+        "reference": "sklearn.metrics.calinski_harabasz_score",
+        "status": "VALIDATED"
+      },
+      "davies_bouldin": {
+        "reference": "sklearn.metrics.davies_bouldin_score",
+        "status": "VALIDATED"
+      }
+    }
+  },
+  "edge_cases_tested": [
+    "Single cluster input",
+    "Empty contingency table handling",
+    "Constant feature (zero variance)"
+  ],
+  "performance_validations": [
+    "Large dataset clustering (1000 samples, 50 features)",
+    "MCA performance on categorical data"
+  ],
+  "reproducibility": {
+    "random_seed": 42,
+    "verified": true,
+    "description": "All random operations use fixed seed for reproducibility"
+  }
+}

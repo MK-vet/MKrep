@@ -93,6 +93,7 @@ data/*
 *.csv
 !data/examples/*.csv
 !examples/*.csv
+!examples/**/*.csv
 
 # Logs
 *.log

@@ -1,0 +1,93 @@
+{
+  "report_timestamp": "2025-12-16T08:26:25.105157",
+  "module": "strepsuis-amrvirkm",
+  "version": "1.0.0",
+  "environment": {
+    "python": "3.12.3",
+    "platform": "linux"
+  },
+  "benchmarks": {
+    "kmodes_clustering": {
+      "description": "K-modes clustering with 3 clusters, Huang initialization",
+      "results": [
+        {
+          "samples": 100,
+          "features": 10,
+          "time_seconds": 0.0084
+        },
+        {
+          "samples": 100,
+          "features": 30,
+          "time_seconds": 0.0196
+        },
+        {
+          "samples": 100,
+          "features": 50,
+          "time_seconds": 0.0429
+        },
+        {
+          "samples": 500,
+          "features": 10,
+          "time_seconds": 0.0321
+        },
+        {
+          "samples": 500,
+          "features": 30,
+          "time_seconds": 0.0926
+        },
+        {
+          "samples": 500,
+          "features": 50,
+          "time_seconds": 0.1402
+        },
+        {
+          "samples": 1000,
+          "features": 10,
+          "time_seconds": 0.0674
+        },
+        {
+          "samples": 1000,
+          "features": 30,
+          "time_seconds": 0.1133
+        },
+        {
+          "samples": 1000,
+          "features": 50,
+          "time_seconds": 0.2016
+        }
+      ]
+    },
+    "mca": {
+      "description": "MCA with 5 components",
+      "results": [
+        {
+          "samples": 100,
+          "features": 10,
+          "time_seconds": 0.015
+        },
+        {
+          "samples": 500,
+          "features": 10,
+          "time_seconds": 0.0154
+        },
+        {
+          "samples": 1000,
+          "features": 10,
+          "time_seconds": 0.0231
+        }
+      ]
+    },
+    "chi_square": {
+      "description": "Chi-square tests on 2x2 contingency tables",
+      "results": {
+        "n_tests": 1000,
+        "total_time_seconds": 0.3231,
+        "time_per_test_ms": 0.3231
+      }
+    }
+  },
+  "memory_usage": {
+    "note": "Memory profiling requires additional tooling",
+    "estimated_peak_mb": "~500 MB for 1000 samples, 50 features"
+  }
+}
