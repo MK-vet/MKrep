@@ -1,0 +1,21 @@
+{
+  "generated": "2025-12-16",
+  "module": "strepsuis-amrvirkm",
+  "version": "1.0.0",
+  "summary": {
+    "total_statements": 1193,
+    "missed_statements": 985,
+    "coverage_percent": 17,
+    "files_covered": 7
+  },
+  "per_file": {
+    "config.py": "100%",
+    "__init__.py": "100%",
+    "cluster_analysis_core.py": "20%",
+    "analyzer.py": "15%",
+    "excel_report_utils.py": "11%",
+    "cli.py": "0%",
+    "generate_synthetic_data.py": "0%"
+  },
+  "note": "Full HTML report available by running: pytest --cov=strepsuis_amrvirkm --cov-report=html:tests/reports/coverage"
+}

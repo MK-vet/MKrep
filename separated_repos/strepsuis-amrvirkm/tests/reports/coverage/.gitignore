@@ -1,0 +1,9 @@
+# Coverage HTML artifacts - regenerate with pytest
+*.html
+*.js
+*.png
+*.css
+# Keep summary and status files
+!.gitkeep
+!coverage_summary.json
+!status.json
